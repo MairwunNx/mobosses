@@ -18,7 +18,8 @@ context (preset: FormulaSection) fun experience(boss: BossEntity, baseExp: Int):
   val levelScale = 1.0 + (preset.maxScale - 1.0) * level.pow(preset.power) / (preset.offset + level.pow(preset.power))
 
   val classMul = boss.clazz.experience
-  return (baseExp * classMul * levelScale).roundToInt()
+  val expModifier = boss.bossType.expModifier
+  return (baseExp * classMul * levelScale * expModifier).roundToInt()
 }
 
 context(preset: ExpGain) fun innerexperience(boss: BossEntity): Long {
