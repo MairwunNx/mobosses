@@ -29,6 +29,10 @@ class RewardsConfigurationModel(
   @SerialName("amplifier_per_level") val amplifierPerLevel: Double = 0.02,
   @SerialName("amplifier_max") val amplifierMax: Int = 2,            // максимум III
 
+  @SerialName("cooldown_multiplier") val cooldownMultiplier: Double = 2.0,
+  @SerialName("cooldown_min_seconds") val cooldownMinSeconds: Int = 8,
+  @SerialName("cooldown_max_seconds") val cooldownMaxSeconds: Int = 180,
+
   @SerialName("tiers") val tiers: Map<String, TierReward> = defaultTiers(),
 ) {
   @Serializable
