@@ -1,9 +1,9 @@
-package ru.mobosses.managers
+package ru.mairwunnx.mobosses.managers
 
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import ru.mairwunnx.mobosses.models.GeneralConfigurationModel
-import ru.mairwunnx.mobosses.models.LootTableConfigurationModel.LootItem
+import ru.mairwunnx.mobosses.models.LootTableConfigurationModel
 import ru.mobosses.PluginUnit
 import kotlin.math.pow
 import kotlin.random.Random
@@ -12,7 +12,7 @@ class DurabilityManager(private val plugin: PluginUnit) {
   private val general = plugin.configuration[GeneralConfigurationModel::class.java]
   private val bias = mapOf("common" to 0.0, "uncommon" to 0.3, "rare" to 0.6, "epic" to 1.0, "legendary" to 1.4, "mythic" to 2.0)
 
-  fun adjustDurability(item: ItemStack, lootItem: LootItem): ItemStack {
+  fun adjustDurability(item: ItemStack, lootItem: LootTableConfigurationModel.LootItem): ItemStack {
     val cfg = general.loot.randomDurability
     val type = item.type
 
