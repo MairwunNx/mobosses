@@ -2,7 +2,6 @@
 
 package ru.mairwunnx.mobosses.models
 
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
@@ -15,8 +14,7 @@ import ru.mairwunnx.mobosses.serializers.ParticleSerializer
 import ru.mairwunnx.mobosses.serializers.PotionEffectTypeSerializer
 import ru.mairwunnx.mobosses.serializers.SoundSerializer
 
-@Serializable
-class RewardsConfigurationModel(
+@Serializable class RewardsConfigurationModel(
   @SerialName("enabled") val enabled: Boolean = true,
   @SerialName("extinguish_player") val extinguishPlayer: Boolean = true,
   @SerialName("cleanse_negatives") val cleanseNegatives: Boolean = true,
@@ -25,9 +23,9 @@ class RewardsConfigurationModel(
   @SerialName("duration_per_level") val durationPerLevel: Double = 0.06,
   @SerialName("max_duration_seconds") val maxDurationSeconds: Int = 16,
 
-  @SerialName("amplifier_base") val amplifierBase: Int = 0,          // 0 = уровень I
+  @SerialName("amplifier_base") val amplifierBase: Int = 0,
   @SerialName("amplifier_per_level") val amplifierPerLevel: Double = 0.02,
-  @SerialName("amplifier_max") val amplifierMax: Int = 2,            // максимум III
+  @SerialName("amplifier_max") val amplifierMax: Int = 2,
 
   @SerialName("cooldown_multiplier") val cooldownMultiplier: Double = 2.0,
   @SerialName("cooldown_min_seconds") val cooldownMinSeconds: Int = 8,
@@ -35,12 +33,11 @@ class RewardsConfigurationModel(
 
   @SerialName("tiers") val tiers: Map<String, TierReward> = defaultTiers(),
 ) {
-  @Serializable
-  data class TierReward(
+  @Serializable class TierReward(
     @SerialName("effects_min") val effectsMin: Int,
     @SerialName("effects_max") val effectsMax: Int,
     @SerialName("extra_absorption_hearts") val extraAbsorptionHearts: Int = 0,
-    @SerialName("effect_pool") val effectPool: List<@Contextual PotionEffectType> = emptyList()
+    @SerialName("effect_pool") val effectPool: List<PotionEffectType> = emptyList()
   )
 
   companion object {
