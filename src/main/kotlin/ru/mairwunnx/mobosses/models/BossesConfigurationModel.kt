@@ -38,6 +38,7 @@ import org.bukkit.enchantments.Enchantment
     @SerialName("name") val name: String,
     @SerialName("enabled") val enabled: Boolean,
     @SerialName("spawn_chance") val spawnChance: Double,
+    @SerialName("exp_modifier") val expModifier: Double = 1.0,
     @SerialName("is_powered") val isPowered: Boolean? = null,
     @SerialName("equipment") val equipment: Equipment? = null,
     @SerialName("effects") val effects: Effects,
@@ -93,6 +94,7 @@ import org.bukkit.enchantments.Enchantment
         name = "Костян",
         enabled = true,
         spawnChance = 0.04,
+        expModifier = 0.7,
         effects = Effects(
           particles = Particle.CRIT,
           sounds = Sounds(Sound.ENTITY_SKELETON_AMBIENT, Sound.ENTITY_SKELETON_DEATH, Sound.ENTITY_STRAY_AMBIENT)
@@ -102,6 +104,7 @@ import org.bukkit.enchantments.Enchantment
         name = "Свиноголовый",
         enabled = true,
         spawnChance = 0.03,
+        expModifier = 0.4,
         effects = Effects(
           particles = Particle.LAVA,
           sounds = Sounds(Sound.ENTITY_PIGLIN_AMBIENT, Sound.ENTITY_PIGLIN_DEATH, Sound.ENTITY_PIGLIN_BRUTE_AMBIENT)
@@ -111,6 +114,7 @@ import org.bukkit.enchantments.Enchantment
         name = "Пилладжерон",
         enabled = true,
         spawnChance = 0.04,
+        expModifier = 0.7,
         effects = Effects(
           particles = Particle.ANGRY_VILLAGER,
           sounds = Sounds(Sound.ENTITY_PILLAGER_AMBIENT, Sound.ENTITY_PILLAGER_DEATH, Sound.ENTITY_VINDICATOR_AMBIENT)
@@ -120,6 +124,7 @@ import org.bukkit.enchantments.Enchantment
         name = "Паукан",
         enabled = true,
         spawnChance = 0.06,
+        expModifier = 0.377,
         effects = Effects(
           particles = Particle.SPORE_BLOSSOM_AIR,
           sounds = Sounds(Sound.ENTITY_SPIDER_AMBIENT, Sound.ENTITY_SPIDER_DEATH, Sound.AMBIENT_CAVE)
@@ -129,6 +134,7 @@ import org.bukkit.enchantments.Enchantment
         name = "Шпала",
         enabled = true,
         spawnChance = 0.08,
+        expModifier = 0.4,
         effects = Effects(
           particles = Particle.PORTAL,
           sounds = Sounds(Sound.ENTITY_ENDERMAN_AMBIENT, Sound.ENTITY_ENDERMAN_DEATH, Sound.ENTITY_ENDERMAN_TELEPORT)
@@ -138,6 +144,7 @@ import org.bukkit.enchantments.Enchantment
         name = "Босс иссушитель",
         enabled = true,
         spawnChance = 0.05,
+        expModifier = 0.688,
         effects = Effects(
           particles = Particle.LARGE_SMOKE,
           sounds = Sounds(Sound.ENTITY_WITHER_SKELETON_AMBIENT, Sound.ENTITY_WITHER_SKELETON_DEATH, Sound.ENTITY_WITHER_SPAWN)
@@ -156,6 +163,7 @@ import org.bukkit.enchantments.Enchantment
         name = "Отмороженный",
         enabled = true,
         spawnChance = 0.1,
+        expModifier = 0.733,
         effects = Effects(
           particles = Particle.SNOWFLAKE,
           sounds = Sounds(Sound.ENTITY_STRAY_AMBIENT, Sound.ENTITY_STRAY_DEATH, Sound.BLOCK_SNOW_BREAK)
@@ -165,6 +173,7 @@ import org.bukkit.enchantments.Enchantment
         name = "Рико",
         enabled = true,
         spawnChance = 0.04,
+        expModifier = 0.666,
         isPowered = true,
         effects = Effects(
           particles = Particle.ELECTRIC_SPARK,
@@ -175,6 +184,7 @@ import org.bukkit.enchantments.Enchantment
         name = "Пустынник",
         enabled = true,
         spawnChance = 0.045,
+        expModifier = 0.9,
         effects = Effects(
           particles = Particle.ANGRY_VILLAGER,
           sounds = Sounds(Sound.ENTITY_HUSK_AMBIENT, Sound.ENTITY_HUSK_DEATH, Sound.ENTITY_HUSK_CONVERTED_TO_ZOMBIE)
@@ -184,6 +194,7 @@ import org.bukkit.enchantments.Enchantment
         name = "Ведьмачка",
         enabled = true,
         spawnChance = 0.08,
+        expModifier = 0.377,
         effects = Effects(
           particles = Particle.WITCH,
           sounds = Sounds(Sound.ENTITY_WITCH_AMBIENT, Sound.ENTITY_WITCH_DEATH, Sound.ENTITY_WITCH_DRINK)
@@ -202,6 +213,7 @@ import org.bukkit.enchantments.Enchantment
         name = "Джаггернаут",
         enabled = true,
         spawnChance = 0.08,
+        expModifier = 0.7,
         effects = Effects(
           particles = Particle.ENCHANT,
           sounds = Sounds(Sound.ENTITY_EVOKER_AMBIENT, Sound.ENTITY_EVOKER_DEATH, Sound.ENTITY_EVOKER_PREPARE_SUMMON)
