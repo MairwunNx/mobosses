@@ -4,7 +4,7 @@ minions:
   - { summoner: "ZOMBIE", entity: "ZOMBIE", name: "Гниль" }
   - { summoner: "SPIDER", entity: "CAVE_SPIDER", name: "Пауканчик" }
   - { summoner: "SKELETON", entity: "SKELETON", name: "Скелетончик" }
-  - { summoner: "ENDERMAN", entity: "ENDERMITE", name: "Эндермит" }
+  - { summoner: "ENDERMAN", entity: "ENDERMITE", name: "Эндерчервь" }
   - { summoner: "WITHER_SKELETON", entity: "WITHER_SKELETON", name: "Скелетик" }
   - { summoner: "PILLAGER", entity: "PILLAGER", name: "Разбойник" }
   - { summoner: "EVOKER", entity: "VINDICATOR", name: "Патологоанатом" }
