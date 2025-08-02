@@ -82,6 +82,8 @@ import ru.mairwunnx.mobosses.serializers.PotionEffectTypeSerializer
     @SerialName("damage") val damage: FormulaSection,
     @SerialName("experience") val experience: FormulaSection,
     @SerialName("minions") val minions: MinionsFormula,
+    @SerialName("armor") val armor: ArmorFormula,
+    @SerialName("toughness") val toughness: ToughnessFormula,
   )
 
   @Serializable class FormulaSection(
@@ -99,9 +101,26 @@ import ru.mairwunnx.mobosses.serializers.PotionEffectTypeSerializer
     @SerialName("variance") val variance: Double,
   )
 
+  @Serializable class ArmorFormula(
+    @SerialName("max_scale") val maxScale: Double,
+    @SerialName("power") val power: Double,
+    @SerialName("offset") val offset: Double,
+    @SerialName("flatten") val flatten: Double? = null,
+    @SerialName("cap_points") val capPoints: Int
+  )
+
+  @Serializable class ToughnessFormula(
+    @SerialName("max_scale") val maxScale: Double,
+    @SerialName("power") val power: Double,
+    @SerialName("offset") val offset: Double,
+    @SerialName("flatten") val flatten: Double? = null,
+    @SerialName("cap_points") val capPoints: Int
+  )
+
   @Serializable class EffectsConfig(
     @SerialName("particles") val particles: ParticlesConfig,
-    @SerialName("glow") val glow: GlowConfig
+    @SerialName("glow") val glow: GlowConfig,
+    @SerialName("visibility_radius") val visibilityRadius: Int
   )
 
   @Serializable class ParticlesConfig(
@@ -234,6 +253,20 @@ import ru.mairwunnx.mobosses.serializers.PotionEffectTypeSerializer
           power = 1.2,
           offset = 80.0,
           variance = 0.0,
+        ),
+        armor = ArmorFormula(
+          maxScale = 2.0,
+          power = 1.2,
+          offset = 180.0,
+          flatten = 0.35,
+          capPoints = 28,
+        ),
+        toughness = ToughnessFormula(
+          maxScale = 2.2,
+          power = 1.1,
+          offset = 200.0,
+          flatten = 0.30,
+          capPoints = 12,
         )
       ),
       effects = EffectsConfig(
@@ -244,7 +277,8 @@ import ru.mairwunnx.mobosses.serializers.PotionEffectTypeSerializer
         glow = GlowConfig(
           enabled = true,
           classes = listOf("uncommon", "rare", "epic", "legendary", "mythic")
-        )
+        ),
+        visibilityRadius = 32
       ),
       bossBar = BossBarConfig(
         enabled = true,
