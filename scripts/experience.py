@@ -1,6 +1,7 @@
 import math
 base=5
 classes={'common':1.5,'uncommon':2.0,'rare':3.0,'epic':4.0,'legendary':6.0,'mythic':8.0}
+exp_mod=1.0
 max_scale=320
 power=2.0
 offset=1000
@@ -11,5 +12,5 @@ for lvl in levels:
  scale=1+(max_scale-1)*prog
  row=[lvl]
  for cm in classes.values():
-  row.append(round(base*cm*scale))
+  row.append(round(base*cm*scale*exp_mod))
  print('\t'.join(map(str,row)))
