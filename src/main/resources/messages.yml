@@ -1,0 +1,52 @@
+# Конфигурация сообщений Mo'Bosses.
+# Формат: MiniMessage (Kyori Adventure).
+# Документация: https://docs.advntr.dev/minimessage/format.html
+#
+# Цветовые псевдо‑теги:
+#   <pri>  … </pri>   — префикс / статусный зелёный
+#   <ok>   … </ok>    — успех
+#   <warn> … </warn>  — предупреждение
+#   <err>  … </err>   — ошибка (красный, bold)
+#   <boss> … </boss>  — имя босса
+#   <num>  … </num>   — числа, уровни, XP
+#   <item> … </item>  — редкий предмет (голубой)
+#   <hp>   … </hp>    — HP / реген
+#   <xp>   … </xp>    — внутренний опыт Mo'Bosses
+
+general:
+  plugin_disabled: "<pri>[Mo'Bosses]</pri> <warn>Плагин выключен!</warn>"
+  config_reloaded: "<pri>[Mo'Bosses]</pri> <ok>Конфигурация перезагружена!</ok>"
+  no_permission: "<err>У вас нет прав для выполнения этой команды!</err>"
+  killall_success: "<pri>[Mo'Bosses]</pri> <ok>Убито <num>{count}</num> боссов!</ok>"
+  killall_no_bosses: "<pri>[Mo'Bosses]</pri> <warn>Нет активных боссов для убийства.</warn>"
+
+boss:
+  loot:
+    # Плейсхолдеры: player, itemstack
+    rare_drop: "<pri>[Mo'Bosses]</pri> Игрок <ok><player></ok> получил <item>редкий</item> лут: <item><itemstack></item>!"
+    epic_drop: "<pri>[Mo'Bosses]</pri> Игрок <ok><player></ok> получил <bold><light_purple>эпический</light_purple></bold> лут: <item><itemstack></item>!"
+    legendary_drop: "<pri>[Mo'Bosses]</pri> Игрок <ok><player></ok> получил <bold><gold>легендарный</gold></bold> лут: <item><itemstack></item>!"
+    mythic_drop: "<pri>[Mo'Bosses]</pri> Игрок <ok><player></ok> получил <bold><gradient:#ff0080:#8000ff>мифический</gradient></bold> лут: <item><itemstack></item>!"
+    enabled: true
+
+  death:
+    killed:
+      broadcast:
+        # Плейсхолдеры: player, boss_name, level, class
+        message: "<pri>[Mo'Bosses]</pri> Игрок <ok><player></ok> победил босса <boss><boss_name></boss> уровня <num>Lv. <level></num>/<class> и получил <xp><experience></xp> опыта!"
+        enabled: true
+      enabled: true
+      sound: "UI_TOAST_CHALLENGE_COMPLETE"
+      sound_volume: 0.3
+
+  abilities:
+    # Плейсхолдеры: boss_name
+    lightning: "<boss><boss_name></boss> использует <item>Молнию</item>!"
+    regeneration: "<boss><boss_name></boss> начинает <hp>регенерацию</hp>!"
+    summon_minions: "<boss><boss_name></boss> призывает миньонов!"
+    fire_ring: "<boss><boss_name></boss> создает кольцо огня!"
+    web_ring: "<boss><boss_name></boss> создает кольцо паутины!"
+    teleport_strike: "<boss><boss_name></boss> использует <item>Приемы ниндзя</item>!"
+    meteor_shower: "<boss><boss_name></boss> вызывает <item>метеоритный дождь</item>!"
+    arrow_arc: "<boss><boss_name></boss> выпускает <item>дуговой залп</item>!"
+    arrow_rain: "<boss><boss_name></boss> обрушивает <item>дождь стрел</item>!"
