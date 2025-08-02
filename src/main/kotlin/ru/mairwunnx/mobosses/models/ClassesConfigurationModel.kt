@@ -23,6 +23,18 @@ import ru.mairwunnx.mobosses.serializers.PotionEffectTypeSerializer
   @SerialName("legendary") val legendary: BossClass,
   @SerialName("mythic") val mythic: BossClass
 ) {
+  @Serializable class AbilityThresholds(
+    @SerialName("lightning") val lightning: Int,
+    @SerialName("summoning") val summoning: Int,
+    @SerialName("regeneration") val regeneration: Int,
+    @SerialName("fire_ring") val fireRing: Int,
+    @SerialName("web_ring") val webRing: Int,
+    @SerialName("teleport_strike") val teleportStrike: Int,
+    @SerialName("meteor_shower") val meteorShower: Int,
+    @SerialName("arrow_arc") val arrowArc: Int,
+    @SerialName("arrow_rain") val arrowRain: Int
+  )
+
   @Serializable class BossClass(
     @SerialName("key") val key: String,
     @SerialName("health") val health: Double,
@@ -32,8 +44,9 @@ import ru.mairwunnx.mobosses.serializers.PotionEffectTypeSerializer
     @SerialName("toughness") val toughness: Double,
     @SerialName("color") val color: @Contextual ChatColor,
     @SerialName("chance") val chance: Double,
-    @SerialName("display_name") val displayName: String
-  )
+    @SerialName("display_name") val displayName: String,
+    @SerialName("ability_thresholds") val abilityThresholds: AbilityThresholds
+   )
 
   companion object {
     fun default() = ClassesConfigurationModel(
@@ -46,7 +59,18 @@ import ru.mairwunnx.mobosses.serializers.PotionEffectTypeSerializer
         toughness = 1.05,
         color = ChatColor.WHITE,
         chance = 55.0,
-        displayName = "Common"
+        displayName = "Common",
+        abilityThresholds = AbilityThresholds(
+          lightning = 20,
+          summoning = 30,
+          regeneration = 45,
+          fireRing = 25,
+          webRing = 35,
+          teleportStrike = 60,
+          meteorShower = 50,
+          arrowArc = 28,
+          arrowRain = 65
+        )
       ),
       uncommon = BossClass(
         key = "uncommon",
@@ -57,7 +81,18 @@ import ru.mairwunnx.mobosses.serializers.PotionEffectTypeSerializer
         toughness = 1.13,
         color = ChatColor.YELLOW,
         chance = 25.0,
-        displayName = "Uncommon"
+        displayName = "Uncommon",
+        abilityThresholds = AbilityThresholds(
+          lightning = 18,
+          summoning = 28,
+          regeneration = 40,
+          fireRing = 22,
+          webRing = 32,
+          teleportStrike = 55,
+          meteorShower = 45,
+          arrowArc = 25,
+          arrowRain = 60
+        )
       ),
       rare = BossClass(
         key = "rare",
@@ -68,7 +103,18 @@ import ru.mairwunnx.mobosses.serializers.PotionEffectTypeSerializer
         toughness = 1.23,
         color = ChatColor.AQUA,
         chance = 12.0,
-        displayName = "Rare"
+        displayName = "Rare",
+        abilityThresholds = AbilityThresholds(
+          lightning = 15,
+          summoning = 25,
+          regeneration = 35,
+          fireRing = 20,
+          webRing = 28,
+          teleportStrike = 50,
+          meteorShower = 40,
+          arrowArc = 22,
+          arrowRain = 55
+        )
       ),
       epic = BossClass(
         key = "epic",
@@ -79,7 +125,18 @@ import ru.mairwunnx.mobosses.serializers.PotionEffectTypeSerializer
         toughness = 1.42,
         color = ChatColor.DARK_PURPLE,
         chance = 5.0,
-        displayName = "Epic"
+        displayName = "Epic",
+        abilityThresholds = AbilityThresholds(
+          lightning = 12,
+          summoning = 20,
+          regeneration = 30,
+          fireRing = 16,
+          webRing = 24,
+          teleportStrike = 42,
+          meteorShower = 35,
+          arrowArc = 18,
+          arrowRain = 48
+        )
       ),
       legendary = BossClass(
         key = "legendary",
@@ -90,7 +147,18 @@ import ru.mairwunnx.mobosses.serializers.PotionEffectTypeSerializer
         toughness = 1.67,
         color = ChatColor.GOLD,
         chance = 2.0,
-        displayName = "Legendary"
+        displayName = "Legendary",
+        abilityThresholds = AbilityThresholds(
+          lightning = 8,
+          summoning = 15,
+          regeneration = 25,
+          fireRing = 12,
+          webRing = 18,
+          teleportStrike = 35,
+          meteorShower = 28,
+          arrowArc = 14,
+          arrowRain = 40
+        )
       ),
       mythic = BossClass(
         key = "mythic",
@@ -101,7 +169,18 @@ import ru.mairwunnx.mobosses.serializers.PotionEffectTypeSerializer
         toughness = 1.97,
         color = ChatColor.RED,
         chance = 1.0,
-        displayName = "Mythic"
+        displayName = "Mythic",
+        abilityThresholds = AbilityThresholds(
+          lightning = 5,
+          summoning = 10,
+          regeneration = 18,
+          fireRing = 8,
+          webRing = 12,
+          teleportStrike = 25,
+          meteorShower = 20,
+          arrowArc = 10,
+          arrowRain = 30
+        )
       )
     )
   }
