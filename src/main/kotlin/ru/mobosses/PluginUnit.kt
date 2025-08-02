@@ -8,11 +8,11 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.plugin.java.JavaPlugin
-import org.bukkit.scheduler.BukkitTask
 import ru.mairwunnx.mobosses.framework.BukkitAsyncDispatcher
 import ru.mairwunnx.mobosses.framework.BukkitDispatcher
 import ru.mairwunnx.mobosses.framework.BukkitLogger
 import ru.mairwunnx.mobosses.managers.ConfigurationManager
+import ru.mairwunnx.mobosses.managers.DurabilityManager
 import ru.mairwunnx.mobosses.managers.RewardsManager
 import ru.mairwunnx.mobosses.models.GeneralConfigurationModel
 import ru.mairwunnx.mobosses.models.MessagesConfigurationModel
@@ -21,13 +21,11 @@ import ru.mobosses.events.WorldEventHandler
 import ru.mobosses.managers.BossBarManager
 import ru.mobosses.managers.BossManager
 import ru.mobosses.managers.DatabaseManager
-import ru.mairwunnx.mobosses.managers.DurabilityManager
 import ru.mobosses.managers.EffectsManager
 import ru.mobosses.managers.LootManager
 import ru.mobosses.managers.MessageManager
 import ru.mobosses.managers.ProgressionManager
 import ru.mobosses.managers.ProximityManager
-import ru.mobosses.storage.DataStorage
 
 class PluginUnit : JavaPlugin(), CommandExecutor {
   lateinit var scope: CoroutineScope private set
@@ -48,7 +46,7 @@ class PluginUnit : JavaPlugin(), CommandExecutor {
   lateinit var lootManager: LootManager private set
   lateinit var progressionManager: ProgressionManager private set
   lateinit var effectsManager: EffectsManager private set
-  lateinit var dataStorage: DataStorage private set
+  lateinit var database: DatabaseManager private set
   lateinit var proximity: ProximityManager private set
 
   override fun onEnable() {
@@ -72,12 +70,12 @@ class PluginUnit : JavaPlugin(), CommandExecutor {
 
     messages = MessageManager(this)
     rewards = RewardsManager(this)
-    dataStorage = DatabaseManager(this)
+    database = DatabaseManager(this)
     bossBarManager = BossBarManager(this)
     durabilityManager = DurabilityManager(this)
     effectsManager = EffectsManager(this)
     lootManager = LootManager(this, durabilityManager)
-    progressionManager = ProgressionManager(this, dataStorage)
+    progressionManager = ProgressionManager(this, database)
     bossManager = BossManager(this, bossBarManager, effectsManager, progressionManager, messages)
     proximity = ProximityManager(this)
     server.pluginManager.registerEvents(WorldEventHandler(this, bossManager, bossBarManager), this)
@@ -105,7 +103,7 @@ class PluginUnit : JavaPlugin(), CommandExecutor {
     // Закрываем ресурсы
     if (::scope.isInitialized) scope.cancel()
     if (::messages.isInitialized) messages.close()
-    if (::dataStorage.isInitialized) dataStorage.close()
+    if (::database.isInitialized) database.close()
 
     logger.info { "✅ Plugin Mo'Bosses unloaded" }
   }
