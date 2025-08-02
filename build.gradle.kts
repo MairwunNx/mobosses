@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "ru.mobosses"
-version = "1.3.1"
+version = "1.8.0"
 
 repositories {
   mavenCentral()
