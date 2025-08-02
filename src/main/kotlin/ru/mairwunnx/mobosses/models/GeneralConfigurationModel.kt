@@ -19,7 +19,6 @@ import ru.mairwunnx.mobosses.serializers.SoundSerializer
   @SerialName("language") val language: String,
   @SerialName("spawn") val spawn: SpawnConfig,
   @SerialName("progression") val progression: ProgressionConfig,
-  @SerialName("boss_tree") val bossTree: BossTreeSettings,
   @SerialName("formula") val formula: FormulaConfig,
   @SerialName("effects") val effects: EffectsConfig,
   @SerialName("boss_bar") val bossBar: BossBarConfig,
@@ -51,15 +50,18 @@ import ru.mairwunnx.mobosses.serializers.SoundSerializer
 
   @Serializable class ProgressionConfig(
     @SerialName("level_curve") val levelCurve: LevelCurve,
+    @SerialName("mini_bosses_level_curve") val miniBossesLevelCurve: MiniBossesCurve,
     @SerialName("exp_gain") val expGain: ExpGain,
     @SerialName("variance") val variance: Variance
   )
 
-  @Serializable class BossTreeSettings(
-    @SerialName("enabled") val enabled: Boolean,
-    @SerialName("max_children_global_cap") val maxChildrenGlobalCap: Int,
-    @SerialName("child_level_bias_down_min") val childLevelBiasDownMin: Int,
-    @SerialName("child_level_bias_down_max") val childLevelBiasDownMax: Int
+  @Serializable class MiniBossesCurve(
+    @SerialName("min_delta") val minDelta: Int,
+    @SerialName("max_delta") val maxDelta: Int,
+    @SerialName("power") val power: Double,
+    @SerialName("offset") val offset: Double,
+    @SerialName("percent_cap") val percentCap: Double,
+    @SerialName("jitter") val jitter: Int,
   )
 
   @Serializable class LevelCurve(
@@ -234,13 +236,15 @@ import ru.mairwunnx.mobosses.serializers.SoundSerializer
           minReduction = 5,
           maxReduction = 80,
           power = 1.2
-        )
-      ),
-      bossTree = BossTreeSettings(
-        enabled = true,
-        maxChildrenGlobalCap = 8,
-        childLevelBiasDownMin = 1,
-        childLevelBiasDownMax = 7
+        ),
+        miniBossesLevelCurve = MiniBossesCurve(
+          minDelta = 1,
+          maxDelta = 18,
+          power = 1.15,
+          offset = 90.0,
+          percentCap = 0.28,
+          jitter = 1,
+        ),
       ),
       formula = FormulaConfig(
         health = FormulaSection(
