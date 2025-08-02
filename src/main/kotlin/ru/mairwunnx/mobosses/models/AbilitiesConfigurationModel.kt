@@ -29,9 +29,7 @@ import ru.mairwunnx.mobosses.serializers.SoundSerializer
   @SerialName("is_regeneration_enabled") val isRegenerationEnabled: Boolean,
   @SerialName("is_meteor_shower_enabled") val isMeteorShowerEnabled: Boolean,
   @SerialName("is_arrow_arc_enabled") val isArrowArcEnabled: Boolean,
-  @SerialName("lightning_level_threshold") val lightningLevelThreshold: Int,
-  @SerialName("summoning_level_threshold") val summoningLevelThreshold: Int,
-  @SerialName("regeneration_level_threshold") val regenerationLevelThreshold: Int,
+
   @SerialName("general_cooldown") val generalCooldown: Long,
   @SerialName("general_cooldown_bias") val generalCooldownBias: Double,
   @SerialName("lightning_cooldown") val lightningCooldown: Long,
@@ -67,7 +65,7 @@ import ru.mairwunnx.mobosses.serializers.SoundSerializer
   @SerialName("fire_ring_density") val fireRingDensity: Double,
   @SerialName("fire_ring_cooldown") val fireRingCooldown: Long,
   @SerialName("fire_ring_cooldown_bias") val fireRingCooldownBias: Double,
-  @SerialName("fire_ring_level_threshold") val fireRingLevelThreshold: Int,
+
   @SerialName("is_web_ring_enabled") val isWebRingEnabled: Boolean,
   @SerialName("web_ring_radius") val webRingRadius: Double,
   @SerialName("web_ring_duration") val webRingDuration: Int,
@@ -77,12 +75,11 @@ import ru.mairwunnx.mobosses.serializers.SoundSerializer
   @SerialName("web_ring_potion_level_modifier") val webRingPotionLevelModifier: Double,
   @SerialName("web_ring_cooldown") val webRingCooldown: Long,
   @SerialName("web_ring_cooldown_bias") val webRingCooldownBias: Double,
-  @SerialName("web_ring_level_threshold") val webRingLevelThreshold: Int,
+
   @SerialName("is_teleport_strike_enabled") val isTeleportStrikeEnabled: Boolean,
   @SerialName("teleport_strike_cooldown") val teleportStrikeCooldown: Long,
   @SerialName("teleport_strike_cooldown_bias") val teleportStrikeCooldownBias: Double,
-  @SerialName("teleport_strike_level_threshold") val teleportStrikeLevelThreshold: Int,
-  @SerialName("meteor_shower_level_threshold") val meteorShowerLevelThreshold: Int,
+
   @SerialName("meteor_shower_cooldown") val meteorShowerCooldown: Long,
   @SerialName("meteor_shower_cooldown_bias") val meteorShowerCooldownBias: Double,
   @SerialName("meteor_shower_waves_base") val wavesBase: Int,
@@ -103,7 +100,7 @@ import ru.mairwunnx.mobosses.serializers.SoundSerializer
   @SerialName("meteor_shower_fire_radius") val fireRadius: Double,
   @SerialName("meteor_shower_ignite_seconds") val igniteSeconds: Int,
   @SerialName("meteor_shower_meteor_lifetime_seconds") val meteorLifetimeSeconds: Int,
-  @SerialName("arrow_arc_level_threshold") val arrowArcLevelThreshold: Int,
+
   @SerialName("arrow_arc_cooldown") val arrowArcCooldown: Long,
   @SerialName("arrow_arc_cooldown_bias") val arrowArcCooldownBias: Double,
   @SerialName("arrow_arc_arrows_base") val arrowsBase: Int,
@@ -126,7 +123,7 @@ import ru.mairwunnx.mobosses.serializers.SoundSerializer
   @SerialName("arrow_arc_negative_effects") val negativeEffects: List<@Contextual PotionEffectType>,
 
   @SerialName("is_arrow_rain_enabled") val isArrowRainEnabled: Boolean,
-  @SerialName("arrow_rain_level_threshold") val arrowRainLevelThreshold: Int,
+
   @SerialName("arrow_rain_cooldown") val arrowRainCooldown: Long,
   @SerialName("arrow_rain_cooldown_bias") val arrowRainCooldownBias: Double,
   @SerialName("arrow_rain_arrows_base") val arrowRainArrowsBase: Int,
@@ -156,9 +153,7 @@ import ru.mairwunnx.mobosses.serializers.SoundSerializer
       isRegenerationEnabled = true,
       isMeteorShowerEnabled = true,
       isArrowArcEnabled = true,
-      lightningLevelThreshold = 15,
-      summoningLevelThreshold = 25,
-      regenerationLevelThreshold = 35,
+
       generalCooldown = 5000L,
       generalCooldownBias = 1.4,
       lightningCooldown = 10000L,
@@ -194,7 +189,7 @@ import ru.mairwunnx.mobosses.serializers.SoundSerializer
       fireRingDensity = 0.7,
       fireRingCooldown = 6000L,
       fireRingCooldownBias = 1.3,
-      fireRingLevelThreshold = 20,
+
       isWebRingEnabled = true,
       webRingRadius = 3.0,
       webRingDuration = 8,
@@ -204,12 +199,11 @@ import ru.mairwunnx.mobosses.serializers.SoundSerializer
       webRingPotionLevelModifier = 0.06,
       webRingCooldown = 8000L,
       webRingCooldownBias = 1.4,
-      webRingLevelThreshold = 28,
+
       isTeleportStrikeEnabled = true,
       teleportStrikeCooldown = 11000L,
       teleportStrikeCooldownBias = 1.2,
-      teleportStrikeLevelThreshold = 50,
-      meteorShowerLevelThreshold = 35,
+
       meteorShowerCooldown = 16_000,
       meteorShowerCooldownBias = 1.2,
       meteorLifetimeSeconds = 8,
@@ -230,7 +224,7 @@ import ru.mairwunnx.mobosses.serializers.SoundSerializer
       impactDamageMax = 18.0,
       fireRadius = 2.5,
       igniteSeconds = 3,
-      arrowArcLevelThreshold = 18,
+
       arrowArcCooldown = 7_000,
       arrowArcCooldownBias = 1.1,
       arrowsBase = 18,
@@ -265,7 +259,7 @@ import ru.mairwunnx.mobosses.serializers.SoundSerializer
         PotionEffectType.BAD_OMEN,
       ),
       isArrowRainEnabled = true,
-      arrowRainLevelThreshold = 22,
+
       arrowRainCooldown = 8_000L,
       arrowRainCooldownBias = 1.1,
       arrowRainArrowsBase = 30,
