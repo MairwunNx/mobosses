@@ -124,6 +124,30 @@ import ru.mairwunnx.mobosses.serializers.SoundSerializer
   @SerialName("arrow_arc_effect_amplifier_min") val effectAmplifierMin: Int,
   @SerialName("arrow_arc_effect_amplifier_max") val effectAmplifierMax: Int,
   @SerialName("arrow_arc_negative_effects") val negativeEffects: List<@Contextual PotionEffectType>,
+
+  @SerialName("is_arrow_rain_enabled") val isArrowRainEnabled: Boolean,
+  @SerialName("arrow_rain_level_threshold") val arrowRainLevelThreshold: Int,
+  @SerialName("arrow_rain_cooldown") val arrowRainCooldown: Long,
+  @SerialName("arrow_rain_cooldown_bias") val arrowRainCooldownBias: Double,
+  @SerialName("arrow_rain_arrows_base") val arrowRainArrowsBase: Int,
+  @SerialName("arrow_rain_arrows_per_level") val arrowRainArrowsPerLevel: Double,
+  @SerialName("arrow_rain_arrows_max") val arrowRainArrowsMax: Int,
+  @SerialName("arrow_rain_waves") val arrowRainWaves: Int,
+  @SerialName("arrow_rain_wave_interval_ticks") val arrowRainWaveIntervalTicks: Long,
+  @SerialName("arrow_rain_half_size") val arrowRainHalfSize: Double,      // половина стороны квадрата (8.0 = 16x16)
+  @SerialName("arrow_rain_height") val arrowRainHeight: Double,           // высота спавна над целью
+  @SerialName("arrow_rain_fall_speed") val arrowRainFallSpeed: Double,    // начальная вертикальная скорость вниз
+  @SerialName("arrow_rain_damage_base") val arrowRainDamageBase: Double,
+  @SerialName("arrow_rain_damage_per_level") val arrowRainDamagePerLevel: Double,
+  @SerialName("arrow_rain_damage_max") val arrowRainDamageMax: Double,
+  @SerialName("arrow_rain_lifetime_seconds") val arrowRainLifetimeSeconds: Int,
+  @SerialName("arrow_rain_random_effect_level_threshold") val arrowRainRandomEffectLevelThreshold: Int,
+  @SerialName("arrow_rain_random_effects_max_per_wave") val arrowRainRandomEffectsMaxPerWave: Int,
+  @SerialName("arrow_rain_effect_duration_seconds") val arrowRainEffectDurationSeconds: Int,
+  @SerialName("arrow_rain_effect_amplifier_min") val arrowRainEffectAmplifierMin: Int,
+  @SerialName("arrow_rain_effect_amplifier_max") val arrowRainEffectAmplifierMax: Int,
+  @SerialName("arrow_rain_negative_effects") val arrowRainNegativeEffects: List<@Contextual PotionEffectType>,
+  @SerialName("arrow_rain_target_search_radius") val arrowRainTargetSearchRadius: Double,
 ) {
   companion object {
     fun default() = AbilitiesConfigurationModel(
@@ -161,7 +185,6 @@ import ru.mairwunnx.mobosses.serializers.SoundSerializer
       regenDurationSecondsBase = 6,
       regenDurationSecondsPerLevel = 0.06,  // +1с примерно на 17 уровней
       regenDurationSecondsMax = 16,
-
       regenAmplifierBase = 0,               // Regeneration I
       regenAmplifierPerLevel = 0.02,        // +1 уровень примерно на 50 лвл
       regenAmplifierMax = 2,                // максимум Regeneration III
@@ -241,6 +264,42 @@ import ru.mairwunnx.mobosses.serializers.SoundSerializer
         PotionEffectType.UNLUCK,
         PotionEffectType.BAD_OMEN,
       ),
+      isArrowRainEnabled = true,
+      arrowRainLevelThreshold = 22,
+      arrowRainCooldown = 8_000L,
+      arrowRainCooldownBias = 1.1,
+      arrowRainArrowsBase = 30,
+      arrowRainArrowsPerLevel = 0.30,
+      arrowRainArrowsMax = 90,
+      arrowRainWaves = 2,
+      arrowRainWaveIntervalTicks = 20L,
+      arrowRainHalfSize = 8.0,     // 16x16 площадь
+      arrowRainHeight = 12.0,
+      arrowRainFallSpeed = 0.9,
+      arrowRainDamageBase = 2.6,
+      arrowRainDamagePerLevel = 0.06,
+      arrowRainDamageMax = 7.0,
+      arrowRainLifetimeSeconds = 6,
+      arrowRainRandomEffectLevelThreshold = 35,
+      arrowRainRandomEffectsMaxPerWave = 24,
+      arrowRainEffectDurationSeconds = 6,
+      arrowRainEffectAmplifierMin = 0,
+      arrowRainEffectAmplifierMax = 1,
+      arrowRainNegativeEffects = listOf(
+        PotionEffectType.SLOWNESS,
+        PotionEffectType.POISON,
+        PotionEffectType.WEAKNESS,
+        PotionEffectType.MINING_FATIGUE,
+        PotionEffectType.BLINDNESS,
+        PotionEffectType.HUNGER,
+        PotionEffectType.WITHER,
+        PotionEffectType.LEVITATION,
+        PotionEffectType.NAUSEA,
+        PotionEffectType.DARKNESS,
+        PotionEffectType.UNLUCK,
+        PotionEffectType.BAD_OMEN
+      ),
+      arrowRainTargetSearchRadius = 40.0,
     )
   }
 }
