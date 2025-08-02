@@ -1,0 +1,18 @@
+# Настройки призыва миньонов по типам мобов, Mo'Bosses.
+
+minions:
+  - { summoner: "ZOMBIE", entity: "ZOMBIE", name: "Гниль" }
+  - { summoner: "SPIDER", entity: "CAVE_SPIDER", name: "Пауканчик" }
+  - { summoner: "SKELETON", entity: "SKELETON", name: "Скелетончик" }
+  - { summoner: "ENDERMAN", entity: "ENDERMITE", name: "Эндермит" }
+  - { summoner: "WITHER_SKELETON", entity: "WITHER_SKELETON", name: "Скелетик" }
+  - { summoner: "PILLAGER", entity: "PILLAGER", name: "Разбойник" }
+  - { summoner: "EVOKER", entity: "VINDICATOR", name: "Патологоанатом" }
+  - { summoner: "WITCH", entity: "ZOMBIE", name: "Поддувало жрицы" }
+  - { summoner: "VINDICATOR", entity: "VEX", name: "Дух" }
+  - { summoner: "STRAY", entity: "STRAY", name: "Замороженный" }
+  - { summoner: "HUSK", entity: "HUSK", name: "Запесоченный" }
+  - { summoner: "DROWNED", entity: "DROWNED", name: "Затонувший" }
+  - { summoner: "PHANTOM", entity: "PHANTOM", name: "Шахед-136" }
+  - { summoner: "VEX", entity: "VEX", name: "Дух" }
+  - { summoner: "ZOMBIE_VILLAGER", entity: "ZOMBIE_VILLAGER", name: "Зомбик" }
