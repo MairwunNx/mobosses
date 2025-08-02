@@ -19,6 +19,7 @@ import ru.mairwunnx.mobosses.serializers.PotionEffectTypeSerializer
   @SerialName("language") val language: String,
   @SerialName("spawn") val spawn: SpawnConfig,
   @SerialName("progression") val progression: ProgressionConfig,
+  @SerialName("boss_tree") val bossTree: BossTreeSettings,
   @SerialName("formula") val formula: FormulaConfig,
   @SerialName("effects") val effects: EffectsConfig,
   @SerialName("boss_bar") val bossBar: BossBarConfig,
@@ -52,6 +53,13 @@ import ru.mairwunnx.mobosses.serializers.PotionEffectTypeSerializer
     @SerialName("level_curve") val levelCurve: LevelCurve,
     @SerialName("exp_gain") val expGain: ExpGain,
     @SerialName("variance") val variance: Variance
+  )
+
+  @Serializable data class BossTreeSettings(
+    @SerialName("enabled") val enabled: Boolean,
+    @SerialName("max_children_global_cap") val maxChildrenGlobalCap: Int,
+    @SerialName("child_level_bias_down_min") val childLevelBiasDownMin: Int,
+    @SerialName("child_level_bias_down_max") val childLevelBiasDownMax: Int
   )
 
   @Serializable class LevelCurve(
@@ -227,6 +235,12 @@ import ru.mairwunnx.mobosses.serializers.PotionEffectTypeSerializer
           maxReduction = 80,
           power = 1.2
         )
+      ),
+      bossTree = BossTreeSettings(
+        enabled = true,
+        maxChildrenGlobalCap = 8,
+        childLevelBiasDownMin = 1,
+        childLevelBiasDownMax = 7
       ),
       formula = FormulaConfig(
         health = FormulaSection(
