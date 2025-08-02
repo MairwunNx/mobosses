@@ -27,7 +27,6 @@ import ru.mairwunnx.mobosses.models.types.IntRangeSpec
     @SerialName("min_level") val minLevel: Int,
     @SerialName("max_level") val maxLevel: Int,
     @SerialName("amount") val amount: IntRangeSpec,
-    @SerialName("experience_multiplier") val experienceMultiplier: Double,
     @SerialName("weight") val weight: Double,
     @SerialName("random_durability") val randomDurability: Boolean? = null,
     @SerialName("enchantments") val enchantments: Map<@Contextual Enchantment, IntRangeSpec>? = null,
@@ -37,11 +36,10 @@ import ru.mairwunnx.mobosses.models.types.IntRangeSpec
   )
 
   @Serializable class LootSettings(
-    @SerialName("max_experience_multiplier") val maxExperienceMultiplier: Double,
     @SerialName("per_level_drop_factor") val perLevelDropFactor: Double
   )
 
   companion object {
-    fun default() = LootTableConfigurationModel(levelLoot = listOf(), lootSettings = LootSettings(maxExperienceMultiplier = 10.0, 0.05))
+    fun default() = LootTableConfigurationModel(levelLoot = listOf(), lootSettings = LootSettings(0.05))
   }
 }
