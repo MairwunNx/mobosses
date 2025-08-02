@@ -5,13 +5,13 @@ package ru.mairwunnx.mobosses.models
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.UseSerializers
-import ru.mairwunnx.mobosses.serializers.SoundSerializer
-import ru.mairwunnx.mobosses.serializers.ParticleSerializer
-import ru.mairwunnx.mobosses.serializers.EntityTypeSerializer
 import ru.mairwunnx.mobosses.serializers.ChatColorSerializer
-import ru.mairwunnx.mobosses.serializers.MaterialSerializer
 import ru.mairwunnx.mobosses.serializers.EnchantmentSerializer
+import ru.mairwunnx.mobosses.serializers.EntityTypeSerializer
+import ru.mairwunnx.mobosses.serializers.MaterialSerializer
+import ru.mairwunnx.mobosses.serializers.ParticleSerializer
 import ru.mairwunnx.mobosses.serializers.PotionEffectTypeSerializer
+import ru.mairwunnx.mobosses.serializers.SoundSerializer
 
 @Serializable class GeneralConfigurationModel(
   @SerialName("enabled") val enabled: Boolean,
@@ -55,7 +55,7 @@ import ru.mairwunnx.mobosses.serializers.PotionEffectTypeSerializer
     @SerialName("variance") val variance: Variance
   )
 
-  @Serializable data class BossTreeSettings(
+  @Serializable class BossTreeSettings(
     @SerialName("enabled") val enabled: Boolean,
     @SerialName("max_children_global_cap") val maxChildrenGlobalCap: Int,
     @SerialName("child_level_bias_down_min") val childLevelBiasDownMin: Int,
