@@ -79,6 +79,7 @@ import ru.mairwunnx.mobosses.serializers.PotionEffectTypeSerializer
     @SerialName("teleport_strike") val teleportStrike: String,
     @SerialName("meteor_shower") val meteorShower: String,
     @SerialName("arrow_arc") val arrowArc: String,
+    @SerialName("arrow_rain") val arrowRain: String,
   )
 
   companion object {
@@ -117,7 +118,8 @@ import ru.mairwunnx.mobosses.serializers.PotionEffectTypeSerializer
           webRing = "<boss><boss_name></boss> создает кольцо паутины!",
           teleportStrike = "<boss><boss_name></boss> использует <item>Приемы ниндзя</item>!",
           meteorShower = "<boss><boss_name></boss> вызывает <item>метеоритный дождь</item>!",
-          arrowArc = "<boss><boss_name></boss> выпускает <item>дуговой залп</item>!"
+          arrowArc = "<boss><boss_name></boss> выпускает <item>дуговой залп</item>!",
+          arrowRain = "<boss><boss_name></boss> обрушивает <item>дождь стрел</item>!"
         )
       )
     )
