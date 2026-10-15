@@ -97,10 +97,38 @@ class WorldApiLink(private val plugin: MoBossesPlugin) : Listener {
           entries.map { mapOf("type" to it.type, "class" to it.clazz, "kills" to it.kills, "bestLevel" to it.bestLevel) }
         }
       },
-      resource("stats", "Bosses spawned and killed by type and class, and how many are alive now", public = true) {
+      resource(
+        "leaderboards/{board}",
+        "Players ranked by kills, level, or experience, shaped as WorldAPI's own leaderboards; ?limit=1..500", public = true,
+      ) { params ->
+        val curve = plugin.catalog.settings.progression.levelCurve
+        val (title, unit, score) = when (params.getValue("board")) {
+          "kills" -> Triple("Bosses killed", "bosses", { p: Progress -> p.kills.toDouble() })
+          "level" -> Triple("Mo’Bosses level", "level", { p: Progress -> Leveling.score(curve, p.experience, p.kills) })
+          "experience" -> Triple("Mo’Bosses experience", "xp", { p: Progress -> p.experience.toDouble() })
+          else -> throw NoSuchElementException("Boards: kills, level, experience")
+        }
+        val board = params.getValue("board")
+        plugin.progression.board(params["limit"]?.toIntOrNull()?.coerceIn(1, 500) ?: 10, score).thenApply { (hunters, total) ->
+          mapOf(
+            "id" to board, "title" to title, "unit" to unit, "total" to total,
+            "entries" to hunters.mapIndexed { i, hunter ->
+              val value = when (board) {
+                "kills" -> hunter.progress.kills.toDouble()
+                "level" -> Leveling.playerLevel(curve, hunter.progress.experience, hunter.progress.kills).toDouble()
+                else -> hunter.progress.experience.toDouble()
+              }
+              mapOf("place" to i + 1, "player" to mapOf("uuid" to hunter.uuid, "name" to plugin.menuStats.name(hunter)), "value" to value)
+            },
+          )
+        }
+      },
+      resource("stats", "Bosses alive now, spawned, and killed, in all and by type and class", public = true) {
         plugin.progression.counts().thenApply { counts ->
           mapOf(
             "alive" to PlanData.bossesAlive,
+            "spawned" to counts.sumOf { it.spawned },
+            "killed" to counts.sumOf { it.killed },
             "counts" to counts.map { mapOf("type" to it.type, "class" to it.clazz, "spawned" to it.spawned, "killed" to it.killed) },
           )
         }

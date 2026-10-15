@@ -59,6 +59,10 @@ class Progression(private val plugin: MoBossesPlugin) : Listener {
   /** The best hunters; empty without a database. Any thread. */
   fun top(limit: Int): CompletableFuture<List<Hunter>> = store?.top(limit, score()) ?: CompletableFuture.completedFuture(emptyList())
 
+  /** A board by any [score] of progress, with how many players are on it; empty without a database. */
+  fun board(limit: Int, score: (Progress) -> Double): CompletableFuture<Pair<List<Hunter>, Int>> =
+    store?.board(limit, score) ?: CompletableFuture.completedFuture(emptyList<Hunter>() to 0)
+
   /** A player's place on the board; null without a database. */
   fun rank(player: UUID): CompletableFuture<Int?> = store?.rank(player, score())?.thenApply { it } ?: CompletableFuture.completedFuture(null)
 

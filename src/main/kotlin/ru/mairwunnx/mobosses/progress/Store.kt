@@ -103,6 +103,12 @@ class Store(private val settings: Settings.Database, folder: File) : AutoCloseab
     hunters().sortedWith(order(score)).take(limit)
   }
 
+  /** Players by [score], highest first, those with none left out; and how many have any. */
+  fun board(limit: Int, score: (Progress) -> Double): CompletableFuture<Pair<List<Hunter>, Int>> = query {
+    val ranked = hunters().filter { score(it.progress) > 0 }.sortedWith(order(score))
+    ranked.take(limit) to ranked.size
+  }
+
   /** A player's place on the board: 1 plus how many rank above them. */
   fun rank(player: UUID, score: (Progress) -> Double): CompletableFuture<Int> = query {
     val all = hunters()
