@@ -130,7 +130,8 @@ hangarPublish {
     changelog = releaseNotes
     platforms {
       register(Platforms.PAPER) {
-        jar = tasks.shadowJar.flatMap { it.archiveFile }
+        // The jar is over Hangar's 15 MB limit (Exposed brings kotlin-reflect), so Hangar links to the GitHub release instead.
+        url = "https://github.com/MairwunNx/mobosses/releases/download/v${project.version}/mobosses-${project.version}.jar"
         platformVersions = listOf("26.3")
       }
     }

@@ -78,7 +78,7 @@ Where the versions live, for `/update-deps` and `/update-minecraft` (both in `.c
 ## Releasing
 
 1. Add a `## X.Y.Z` section to CHANGELOG.md, written for server owners, and push it. After a change that reaches what the project ships, add it to CHANGELOG.md in the same push: under the topmost “## X.Y.Z” section while that version isn’t released (`gh release view vX.Y.Z` fails), or under a new section with the next version: patch for fixes, minor for features, major for breaking changes. A release then needs only the workflow, and the workflow runs only when the owner asks.
-2. Run the “Release” workflow with the new version: `gh workflow run release.yml -R MairwunNx/mobosses -f version=X.Y.Z -f modrinth=true`. Its `changelog` field overrides the CHANGELOG.md section; one of the two must be there. It builds with `-PreleaseVersion`, tags `vX.Y.Z`, and attaches `mobosses-X.Y.Z.jar` to a GitHub release. Nothing in the repo holds the version; local and CI builds are `dev`.
+2. Run the “Release” workflow with the new version: `gh workflow run release.yml -R MairwunNx/mobosses -f version=X.Y.Z -f modrinth=true -f hangar=true`. Its `changelog` field overrides the CHANGELOG.md section; one of the two must be there. It builds with `-PreleaseVersion`, tags `vX.Y.Z`, and attaches `mobosses-X.Y.Z.jar` to a GitHub release. Nothing in the repo holds the version; local and CI builds are `dev`.
 3. Never delete or re-tag a published release. If GitHub succeeded and Modrinth didn’t, fix the build, finish the upload with `./gradlew modrinth -PreleaseVersion=X.Y.Z -PchangelogFile=… --no-configuration-cache` locally, and fix the workflow for next time.
 
 ## Modrinth
@@ -87,7 +87,7 @@ The project is `mobosses` (id `bRPqbgIV`), MIT, created 2026-10-15 and submitted
 
 ## Hangar
 
-The project is `MairwunNx/MoBosses` on hangar.papermc.io, MIT, created 2026-10-15 through the API without a version or an icon yet. The workflow has a `hangar` switch for it, through `./gradlew publishPluginPublicationToHangar` and the `HANGAR_TOKEN` secret. A new Hangar project takes its first version only through the website (the API answers 404 until then); later versions go through the workflow. Hangar doesn’t sync its page from MODRINTH.md, so edit it on the site after a big change.
+The project is `MairwunNx/MoBosses` on hangar.papermc.io, MIT, created 2026-10-15 through the API; the owner set its avatar on the site. The “Release” workflow has a `hangar` switch, off by default: on, it runs `./gradlew publishPluginPublicationToHangar` with the `HANGAR_TOKEN` secret. The jar is over Hangar's 15 MB limit (Exposed brings `kotlin-reflect`), so Hangar gets a link to the GitHub release jar, as WorldAPI does; the GitHub release must exist first, which the workflow's order makes sure of. 2.1.0 went up this way from a local run after the workflow hit the limit. Hangar doesn't sync its page from MODRINTH.md, so edit it on the site after a big change.
 
 ## Commits
 
