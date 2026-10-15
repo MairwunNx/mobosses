@@ -1,0 +1,713 @@
+# Система лута Mo'Bosses
+
+level_loot:
+  # =================== ДИАПАЗОН 0-5 УРОВНЕЙ ===================
+  # Common класс - базовые предметы для новичков
+  - { material: STICK, mobclass: common, min_level: 0, max_level: 5, amount: "2-6", weight: 8.0 }
+  - { material: COBBLESTONE, mobclass: common, min_level: 0, max_level: 5, amount: "4-12", weight: 7.0 }
+  - { material: COAL, mobclass: common, min_level: 0, max_level: 5, amount: "1-3", weight: 6.5 }
+  - { material: FLINT, mobclass: common, min_level: 0, max_level: 5, amount: "1-2", weight: 6.0 }
+  - { material: WHEAT_SEEDS, mobclass: common, min_level: 0, max_level: 5, amount: "2-5", weight: 5.5 }
+  - { material: FEATHER, mobclass: common, min_level: 0, max_level: 5, amount: "1-3", weight: 5.0 }
+  - { material: ROTTEN_FLESH, mobclass: common, min_level: 0, max_level: 5, amount: "1-2", weight: 4.5 }
+  - { material: BONE, mobclass: common, min_level: 0, max_level: 5, amount: "1-2", weight: 4.0 }
+  - { material: STRING, mobclass: common, min_level: 0, max_level: 5, amount: "1-2", weight: 4.0 }
+  - { material: LEATHER, mobclass: common, min_level: 0, max_level: 5, amount: "1-2", weight: 3.5 }
+  - { material: DIRT, mobclass: common, min_level: 0, max_level: 5, amount: "8-16", weight: 7.5 }
+  - { material: OAK_LOG, mobclass: common, min_level: 0, max_level: 5, amount: "2-4", weight: 6.8 }
+  - { material: POTATO, mobclass: common, min_level: 0, max_level: 5, amount: "1-3", weight: 5.8 }
+  - { material: CARROT, mobclass: common, min_level: 0, max_level: 5, amount: "1-3", weight: 5.3 }
+  - { material: BEETROOT_SEEDS, mobclass: common, min_level: 0, max_level: 5, amount: "1-2", weight: 4.8 }
+  - { material: EGG, mobclass: common, min_level: 0, max_level: 5, amount: "1-2", weight: 4.3 }
+  - { material: SPIDER_EYE, mobclass: common, min_level: 0, max_level: 5, amount: "1", weight: 3.8 }
+  - { material: GUNPOWDER, mobclass: common, min_level: 0, max_level: 5, amount: "1", weight: 3.2 }
+
+  # Uncommon класс - немного лучше
+  - { material: IRON_INGOT, mobclass: uncommon, min_level: 0, max_level: 5, amount: "1", weight: 3.0 }
+  - { material: BREAD, mobclass: uncommon, min_level: 0, max_level: 5, amount: "2-4", weight: 3.0 }
+  - { material: TORCH, mobclass: uncommon, min_level: 0, max_level: 5, amount: "4-8", weight: 2.8 }
+  - { material: ARROW, mobclass: uncommon, min_level: 0, max_level: 5, amount: "3-6", weight: 2.5 }
+  - { material: WOODEN_SWORD, mobclass: uncommon, min_level: 0, max_level: 5, amount: "1", weight: 2.0, random_durability: true }
+  - { material: LEATHER_BOOTS, mobclass: uncommon, min_level: 0, max_level: 5, amount: "1", weight: 1.8, random_durability: true }
+  - { material: COOKED_CHICKEN, mobclass: uncommon, min_level: 0, max_level: 5, amount: "1-2", weight: 2.7 }
+  - { material: WOODEN_PICKAXE, mobclass: uncommon, min_level: 0, max_level: 5, amount: "1", weight: 2.3, random_durability: true }
+  - { material: LEATHER_HELMET, mobclass: uncommon, min_level: 0, max_level: 5, amount: "1", weight: 2.1, random_durability: true }
+  - { material: PUMPKIN_SEEDS, mobclass: uncommon, min_level: 0, max_level: 5, amount: "2-4", weight: 1.9 }
+  - { material: MELON_SEEDS, mobclass: uncommon, min_level: 0, max_level: 5, amount: "2-4", weight: 1.7 }
+  - { material: BOWL, mobclass: uncommon, min_level: 0, max_level: 5, amount: "1-2", weight: 1.6 }
+  - { material: MUSHROOM_STEW, mobclass: uncommon, min_level: 0, max_level: 5, amount: "1", weight: 1.5 }
+  - { material: WOODEN_AXE, mobclass: uncommon, min_level: 0, max_level: 5, amount: "1", weight: 1.4, random_durability: true }
+
+  # Rare класс — стартовые, но ощутимые награды
+  - { material: GOLD_NUGGET, mobclass: rare, min_level: 0, max_level: 5, amount: "2-4", weight: 1.5 }
+  - { material: APPLE, mobclass: rare, min_level: 0, max_level: 5, amount: "1-2", weight: 1.3 }
+  - { material: STONE_SWORD, mobclass: rare, min_level: 0, max_level: 5, amount: "1", weight: 1.0, random_durability: true, itemClass: rare, title: "§9Каменный клинок ученика", lore: [ "§7Простой, но надёжный клинок.", "§8Первый шаг охотника на боссов."] }
+  - { material: CHAINMAIL_HELMET, mobclass: rare, min_level: 0, max_level: 5, amount: "1", weight: 0.8, random_durability: true, itemClass: rare, title: "§9Кольчужный шлем новобранца", lore: [ "§7Бережёт голову от глупых ошибок.", "§8Не лучший, но лучше, чем ничего."] }
+  - { material: STONE_PICKAXE, mobclass: rare, min_level: 0, max_level: 5, amount: "1", weight: 1.2, random_durability: true }
+  - { material: LEATHER_CHESTPLATE, mobclass: rare, min_level: 0, max_level: 5, amount: "1", weight: 1.1, random_durability: true, itemClass: rare, title: "§9Кожаный жилет следопыта", lore: [ "§7Лёгкая защита и свобода движения.", "§8Подходит для разведки и охоты."] }
+  - { material: COOKED_BEEF, mobclass: rare, min_level: 0, max_level: 5, amount: "1-2", weight: 0.95 }
+  - { material: MILK_BUCKET, mobclass: rare, min_level: 0, max_level: 5, amount: "1", weight: 0.9 }
+  - { material: WATER_BUCKET, mobclass: rare, min_level: 0, max_level: 5, amount: "1", weight: 0.85 }
+  - { material: LEATHER_LEGGINGS, mobclass: rare, min_level: 0, max_level: 5, amount: "1", weight: 0.75, random_durability: true, itemClass: rare, title: "§9Кожаные поножи искателя", lore: [ "§7Немного защиты для дальних дорог.", "§8Стерпят грязь и дождь."] }
+  - { material: FISHING_ROD, mobclass: rare, min_level: 0, max_level: 5, amount: "1", weight: 0.7, random_durability: true, itemClass: rare, title: "§9Удочка следопыта", lore: [ "§7Еда и трофеи — терпеливым.", "§8Иногда вылавливает не только рыбу."] }
+  - { material: CAKE, mobclass: rare, min_level: 0, max_level: 5, amount: "1", weight: 0.65 }
+
+  # Epic класс — достойные трофеи
+  - { material: IRON_SWORD, mobclass: epic, min_level: 0, max_level: 5, amount: "1", weight: 0.5, random_durability: true, itemClass: epic, title: "§5Железный клинок ветерана", lore: [ "§7Баланс остроты и веса.", "§8Надёжен в любой схватке."] }
+  - { material: GOLD_INGOT, mobclass: epic, min_level: 0, max_level: 5, amount: "1-2", weight: 0.4 }
+  - { material: IRON_HELMET, mobclass: epic, min_level: 0, max_level: 5, amount: "1", weight: 0.45, random_durability: true, itemClass: epic, title: "§5Железный шлем стража", lore: [ "§7Твёрдая защита лба и висков.", "§8Кузнечная работа без компромиссов."] }
+  - { material: BOW, mobclass: epic, min_level: 0, max_level: 5, amount: "1", weight: 0.42, random_durability: true, itemClass: epic, title: "§5Лук меткого стрелка", lore: [ "§7Дальность — твой союзник.", "§8Стрела найдёт слабое место."] }
+  - { material: REDSTONE, mobclass: epic, min_level: 0, max_level: 5, amount: "1-3", weight: 0.38 }
+  - { material: LAPIS_LAZULI, mobclass: epic, min_level: 0, max_level: 5, amount: "2-4", weight: 0.35 }
+  - { material: CHAINMAIL_BOOTS, mobclass: epic, min_level: 0, max_level: 5, amount: "1", weight: 0.32, random_durability: true, itemClass: epic, title: "§5Кольчужные сапоги", lore: [ "§7Шумят меньше, чем кажется.", "§8Ступай смелее."] }
+  - { material: STONE_AXE, mobclass: epic, min_level: 0, max_level: 5, amount: "1", weight: 0.28, random_durability: true }
+  - { material: GOLDEN_APPLE, mobclass: epic, min_level: 0, max_level: 5, amount: "1", weight: 0.25, itemClass: epic, title: "§5Золотое яблоко", lore: [ "§7Сладкий вкус второго шанса."] }
+  - { material: COMPASS, mobclass: epic, min_level: 0, max_level: 5, amount: "1", weight: 0.22 }
+
+  # Legendary класс — редкие и желанные
+  - { material: DIAMOND, mobclass: legendary, min_level: 0, max_level: 5, amount: "1", weight: 0.2, itemClass: legendary }
+  - { material: ENCHANTED_BOOK, mobclass: legendary, min_level: 0, max_level: 5, amount: "1", weight: 0.15, enchantments: { sharpness: "1-2" }, itemClass: legendary, title: "§6Книга забытых ремёсел", lore: [ "§eСтраницы пахнут кузней и боем.", "§7Острота — в каждом слове."] }
+  - { material: IRON_CHESTPLATE, mobclass: legendary, min_level: 0, max_level: 5, amount: "1", weight: 0.18, random_durability: true, itemClass: legendary, title: "§6Нагрудник героя", lore: [ "§eЗащита, проверенная славой.", "§7Носили лишь достойные."] }
+  - { material: SADDLE, mobclass: legendary, min_level: 0, max_level: 5, amount: "1", weight: 0.16, itemClass: legendary }
+  - { material: NAME_TAG, mobclass: legendary, min_level: 0, max_level: 5, amount: "1", weight: 0.14, itemClass: legendary }
+  - { material: EXPERIENCE_BOTTLE, mobclass: legendary, min_level: 0, max_level: 5, amount: "1", weight: 0.12, itemClass: legendary }
+  - { material: IRON_PICKAXE, mobclass: legendary, min_level: 0, max_level: 5, amount: "1", weight: 0.11, random_durability: true, itemClass: legendary, title: "§6Кирка мастера", lore: [ "§eИскры летят — руда сдаётся.", "§7Сталь поёт в руках умельца."] }
+  - { material: CLOCK, mobclass: legendary, min_level: 0, max_level: 5, amount: "1", weight: 0.10 }
+  - { material: LEAD, mobclass: legendary, min_level: 0, max_level: 5, amount: "1", weight: 0.09, itemClass: legendary }
+  - { material: CHAINMAIL_CHESTPLATE, mobclass: legendary, min_level: 0, max_level: 5, amount: "1", weight: 0.08, random_durability: true, itemClass: legendary, title: "§6Кольчуга чемпиона", lore: [ "§eГремит как фанфары победы.", "§7Каждое кольцо — урок битвы."] }
+
+  # Mythic класс — мифические, крайне редкие
+  - { material: EMERALD, mobclass: mythic, min_level: 0, max_level: 5, amount: "1", weight: 0.05, itemClass: mythic }
+  - { material: ENDER_PEARL, mobclass: mythic, min_level: 0, max_level: 5, amount: "1", weight: 0.045, itemClass: mythic }
+  - { material: DIAMOND_HELMET, mobclass: mythic, min_level: 0, max_level: 5, amount: "1", weight: 0.04, random_durability: true, itemClass: mythic, title: "§dАлмазный шлем предтеч", lore: [ "§5Холод камня — и покой в бою.", "§7Снимает страх перед ударом."] }
+  - { material: ENCHANTED_BOOK, mobclass: mythic, min_level: 0, max_level: 5, amount: "1", weight: 0.035, enchantments: { protection: "1-2" }, itemClass: mythic, title: "§dТом первородной защиты", lore: [ "§5Ткань чар плотнее стали.", "§7Оберег для бесстрашных."] }
+  - { material: BLAZE_POWDER, mobclass: mythic, min_level: 0, max_level: 5, amount: "1", weight: 0.03, itemClass: mythic }
+  - { material: GHAST_TEAR, mobclass: mythic, min_level: 0, max_level: 5, amount: "1", weight: 0.025, itemClass: mythic }
+
+  # =================== ДИАПАЗОН 5-10 УРОВНЕЙ ===================
+  # Common класс
+  - { material: COBBLESTONE, mobclass: common, min_level: 5, max_level: 10, amount: "6-15", weight: 8.0 }
+  - { material: COAL, mobclass: common, min_level: 5, max_level: 10, amount: "2-5", weight: 7.0 }
+  - { material: IRON_NUGGET, mobclass: common, min_level: 5, max_level: 10, amount: "2-4", weight: 6.0 }
+  - { material: CLAY_BALL, mobclass: common, min_level: 5, max_level: 10, amount: "2-4", weight: 5.5 }
+  - { material: SAND, mobclass: common, min_level: 5, max_level: 10, amount: "4-8", weight: 5.0 }
+  - { material: GRAVEL, mobclass: common, min_level: 5, max_level: 10, amount: "3-6", weight: 4.5 }
+  - { material: WOODEN_AXE, mobclass: common, min_level: 5, max_level: 10, amount: "1", weight: 4.0, random_durability: true }
+  - { material: COOKED_CHICKEN, mobclass: common, min_level: 5, max_level: 10, amount: "1-3", weight: 3.8 }
+  - { material: STONE, mobclass: common, min_level: 5, max_level: 10, amount: "6-12", weight: 7.5 }
+  - { material: OAK_PLANKS, mobclass: common, min_level: 5, max_level: 10, amount: "4-8", weight: 6.8 }
+  - { material: BAKED_POTATO, mobclass: common, min_level: 5, max_level: 10, amount: "1-3", weight: 5.8 }
+  - { material: LEATHER, mobclass: common, min_level: 5, max_level: 10, amount: "2-4", weight: 5.3 }
+  - { material: WHITE_WOOL, mobclass: common, min_level: 5, max_level: 10, amount: "2-5", weight: 4.8 }
+  - { material: PUMPKIN, mobclass: common, min_level: 5, max_level: 10, amount: "1-2", weight: 4.3 }
+  - { material: MELON, mobclass: common, min_level: 5, max_level: 10, amount: "1-2", weight: 3.9 }
+  - { material: BRICK, mobclass: common, min_level: 5, max_level: 10, amount: "2-4", weight: 3.6 }
+
+  # Uncommon класс
+  - { material: IRON_INGOT, mobclass: uncommon, min_level: 5, max_level: 10, amount: "1-2", weight: 3.5 }
+  - { material: STONE_PICKAXE, mobclass: uncommon, min_level: 5, max_level: 10, amount: "1", weight: 3.0, random_durability: true }
+  - { material: LEATHER_CHESTPLATE, mobclass: uncommon, min_level: 5, max_level: 10, amount: "1", weight: 2.8, random_durability: true }
+  - { material: BOW, mobclass: uncommon, min_level: 5, max_level: 10, amount: "1", weight: 2.5, random_durability: true }
+  - { material: COOKED_BEEF, mobclass: uncommon, min_level: 5, max_level: 10, amount: "2-4", weight: 2.3 }
+  - { material: STONE_SWORD, mobclass: uncommon, min_level: 5, max_level: 10, amount: "1", weight: 3.2, random_durability: true }
+  - { material: CHAINMAIL_HELMET, mobclass: uncommon, min_level: 5, max_level: 10, amount: "1", weight: 2.9, random_durability: true }
+  - { material: LEATHER_LEGGINGS, mobclass: uncommon, min_level: 5, max_level: 10, amount: "1", weight: 2.7, random_durability: true }
+  - { material: STONE_HOE, mobclass: uncommon, min_level: 5, max_level: 10, amount: "1", weight: 2.4, random_durability: true }
+  - { material: SHEARS, mobclass: uncommon, min_level: 5, max_level: 10, amount: "1", weight: 2.2, random_durability: true }
+  - { material: BUCKET, mobclass: uncommon, min_level: 5, max_level: 10, amount: "1", weight: 2.1 }
+  - { material: MAP, mobclass: uncommon, min_level: 5, max_level: 10, amount: "1", weight: 2.0 }
+  - { material: GLASS_BOTTLE, mobclass: uncommon, min_level: 5, max_level: 10, amount: "2-4", weight: 1.9 }
+
+  # Rare класс — с именами и лором на стоящих предметах
+  - { material: GOLD_INGOT, mobclass: rare, min_level: 5, max_level: 10, amount: "1-2", weight: 2.0 }
+  - { material: REDSTONE, mobclass: rare, min_level: 5, max_level: 10, amount: "2-4", weight: 1.8 }
+  - { material: IRON_HELMET, mobclass: rare, min_level: 5, max_level: 10, amount: "1", weight: 1.5, random_durability: true, itemClass: rare, title: "§9Шлем дозорного", lore: ["§7Смотрит в лицо бурям.", "§8Не трескается от первого удара."] }
+  - { material: STONE_AXE, mobclass: rare, min_level: 5, max_level: 10, amount: "1", weight: 1.3, random_durability: true, enchantments: { efficiency: "1" }, itemClass: rare, title: "§9Каменный топор плотника", lore: ["§7Тяжёлый, но надёжный.", "§8Дерево — его стихия."] }
+  - { material: IRON_BOOTS, mobclass: rare, min_level: 5, max_level: 10, amount: "1", weight: 1.7, random_durability: true, itemClass: rare, title: "§9Железные сапоги следопыта", lore: ["§7Следы остаются, ноги — нет.", "§8Проверены грязью и камнями."] }
+  - { material: COMPASS, mobclass: rare, min_level: 5, max_level: 10, amount: "1", weight: 1.6 }
+  - { material: CLOCK, mobclass: rare, min_level: 5, max_level: 10, amount: "1", weight: 1.4 }
+  - { material: FISHING_ROD, mobclass: rare, min_level: 5, max_level: 10, amount: "1", weight: 1.2, random_durability: true, itemClass: rare, title: "§9Удочка охотника", lore: ["§7Трофеи терпеливым.", "§8Иногда клюёт удача."] }
+  - { material: CHAINMAIL_CHESTPLATE, mobclass: rare, min_level: 5, max_level: 10, amount: "1", weight: 1.1, random_durability: true, itemClass: rare, title: "§9Кольчуга дозорного", lore: ["§7Кольца звенят — враги бегут.", "§8Лучше шипов, легче плиты."] }
+  - { material: LAPIS_LAZULI, mobclass: rare, min_level: 5, max_level: 10, amount: "2-4", weight: 1.0 }
+  - { material: GOLDEN_CARROT, mobclass: rare, min_level: 5, max_level: 10, amount: "1-2", weight: 0.9 }
+  - { material: PUMPKIN_PIE, mobclass: rare, min_level: 5, max_level: 10, amount: "1-2", weight: 0.8 }
+
+  # Epic класс — предметы с характером
+  - { material: IRON_CHESTPLATE, mobclass: epic, min_level: 5, max_level: 10, amount: "1", weight: 1.0, random_durability: true, itemClass: epic, title: "§5Кираса ветерана", lore: ["§7Держит удар и строй.", "§8Служит дольше клятв."] }
+  - { material: LAPIS_LAZULI, mobclass: epic, min_level: 5, max_level: 10, amount: "3-6", weight: 0.8 }
+  - { material: ENCHANTED_BOOK, mobclass: epic, min_level: 5, max_level: 10, amount: "1", weight: 0.6, enchantments: { protection: "1" }, itemClass: epic, title: "§5Тракт защиты I", lore: ["§7Коротко и по делу.", "§8Броня полюбит эти строки."] }
+  - { material: IRON_SWORD, mobclass: epic, min_level: 5, max_level: 10, amount: "1", weight: 0.9, random_durability: true, itemClass: epic, title: "§5Стальной клинок", lore: ["§7Сбалансирован и предсказуем.", "§8В бою — без сюрпризов, кроме побед."] }
+  - { material: IRON_LEGGINGS, mobclass: epic, min_level: 5, max_level: 10, amount: "1", weight: 0.85, random_durability: true, itemClass: epic, title: "§5Набедренники хранителя", lore: ["§7Там, где падают другие — ты стоишь.", "§8Вес — цена стойкости."] }
+  - { material: BOW, mobclass: epic, min_level: 5, max_level: 10, amount: "1", weight: 0.75, random_durability: true, enchantments: { power: "1" }, itemClass: epic, title: "§5Лук степного ветра", lore: ["§7Стрела укажет путь.", "§8Тише — дальше летит."] }
+  - { material: GOLDEN_APPLE, mobclass: epic, min_level: 5, max_level: 10, amount: "1", weight: 0.7, itemClass: epic, title: "§5Золотое яблоко", lore: ["§7Сладость спасения."] }
+  - { material: SADDLE, mobclass: epic, min_level: 5, max_level: 10, amount: "1", weight: 0.65 }
+  - { material: NAME_TAG, mobclass: epic, min_level: 5, max_level: 10, amount: "1", weight: 0.55 }
+  - { material: ANVIL, mobclass: epic, min_level: 5, max_level: 10, amount: "1", weight: 0.5 }
+  - { material: ENCHANTED_BOOK, mobclass: epic, min_level: 5, max_level: 10, amount: "1", weight: 0.45, enchantments: { sharpness: "1-2" }, itemClass: epic, title: "§5Тракт остроты I–II", lore: ["§7Лезвие станет честнее.", "§8И враги — короче."] }
+
+  # Legendary класс — редкость с историей
+  - { material: DIAMOND, mobclass: legendary, min_level: 5, max_level: 10, amount: "1", weight: 0.3, itemClass: legendary }
+  - { material: IRON_SWORD, mobclass: legendary, min_level: 5, max_level: 10, amount: "1", weight: 0.25, random_durability: true, enchantments: { sharpness: "1-2" }, itemClass: legendary, title: "§6Клинок полевой смуты", lore: ["§7Видел больше битв, чем костров.", "§8Остро и справедливо."] }
+  - { material: DIAMOND_HELMET, mobclass: legendary, min_level: 5, max_level: 10, amount: "1", weight: 0.28, random_durability: true, itemClass: legendary, title: "§6Алмазный венец дозорного", lore: ["§7Тяжёл — потому надёжен.", "§8Снимает сомнения и стрелы."] }
+  - { material: ENDER_PEARL, mobclass: legendary, min_level: 5, max_level: 10, amount: "1", weight: 0.26, itemClass: legendary }
+  - { material: EXPERIENCE_BOTTLE, mobclass: legendary, min_level: 5, max_level: 10, amount: "1-2", weight: 0.24, itemClass: legendary }
+  - { material: BLAZE_POWDER, mobclass: legendary, min_level: 5, max_level: 10, amount: "1", weight: 0.22, itemClass: legendary }
+  - { material: IRON_PICKAXE, mobclass: legendary, min_level: 5, max_level: 10, amount: "1", weight: 0.21, random_durability: true, enchantments: { efficiency: "1-2" }, itemClass: legendary, title: "§6Кирка подземного царя", lore: ["§7Руда сдаётся без суда.", "§8Сталь ведёт, руки догоняют."] }
+  - { material: ENCHANTED_BOOK, mobclass: legendary, min_level: 5, max_level: 10, amount: "1", weight: 0.19, enchantments: { unbreaking: "1" }, itemClass: legendary, title: "§6Свод крепости I", lore: ["§7Вещам — жить дольше.", "§8Треск — не приговор."] }
+  - { material: LEAD, mobclass: legendary, min_level: 5, max_level: 10, amount: "1", weight: 0.17, itemClass: legendary }
+  - { material: GHAST_TEAR, mobclass: legendary, min_level: 5, max_level: 10, amount: "1", weight: 0.15, itemClass: legendary }
+
+  # Mythic класс — трофеи, о которых рассказывают
+  - { material: EMERALD, mobclass: mythic, min_level: 5, max_level: 10, amount: "1", weight: 0.08, itemClass: mythic }
+  - { material: GOLDEN_APPLE, mobclass: mythic, min_level: 5, max_level: 10, amount: "1", weight: 0.05, itemClass: mythic }
+  - { material: DIAMOND_SWORD, mobclass: mythic, min_level: 5, max_level: 10, amount: "1", weight: 0.075, random_durability: true, itemClass: mythic, title: "§dКлинок сумеречной кромки", lore: ["§5Там, где свет и тьма спорят,", "§7этот клинок решает."] }
+  - { material: DIAMOND_CHESTPLATE, mobclass: mythic, min_level: 5, max_level: 10, amount: "1", weight: 0.055, random_durability: true, itemClass: mythic, title: "§dПанцирь вечного маршала", lore: ["§5Шаг твёрже камня.", "§7Стрелы вспоминают полёт."] }
+
+  # =================== ДИАПАЗОН 10-17 УРОВНЕЙ ===================
+  # Common класс
+  - { material: COBBLESTONE, mobclass: common, min_level: 10, max_level: 17, amount: "8-16", weight: 7.5 }
+  - { material: IRON_NUGGET, mobclass: common, min_level: 10, max_level: 17, amount: "3-6", weight: 6.8 }
+  - { material: COAL, mobclass: common, min_level: 10, max_level: 17, amount: "3-6", weight: 6.0 }
+  - { material: STONE_HOE, mobclass: common, min_level: 10, max_level: 17, amount: "1", weight: 5.5, random_durability: true }
+  - { material: LEATHER_LEGGINGS, mobclass: common, min_level: 10, max_level: 17, amount: "1", weight: 5.0, random_durability: true }
+  - { material: PAPER, mobclass: common, min_level: 10, max_level: 17, amount: "2-5", weight: 4.5 }
+  - { material: SUGAR, mobclass: common, min_level: 10, max_level: 17, amount: "1-3", weight: 4.0 }
+  - { material: SMOOTH_STONE, mobclass: common, min_level: 10, max_level: 17, amount: "4-8", weight: 7.2 }
+  - { material: COOKED_PORKCHOP, mobclass: common, min_level: 10, max_level: 17, amount: "2-4", weight: 6.5 }
+  - { material: CRAFTING_TABLE, mobclass: common, min_level: 10, max_level: 17, amount: "1", weight: 5.8 }
+  - { material: FURNACE, mobclass: common, min_level: 10, max_level: 17, amount: "1", weight: 5.3 }
+  - { material: CHEST, mobclass: common, min_level: 10, max_level: 17, amount: "1", weight: 4.8 }
+  - { material: LADDER, mobclass: common, min_level: 10, max_level: 17, amount: "2-6", weight: 4.3 }
+  - { material: SIGN, mobclass: common, min_level: 10, max_level: 17, amount: "1-3", weight: 3.8 }
+  - { material: WOODEN_SHOVEL, mobclass: common, min_level: 10, max_level: 17, amount: "1", weight: 3.5, random_durability: true }
+
+  # Uncommon класс
+  - { material: IRON_INGOT, mobclass: uncommon, min_level: 10, max_level: 17, amount: "2-3", weight: 3.8 }
+  - { material: IRON_AXE, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1", weight: 3.5, random_durability: true }
+  - { material: CHAINMAIL_CHESTPLATE, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1", weight: 3.0, random_durability: true }
+  - { material: GLASS, mobclass: uncommon, min_level: 10, max_level: 17, amount: "4-8", weight: 2.8 }
+  - { material: BOOK, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1-2", weight: 2.5 }
+  - { material: INK_SAC, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1-3", weight: 2.3 }
+  - { material: IRON_SHOVEL, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1", weight: 3.6, random_durability: true }
+  - { material: CHAINMAIL_LEGGINGS, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1", weight: 3.3, random_durability: true }
+  - { material: STONE_SWORD, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1", weight: 3.1, random_durability: true, enchantments: { sharpness: "1" } }
+  - { material: CROSSBOW, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1", weight: 2.9, random_durability: true }
+  - { material: FLINT_AND_STEEL, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1", weight: 2.7, random_durability: true }
+  - { material: ENCHANTING_TABLE, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1", weight: 2.4 }
+  - { material: ITEM_FRAME, mobclass: uncommon, min_level: 10, max_level: 17, amount: "2-4", weight: 2.0 }
+
+  # Rare класс
+  - { material: GOLD_INGOT, mobclass: rare, min_level: 10, max_level: 17, amount: "1-3", weight: 2.0 }
+  - { material: REDSTONE, mobclass: rare, min_level: 10, max_level: 17, amount: "3-6", weight: 1.8 }
+  - { material: IRON_SWORD, mobclass: rare, min_level: 10, max_level: 17, amount: "1", weight: 1.5, random_durability: true, enchantments: { sharpness: "1" }, itemClass: rare, title: "§9Железный клинок подмастерья", lore: ["§7Сбалансирован и упрям.", "§8Служит дольше споров."] }
+  - { material: COMPASS, mobclass: rare, min_level: 10, max_level: 17, amount: "1", weight: 1.3 }
+  - { material: CLOCK, mobclass: rare, min_level: 10, max_level: 17, amount: "1", weight: 1.1 }
+  - { material: IRON_PICKAXE, mobclass: rare, min_level: 10, max_level: 17, amount: "1", weight: 1.9, random_durability: true, enchantments: { efficiency: "1" }, itemClass: rare, title: "§9Кирка шахтёрской артели", lore: ["§7Глубже — значит ближе.", "§8Искры — как звёзды подземелья."] }
+  - { material: BOW, mobclass: rare, min_level: 10, max_level: 17, amount: "1", weight: 1.7, random_durability: true, enchantments: { power: "1" }, itemClass: rare, title: "§9Лук дозорного", lore: ["§7Тише ветра, метче слова.", "§8Стрелы помнят цель."] }
+  - { material: IRON_CHESTPLATE, mobclass: rare, min_level: 10, max_level: 17, amount: "1", weight: 1.6, random_durability: true, itemClass: rare, title: "§9Нагрудник стража", lore: ["§7Щит для сердца.", "§8Ржавчине — отказ."] }
+  - { material: GOLDEN_SWORD, mobclass: rare, min_level: 10, max_level: 17, amount: "1", weight: 1.4, random_durability: true, itemClass: rare, title: "§9Позолоченный клинок", lore: ["§7Блестит ярче пользы.", "§8Но иногда блеск — всё."] }
+  - { material: BREWING_STAND, mobclass: rare, min_level: 10, max_level: 17, amount: "1", weight: 1.2 }
+  - { material: CAULDRON, mobclass: rare, min_level: 10, max_level: 17, amount: "1", weight: 1.0 }
+  - { material: GOLDEN_CARROT, mobclass: rare, min_level: 10, max_level: 17, amount: "2-4", weight: 0.9 }
+  - { material: PISTON, mobclass: rare, min_level: 10, max_level: 17, amount: "1-2", weight: 0.8 }
+
+  # Epic класс
+  - { material: DIAMOND, mobclass: epic, min_level: 10, max_level: 17, amount: "1", weight: 1.0 }
+  - { material: LAPIS_LAZULI, mobclass: epic, min_level: 10, max_level: 17, amount: "4-8", weight: 0.9 }
+  - { material: IRON_LEGGINGS, mobclass: epic, min_level: 10, max_level: 17, amount: "1", weight: 0.7, random_durability: true, itemClass: epic, title: "§5Набедренники закалённого", lore: ["§7Ноги — как колонны.", "§8Падать — далеко."] }
+  - { material: ENCHANTED_BOOK, mobclass: epic, min_level: 10, max_level: 17, amount: "1", weight: 0.6, enchantments: { efficiency: "1-2" }, itemClass: epic, title: "§5Тракт усердия I–II", lore: ["§7Рука — быстрее, металл — мягче.", "§8Работе — радость."] }
+  - { material: DIAMOND_HELMET, mobclass: epic, min_level: 10, max_level: 17, amount: "1", weight: 0.95, random_durability: true, itemClass: epic, title: "§5Алмазный шлем следопыта", lore: ["§7Следит и молчит.", "§8Мысли — как камень."] }
+  - { material: GOLDEN_APPLE, mobclass: epic, min_level: 10, max_level: 17, amount: "1", weight: 0.85, itemClass: epic, title: "§5Золотое яблоко", lore: ["§7Сладость спасения."] }
+  - { material: ENDER_PEARL, mobclass: epic, min_level: 10, max_level: 17, amount: "1", weight: 0.8 }
+  - { material: BLAZE_POWDER, mobclass: epic, min_level: 10, max_level: 17, amount: "1", weight: 0.75 }
+  - { material: EXPERIENCE_BOTTLE, mobclass: epic, min_level: 10, max_level: 17, amount: "1-2", weight: 0.65 }
+  - { material: ANVIL, mobclass: epic, min_level: 10, max_level: 17, amount: "1", weight: 0.55 }
+  - { material: ENCHANTED_BOOK, mobclass: epic, min_level: 10, max_level: 17, amount: "1", weight: 0.5, enchantments: { unbreaking: "1-2" }, itemClass: epic, title: "§5Свод крепости I–II", lore: ["§7Сломать — сложнее.", "§8Служить — дольше."] }
+  - { material: HOPPER, mobclass: epic, min_level: 10, max_level: 17, amount: "1", weight: 0.45 }
+
+  # Legendary класс
+  - { material: EMERALD, mobclass: legendary, min_level: 10, max_level: 17, amount: "1", weight: 0.4, itemClass: legendary }
+  - { material: DIAMOND_SWORD, mobclass: legendary, min_level: 10, max_level: 17, amount: "1", weight: 0.3, random_durability: true, enchantments: { sharpness: "1-2" }, itemClass: legendary, title: "§6Клинок полевой смуты", lore: ["§7Сталь, что решает споры.", "§8Рубит — не спорит."] }
+  - { material: ENCHANTED_BOOK, mobclass: legendary, min_level: 10, max_level: 17, amount: "1", weight: 0.25, enchantments: { protection: "1-2" }, itemClass: legendary, title: "§6Кодекс опеки I–II", lore: ["§7Плечам — отдых.", "§8Щитам — уважение."] }
+  - { material: DIAMOND_CHESTPLATE, mobclass: legendary, min_level: 10, max_level: 17, amount: "1", weight: 0.35, random_durability: true, itemClass: legendary, title: "§6Панцирь дозорного", lore: ["§7Не подведёт ни днём, ни ночью.", "§8Грохот ударов — как дождь."] }
+  - { material: DIAMOND_PICKAXE, mobclass: legendary, min_level: 10, max_level: 17, amount: "1", weight: 0.29, random_durability: true, enchantments: { efficiency: "2" }, itemClass: legendary, title: "§6Штоленник", lore: ["§7Каменоломни слушают её шаг.", "§8Руда сдаётся без крика."] }
+  - { material: GHAST_TEAR, mobclass: legendary, min_level: 10, max_level: 17, amount: "1", weight: 0.24, itemClass: legendary }
+  - { material: SADDLE, mobclass: legendary, min_level: 10, max_level: 17, amount: "1", weight: 0.22, itemClass: legendary }
+  - { material: NAME_TAG, mobclass: legendary, min_level: 10, max_level: 17, amount: "1", weight: 0.20 }
+  - { material: ENCHANTED_BOOK, mobclass: legendary, min_level: 10, max_level: 17, amount: "1", weight: 0.18, enchantments: { fortune: "1-2" }, itemClass: legendary, title: "§6Тракт удачи I–II", lore: ["§7Шанс — не случайность.", "§8Случай — не помеха."] }
+
+  # Mythic класс
+  - { material: EXPERIENCE_BOTTLE, mobclass: mythic, min_level: 10, max_level: 17, amount: "1-2", weight: 0.08, itemClass: mythic }
+  - { material: DIAMOND_SWORD, mobclass: mythic, min_level: 10, max_level: 17, amount: "1", weight: 0.09, random_durability: true, enchantments: { sharpness: "2-3" }, itemClass: mythic, title: "§dКлинок сумеречной кромки", lore: ["§5Где свет спорит с тьмой,", "§7этот клинок решает."] }
+  - { material: DIAMOND_CHESTPLATE, mobclass: mythic, min_level: 10, max_level: 17, amount: "1", weight: 0.065, random_durability: true, enchantments: { protection: "2" }, itemClass: mythic, title: "§dПанцирь вечного маршала", lore: ["§5Шаг твёрже камня.", "§7Стрелы вспоминают полёт."] }
+  - { material: HEART_OF_THE_SEA, mobclass: mythic, min_level: 10, max_level: 17, amount: "1", weight: 0.04, itemClass: mythic, title: "§dСердце моря", lore: ["§5Бьётся тихо, но верно.", "§7Глубины отвечают эхом."] }
+
+  # =================== ДИАПАЗОН 17-24 УРОВНЕЙ ===================
+  # Common класс
+  - { material: IRON_NUGGET, mobclass: common, min_level: 17, max_level: 24, amount: "4-8", weight: 7.0 }
+  - { material: COBBLESTONE, mobclass: common, min_level: 17, max_level: 24, amount: "10-20", weight: 6.5 }
+  - { material: STONE_PICKAXE, mobclass: common, min_level: 17, max_level: 24, amount: "1", weight: 6.0, random_durability: true, enchantments: { efficiency: "1" } }
+  - { material: IRON_ORE, mobclass: common, min_level: 17, max_level: 24, amount: "1-3", weight: 5.5 }
+  - { material: COOKED_PORKCHOP, mobclass: common, min_level: 17, max_level: 24, amount: "2-4", weight: 5.0 }
+  - { material: BRICK, mobclass: common, min_level: 17, max_level: 24, amount: "2-5", weight: 4.5 }
+  - { material: GLOWSTONE_DUST, mobclass: common, min_level: 17, max_level: 24, amount: "1-3", weight: 4.0 }
+  - { material: COAL_BLOCK, mobclass: common, min_level: 17, max_level: 24, amount: "1-2", weight: 6.8 }
+  - { material: BAKED_POTATO, mobclass: common, min_level: 17, max_level: 24, amount: "3-6", weight: 6.2 }
+  - { material: QUARTZ, mobclass: common, min_level: 17, max_level: 24, amount: "1-3", weight: 5.8 }
+  - { material: NETHER_BRICK, mobclass: common, min_level: 17, max_level: 24, amount: "2-5", weight: 5.3 }
+  - { material: PRISMARINE_SHARD, mobclass: common, min_level: 17, max_level: 24, amount: "1-2", weight: 4.8 }
+  - { material: OBSERVER, mobclass: common, min_level: 17, max_level: 24, amount: "1", weight: 4.3 }
+  - { material: DISPENSER, mobclass: common, min_level: 17, max_level: 24, amount: "1", weight: 3.8 }
+  - { material: DROPPER, mobclass: common, min_level: 17, max_level: 24, amount: "1", weight: 3.5 }
+
+  # Uncommon класс
+  - { material: IRON_INGOT, mobclass: uncommon, min_level: 17, max_level: 24, amount: "2-4", weight: 4.0 }
+  - { material: GOLD_NUGGET, mobclass: uncommon, min_level: 17, max_level: 24, amount: "4-8", weight: 3.8 }
+  - { material: CHAINMAIL_HELMET, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1", weight: 3.5, random_durability: true }
+  - { material: SHEARS, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1", weight: 3.2, random_durability: true }
+  - { material: FISHING_ROD, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1", weight: 3.0, random_durability: true }
+  - { material: BUCKET, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1", weight: 2.8 }
+  - { material: IRON_AXE, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1", weight: 3.9, random_durability: true, enchantments: { efficiency: "1" } }
+  - { material: IRON_SHOVEL, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1", weight: 3.7, random_durability: true }
+  - { material: CHAINMAIL_BOOTS, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1", weight: 3.4, random_durability: true }
+  - { material: LAVA_BUCKET, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1", weight: 3.1 }
+  - { material: STICKY_PISTON, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1", weight: 2.9 }
+  - { material: REPEATER, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1-2", weight: 2.7 }
+  - { material: COMPARATOR, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1", weight: 2.6 }
+  - { material: IRON_DOOR, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1", weight: 2.5 }
+
+  # Rare класс
+  - { material: GOLD_INGOT, mobclass: rare, min_level: 17, max_level: 24, amount: "2-4", weight: 2.5 }
+  - { material: IRON_HELMET, mobclass: rare, min_level: 17, max_level: 24, amount: "1", weight: 2.2, random_durability: true, enchantments: { protection: "1" }, itemClass: rare, title: "§9Шлем дежурного караула", lore: ["§7Держит удар, как слово.", "§8Вмятины — память о вахте."] }
+  - { material: BOW, mobclass: rare, min_level: 17, max_level: 24, amount: "1", weight: 2.0, random_durability: true, enchantments: { power: "1" }, itemClass: rare, title: "§9Лук караульного", lore: ["§7Звук тетивы — знак тревоги.", "§8Стреляет там, где нужно."] }
+  - { material: REDSTONE, mobclass: rare, min_level: 17, max_level: 24, amount: "4-8", weight: 1.8 }
+  - { material: SADDLE, mobclass: rare, min_level: 17, max_level: 24, amount: "1", weight: 1.5 }
+  - { material: IRON_SWORD, mobclass: rare, min_level: 17, max_level: 24, amount: "1", weight: 2.3, random_durability: true, enchantments: { sharpness: "1-2" }, itemClass: rare, title: "§9Полевой клинок", lore: ["§7Без украшений, но честен.", "§8Сталь для дела, не для позы."] }
+  - { material: IRON_PICKAXE, mobclass: rare, min_level: 17, max_level: 24, amount: "1", weight: 2.1, random_durability: true, enchantments: { efficiency: "2" }, itemClass: rare, title: "§9Рудокоп-надсмотрщик", lore: ["§7Гудит, когда камень сдаётся.", "§8Рукоять знает мозоли."] }
+  - { material: CROSSBOW, mobclass: rare, min_level: 17, max_level: 24, amount: "1", weight: 1.9, random_durability: true, enchantments: { piercing: "1" }, itemClass: rare, title: "§9Арбалет патруля", lore: ["§7Коротко, метко, строго.", "§8Болты любят порядок."] }
+  - { material: IRON_LEGGINGS, mobclass: rare, min_level: 17, max_level: 24, amount: "1", weight: 1.7, random_durability: true, itemClass: rare, title: "§9Поножи дозорного", lore: ["§7Шаги звенят уверенностью.", "§8Грязь не пристаёт к долгу."] }
+  - { material: GOLDEN_APPLE, mobclass: rare, min_level: 17, max_level: 24, amount: "1", weight: 1.6, itemClass: rare, title: "§9Золотое яблоко", lore: ["§7Вкус своевременной помощи."] }
+  - { material: JUKEBOX, mobclass: rare, min_level: 17, max_level: 24, amount: "1", weight: 1.4 }
+  - { material: NOTE_BLOCK, mobclass: rare, min_level: 17, max_level: 24, amount: "1-2", weight: 1.3 }
+  - { material: IRON_BARS, mobclass: rare, min_level: 17, max_level: 24, amount: "4-8", weight: 1.2 }
+
+  # Epic класс
+  - { material: DIAMOND, mobclass: epic, min_level: 17, max_level: 24, amount: "1", weight: 1.2, itemClass: epic }
+  - { material: IRON_CHESTPLATE, mobclass: epic, min_level: 17, max_level: 24, amount: "1", weight: 1.0, random_durability: true, enchantments: { protection: "1-2" }, itemClass: epic, title: "§5Кираса привратника", lore: ["§7Ключи звенят над металлом.", "§8Впускает только стойких."] }
+  - { material: EMERALD, mobclass: epic, min_level: 17, max_level: 24, amount: "1", weight: 0.8, itemClass: epic }
+  - { material: ENCHANTED_BOOK, mobclass: epic, min_level: 17, max_level: 24, amount: "1", weight: 0.7, enchantments: { sharpness: "1-2" }, itemClass: epic, title: "§5Страницы рвения I–II", lore: ["§7Клинок слушает буквы.", "§8Слова — тоже сталь."] }
+  - { material: DIAMOND_BOOTS, mobclass: epic, min_level: 17, max_level: 24, amount: "1", weight: 1.1, random_durability: true, itemClass: epic, title: "§5Сапоги горного хода", lore: ["§7Следы тяжелее дождя.", "§8Камень запоминает имя."] }
+  - { material: BLAZE_POWDER, mobclass: epic, min_level: 17, max_level: 24, amount: "1-2", weight: 0.95, itemClass: epic }
+  - { material: GHAST_TEAR, mobclass: epic, min_level: 17, max_level: 24, amount: "1", weight: 0.9, itemClass: epic }
+  - { material: EXPERIENCE_BOTTLE, mobclass: epic, min_level: 17, max_level: 24, amount: "1-2", weight: 0.75, itemClass: epic }
+  - { material: TRIDENT, mobclass: epic, min_level: 17, max_level: 24, amount: "1", weight: 0.65, random_durability: true, itemClass: epic, title: "§5Трезубец прилива", lore: ["§7Шум волн — команда к броску.", "§8Соль лечит раны победы."] }
+  - { material: NAUTILUS_SHELL, mobclass: epic, min_level: 17, max_level: 24, amount: "1", weight: 0.6, itemClass: epic }
+  - { material: ENCHANTED_BOOK, mobclass: epic, min_level: 17, max_level: 24, amount: "1", weight: 0.55, enchantments: { fortune: "1-2" }, itemClass: epic, title: "§5Свод удачи I–II", lore: ["§7Шанс подчиняется терпеливым."] }
+  - { material: SHIELD, mobclass: epic, min_level: 17, max_level: 24, amount: "1", weight: 0.5, random_durability: true, itemClass: epic, title: "§5Щит верного", lore: ["§7Стоит там, где нужно.", "§8Пропускает только ветер."] }
+
+  # Legendary класс
+  - { material: DIAMOND_HELMET, mobclass: legendary, min_level: 17, max_level: 24, amount: "1", weight: 0.5, random_durability: true, itemClass: legendary, title: "§6Каска первопроходца", lore: ["§eПервым видит опасность.", "§7Последним её вспоминает."] }
+  - { material: ENDER_PEARL, mobclass: legendary, min_level: 17, max_level: 24, amount: "1", weight: 0.4, itemClass: legendary }
+  - { material: ENCHANTED_BOOK, mobclass: legendary, min_level: 17, max_level: 24, amount: "1", weight: 0.35, enchantments: { unbreaking: "1-2" }, itemClass: legendary, title: "§6Кодекс стойкости I–II", lore: ["§eДольше — значит дальше.", "§7Износ боится этого переплёта."] }
+  - { material: DIAMOND_SWORD, mobclass: legendary, min_level: 17, max_level: 24, amount: "1", weight: 0.45, random_durability: true, enchantments: { sharpness: "1-3" }, itemClass: legendary, title: "§6Острие расправы", lore: ["§eВопросы задаёт коротко.", "§7Ответы — на лезвии."] }
+  - { material: DIAMOND_CHESTPLATE, mobclass: legendary, min_level: 17, max_level: 24, amount: "1", weight: 0.42, random_durability: true, itemClass: legendary, title: "§6Нагрудник геральда", lore: ["§eВидят издалека — и уступают.", "§7Грудь держит знамя."] }
+  - { material: NAME_TAG, mobclass: legendary, min_level: 17, max_level: 24, amount: "1", weight: 0.28 }
+  - { material: LEAD, mobclass: legendary, min_level: 17, max_level: 24, amount: "1-2", weight: 0.25, itemClass: legendary }
+  - { material: ENCHANTED_BOOK, mobclass: legendary, min_level: 17, max_level: 24, amount: "1", weight: 0.22, enchantments: { looting: "1-2" }, itemClass: legendary, title: "§6Книга наживы I–II", lore: ["§eДобыча любит настойчивых."] }
+
+  # Mythic класс
+  - { material: GOLDEN_APPLE, mobclass: mythic, min_level: 17, max_level: 24, amount: "1", weight: 0.15, itemClass: mythic, title: "§dЗнак благоволения", lore: ["§5Сладок тем, кто выжил.", "§7Ещё один шанс."] }
+  - { material: NAME_TAG, mobclass: mythic, min_level: 17, max_level: 24, amount: "1", weight: 0.12, itemClass: mythic }
+  - { material: DIAMOND_SWORD, mobclass: mythic, min_level: 17, max_level: 24, amount: "1", weight: 0.14, random_durability: true, enchantments: { sharpness: "3", fire_aspect: "1" }, itemClass: mythic, title: "§dКлинок жаркого приговора", lore: ["§5Пепел — тоже ответ.", "§7Искры — подпись судьбы."] }
+  - { material: DIAMOND_CHESTPLATE, mobclass: mythic, min_level: 17, max_level: 24, amount: "1", weight: 0.10, random_durability: true, enchantments: { protection: "3" }, itemClass: mythic, title: "§dНагрудник вечного караула", lore: ["§5Броня, что не забывает службу."] }
+
+  # =================== ДИАПАЗОН 24-30 УРОВНЕЙ ===================
+  # Common класс
+  - { material: IRON_INGOT, mobclass: common, min_level: 24, max_level: 30, amount: "2-4", weight: 7.0 }
+  - { material: COAL_BLOCK, mobclass: common, min_level: 24, max_level: 30, amount: "1-2", weight: 6.5 }
+  - { material: IRON_PICKAXE, mobclass: common, min_level: 24, max_level: 30, amount: "1", weight: 6.0, random_durability: true }
+  - { material: COOKED_BEEF, mobclass: common, min_level: 24, max_level: 30, amount: "3-6", weight: 5.5 }
+  - { material: SANDSTONE, mobclass: common, min_level: 24, max_level: 30, amount: "6-12", weight: 5.0 }
+  - { material: NETHER_BRICK, mobclass: common, min_level: 24, max_level: 30, amount: "2-6", weight: 4.5 }
+  - { material: GOLDEN_CARROT, mobclass: common, min_level: 24, max_level: 30, amount: "2-4", weight: 6.8 }
+  - { material: PRISMARINE_CRYSTALS, mobclass: common, min_level: 24, max_level: 30, amount: "1-3", weight: 6.2 }
+  - { material: END_STONE, mobclass: common, min_level: 24, max_level: 30, amount: "4-8", weight: 5.8 }
+  - { material: MAGMA_CREAM, mobclass: common, min_level: 24, max_level: 30, amount: "1-2", weight: 5.3 }
+  - { material: BLAZE_ROD, mobclass: common, min_level: 24, max_level: 30, amount: "1", weight: 4.8 }
+  - { material: IRON_BLOCK, mobclass: common, min_level: 24, max_level: 30, amount: "1", weight: 4.3 }
+  - { material: SLIME_BALL, mobclass: common, min_level: 24, max_level: 30, amount: "1-2", weight: 3.8 }
+
+  # Uncommon класс
+  - { material: GOLD_INGOT, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1-3", weight: 4.0 }
+  - { material: IRON_BOOTS, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1", weight: 3.8, random_durability: true }
+  - { material: CAULDRON, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1", weight: 3.5 }
+  - { material: QUARTZ, mobclass: uncommon, min_level: 24, max_level: 30, amount: "2-5", weight: 3.2 }
+  - { material: CROSSBOW, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1", weight: 3.0, random_durability: true }
+  - { material: IRON_SWORD, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1", weight: 4.2, random_durability: true, enchantments: { sharpness: "2" } }
+  - { material: IRON_HELMET, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1", weight: 3.9, random_durability: true, enchantments: { protection: "1-2" } }
+  - { material: DIAMOND_HELMET, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1", weight: 3.7, random_durability: true }
+  - { material: SHIELD, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1", weight: 3.4, random_durability: true }
+  - { material: MUSIC_DISC_CAT, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1", weight: 3.1 }
+  - { material: GOLDEN_HELMET, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1", weight: 2.9, random_durability: true }
+  - { material: PHANTOM_MEMBRANE, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1", weight: 2.8 }
+  - { material: TURTLE_EGG, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1-2", weight: 2.7 }
+
+  # Rare класс
+  - { material: DIAMOND, mobclass: rare, min_level: 24, max_level: 30, amount: "1", weight: 2.5, itemClass: rare }
+  - { material: IRON_LEGGINGS, mobclass: rare, min_level: 24, max_level: 30, amount: "1", weight: 2.2, random_durability: true, enchantments: { protection: "1-2" }, itemClass: rare, title: "§9Поножи походника", lore: ["§7Дороги знают эти шаги.", "§8Пыль — часть службы."] }
+  - { material: ENCHANTED_BOOK, mobclass: rare, min_level: 24, max_level: 30, amount: "1", weight: 2.0, enchantments: { power: "1-2" }, itemClass: rare, title: "§9Руководство по натягу I–II", lore: ["§7Тетива поёт громче.", "§8Цель — ближе."] }
+  - { material: LAPIS_LAZULI, mobclass: rare, min_level: 24, max_level: 30, amount: "6-12", weight: 1.8 }
+  - { material: BLAZE_POWDER, mobclass: rare, min_level: 24, max_level: 30, amount: "1-2", weight: 1.5 }
+  - { material: DIAMOND_SWORD, mobclass: rare, min_level: 24, max_level: 30, amount: "1", weight: 2.3, random_durability: true, enchantments: { sharpness: "1-2" }, itemClass: rare, title: "§9Клинок уверенности", lore: ["§7Рубит сомнения первым ударом."] }
+  - { material: DIAMOND_PICKAXE, mobclass: rare, min_level: 24, max_level: 30, amount: "1", weight: 2.1, random_durability: true, enchantments: { efficiency: "2-3" }, itemClass: rare, title: "§9Скальная песнь", lore: ["§7Камень отвечает эхом.", "§8Жила идёт сама."] }
+  - { material: BOW, mobclass: rare, min_level: 24, max_level: 30, amount: "1", weight: 1.9, random_durability: true, enchantments: { power: "2", flame: "1" }, itemClass: rare, title: "§9Лук дорожного огня", lore: ["§7Стрелы несут жар.", "§8Ночь становится короче."] }
+  - { material: TRIDENT, mobclass: rare, min_level: 24, max_level: 30, amount: "1", weight: 1.7, random_durability: true, itemClass: rare, title: "§9Коралловый судья", lore: ["§7Вода всегда на стороне закона."] }
+  - { material: SCUTE, mobclass: rare, min_level: 24, max_level: 30, amount: "1-2", weight: 1.6 }
+  - { material: HEART_OF_THE_SEA, mobclass: rare, min_level: 24, max_level: 30, amount: "1", weight: 1.4, itemClass: rare }
+  - { material: CONDUIT, mobclass: rare, min_level: 24, max_level: 30, amount: "1", weight: 1.3, itemClass: rare }
+  - { material: PRISMARINE_CRYSTALS, mobclass: rare, min_level: 24, max_level: 30, amount: "3-6", weight: 1.2 }
+
+  # Epic класс
+  - { material: EMERALD, mobclass: epic, min_level: 24, max_level: 30, amount: "1-2", weight: 1.3, itemClass: epic }
+  - { material: DIAMOND_BOOTS, mobclass: epic, min_level: 24, max_level: 30, amount: "1", weight: 1.0, random_durability: true, itemClass: epic, title: "§5Шаги каменного шёпота", lore: ["§7Слышат только нужные стены."] }
+  - { material: ENDER_PEARL, mobclass: epic, min_level: 24, max_level: 30, amount: "1", weight: 0.8, itemClass: epic }
+  - { material: ENCHANTED_BOOK, mobclass: epic, min_level: 24, max_level: 30, amount: "1", weight: 0.7, enchantments: { fortune: "1" }, itemClass: epic, title: "§5Справочник прометчика I", lore: ["§7Счастье любит подготовленных."] }
+  - { material: DIAMOND_HELMET, mobclass: epic, min_level: 24, max_level: 30, amount: "1", weight: 1.2, random_durability: true, enchantments: { protection: "2-3" }, itemClass: epic, title: "§5Шлем каменного дозора", lore: ["§7Ни одна трещина не ускользнёт."] }
+  - { material: NETHERITE_SCRAP, mobclass: epic, min_level: 24, max_level: 30, amount: "1", weight: 1.1, itemClass: epic }
+  - { material: ANCIENT_DEBRIS, mobclass: epic, min_level: 24, max_level: 30, amount: "1", weight: 0.9, itemClass: epic }
+  - { material: ENCHANTED_BOOK, mobclass: epic, min_level: 24, max_level: 30, amount: "1", weight: 0.55, enchantments: { silk_touch: "1" }, itemClass: epic, title: "§5Тракт бережности I", lore: ["§7Мир — аккуратнее в руках."] }
+
+  # Legendary класс
+  - { material: DIAMOND_CHESTPLATE, mobclass: legendary, min_level: 24, max_level: 30, amount: "1", weight: 0.6, random_durability: true, itemClass: legendary, title: "§6Нагрудник марш-бастиона", lore: ["§eШаг держит строй.", "§7Удар — лишь отметка."] }
+  - { material: ENCHANTED_BOOK, mobclass: legendary, min_level: 24, max_level: 30, amount: "1", weight: 0.4, enchantments: { sharpness: "2-3" }, itemClass: legendary, title: "§6Кодекс остроты II–III", lore: ["§eЛезвие читает вслух.", "§7Смысл — в разрезах."] }
+  - { material: GOLDEN_APPLE, mobclass: legendary, min_level: 24, max_level: 30, amount: "1", weight: 0.35, itemClass: legendary }
+  - { material: NETHERITE_HELMET, mobclass: legendary, min_level: 24, max_level: 30, amount: "1", weight: 0.55, random_durability: true, itemClass: legendary, title: "§6Незеритовая маска дельца", lore: ["§eСделки заключают выжившие.", "§7Шлем помогает."] }
+  - { material: NETHERITE_SWORD, mobclass: legendary, min_level: 24, max_level: 30, amount: "1", weight: 0.5, random_durability: true, enchantments: { sharpness: "1-2" }, itemClass: legendary, title: "§6Клинок без оговорок", lore: ["§eПишет приговоры чёрными чернилами."] }
+  - { material: DIAMOND_LEGGINGS, mobclass: legendary, min_level: 24, max_level: 30, amount: "1", weight: 0.45, random_durability: true, enchantments: { protection: "1-3" }, itemClass: legendary, title: "§6Ступени крепости", lore: ["§eКаждый шаг — как стена.", "§7Каждая стена — как шаг."] }
+  - { material: ENCHANTED_BOOK, mobclass: legendary, min_level: 24, max_level: 30, amount: "1", weight: 0.33, enchantments: { looting: "2-3" }, itemClass: legendary, title: "§6Летопись добычи II–III", lore: ["§eКто ищет — тот найдёт больше."] }
+  - { material: TRIDENT, mobclass: legendary, min_level: 24, max_level: 30, amount: "1", weight: 0.30, random_durability: true, enchantments: { loyalty: "1-2" }, itemClass: legendary, title: "§6Клятва прилива I–II", lore: ["§eБрошен — но вернётся.", "§7Всегда."] }
+  - { material: ENCHANTED_BOOK, mobclass: legendary, min_level: 24, max_level: 30, amount: "1", weight: 0.28, itemClass: legendary, title: "§6Книга ремесла I", lore: ["§eВещи служат верным."] }
+
+  # Mythic класс
+  - { material: EXPERIENCE_BOTTLE, mobclass: mythic, min_level: 24, max_level: 30, amount: "3-8", weight: 0.15, itemClass: mythic }
+  - { material: NETHERITE_INGOT, mobclass: mythic, min_level: 24, max_level: 30, amount: "1", weight: 0.14, itemClass: mythic }
+  - { material: NETHERITE_CHESTPLATE, mobclass: mythic, min_level: 24, max_level: 30, amount: "1", weight: 0.12, itemClass: mythic, title: "§dКираса без компромиссов", lore: ["§5Тяжесть — это надёжность.", "§7Надёжность — это вы."] }
+  - { material: ENCHANTED_BOOK, mobclass: mythic, min_level: 24, max_level: 30, amount: "1", weight: 0.13, enchantments: { sharpness: "1-3", unbreaking: "3" }, itemClass: mythic, title: "§dАрхив клинка IV–V", lore: ["§5Страницы режут взгляд.", "§7И затупляют время."] }
+  - { material: CONDUIT, mobclass: mythic, min_level: 24, max_level: 30, amount: "1", weight: 0.07, itemClass: mythic }
+
+  # =================== ДИАПАЗОН 30-40 УРОВНЕЙ ===================
+  # Common класс
+  - { material: IRON_INGOT, mobclass: common, min_level: 30, max_level: 40, amount: "3-6", weight: 6.8 }
+  - { material: GOLD_NUGGET, mobclass: common, min_level: 30, max_level: 40, amount: "3-8", weight: 6.5 }
+  - { material: CHAIN, mobclass: common, min_level: 30, max_level: 40, amount: "1-3", weight: 6.0 }
+  - { material: GOLDEN_CARROT, mobclass: common, min_level: 30, max_level: 40, amount: "2-4", weight: 5.5 }
+  - { material: LEAD, mobclass: common, min_level: 30, max_level: 40, amount: "1", weight: 5.0 }
+  - { material: PRISMARINE_SHARD, mobclass: common, min_level: 30, max_level: 40, amount: "1-3", weight: 4.5 }
+  - { material: DIAMOND, mobclass: common, min_level: 30, max_level: 40, amount: "1", weight: 7.2 }
+  - { material: EMERALD, mobclass: common, min_level: 30, max_level: 40, amount: "1-2", weight: 6.9 }
+  - { material: LAPIS_LAZULI, mobclass: common, min_level: 30, max_level: 40, amount: "6-14", weight: 5.8 }
+  - { material: BLAZE_ROD, mobclass: common, min_level: 30, max_level: 40, amount: "1-2", weight: 5.3 }
+  - { material: ENDER_PEARL, mobclass: common, min_level: 30, max_level: 40, amount: "1", weight: 4.8 }
+  - { material: MAGMA_CREAM, mobclass: common, min_level: 30, max_level: 40, amount: "2-3", weight: 4.3 }
+  - { material: COPPER_BLOCK, mobclass: common, min_level: 30, max_level: 40, amount: "1", weight: 3.8 }
+
+  # Uncommon класс
+  - { material: GOLD_INGOT, mobclass: uncommon, min_level: 30, max_level: 40, amount: "2-4", weight: 4.2 }
+  - { material: IRON_SWORD, mobclass: uncommon, min_level: 30, max_level: 40, amount: "1", weight: 4.0, random_durability: true, enchantments: { sharpness: "1-3" } }
+  - { material: CHAINMAIL_LEGGINGS, mobclass: uncommon, min_level: 30, max_level: 40, amount: "1", weight: 3.8, random_durability: true }
+  - { material: ANVIL, mobclass: uncommon, min_level: 30, max_level: 40, amount: "1", weight: 3.5 }
+  - { material: BREWING_STAND, mobclass: uncommon, min_level: 30, max_level: 40, amount: "1", weight: 3.2 }
+  - { material: DIAMOND_HELMET, mobclass: uncommon, min_level: 30, max_level: 40, amount: "1", weight: 4.5, random_durability: true, enchantments: { protection: "2" } }
+  - { material: DIAMOND_BOOTS, mobclass: uncommon, min_level: 30, max_level: 40, amount: "1", weight: 4.3, random_durability: true }
+  - { material: IRON_HELMET, mobclass: uncommon, min_level: 30, max_level: 40, amount: "1", weight: 4.1, random_durability: true, enchantments: { protection: "2-3", unbreaking: "1" } }
+  - { material: CROSSBOW, mobclass: uncommon, min_level: 30, max_level: 40, amount: "1", weight: 3.9, random_durability: true, enchantments: { piercing: "1" } }
+  - { material: SHIELD, mobclass: uncommon, min_level: 30, max_level: 40, amount: "1", weight: 3.7, random_durability: true }
+  - { material: HOPPER, mobclass: uncommon, min_level: 30, max_level: 40, amount: "1", weight: 3.6 }
+  - { material: ENCHANTING_TABLE, mobclass: uncommon, min_level: 30, max_level: 40, amount: "1", weight: 3.4 }
+
+  # Rare класс
+  - { material: DIAMOND, mobclass: rare, min_level: 30, max_level: 40, amount: "1", weight: 2.8, itemClass: rare }
+  - { material: IRON_CHESTPLATE, mobclass: rare, min_level: 30, max_level: 40, amount: "1", weight: 2.5, random_durability: true, enchantments: { protection: "1-3" }, itemClass: rare, title: "§9Кираса дозора", lore: ["§7Стальная вера в порядок.", "§8Звенит уставом."] }
+  - { material: BOW, mobclass: rare, min_level: 30, max_level: 40, amount: "1", weight: 2.2, random_durability: true, enchantments: { power: "1-2", unbreaking: "1" }, itemClass: rare, title: "§9Лук выдержки", lore: ["§7Тетива не знает усталости."] }
+  - { material: GHAST_TEAR, mobclass: rare, min_level: 30, max_level: 40, amount: "1", weight: 2.0, itemClass: rare }
+  - { material: PRISMARINE_CRYSTALS, mobclass: rare, min_level: 30, max_level: 40, amount: "1-2", weight: 1.8, itemClass: rare }
+  - { material: DIAMOND_SWORD, mobclass: rare, min_level: 30, max_level: 40, amount: "1", weight: 2.7, random_durability: true, enchantments: { sharpness: "1-3" }, itemClass: rare, title: "§9Сугробный резец", lore: ["§7Холоден к чужим шансам."] }
+  - { material: DIAMOND_PICKAXE, mobclass: rare, min_level: 30, max_level: 40, amount: "1", weight: 2.6, random_durability: true, enchantments: { efficiency: "1-2" }, itemClass: rare, title: "§9Сверло упорства", lore: ["§7Глубже — значит ближе к цели."] }
+  - { material: DIAMOND_CHESTPLATE, mobclass: rare, min_level: 30, max_level: 40, amount: "1", weight: 2.4, random_durability: true, enchantments: { protection: "1-2" }, itemClass: rare, title: "§9Панцирь каменного двора", lore: ["§7Держит удар как слово."] }
+  - { material: TRIDENT, mobclass: rare, min_level: 30, max_level: 40, amount: "1", weight: 2.3, random_durability: true, enchantments: { loyalty: "1" }, itemClass: rare, title: "§9Глас прилива", lore: ["§7Бросил — услышал ответ."] }
+  - { material: GOLDEN_APPLE, mobclass: rare, min_level: 30, max_level: 40, amount: "1", weight: 2.1, itemClass: rare }
+  - { material: ENCHANTED_BOOK, mobclass: rare, min_level: 30, max_level: 40, amount: "1", weight: 1.9, enchantments: { fortune: "1-2" }, itemClass: rare, title: "§9Наставление удачи I–II", lore: ["§7Везение любит дисциплину."] }
+  - { material: SLIME_BALL, mobclass: rare, min_level: 30, max_level: 40, amount: "2-4", weight: 1.7, itemClass: rare }
+  - { material: BLAZE_POWDER, mobclass: rare, min_level: 30, max_level: 40, amount: "2-3", weight: 1.6, itemClass: rare }
+
+  # Epic класс
+  - { material: EMERALD, mobclass: epic, min_level: 30, max_level: 40, amount: "1-2", weight: 1.5, itemClass: epic }
+  - { material: DIAMOND_HELMET, mobclass: epic, min_level: 30, max_level: 40, amount: "1", weight: 1.2, random_durability: true, enchantments: { protection: "1-2" }, itemClass: epic, title: "§5Шлем каменной воли", lore: ["§7Труднее — значит вернее."] }
+  - { material: ENCHANTED_BOOK, mobclass: epic, min_level: 30, max_level: 40, amount: "1", weight: 1.0, enchantments: { efficiency: "2-3" }, itemClass: epic, title: "§5Руководство мастера II–III", lore: ["§7Работай — и камень поддастся."] }
+  - { material: NAUTILUS_SHELL, mobclass: epic, min_level: 30, max_level: 40, amount: "1", weight: 0.8, itemClass: epic }
+  - { material: DIAMOND_CHESTPLATE, mobclass: epic, min_level: 30, max_level: 40, amount: "1", weight: 1.4, random_durability: true, enchantments: { protection: "2-3", unbreaking: "2" }, itemClass: epic, title: "§5Кираса стратега", lore: ["§7План держит удар лучше брони."] }
+  - { material: NETHERITE_SCRAP, mobclass: epic, min_level: 30, max_level: 40, amount: "1", weight: 1.3, itemClass: epic }
+  - { material: ANCIENT_DEBRIS, mobclass: epic, min_level: 30, max_level: 40, amount: "1", weight: 1.1, itemClass: epic }
+  - { material: ENCHANTED_GOLDEN_APPLE, mobclass: epic, min_level: 30, max_level: 40, amount: "1", weight: 0.9, itemClass: epic, title: "§5Зачарованное яблоко", lore: ["§7Вкус спасения."] }
+  - { material: ENCHANTED_BOOK, mobclass: epic, min_level: 30, max_level: 40, amount: "1", weight: 0.6, enchantments: { unbreaking: "2-3" }, itemClass: epic, title: "§5Хартия стойкости II–III", lore: ["§7Выносливость — тоже навык."] }
+  - { material: CONDUIT, mobclass: epic, min_level: 30, max_level: 40, amount: "1", weight: 0.5, itemClass: epic }
+  - { material: CRYING_OBSIDIAN, mobclass: epic, min_level: 30, max_level: 40, amount: "1-2", weight: 0.4, itemClass: epic }
+
+  # Legendary класс
+  - { material: DIAMOND_LEGGINGS, mobclass: legendary, min_level: 30, max_level: 40, amount: "1", weight: 0.7, random_durability: true, enchantments: { protection: "2-3" }, itemClass: legendary, title: "§6Шаги бастиона", lore: ["§eШаг — кирпич крепости."] }
+  - { material: TRIDENT, mobclass: legendary, min_level: 30, max_level: 40, amount: "1", weight: 0.5, random_durability: true, itemClass: legendary, title: "§6Клятва глубин", lore: ["§eВода — надёжный союзник."] }
+  - { material: ENCHANTED_BOOK, mobclass: legendary, min_level: 30, max_level: 40, amount: "1", weight: 0.4, enchantments: { looting: "1-2" }, itemClass: legendary, title: "§6Летопись наживы I–II", lore: ["§eДобыча идёт к терпеливым."] }
+  - { material: NETHERITE_HELMET, mobclass: legendary, min_level: 30, max_level: 40, amount: "1", weight: 0.65, random_durability: true, itemClass: legendary, title: "§6Капюшон пепельной стражи", lore: ["§eПепел — лучший камуфляж."] }
+  - { material: NETHERITE_SWORD, mobclass: legendary, min_level: 30, max_level: 40, amount: "1", weight: 0.6, random_durability: true, itemClass: legendary, title: "§6Лезвие присяги", lore: ["§eРежет кратко, служит долго."] }
+  - { material: NETHERITE_PICKAXE, mobclass: legendary, min_level: 30, max_level: 40, amount: "1", weight: 0.55, random_durability: true, itemClass: legendary, title: "§6Кирка вечной смены", lore: ["§eРабочая смена — до звёзд."] }
+  - { material: NETHERITE_CHESTPLATE, mobclass: legendary, min_level: 30, max_level: 40, amount: "1", weight: 0.75, random_durability: true, itemClass: legendary, title: "§6Панцирь неизбежности", lore: ["§eЕсли пришёл — то дошёл."] }
+  - { material: ENCHANTED_BOOK, mobclass: legendary, min_level: 30, max_level: 40, amount: "1", weight: 0.45, enchantments: { unbreaking: "3" }, itemClass: legendary, title: "§6Свод ремесла I", lore: ["§eЧинить — тоже искусство."] }
+  - { material: CONDUIT, mobclass: legendary, min_level: 30, max_level: 40, amount: "1", weight: 0.35, itemClass: legendary }
+
+  # Mythic класс
+  - { material: CONDUIT, mobclass: mythic, min_level: 30, max_level: 40, amount: "1", weight: 0.12, itemClass: mythic }
+  - { material: NETHERITE_INGOT, mobclass: mythic, min_level: 30, max_level: 40, amount: "1-2", weight: 0.18, itemClass: mythic }
+  - { material: ENCHANTED_BOOK, mobclass: mythic, min_level: 30, max_level: 40, amount: "1", weight: 0.16, enchantments: { sharpness: "2", looting: "1", unbreaking: "2" }, itemClass: mythic, title: "§dАбсолют клинка V", lore: ["§5Глава о последнем слове.", "§7И о том, кто его говорит."] }
+
+  # =================== ДИАПАЗОН 40-70 УРОВНЕЙ ===================
+  # Common класс
+  - { material: GOLD_INGOT, mobclass: common, min_level: 40, max_level: 70, amount: "2-5", weight: 6.5 }
+  - { material: IRON_BLOCK, mobclass: common, min_level: 40, max_level: 70, amount: "1", weight: 6.0 }
+  - { material: COPPER_INGOT, mobclass: common, min_level: 40, max_level: 70, amount: "4-8", weight: 5.8 }
+  - { material: AMETHYST_SHARD, mobclass: common, min_level: 40, max_level: 70, amount: "1-3", weight: 5.5 }
+  - { material: RAW_IRON, mobclass: common, min_level: 40, max_level: 70, amount: "2-5", weight: 5.2 }
+  - { material: RAW_GOLD, mobclass: common, min_level: 40, max_level: 70, amount: "1-3", weight: 5.0 }
+  - { material: DIAMOND, mobclass: common, min_level: 40, max_level: 70, amount: "1-2", weight: 6.8 }
+  - { material: EMERALD, mobclass: common, min_level: 40, max_level: 70, amount: "1-3", weight: 6.3 }
+  - { material: NETHERITE_SCRAP, mobclass: common, min_level: 40, max_level: 70, amount: "1", weight: 5.9 }
+  - { material: ANCIENT_DEBRIS, mobclass: common, min_level: 40, max_level: 70, amount: "1", weight: 5.6 }
+  - { material: GOLD_INGOT, mobclass: common, min_level: 40, max_level: 70, amount: "1", weight: 5.3 }
+  - { material: DIAMOND, mobclass: common, min_level: 40, max_level: 70, amount: "1", weight: 4.8 }
+  - { material: EMERALD, mobclass: common, min_level: 40, max_level: 70, amount: "1", weight: 4.5 }
+  - { material: WITHER_ROSE, mobclass: common, min_level: 40, max_level: 70, amount: "1-2", weight: 4.2 }
+
+  # Uncommon класс
+  - { material: DIAMOND, mobclass: uncommon, min_level: 40, max_level: 70, amount: "1", weight: 4.5 }
+  - { material: IRON_HELMET, mobclass: uncommon, min_level: 40, max_level: 70, amount: "1", weight: 4.2, random_durability: true, enchantments: { protection: "1-3", unbreaking: "1" } }
+  - { material: GOLDEN_HELMET, mobclass: uncommon, min_level: 40, max_level: 70, amount: "1", weight: 4.0, random_durability: true }
+  - { material: HOPPER, mobclass: uncommon, min_level: 40, max_level: 70, amount: "1", weight: 3.8 }
+  - { material: LIGHTNING_ROD, mobclass: uncommon, min_level: 40, max_level: 70, amount: "1", weight: 3.5 }
+  - { material: DIAMOND_HELMET, mobclass: uncommon, min_level: 40, max_level: 70, amount: "1", weight: 4.7, random_durability: true, enchantments: { protection: "1-3", unbreaking: "2" } }
+  - { material: DIAMOND_BOOTS, mobclass: uncommon, min_level: 40, max_level: 70, amount: "1", weight: 4.4, random_durability: true, enchantments: { protection: "2", feather_falling: "1-2" } }
+  - { material: DIAMOND_SWORD, mobclass: uncommon, min_level: 40, max_level: 70, amount: "1", weight: 4.1, random_durability: true, enchantments: { sharpness: "1-2" } }
+  - { material: CROSSBOW, mobclass: uncommon, min_level: 40, max_level: 70, amount: "1", weight: 3.9, random_durability: true, enchantments: { piercing: "2" } }
+  - { material: SHIELD, mobclass: uncommon, min_level: 40, max_level: 70, amount: "1", weight: 3.7, random_durability: true, enchantments: { unbreaking: "2" } }
+  - { material: TRIDENT, mobclass: uncommon, min_level: 40, max_level: 70, amount: "1", weight: 3.6, random_durability: true }
+  - { material: ENCHANTED_BOOK, mobclass: uncommon, min_level: 40, max_level: 70, amount: "1", weight: 3.3, enchantments: { efficiency: "2-3" } }
+  - { material: ANVIL, mobclass: uncommon, min_level: 40, max_level: 70, amount: "1", weight: 3.0 }
+
+  # Rare класс
+  - { material: EMERALD, mobclass: rare, min_level: 40, max_level: 70, amount: "1-3", weight: 3.0, itemClass: rare }
+  - { material: DIAMOND_SWORD, mobclass: rare, min_level: 40, max_level: 70, amount: "1", weight: 2.8, random_durability: true, enchantments: { sharpness: "1-3" }, itemClass: rare, title: "§9Господство удара", lore: ["§7Решает спор первым взмахом."] }
+  - { material: DIAMOND_PICKAXE, mobclass: rare, min_level: 40, max_level: 70, amount: "1", weight: 2.5, random_durability: true, enchantments: { efficiency: "1-3" }, itemClass: rare, title: "§9Гул шахты", lore: ["§7Эхо зовёт к рудам."] }
+  - { material: ENCHANTED_BOOK, mobclass: rare, min_level: 40, max_level: 70, amount: "1", weight: 2.2, enchantments: { fortune: "1-2" }, itemClass: rare, title: "§9Курс удачи I–II", lore: ["§7Чем глубже — тем богаче."] }
+  - { material: SLIME_BALL, mobclass: rare, min_level: 40, max_level: 70, amount: "2-4", weight: 2.0, itemClass: rare }
+  - { material: DIAMOND_CHESTPLATE, mobclass: rare, min_level: 40, max_level: 70, amount: "1", weight: 2.9, random_durability: true, enchantments: { protection: "1-2", unbreaking: "2" }, itemClass: rare, title: "§9Кираса дальнего похода", lore: ["§7Буря — часть маршрута."] }
+  - { material: DIAMOND_LEGGINGS, mobclass: rare, min_level: 40, max_level: 70, amount: "1", weight: 2.7, random_durability: true, enchantments: { protection: "1-3" }, itemClass: rare, title: "§9Шаги гвардии", lore: ["§7Шаги равняют тревогу."] }
+  - { material: BOW, mobclass: rare, min_level: 40, max_level: 70, amount: "1", weight: 2.6, random_durability: true, enchantments: { power: "2", flame: "1", unbreaking: "2" }, itemClass: rare, title: "§9Пламенный дозор", lore: ["§7Стрелы — как маяки."] }
+  - { material: NETHERITE_HELMET, mobclass: rare, min_level: 40, max_level: 70, amount: "1", weight: 2.4, random_durability: true, itemClass: rare, title: "§9Пепельный козырёк", lore: ["§7Гарью пахнет победа."] }
+  - { material: HEART_OF_THE_SEA, mobclass: rare, min_level: 40, max_level: 70, amount: "1", weight: 2.3, itemClass: rare }
+  - { material: NAUTILUS_SHELL, mobclass: rare, min_level: 40, max_level: 70, amount: "1-2", weight: 2.1, itemClass: rare }
+  - { material: PHANTOM_MEMBRANE, mobclass: rare, min_level: 40, max_level: 70, amount: "2-3", weight: 1.9, itemClass: rare }
+  - { material: GHAST_TEAR, mobclass: rare, min_level: 40, max_level: 70, amount: "1-2", weight: 1.8, itemClass: rare }
+
+  # Epic класс
+  - { material: DIAMOND_CHESTPLATE, mobclass: epic, min_level: 40, max_level: 70, amount: "1", weight: 1.8, random_durability: true, enchantments: { protection: "1-2", unbreaking: "2" }, itemClass: epic, title: "§5Нагрудник походного штаба", lore: ["§7План на груди — план в голове."] }
+  - { material: NETHERITE_SCRAP, mobclass: epic, min_level: 40, max_level: 70, amount: "1", weight: 1.5, itemClass: epic }
+  - { material: ENCHANTED_BOOK, mobclass: epic, min_level: 40, max_level: 70, amount: "1", weight: 1.2, enchantments: { unbreaking: "1-2" }, itemClass: epic, title: "§5Устав стойкости II–III", lore: ["§7Износ подписывает капитуляцию."] }
+  - { material: CRYING_OBSIDIAN, mobclass: epic, min_level: 40, max_level: 70, amount: "1-2", weight: 1.0, itemClass: epic }
+  - { material: NETHERITE_BOOTS, mobclass: epic, min_level: 40, max_level: 70, amount: "1", weight: 1.7, random_durability: true, enchantments: { protection: "1", feather_falling: "3" }, itemClass: epic, title: "§5Сапоги марша", lore: ["§7Дорога короче для упорных."] }
+  - { material: NETHERITE_LEGGINGS, mobclass: epic, min_level: 40, max_level: 70, amount: "1", weight: 1.6, random_durability: true, enchantments: { protection: "1" }, itemClass: epic, title: "§5Незеритовые поножи караула", lore: ["§7Не трутся, когда не отступают."] }
+  - { material: ANCIENT_DEBRIS, mobclass: epic, min_level: 40, max_level: 70, amount: "1", weight: 1.4, itemClass: epic }
+  - { material: NETHERITE_INGOT, mobclass: epic, min_level: 40, max_level: 70, amount: "1", weight: 1.3, itemClass: epic }
+  - { material: ENCHANTED_GOLDEN_APPLE, mobclass: epic, min_level: 40, max_level: 70, amount: "1", weight: 1.1, itemClass: epic, title: "§5Зачарованное яблоко", lore: ["§7Пауза между поражениями."] }
+  - { material: ENCHANTED_BOOK, mobclass: epic, min_level: 40, max_level: 70, amount: "1", weight: 0.7, enchantments: { looting: "2-3" }, itemClass: epic, title: "§5Регистр наживы II–III", lore: ["§7Пустые сундуки — это навык."] }
+
+  # Legendary класс
+  - { material: DIAMOND_LEGGINGS, mobclass: legendary, min_level: 40, max_level: 70, amount: "1", weight: 0.9, random_durability: true, enchantments: { protection: "1", unbreaking: "2" }, itemClass: legendary, title: "§6Штаны цитадели", lore: ["§eШаги звучат приказом."] }
+  - { material: TRIDENT, mobclass: legendary, min_level: 40, max_level: 70, amount: "1", weight: 0.7, random_durability: true, enchantments: { loyalty: "1-2" }, itemClass: legendary, title: "§6Флотская присяга I–II", lore: ["§eВернётся даже через шторм."] }
+  - { material: ENCHANTED_BOOK, mobclass: legendary, min_level: 40, max_level: 70, amount: "1", weight: 0.6, enchantments: { silk_touch: "1" }, itemClass: legendary, title: "§6Лёгкая рука I", lore: ["§eМир останется целым."] }
+  - { material: NETHERITE_SWORD, mobclass: legendary, min_level: 40, max_level: 70, amount: "1", weight: 0.85, random_durability: true, enchantments: { unbreaking: "3" }, itemClass: legendary, title: "§6Устав последнего удара", lore: ["§eБой заканчивают правильно."] }
+  - { material: NETHERITE_PICKAXE, mobclass: legendary, min_level: 40, max_level: 70, amount: "1", weight: 0.8, random_durability: true, enchantments: { fortune: "1-2" }, itemClass: legendary, title: "§6Копьё землекопа", lore: ["§eЗемля сдаётся с честью."] }
+  - { material: NETHERITE_CHESTPLATE, mobclass: legendary, min_level: 40, max_level: 70, amount: "1", weight: 0.75, random_durability: true, enchantments: { unbreaking: "2" }, itemClass: legendary, title: "§6Грудь бастиона", lore: ["§eНа ней опирается строй."] }
+  - { material: ENCHANTED_BOOK, mobclass: legendary, min_level: 40, max_level: 70, amount: "1", weight: 0.45, enchantments: { unbreaking: "3" }, itemClass: legendary, title: "§6Ремесло долговечности I", lore: ["§eВещи служат дисциплине."] }
+  - { material: CONDUIT, mobclass: legendary, min_level: 40, max_level: 70, amount: "1", weight: 0.35, itemClass: legendary }
+
+  # Mythic класс
+  - { material: CONDUIT, mobclass: mythic, min_level: 40, max_level: 70, amount: "1", weight: 0.12, itemClass: mythic }
+  - { material: NETHERITE_INGOT, mobclass: mythic, min_level: 40, max_level: 70, amount: "1", weight: 0.18, itemClass: mythic }
+  - { material: ENCHANTED_BOOK, mobclass: mythic, min_level: 40, max_level: 70, amount: "1", weight: 0.16, enchantments: { sharpness: "1", looting: "1", unbreaking: "1" }, itemClass: mythic, title: "§dКвинтэссенция охоты V", lore: ["§5Искусство брать своё."] }
+
+  # =================== ДИАПАЗОН 70-85 УРОВНЕЙ ===================
+  # Common класс - отличные предметы для поздней игры
+  - { material: DIAMOND, mobclass: common, min_level: 70, max_level: 85, amount: "1-2", weight: 6.0 }
+  - { material: GOLD, mobclass: common, min_level: 70, max_level: 85, amount: "1", weight: 5.8 }
+  - { material: NETHERITE_SCRAP, mobclass: common, min_level: 70, max_level: 85, amount: "1", weight: 5.5 }
+  - { material: PHANTOM_MEMBRANE, mobclass: common, min_level: 70, max_level: 85, amount: "1-2", weight: 5.2 }
+  - { material: EMERALD, mobclass: common, min_level: 70, max_level: 85, amount: "2-4", weight: 6.2 }
+  - { material: ANCIENT_DEBRIS, mobclass: common, min_level: 70, max_level: 85, amount: "1", weight: 5.9 }
+  - { material: NETHERITE_INGOT, mobclass: common, min_level: 70, max_level: 85, amount: "1", weight: 5.6 }
+  - { material: DIAMOND, mobclass: common, min_level: 70, max_level: 85, amount: "1", weight: 5.3 }
+  - { material: EMERALD, mobclass: common, min_level: 70, max_level: 85, amount: "1", weight: 4.8 }
+  - { material: HEART_OF_THE_SEA, mobclass: common, min_level: 70, max_level: 85, amount: "1", weight: 4.2 }
+
+  # Uncommon класс
+  - { material: EMERALD, mobclass: uncommon, min_level: 70, max_level: 85, amount: "1-2", weight: 4.8 }
+  - { material: DIAMOND_HELMET, mobclass: uncommon, min_level: 70, max_level: 85, amount: "1", weight: 4.5, random_durability: true, enchantments: { protection: "1-2", respiration: "1-2" } }
+  - { material: DIAMOND_BOOTS, mobclass: uncommon, min_level: 70, max_level: 85, amount: "1", weight: 4.2, random_durability: true, enchantments: { protection: "1-3", feather_falling: "1-2" } }
+  - { material: ENCHANTED_BOOK, mobclass: uncommon, min_level: 70, max_level: 85, amount: "1", weight: 4.0, enchantments: { fire_aspect: "1-2" } }
+  - { material: NETHERITE_HELMET, mobclass: uncommon, min_level: 70, max_level: 85, amount: "1", weight: 4.6, random_durability: true, enchantments: { protection: "1-2" } }
+  - { material: NETHERITE_BOOTS, mobclass: uncommon, min_level: 70, max_level: 85, amount: "1", weight: 4.4, random_durability: true, enchantments: { protection: "1-2", feather_falling: "1-2" } }
+  - { material: DIAMOND_SWORD, mobclass: uncommon, min_level: 70, max_level: 85, amount: "1", weight: 4.3, random_durability: true, enchantments: { sharpness: "1-2", fire_aspect: "2" } }
+  - { material: DIAMOND_CHESTPLATE, mobclass: uncommon, min_level: 70, max_level: 85, amount: "1", weight: 4.1, random_durability: true, enchantments: { protection: "1-2", unbreaking: "2" } }
+  - { material: TRIDENT, mobclass: uncommon, min_level: 70, max_level: 85, amount: "1", weight: 3.9, random_durability: true, enchantments: { loyalty: "1" } }
+  - { material: SHIELD, mobclass: uncommon, min_level: 70, max_level: 85, amount: "1", weight: 3.8, random_durability: true, enchantments: { unbreaking: "3" } }
+  - { material: ENCHANTED_BOOK, mobclass: uncommon, min_level: 70, max_level: 85, amount: "1", weight: 3.7, enchantments: { efficiency: "1-3" } }
+  - { material: CONDUIT, mobclass: uncommon, min_level: 70, max_level: 85, amount: "1", weight: 3.6 }
+
+  # Rare класс
+  - { material: DIAMOND_SWORD, mobclass: rare, min_level: 70, max_level: 85, amount: "1", weight: 3.5, random_durability: true, enchantments: { sharpness: "1-2", fire_aspect: "1", unbreaking: "2" }, itemClass: rare, title: "§9Клинок заката", lore: ["§7Добивает с последним лучом."] }
+  - { material: DIAMOND_PICKAXE, mobclass: rare, min_level: 70, max_level: 85, amount: "1", weight: 3.2, random_durability: true, enchantments: { efficiency: "2-3", fortune: "1-2" }, itemClass: rare, title: "§9Легенда шахт", lore: ["§7Каждый слой — глава добычи."] }
+  - { material: BOW, mobclass: rare, min_level: 70, max_level: 85, amount: "1", weight: 3.0, random_durability: true, enchantments: { power: "1", flame: "1", unbreaking: "2-3" }, itemClass: rare, title: "§9Тлеющая тетива", lore: ["§7Стрелы — искры на ветру."] }
+  - { material: CROSSBOW, mobclass: rare, min_level: 70, max_level: 85, amount: "1", weight: 2.8, random_durability: true, enchantments: { piercing: "1", quick_charge: "1" }, itemClass: rare, title: "§9Гроза бастионов", lore: ["§7Заряжается быстрее, чем страх."] }
+  - { material: TRIDENT, mobclass: rare, min_level: 70, max_level: 85, amount: "1", weight: 2.5, random_durability: true, enchantments: { channeling: "1", unbreaking: "1" }, itemClass: rare, title: "§9Штормовой жезл", lore: ["§7Слышит зов грозы."] }
+  - { material: NETHERITE_SWORD, mobclass: rare, min_level: 70, max_level: 85, amount: "1", weight: 3.3, random_durability: true, enchantments: { sharpness: "1", unbreaking: "2" }, itemClass: rare, title: "§9Кромка бездны", lore: ["§7Горячее ядро в холодной стали."] }
+  - { material: NETHERITE_PICKAXE, mobclass: rare, min_level: 70, max_level: 85, amount: "1", weight: 3.1, random_durability: true, enchantments: { efficiency: "1", fortune: "2" }, itemClass: rare, title: "§9Жилоискатель", lore: ["§7Чует руду сквозь породу."] }
+  - { material: NETHERITE_CHESTPLATE, mobclass: rare, min_level: 70, max_level: 85, amount: "1", weight: 2.9, random_durability: true, enchantments: { protection: "1" }, itemClass: rare, title: "§9Панцирь кочегара", lore: ["§7Коптит, но спасает."] }
+  - { material: NETHERITE_LEGGINGS, mobclass: rare, min_level: 70, max_level: 85, amount: "1", weight: 2.7, random_durability: true, enchantments: { protection: "1-2" }, itemClass: rare, title: "§9Марш горнила", lore: ["§7Шаг — как удар молота."] }
+
+  # Epic класс
+  - { material: DIAMOND_CHESTPLATE, mobclass: epic, min_level: 70, max_level: 85, amount: "1", weight: 2.2, random_durability: true, enchantments: { protection: "1-3", unbreaking: "2-3" }, itemClass: epic, title: "§5Кираса убеждения", lore: ["§7Кто прав — того не пробить."] }
+  - { material: DIAMOND_LEGGINGS, mobclass: epic, min_level: 70, max_level: 85, amount: "1", weight: 2.0, random_durability: true, enchantments: { protection: "2", unbreaking: "2-3", thorns: "1" }, itemClass: epic, title: "§5Поножи неуступчивости", lore: ["§7Ответ держат колени."] }
+  - { material: SHIELD, mobclass: epic, min_level: 70, max_level: 85, amount: "1", weight: 1.8, random_durability: true, enchantments: { unbreaking: "3" }, itemClass: epic, title: "§5Щит дальнего строя", lore: ["§7Стена начинается здесь."] }
+  - { material: NETHERITE_INGOT, mobclass: epic, min_level: 70, max_level: 85, amount: "1", weight: 1.3, itemClass: epic }
+  - { material: NETHERITE_SWORD, mobclass: epic, min_level: 70, max_level: 85, amount: "1", weight: 2.1, random_durability: true, enchantments: { sharpness: "1", fire_aspect: "1", unbreaking: "1-3" }, itemClass: epic, title: "§5Клятва огня", lore: ["§7Жжёт к делу."] }
+  - { material: NETHERITE_CHESTPLATE, mobclass: epic, min_level: 70, max_level: 85, amount: "1", weight: 2.4, random_durability: true, enchantments: { protection: "1", unbreaking: "3", }, itemClass: epic, title: "§5Жилет бессменного", lore: ["§7Смена — бесконечна."] }
+  - { material: NETHERITE_LEGGINGS, mobclass: epic, min_level: 70, max_level: 85, amount: "1", weight: 1.7, random_durability: true, enchantments: { protection: "1", unbreaking: "2-3" }, itemClass: epic, title: "§5Режим марш-броска", lore: ["§7Ни мозолей, ни пощады."] }
+  - { material: CONDUIT, mobclass: epic, min_level: 70, max_level: 85, amount: "1", weight: 1.2, itemClass: epic }
+  - { material: ENCHANTED_BOOK, mobclass: epic, min_level: 70, max_level: 85, amount: "1", weight: 1.1, enchantments: { fortune: "1", unbreaking: "3" }, itemClass: epic, title: "§5Кодекс добытчика III", lore: ["§7Смерть ресурсам — не выход."] }
+
+  # Legendary класс
+  - { material: NETHERITE_SWORD, mobclass: legendary, min_level: 70, max_level: 85, amount: "1", weight: 1.0, random_durability: true, enchantments: { sharpness: "1", unbreaking: "2" }, itemClass: legendary, title: "§6Лезвие гарнизона", lore: ["§eРежим караула: постоянно."] }
+  - { material: NETHERITE_HELMET, mobclass: legendary, min_level: 70, max_level: 85, amount: "1", weight: 0.8, random_durability: true, itemClass: legendary, title: "§6Купол дозорного", lore: ["§eОсмотр — круговой."] }
+  - { material: ENCHANTED_BOOK, mobclass: legendary, min_level: 70, max_level: 85, amount: "1", weight: 0.7, enchantments: { fortune: "3" }, itemClass: legendary, title: "§6Курс удачи III", lore: ["§eСверяйся с картой жил."] }
+  - { material: NETHERITE_SWORD, mobclass: legendary, min_level: 70, max_level: 85, amount: "1", weight: 0.95, random_durability: true, enchantments: { sharpness: "1", fire_aspect: "2", unbreaking: "3", }, itemClass: legendary, title: "§6Печать клинка", lore: ["§eПодписывает приговор огнём."] }
+  - { material: NETHERITE_CHESTPLATE, mobclass: legendary, min_level: 70, max_level: 85, amount: "1", weight: 0.9, random_durability: true, enchantments: { protection: "1", unbreaking: "3", }, itemClass: legendary, title: "§6Доспех непримиримых", lore: ["§eСнятию не подлежит."] }
+  - { material: NETHERITE_LEGGINGS, mobclass: legendary, min_level: 70, max_level: 85, amount: "1", weight: 0.85, random_durability: true, enchantments: { protection: "1", unbreaking: "3" }, itemClass: legendary, title: "§6Шаг гончих войны", lore: ["§eБыстрее — только ветер."] }
+
+  # Mythic класс
+  - { material: NETHERITE_INGOT, mobclass: mythic, min_level: 70, max_level: 85, amount: "1", weight: 0.28, itemClass: mythic }
+  - { material: ENCHANTED_BOOK, mobclass: mythic, min_level: 70, max_level: 85, amount: "1", weight: 0.24, enchantments: { sharpness: "1", looting: "1", unbreaking: "3", }, itemClass: mythic, title: "§dКанон охотника V", lore: ["§5Берёт своё — бережёт своё."] }
+  - { material: CONDUIT, mobclass: mythic, min_level: 70, max_level: 85, amount: "1", weight: 0.16, itemClass: mythic }
+
+  # =================== ДИАПАЗОН 85-92 УРОВНЕЙ ===================
+  # Common класс - превосходные предметы
+  - { material: EMERALD, mobclass: common, min_level: 85, max_level: 92, amount: "1-3", weight: 5.5 }
+  - { material: NETHERITE_SCRAP, mobclass: common, min_level: 85, max_level: 92, amount: "1-2", weight: 5.2 }
+  - { material: ANCIENT_DEBRIS, mobclass: common, min_level: 85, max_level: 92, amount: "1", weight: 5.0 }
+  - { material: NETHERITE_INGOT, mobclass: common, min_level: 85, max_level: 92, amount: "1-2", weight: 5.8 }
+  - { material: DIAMOND, mobclass: common, min_level: 85, max_level: 92, amount: "1", weight: 5.6 }
+  - { material: CONDUIT, mobclass: common, min_level: 85, max_level: 92, amount: "1", weight: 4.4 }
+  - { material: TOTEM_OF_UNDYING, mobclass: common, min_level: 85, max_level: 92, amount: "1", weight: 4.2 }
+  - { material: HEART_OF_THE_SEA, mobclass: common, min_level: 85, max_level: 92, amount: "1", weight: 4.0 }
+
+  # Uncommon класс
+  - { material: NETHERITE_INGOT, mobclass: uncommon, min_level: 85, max_level: 92, amount: "1", weight: 4.5 }
+  - { material: DIAMOND_SWORD, mobclass: uncommon, min_level: 85, max_level: 92, amount: "1", weight: 4.2, random_durability: true, enchantments: { sharpness: "2", fire_aspect: "1", unbreaking: "3" } }
+  - { material: DIAMOND_PICKAXE, mobclass: uncommon, min_level: 85, max_level: 92, amount: "1", weight: 4.0, random_durability: true, enchantments: { efficiency: "2", fortune: "2", unbreaking: "1" } }
+  - { material: ENCHANTED_BOOK, mobclass: uncommon, min_level: 85, max_level: 92, amount: "1", weight: 3.8, enchantments: { knockback: "2" } }
+  - { material: NETHERITE_HELMET, mobclass: uncommon, min_level: 85, max_level: 92, amount: "1", weight: 4.7, random_durability: true, enchantments: { protection: "2", unbreaking: "3" } }
+  - { material: NETHERITE_BOOTS, mobclass: uncommon, min_level: 85, max_level: 92, amount: "1", weight: 4.6, random_durability: true, enchantments: { protection: "2-3", feather_falling: "3" } }
+  - { material: NETHERITE_SWORD, mobclass: uncommon, min_level: 85, max_level: 92, amount: "1", weight: 4.4, random_durability: true, enchantments: { sharpness: "2-3", unbreaking: "3" } }
+  - { material: NETHERITE_PICKAXE, mobclass: uncommon, min_level: 85, max_level: 92, amount: "1", weight: 4.3, random_durability: true, enchantments: { efficiency: "2-3", fortune: "1-3" } }
+  - { material: CONDUIT, mobclass: uncommon, min_level: 85, max_level: 92, amount: "1", weight: 3.7 }
+  - { material: ENCHANTED_BOOK, mobclass: uncommon, min_level: 85, max_level: 92, amount: "1", weight: 3.6, enchantments: { sharpness: "1-3", } }
+
+  # Rare класс
+  - { material: NETHERITE_CHESTPLATE, mobclass: rare, min_level: 85, max_level: 92, amount: "1", weight: 3.5, random_durability: true, itemClass: rare, title: "§9Броня исключения", lore: ["§7Исключает ошибки противника."] }
+  - { material: NETHERITE_LEGGINGS, mobclass: rare, min_level: 85, max_level: 92, amount: "1", weight: 3.2, random_durability: true, itemClass: rare, title: "§9Поножи регламента", lore: ["§7Статут марш-броска."] }
+  - { material: TRIDENT, mobclass: rare, min_level: 85, max_level: 92, amount: "1", weight: 3.0, random_durability: true, enchantments: { loyalty: "2", channeling: "1", unbreaking: "2" }, itemClass: rare, title: "§9Громовержец дозора", lore: ["§7Буря — по расписанию."] }
+  - { material: ENCHANTED_BOOK, mobclass: rare, min_level: 85, max_level: 92, amount: "1", weight: 2.8, enchantments: { efficiency: "2-3" }, itemClass: rare, title: "§9Методичка труда IV–V", lore: ["§7Порода сдаётся методично."] }
+  - { material: NETHERITE_SWORD, mobclass: rare, min_level: 85, max_level: 92, amount: "1", weight: 3.4, random_durability: true, enchantments: { sharpness: "1", fire_aspect: "2", unbreaking: "2" }, itemClass: rare, title: "§9Протокол клинка V", lore: ["§7Подписывает в кровь."] }
+  - { material: NETHERITE_PICKAXE, mobclass: rare, min_level: 85, max_level: 92, amount: "1", weight: 3.3, random_durability: true, enchantments: { efficiency: "3", fortune: "3", unbreaking: "2" }, itemClass: rare, title: "§9Смена у ядра", lore: ["§7Глубже всех — дольше всех."] }
+  - { material: NETHERITE_HELMET, mobclass: rare, min_level: 85, max_level: 92, amount: "1", weight: 3.1, random_durability: true, enchantments: { protection: "3", unbreaking: "3", }, itemClass: rare, title: "§9Шлем главного караула", lore: ["§7Смотрит дальше горизонта."] }
+  - { material: ENCHANTED_GOLDEN_APPLE, mobclass: rare, min_level: 85, max_level: 92, amount: "1", weight: 2.4, itemClass: rare }
+
+  # Epic класс
+  - { material: NETHERITE_SWORD, mobclass: epic, min_level: 85, max_level: 92, amount: "1", weight: 2.5, random_durability: true, enchantments: { sharpness: "2", fire_aspect: "2", unbreaking: "2" }, itemClass: epic, title: "§5Огневой устав IV", lore: ["§7Горячие аргументы."] }
+  - { material: NETHERITE_PICKAXE, mobclass: epic, min_level: 85, max_level: 92, amount: "1", weight: 2.2, random_durability: true, enchantments: { efficiency: "4-5", fortune: "2-3" }, itemClass: epic, title: "§5Шахтафорс V", lore: ["§7Скорость — тоже ресурс."] }
+  - { material: ENCHANTED_BOOK, mobclass: epic, min_level: 85, max_level: 92, amount: "1", weight: 2.0, enchantments: { sharpness: "4-5" }, itemClass: epic, title: "§5Трактат о клинке IV–V", lore: ["§7Сечения и доказательства."] }
+
+  - { material: NETHERITE_CHESTPLATE, mobclass: epic, min_level: 85, max_level: 92, amount: "1", weight: 2.4, random_durability: true, enchantments: { protection: "3", unbreaking: "2", }, itemClass: epic, title: "§5Протокол живучести", lore: ["§7Служит, пока служишь."] }
+  - { material: NETHERITE_LEGGINGS, mobclass: epic, min_level: 85, max_level: 92, amount: "1", weight: 2.3, random_durability: true, enchantments: { protection: "3", unbreaking: "2", }, itemClass: epic, title: "§5Устав движения", lore: ["§7Дистанция — дисциплина."] }
+  - { material: ENCHANTED_BOOK, mobclass: epic, min_level: 85, max_level: 92, amount: "1", weight: 1.6, enchantments: { sharpness: "3", looting: "2", unbreaking: "2", }, itemClass: epic, title: "§5Комплекс охотника V", lore: ["§7Бей, бери, береги."] }
+
+  # Legendary класс
+  - { material: NETHERITE_BOOTS, mobclass: legendary, min_level: 85, max_level: 92, amount: "1", weight: 1.5, random_durability: true, enchantments: { protection: "3", feather_falling: "4" }, itemClass: legendary, title: "§6След дозора", lore: ["§eМягкий шаг — твёрдое решение."] }
+  - { material: ENCHANTED_GOLDEN_APPLE, mobclass: legendary, min_level: 85, max_level: 92, amount: "1", weight: 1.2, itemClass: legendary, title: "§6Эмулятор чуда", lore: ["§eНа случай, когда чудо нужно."] }
+  - { material: ENCHANTED_BOOK, mobclass: legendary, min_level: 85, max_level: 92, amount: "1", weight: 1.0, enchantments: { silk_touch: "1", unbreaking: "3" }, itemClass: legendary, title: "§6Тактика бережливости", lore: ["§eКопай — не ломай."] }
+  - { material: NETHERITE_HELMET, mobclass: legendary, min_level: 85, max_level: 92, amount: "1", weight: 1.4, random_durability: true, enchantments: { protection: "3", unbreaking: "3", respiration: "3" }, itemClass: legendary, title: "§6Шлем дальнего плавания", lore: ["§eГлубина — не повод молчать."] }
+  - { material: NETHERITE_SWORD, mobclass: legendary, min_level: 85, max_level: 92, amount: "1", weight: 1.3, random_durability: true, enchantments: { sharpness: "3", fire_aspect: "2", looting: "3", unbreaking: "3", }, itemClass: legendary, title: "§6Кодекс последнего удара V", lore: ["§eПобеда — подпись клинком."] }
+  - { material: NETHERITE_PICKAXE, mobclass: legendary, min_level: 85, max_level: 92, amount: "1", weight: 1.25, random_durability: true, enchantments: { efficiency: "3", fortune: "2", unbreaking: "3" }, itemClass: legendary, title: "§6Универсал добычи V", lore: ["§eЛюбая руда — профильная."] }
+
+  # Mythic класс
+  - { material: NETHERITE_INGOT, mobclass: mythic, min_level: 85, max_level: 92, amount: "3-5", weight: 0.35, itemClass: mythic }
+  - { material: ENCHANTED_BOOK, mobclass: mythic, min_level: 85, max_level: 92, amount: "1", weight: 0.30, enchantments: { sharpness: "5", looting: "3", fortune: "3", unbreaking: "3", }, itemClass: mythic, title: "§dКвинтэтюд охотника V", lore: ["§5Сила, добыча, удача, стойкость, память."] }
+
+  # =================== ДИАПАЗОН 92-100 УРОВНЕЙ ===================
+  # Common класс - ультимативные предметы даже для common класса
+  - { material: NETHERITE_INGOT, mobclass: common, min_level: 92, max_level: 100, amount: "1-2", weight: 5.0 }
+  - { material: ANCIENT_DEBRIS, mobclass: common, min_level: 92, max_level: 100, amount: "1", weight: 4.8 }
+  - { material: TOTEM_OF_UNDYING, mobclass: common, min_level: 92, max_level: 100, amount: "1", weight: 4.5 }
+  - { material: CONDUIT, mobclass: common, min_level: 92, max_level: 100, amount: "1", weight: 5.1 }
+  - { material: HEART_OF_THE_SEA, mobclass: common, min_level: 92, max_level: 100, amount: "1", weight: 4.2 }
+  - { material: ENCHANTED_GOLDEN_APPLE, mobclass: common, min_level: 92, max_level: 100, amount: "1", weight: 4.1 }
+
+  # Uncommon класс
+  - { material: NETHERITE_HELMET, mobclass: uncommon, min_level: 92, max_level: 100, amount: "1", weight: 4.2, random_durability: true }
+  - { material: NETHERITE_BOOTS, mobclass: uncommon, min_level: 92, max_level: 100, amount: "1", weight: 4.0, random_durability: true }
+  - { material: ENCHANTED_BOOK, mobclass: uncommon, min_level: 92, max_level: 100, amount: "1", weight: 3.8, enchantments: { protection: "4" } }
+  - { material: NETHERITE_SWORD, mobclass: uncommon, min_level: 92, max_level: 100, amount: "1", weight: 4.5, random_durability: true, enchantments: { sharpness: "5", unbreaking: "3", } }
+  - { material: NETHERITE_PICKAXE, mobclass: uncommon, min_level: 92, max_level: 100, amount: "1", weight: 4.4, random_durability: true, enchantments: { efficiency: "5", fortune: "3", unbreaking: "3" } }
+  - { material: NETHERITE_CHESTPLATE, mobclass: uncommon, min_level: 92, max_level: 100, amount: "1", weight: 4.3, random_durability: true, enchantments: { protection: "4", unbreaking: "3", } }
+  - { material: NETHERITE_LEGGINGS, mobclass: uncommon, min_level: 92, max_level: 100, amount: "1", weight: 4.1, random_durability: true, enchantments: { protection: "4", unbreaking: "3" } }
+  - { material: CONDUIT, mobclass: uncommon, min_level: 92, max_level: 100, amount: "1", weight: 3.6 }
+  - { material: ENCHANTED_BOOK, mobclass: uncommon, min_level: 92, max_level: 100, amount: "1", weight: 3.5, enchantments: { sharpness: "5", looting: "3", } }
+
+  # Rare класс
+  - { material: NETHERITE_SWORD, mobclass: rare, min_level: 92, max_level: 100, amount: "1", weight: 3.5, random_durability: true, enchantments: { sharpness: "5", fire_aspect: "2", unbreaking: "3", }, itemClass: rare, title: "§9Роспись огнём V", lore: ["§7Приговор — в двух строках."] }
+  - { material: NETHERITE_PICKAXE, mobclass: rare, min_level: 92, max_level: 100, amount: "1", weight: 3.2, random_durability: true, enchantments: { efficiency: "5", fortune: "3", unbreaking: "3" }, itemClass: rare, title: "§9Главная выемка", lore: ["§7Руда сдаётся с подписью."] }
+  - { material: NETHERITE_CHESTPLATE, mobclass: rare, min_level: 92, max_level: 100, amount: "1", weight: 3.0, random_durability: true, enchantments: { protection: "4", unbreaking: "3" }, itemClass: rare, title: "§9Каркас неизбежности", lore: ["§7Удар — только повод встать."] }
+  - { material: NETHERITE_HELMET, mobclass: rare, min_level: 92, max_level: 100, amount: "1", weight: 3.4, random_durability: true, enchantments: { protection: "4", unbreaking: "3", respiration: "3", aqua_affinity: "1" }, itemClass: rare, title: "§9Шлем глубинного дозора", lore: ["§7Где темно — там видно."] }
+  - { material: NETHERITE_LEGGINGS, mobclass: rare, min_level: 92, max_level: 100, amount: "1", weight: 3.3, random_durability: true, enchantments: { protection: "4", unbreaking: "3", }, itemClass: rare, title: "§9Статут шага", lore: ["§7Марш — до последней черты."] }
+  - { material: NETHERITE_BOOTS, mobclass: rare, min_level: 92, max_level: 100, amount: "1", weight: 3.1, random_durability: true, enchantments: { protection: "4", feather_falling: "4", unbreaking: "3", }, itemClass: rare, title: "§9След бессрочной службы", lore: ["§7Падения — не выговор."] }
+  - { material: ENCHANTED_BOOK, mobclass: rare, min_level: 92, max_level: 100, amount: "1", weight: 2.5, enchantments: { sharpness: "5", efficiency: "5", fortune: "3", unbreaking: "3", }, itemClass: rare, title: "§9Кодекс синергии V", lore: ["§7Собери весь набор преимуществ."] }
+
+  # Epic класс
+  - { material: NETHERITE_LEGGINGS, mobclass: epic, min_level: 92, max_level: 100, amount: "1", weight: 2.5, random_durability: true, enchantments: { protection: "4", unbreaking: "3", }, itemClass: epic, title: "§5Поножи непреклонных", lore: ["§7Шаг, что не знают отката."] }
+  - { material: ENCHANTED_BOOK, mobclass: epic, min_level: 92, max_level: 100, amount: "1", weight: 2.0, enchantments: { sharpness: "5", looting: "3" }, itemClass: epic, title: "§5Дуэт охотника V", lore: ["§7Бей сильнее. Забирай больше."] }
+  - { material: NETHERITE_SWORD, mobclass: epic, min_level: 92, max_level: 100, amount: "1", weight: 2.4, random_durability: true, enchantments: { sharpness: "5", fire_aspect: "2", looting: "3", unbreaking: "3", }, itemClass: epic, title: "§5Печать гарнизона", lore: ["§7Клинок с полномочиями."] }
+  - { material: NETHERITE_PICKAXE, mobclass: epic, min_level: 92, max_level: 100, amount: "1", weight: 2.3, random_durability: true, enchantments: { efficiency: "5", fortune: "3", silk_touch: "1", unbreaking: "3", }, itemClass: epic, title: "§5Горный регламент V", lore: ["§7Чисто, быстро, бережно."] }
+  - { material: NETHERITE_CHESTPLATE, mobclass: epic, min_level: 92, max_level: 100, amount: "1", weight: 2.1, random_durability: true, enchantments: { protection: "4", thorns: "3", unbreaking: "3", }, itemClass: epic, title: "§5Устав несокрушимости", lore: ["§7Инициатива: отражать."] }
+  - { material: ENCHANTED_BOOK, mobclass: epic, min_level: 92, max_level: 100, amount: "1", weight: 1.4, enchantments: { sharpness: "5", efficiency: "5", fortune: "3", looting: "3", unbreaking: "3", }, itemClass: epic, title: "§5Свод элиты V", lore: ["§7Лучшие практики в одном томе."] }
+
+  # Legendary класс
+  - { material: ENCHANTED_GOLDEN_APPLE, mobclass: legendary, min_level: 92, max_level: 100, amount: "1-3", weight: 1.5, itemClass: legendary, title: "§6Гарант продления", lore: ["§eЖизнь по подписке."] }
+  - { material: ENCHANTED_BOOK, mobclass: legendary, min_level: 92, max_level: 100, amount: "1", weight: 1.0, enchantments: { unbreaking: "3", silk_touch: "1" }, itemClass: legendary, title: "§6Учебник долговечности", lore: ["§eЧини, не меняй."] }
+  - { material: NETHERITE_SWORD, mobclass: legendary, min_level: 92, max_level: 100, amount: "1", weight: 1.4, random_durability: true, enchantments: { sharpness: "5", fire_aspect: "2", looting: "3", sweeping_edge: "3", unbreaking: "3", }, itemClass: legendary, title: "§6Манифест клинка", lore: ["§eПорядок наведен."] }
+  - { material: NETHERITE_PICKAXE, mobclass: legendary, min_level: 92, max_level: 100, amount: "1", weight: 1.35, random_durability: true, enchantments: { efficiency: "5", fortune: "3", silk_touch: "1", unbreaking: "3", }, itemClass: legendary, title: "§6Эталон добычи V", lore: ["§eРесурсы — под роспись."] }
+  - { material: NETHERITE_CHESTPLATE, mobclass: legendary, min_level: 92, max_level: 100, amount: "1", weight: 1.3, random_durability: true, enchantments: { protection: "4", thorns: "3", unbreaking: "3", }, itemClass: legendary, title: "§6Щит статуса", lore: ["§eВыше — только легенды."] }
+  - { material: ENCHANTED_BOOK, mobclass: legendary, min_level: 92, max_level: 100, amount: "1", weight: 0.7, enchantments: { sharpness: "5", efficiency: "5", fortune: "3", looting: "3", protection: "4", unbreaking: "3", }, itemClass: legendary, title: "§6Сборник доминирования", lore: ["§eПолная комплектация силы."] }
+
+  # Mythic класс
+  - { material: ENCHANTED_BOOK, mobclass: mythic, min_level: 92, max_level: 100, amount: "1", weight: 0.25, enchantments: { sharpness: "5", looting: "3", unbreaking: "3", }, itemClass: mythic, title: "§dКодекс трофея V", lore: ["§5Взять всё и не сломать."] }
+  - { material: NETHERITE_INGOT, mobclass: mythic, min_level: 92, max_level: 100, amount: "2-4", weight: 0.45, itemClass: mythic }
+  - { material: ENCHANTED_BOOK, mobclass: mythic, min_level: 92, max_level: 100, amount: "1", weight: 0.18, enchantments: { sharpness: "5", efficiency: "5", fortune: "3", looting: "3", protection: "4", fire_aspect: "2", unbreaking: "3", }, itemClass: mythic, title: "§dАбсолютный свод V", lore: ["§5Сила, труд, удача, пламя, вечность."] }
+
+loot_settings:
+  per_level_drop_factor: 0.08
