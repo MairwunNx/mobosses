@@ -52,6 +52,9 @@ class Progression(private val plugin: MoBossesPlugin) : Listener {
   /** Any thread: PlaceholderAPI asks from its own. */
   fun of(player: UUID): Progress = cache[player] ?: Progress()
 
+  /** Null for a player whose progress isn't loaded, so Plan keeps what it stored last instead of a zero. */
+  fun known(player: UUID): Progress? = cache[player]
+
   fun level(player: UUID): Int = plugin.catalog.settings.progression.levelCurve.let { Leveling.playerLevel(it, of(player).experience, of(player).kills) }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

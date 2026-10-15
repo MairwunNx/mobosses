@@ -20,6 +20,8 @@ import ru.mairwunnx.mobosses.config.Configs
 import ru.mairwunnx.mobosses.config.Ids
 import ru.mairwunnx.mobosses.config.Settings
 import ru.mairwunnx.mobosses.hooks.Expansion
+import ru.mairwunnx.mobosses.hooks.MiniPlaceholderTags
+import ru.mairwunnx.mobosses.hooks.PlanData
 import ru.mairwunnx.mobosses.hooks.Placeholders
 import ru.mairwunnx.mobosses.lang.GeoIp
 import ru.mairwunnx.mobosses.lang.LanguageFiles
@@ -64,6 +66,7 @@ class MoBossesPlugin : JavaPlugin() {
   private val tasks = mutableListOf<BukkitTask>()
   private var geoIpTask: BukkitTask? = null
   private var expansion: Expansion? = null
+  private var miniPlaceholders: AutoCloseable? = null
 
   override fun onLoad() {
     // WorldGuard takes new flags only while plugins load.
@@ -75,7 +78,7 @@ class MoBossesPlugin : JavaPlugin() {
     listOf(playerLanguages, progression, spawns, DamageListener(this), DeathListener(this), MeteorListener(this), ArrowListener(this), BlockLogListener(this), TemporaryBlockListener(this))
       .forEach { server.pluginManager.registerEvents(it, this) }
     registerCommand("mobosses", "Reload Mo’Bosses, spawn a boss, or remove every boss", listOf("mb", "moboss"), MoBossesCommand(this))
-    tasks += server.scheduler.runTaskTimer(this, Runnable { visuals.tick(); bars.tick() }, 20L, 20L)
+    tasks += server.scheduler.runTaskTimer(this, Runnable { visuals.tick(); bars.tick(); PlanData.bossesAlive = bosses.all.size }, 20L, 20L)
     tasks += server.scheduler.runTaskTimer(this, Runnable { nameTags.tick() }, 10L, 10L)
 
     // What the last run left: cobwebs after a crash, and bosses and minions in chunks already loaded.
@@ -85,6 +88,11 @@ class MoBossesPlugin : JavaPlugin() {
       expansion = Expansion(this).also { it.register() }
       log.info("PlaceholderAPI found: %mobosses_level%, %mobosses_xp%, and %mobosses_kills% work, and so do <papi:…> tags in messages")
     }
+    if (PlanData.available) PlanData.register(this)
+    if (MiniPlaceholderTags.available) {
+      miniPlaceholders = MiniPlaceholderTags.register(this)
+      log.info("MiniPlaceholders found: its tags work in messages, and <mobosses_level>, <mobosses_xp>, <mobosses_kills> work elsewhere")
+    }
     log.info("Mo’Bosses ${pluginMeta.version} is on: ${catalog.types.size} boss types, ${languages.codes.sorted().joinToString()}, default ${resolver.default}; protection: ${guards.name}")
   }
 
@@ -92,6 +100,7 @@ class MoBossesPlugin : JavaPlugin() {
     tasks.forEach(BukkitTask::cancel)
     geoIpTask?.cancel()
     expansion?.unregister()
+    miniPlaceholders?.close()
     // Cobwebs and the like go back now, or they'd stay in the world for good.
     blockChanges.temporary.restoreAll()
     nameTags.clearAll()

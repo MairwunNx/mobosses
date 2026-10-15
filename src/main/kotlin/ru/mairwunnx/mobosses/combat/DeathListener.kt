@@ -12,6 +12,7 @@ import ru.mairwunnx.mobosses.MoBossesPlugin
 import ru.mairwunnx.mobosses.algebra.Leveling
 import ru.mairwunnx.mobosses.algebra.Stats
 import ru.mairwunnx.mobosses.boss.Boss
+import ru.mairwunnx.mobosses.hooks.PlanData
 import ru.mairwunnx.mobosses.lang.Message
 import java.util.UUID
 
@@ -44,6 +45,7 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
     val worth = Leveling.bossExperience(progression.expGain, boss.entity.getAttribute(Attribute.MAX_HEALTH)?.baseValue ?: 0.0, boss.clazz.experience, boss.level)
     val gained = (worth * share * Leveling.relevance(progression.relevance, level, boss.level)).toLong()
     plugin.progression.add(player, gained, Leveling.countsAsKill(progression, share, level, boss.level))
+    if (PlanData.available) PlanData.update(player)
 
     if (share > settings.loot.minDamageShare) plugin.loot.drop(boss, player)
     if (share > plugin.catalog.rewards.minDamageShare) plugin.rewards.give(player, boss)

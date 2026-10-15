@@ -248,6 +248,9 @@ protection:
   worldguard:
     enabled: true
     spawn_flags: true     # Natural spawns follow mobosses-spawn and mob-spawning.
+    # No boss spawns in a region with owners or members, a player's plot, unless
+    # mobosses-spawn allows it there. Regions without owners, like spawn, keep bosses.
+    no_bosses_in_owned_regions: true
     ability_flags: true   # Block-changing abilities follow mobosses-abilities and build.
     damage_flags: true    # Ability damage to players follows mob-damage.
   admin_spawn_bypass: true   # /mobosses spawn works anywhere; false makes it ask too.

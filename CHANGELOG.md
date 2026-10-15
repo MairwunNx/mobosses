@@ -10,6 +10,10 @@ The “Release” workflow takes the notes for a version from its section here, 
 - 🐲 **Eight new bosses:** Bogged, Blaze, Breeze, Cave Spider, Piglin Brute, Hoglin, Ravager, and Guardian, each with minions. A `bosses.yml` from 1.x or 2.0 doesn’t have them; copy them from the bundled file to get them.
 - ✨ **Four new abilities.** A **shockwave** that knocks players back; a **frost nova** that freezes them as powder snow does; a **grapple** that pulls the farthest player in sight, against shooting a boss from a pillar; and **enrage**: once below 30% of its health, a boss hits harder and moves faster. A `classes.yml` without their levels keeps them off.
 - 🧟 **Minions have better names** in every language, and they despawn as vanilla mobs do instead of filling the world.
+- 📊 **Plan:** a player’s page shows their Mo’Bosses level, experience, and kills, the players table gets a level column, and the server page counts the bosses alive.
+- 🧩 **MiniPlaceholders:** its tags work in every message, for the player who reads it, and `<mobosses_level>`, `<mobosses_xp>`, `<mobosses_kills>` work in TAB and elsewhere.
+- 🛡️ **No bosses in WorldGuard plots.** No boss spawns in a region with owners or members unless `mobosses-spawn` allows it there; regions without owners, like spawn, keep their bosses (`no_bosses_in_owned_regions`).
+- 💪 **Never weaker than vanilla.** A boss’s health, damage, armor, and toughness are at least its mob’s own, whatever the classes and curves say. Its gear only gets better: a piece goes on where the slot is empty or the piece is stronger, slots its set leaves out keep what the mob had, a skeleton’s pumpkin against the sun included, and an archer keeps its bow.
 - 📊 **`./gradlew balance`** prints the stat curves from the real formulas and a config; it replaces the Python scripts, which kept numbers of their own.
 
 ### Fairer progression

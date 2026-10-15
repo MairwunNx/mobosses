@@ -12,7 +12,7 @@ import org.bukkit.entity.Player
 import ru.mairwunnx.mobosses.config.Settings
 
 /**
- * WorldGuard: natural boss spawns honor `mobosses-spawn` and `mob-spawning`; abilities that change
+ * WorldGuard: natural boss spawns honor `mobosses-spawn` and `mob-spawning`, and skip players' plots; abilities that change
  * blocks honor `mobosses-abilities` and `build`; ability damage to players honors `mob-damage`.
  */
 class WorldGuardGuard(private val settings: Settings.WorldGuard) : Guard {
@@ -22,7 +22,17 @@ class WorldGuardGuard(private val settings: Settings.WorldGuard) : Guard {
 
   override val name = "WorldGuard"
 
-  override fun canSpawnBoss(location: Location) = !settings.spawnFlags || query.testState(BukkitAdapter.adapt(location), NOBODY, spawn, Flags.MOB_SPAWNING)
+  /**
+   * An explicit `mobosses-spawn` decides. Without it, a region with owners or members is a player's
+   * plot and gets no bosses; anywhere else, `mob-spawning` decides, so a fresh WorldGuard setup keeps
+   * bosses everywhere but in players' plots.
+   */
+  override fun canSpawnBoss(location: Location): Boolean {
+    val at = BukkitAdapter.adapt(location)
+    if (settings.spawnFlags) query.queryState(at, NOBODY, spawn)?.let { return it == StateFlag.State.ALLOW && query.testState(at, NOBODY, Flags.MOB_SPAWNING) }
+    if (settings.noBossesInOwnedRegions && query.getApplicableRegions(at).regions.any { it.owners.size() > 0 || it.members.size() > 0 }) return false
+    return !settings.spawnFlags || query.testState(at, NOBODY, Flags.MOB_SPAWNING)
+  }
 
   override fun canChangeBlock(location: Location): Boolean {
     if (!settings.abilityFlags) return true

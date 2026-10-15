@@ -16,6 +16,7 @@ repositories {
   mavenCentral()
   maven("https://repo.papermc.io/repository/maven-public/")
   maven("https://repo.extendedclip.com/releases/")
+  maven("https://repo.playeranalytics.net/releases/")
   maven("https://maven.enginehub.org/repo/")
   maven("https://maven.playpro.com/")
   maven("https://jitpack.io/") { content { includeGroup("com.github.GriefPrevention") } }
@@ -29,6 +30,8 @@ dependencies {
   compileOnly("org.xerial:sqlite-jdbc:3.53.4.0")
   // Optional plugins: their classes load only when they're on the server.
   compileOnly("me.clip:placeholderapi:2.12.3")
+  compileOnly("com.djrapitops:plan-api:5.9-R1.3")
+  compileOnly("io.github.miniplaceholders:miniplaceholders-api:3.2.0")
   compileOnly("com.github.GriefPrevention:GriefPrevention:16.18.7") { isTransitive = false }
   compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.19")
   compileOnly("net.coreprotect:coreprotect:24.1") { isTransitive = false }

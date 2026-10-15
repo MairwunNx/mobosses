@@ -1,5 +1,6 @@
 package ru.mairwunnx.mobosses.lang
 
+import net.kyori.adventure.pointer.Pointered
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
@@ -23,16 +24,20 @@ class Languages(private val texts: Map<String, Map<String, String>>, val default
   fun text(code: String, key: String): String? = texts[code]?.get(key) ?: texts[default]?.get(key) ?: texts[FALLBACK]?.get(key)
 
   /** A message in a language; null when its text is empty, which turns it off. */
-  fun render(code: String, message: Message, vararg resolvers: TagResolver): Component? = render(code, message.key, *resolvers)
+  /** A message in a language; [target] is the player it's for, for tags that read a player. */
+  fun render(code: String, message: Message, vararg resolvers: TagResolver, target: Pointered? = null): Component? = render(code, message.key, *resolvers, target = target)
 
-  fun render(code: String, key: String, vararg resolvers: TagResolver): Component? =
-    text(code, key)?.takeIf { it.isNotBlank() }?.let { deserialize(it, *resolvers) }
+  fun render(code: String, key: String, vararg resolvers: TagResolver, target: Pointered? = null): Component? =
+    text(code, key)?.takeIf { it.isNotBlank() }?.let { deserialize(it, *resolvers, target = target) }
 
   /** A name from the language files, or [key]'s last part when no language has it. */
   fun name(code: String, key: String): Component = render(code, key) ?: Component.text(key.substringAfterLast('.'))
 
-  fun deserialize(text: String, vararg resolvers: TagResolver): Component =
-    if (LEGACY.containsMatchIn(text)) legacy.deserialize(text.replace('§', '&')) else mini.deserialize(text, COLORS, *resolvers)
+  fun deserialize(text: String, vararg resolvers: TagResolver, target: Pointered? = null): Component = when {
+    LEGACY.containsMatchIn(text) -> legacy.deserialize(text.replace('§', '&'))
+    target != null -> mini.deserialize(text, target, COLORS, *resolvers)
+    else -> mini.deserialize(text, COLORS, *resolvers)
+  }
 
   companion object {
     const val FALLBACK = "en"

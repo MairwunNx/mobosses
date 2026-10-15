@@ -295,6 +295,8 @@ data class Settings(
     val enabled: Boolean = true,
     /** Bosses spawn only where `mobosses-spawn` and `mob-spawning` allow it. */
     @SerialName("spawn_flags") val spawnFlags: Boolean = true,
+    /** No boss spawns in a region with owners or members, a player's plot, unless `mobosses-spawn` allows it there. */
+    @SerialName("no_bosses_in_owned_regions") val noBossesInOwnedRegions: Boolean = true,
     /** Abilities change blocks only where `mobosses-abilities` allows it and `build` isn't denied. */
     @SerialName("ability_flags") val abilityFlags: Boolean = true,
     /** Abilities hurt players only where `mob-damage` allows it. */

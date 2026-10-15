@@ -9,6 +9,7 @@
 - 🐲 **25 kinds of bosses**, from zombies and skeletons to blazes, breezes, ravagers, and guardians.
 - ⚔️ **Six classes**, from Common to Mythic. Each multiplies a boss’s health, damage, experience, armor, and toughness, and decides which abilities it gets and when. Rarer classes come less often.
 - 📈 **Levels that grow with you.** Each player has a Mo’Bosses level, from the experience and kills they’ve gathered. A boss takes the average level of the players near it, now and then a little lower, so weaker bosses keep turning up. Bosses far below your level count for little, so farming them levels nobody up.
+- 💪 **Never weaker than vanilla:** a level 1 boss has at least its mob’s health, damage, and armor, and its gear only gets better.
 - 🧮 **Scaling by curves.** Health, damage, and armor climb fast at first and level off toward a ceiling, so a level 100 boss is hard without being absurd. Class differences shrink at high levels.
 - ✨ **Thirteen abilities:** lightning, minions, regeneration, a ring of fire, a ring of cobwebs, a teleport behind you, a meteor shower, an arc of arrows, arrow rain, a shockwave, a frost nova, a grapple that pulls archers off their pillars, and enrage at low health. Each class unlocks them at its own levels, with cooldowns.
 - 🧟 **Minions** that a boss summons, up to a dozen at a time, and that may turn into weaker bosses themselves.
@@ -20,6 +21,8 @@
 - 🛡️ **Protected areas stay protected:** GriefPrevention claims and WorldGuard regions keep bosses and their abilities out.
 - 🔎 **CoreProtect logging:** whatever bosses do to blocks shows up under `#mobosses`, ready to roll back.
 - 🧩 **PlaceholderAPI**, if you have it: `%mobosses_level%`, `%mobosses_xp%`, and `%mobosses_kills%` for scoreboards and chat, and `<papi:…>` tags in messages.
+- 🧩 **MiniPlaceholders**, if you have it: its tags work in messages, and `<mobosses_level>`, `<mobosses_xp>`, `<mobosses_kills>` work in TAB and elsewhere.
+- 📊 **Plan**, if you have it: each player’s level, experience, and kills on their page, and the bosses alive on the server’s.
 - 💾 **SQLite, MySQL, MariaDB, or PostgreSQL** for players’ levels.
 - 🧯 **No piles of bosses:** a cooldown per player and a cap on bosses nearby keep mob farms and spawner rooms from turning into boss factories.
 - ⚙️ **`/mobosses reload`** applies changes without a restart, and a fight survives restarts and relogs: bosses keep their level, cooldowns, and who hit them.
@@ -99,7 +102,7 @@ Mo’Bosses works with each protection plugin only when that plugin runs; with n
 | Plugin | What it stops |
 |---|---|
 | [GriefPrevention](https://modrinth.com/plugin/griefprevention) | No boss spawns naturally inside a claim, and no ability breaks, places, or ignites blocks there. Bosses may still walk in and fight, as vanilla mobs do. |
-| [WorldGuard](https://modrinth.com/plugin/worldguard) | Bosses spawn only where the `mobosses-spawn` flag and WorldGuard’s `mob-spawning` allow it. Abilities change blocks only where `mobosses-abilities` allows it and `build` lets non-members build. Ability damage to players follows `mob-damage`. |
+| [WorldGuard](https://modrinth.com/plugin/worldguard) | No boss spawns naturally in a region with owners or members, a player’s plot, unless the `mobosses-spawn` flag allows it there. Elsewhere bosses spawn where `mobosses-spawn` and WorldGuard’s `mob-spawning` allow it, so a fresh setup keeps them everywhere but in plots. Abilities change blocks only where `mobosses-abilities` allows it and `build` lets non-members build. Ability damage to players follows `mob-damage`. |
 
 Set the flags as any other: `/rg flag spawn mobosses-spawn deny`. `/mobosses spawn` ignores protection on purpose, since an admin asked for the boss; set `protection.admin_spawn_bypass: false` to make it ask too.
 
@@ -125,6 +128,20 @@ With [PlaceholderAPI](https://modrinth.com/plugin/placeholderapi) installed:
 | `%mobosses_kills%` | Bosses they helped kill |
 
 In messages, write `<papi:name>` to show `%name%` for the player who reads it. Mo’Bosses doesn’t look for `%…%` in your text, so a percent sign stays a percent sign.
+
+## MiniPlaceholders
+
+Every message is [MiniMessage](https://docs.advntr.dev/minimessage/format). With [MiniPlaceholders](https://modrinth.com/plugin/miniplaceholders) installed, messages take its tags as they are, for the player who reads them: `<luckperms_prefix>`. Mo’Bosses adds three tags of its own, each about the player they’re shown for:
+
+| Tag | What it shows |
+|---|---|
+| `<mobosses_level>` | The player’s Mo’Bosses level |
+| `<mobosses_xp>` | Their Mo’Bosses experience |
+| `<mobosses_kills>` | Bosses they helped kill |
+
+## Plan
+
+With [Plan](https://modrinth.com/plugin/plan) installed, Mo’Bosses adds its section to Plan’s pages. A player’s “Plugins” tab shows their level, experience, and kills; the level is also a column in the players table. The server’s “Plugins Overview” shows the bosses alive. Plan keeps the last values while a player is away.
 
 ## Databases
 

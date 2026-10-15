@@ -24,7 +24,7 @@ A Paper 26.3 plugin that turns ordinary mobs into bosses of six classes, with ab
 | `progress/` | Players’ levels: `Progression` (a cache filled at login) and `Store` (Exposed over SQLite, MySQL/MariaDB, or PostgreSQL) on a thread of its own |
 | `lang/` | `Message`, `Languages`, `LanguageFiles`, `LocaleResolver`, `GeoIp`, `PlayerLanguages` (who reads what), `Texts` (rendering, boss names, classes, minions) |
 | `protect/` | `Guard` and `Guards`, the GriefPrevention and WorldGuard adapters and flags, `BlockLog` and `CoreProtectLog`, `BlockLogListener`, and `BlockChanges` with `TemporaryBlocks`, the only way abilities touch blocks |
-| `hooks/` | PlaceholderAPI: the `<papi:…>` tag and the `%mobosses_…%` expansion |
+| `hooks/` | PlaceholderAPI (the `<papi:…>` tag and `%mobosses_…%`), MiniPlaceholders (`MiniPlaceholderTags`), and Plan (`PlanData`). Plan and MiniPlaceholders ask from other threads, so they read only the progress cache and counts the server thread keeps |
 
 ## Rules that keep it working
 
@@ -35,7 +35,8 @@ A Paper 26.3 plugin that turns ordinary mobs into bosses of six classes, with ab
 - A new ability is an object in `ability/kinds/` in `Abilities.PICKED`, with its keys in `AbilitySettings` and `abilities.yml`, a threshold in `AbilityThresholds` and `classes.yml`, and a message in every language.
 - Abilities change blocks only through `BlockChanges.set` or `setFor`: that asks the guards, logs to CoreProtect before the change, in the same tick, and restores temporary blocks on shutdown.
 - Abilities hit players only, through `Targets`, which checks the game mode and `Guard.canHurt`.
-- Optional plugins (PlaceholderAPI, GriefPrevention, WorldGuard, CoreProtect) are `compileOnly` and `join-classpath` in `paper-plugin.yml`; their classes are touched only after checking the plugin is enabled. WorldGuard flags register in `onLoad`, the only time WorldGuard takes them.
+- A boss is never weaker than its vanilla mob: `BossFactory` keeps every stat at least the mob’s own, and `Equipment` puts on only stronger pieces of the same kind. Keep both when changing stats or gear.
+- Optional plugins (PlaceholderAPI, Plan, MiniPlaceholders, GriefPrevention, WorldGuard, CoreProtect) are `compileOnly` and `join-classpath` in `paper-plugin.yml`; their classes are touched only after checking the plugin is enabled. WorldGuard flags register in `onLoad`, the only time WorldGuard takes them.
 - Game ids stay strings in the config models and resolve in `Catalog`; a bad one logs a warning and drops out, never failing the file.
 - A new message gets a `Message` entry and a line in every file in `src/main/resources/lang/`; a new boss type, minion, class, or loot `id` needs its name in every language too. `ResourcesTest` fails otherwise.
 - A new key in `config.yml`, `abilities.yml`, `classes.yml`, or `rewards.yml` gets the same default in its model; `ResourcesTest` checks they match. 1.x files must keep loading (`src/test/resources/v1/`).
@@ -53,7 +54,7 @@ A Paper 26.3 plugin that turns ordinary mobs into bosses of six classes, with ab
 1. `./gradlew build`: the tests and the jar.
 2. A real Paper with the jar, started and stopped by the script, which fails on any error about the plugin:
    ```sh
-   python3 -I .claude/scripts/paper_smoke.py --game 26.3 --plugin build/libs/mobosses-dev.jar --modrinth placeholderapi --modrinth griefprevention --modrinth worldedit --modrinth worldguard --command "forceload add 0 0" --command "mobosses spawn zombie 30 epic 0 -60 4 world" --command "mobosses reload" --command "mobosses killall" --expect "protection: GriefPrevention, WorldGuard" --expect "Bosses removed: 1"
+   python3 -I .claude/scripts/paper_smoke.py --game 26.3 --plugin build/libs/mobosses-dev.jar --modrinth placeholderapi --modrinth plan --jar https://cdn.modrinth.com/data/HQyibRsN/versions/N2WfJ0ll/MiniPlaceholders-Paper-3.2.0.jar --modrinth griefprevention --modrinth worldedit --modrinth worldguard --command "forceload add 0 0" --command "mobosses spawn zombie 30 epic 0 -60 4 world" --command "mobosses reload" --command "mobosses killall" --expect "protection: GriefPrevention, WorldGuard" --expect "Bosses removed: 1" --expect "Plan found" --expect "MiniPlaceholders found" --ignore "Plan\] Failed to enable geolocation"
    ```
    The console must give coordinates to `spawn`; a flat world’s ground is at y -60. Pass `--dir` to keep the folder and run it again: bosses spawned in the first run must come back in the second. Spawn them in a chunk `forceload add` keeps loaded: an unloaded boss stays in the world, but `killall` only sees loaded ones.
 3. CoreProtect 24.1 lists the game only up to 26.2 and refuses to start on 26.3. Until a release supports 26.3, build its `master` with `-Dproject.branch=development` to test the logging, as 2.0.0 was tested.
@@ -65,6 +66,8 @@ Where the versions live, for `/update-deps` and `/update-minecraft` (both in `.c
 
 - The game: `io.papermc.paper:paper-api` (twice: `compileOnly` and `testImplementation`), `gameVersions` (Modrinth) and `platformVersions` (Hangar) in `build.gradle.kts`, and `api-version` in `src/main/resources/paper-plugin.yml`.
 - PlaceholderAPI: `compileOnly("me.clip:placeholderapi:…")`, from `repo.extendedclip.com`.
+- Plan: `compileOnly("com.djrapitops:plan-api:…")`, from `repo.playeranalytics.net`; `PlanData` checks Plan’s capabilities.
+- MiniPlaceholders: `compileOnly("io.github.miniplaceholders:miniplaceholders-api:…")` from Maven Central; its Paper jar on Modrinth lags a game version, so the check passes its URL with `--jar`.
 - GriefPrevention: `compileOnly("com.github.GriefPrevention:GriefPrevention:…")` from JitPack, the version Moonlands runs.
 - WorldGuard: `compileOnly("com.sk89q.worldguard:worldguard-bukkit:…")` from `maven.enginehub.org`.
 - CoreProtect: `compileOnly("net.coreprotect:coreprotect:…")` from `maven.playpro.com`; the code needs API 10 or newer.

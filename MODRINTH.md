@@ -17,6 +17,9 @@
 - 🛡️ **GriefPrevention and WorldGuard:** no bosses or block-changing abilities in claims and protected regions.
 - 🔎 **CoreProtect:** whatever bosses do to blocks is logged under `#mobosses`, ready to roll back.
 - 🧩 **PlaceholderAPI:** `%mobosses_level%`, `%mobosses_xp%`, `%mobosses_kills%`, and `<papi:…>` tags in messages.
+- 🧩 **MiniPlaceholders:** its tags in messages, and `<mobosses_level>`, `<mobosses_xp>`, `<mobosses_kills>` in TAB and elsewhere.
+- 📊 **Plan:** each player’s level, experience, and kills on their page, and the bosses alive on the server’s.
+- 💪 **Never weaker than vanilla:** every boss has at least its mob’s health, damage, and armor, and its gear only gets better.
 - 💾 **SQLite, MySQL, MariaDB, or PostgreSQL** for players’ levels.
 - 🧯 **No piles of bosses:** a cooldown per player and a cap on bosses nearby keep mob farms from turning into boss factories.
 - ⚙️ **`/mobosses reload`** applies changes without a restart, and a fight survives restarts and relogs.
@@ -44,7 +47,7 @@ The country lookup needs no account and sends no address anywhere: the plugin do
 | Plugin | What it stops |
 |---|---|
 | GriefPrevention | No boss spawns naturally inside a claim, and no ability breaks, places, or ignites blocks there. Bosses may still walk in and fight, as vanilla mobs do. |
-| WorldGuard | Bosses spawn only where the `mobosses-spawn` flag and `mob-spawning` allow it. Abilities change blocks only where `mobosses-abilities` allows it and `build` lets non-members build. Ability damage follows `mob-damage`. |
+| WorldGuard | No boss spawns in a player’s plot, a region with owners or members, unless `mobosses-spawn` allows it. Elsewhere bosses follow `mobosses-spawn` and `mob-spawning`. Abilities change blocks only where `mobosses-abilities` allows it and `build` lets non-members build. Ability damage follows `mob-damage`. |
 | CoreProtect | Every block an ability or minion changes is logged as `#mobosses`: `/co rollback u:#mobosses t:1h r:50` undoes it. |
 
 Each rule has its own switch in `config.yml`, on by default. `/mobosses spawn` ignores protection, since an admin asked for the boss, unless `protection.admin_spawn_bypass` is off.
