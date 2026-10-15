@@ -52,6 +52,8 @@ Mo’Bosses runs on Moonlands, my hard survival server with friends. Come in and
 
 When a mob spawns, Mo’Bosses looks up its type in `bosses.yml`. If a player is within `spawn.spawn_radius`, the mob becomes a boss with the type’s `spawn_chance`, times the multipliers for the world, the time of day, and the weather. The boss picks a class by weight, takes the average level of the players within `spawn.group_radius`, and gets its health, damage, gear, and name.
 
+Under a full moon bosses come more often, and rarer ones more often still (`full_moon`). A boss grows by 35% for each player past the first who truly fights it (`group_health`). Dying to a boss burns your progress toward the next level, never the level itself. Spawner bosses farmed in one spot give less after the third, and it comes back with time (`spawner_fatigue`). The survival bonus tips loot toward rare items, and a run of drops with nothing rare ends sooner or later in a rare one (`loot.pity`).
+
 The longer you play without dying, the more bosses find you, as with Sacred’s survival bonus: +25% to the chance after an hour, +50% after three, +75% after nine, toward double. Death takes it all, and minutes standing idle don’t count (`survival_bonus`). `/mobosses info` shows yours.
 
 After a boss spawns for a group, its players wait about a minute for the next one, and no boss spawns while three are already close. Both live in `spawn` in `config.yml`. A boss nobody comes within 64 blocks of for 10 minutes leaves without loot, as vanilla mobs do (`despawn`); bosses from `/mobosses spawn` stay.

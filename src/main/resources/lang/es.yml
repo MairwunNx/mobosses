@@ -35,6 +35,10 @@ info: |-
   <gray>Bono de supervivencia</gray> <num>+<bonus>%</num> <dark_gray>· <hours> h <minutes> min sin morir</dark_gray>
 info_ready: "en cualquier momento"
 survival_lost: "<pri>[Mo’Bosses]</pri> <warn>Perdiste tu bono de supervivencia: +<bonus>% de jefes tras <hours> h <minutes> min sin morir.</warn>"
+death_penalty: "<pri>[Mo’Bosses]</pri> <warn>Caíste ante</warn> <boss><boss_name></boss><warn>: tu progreso hacia el nivel <next> se quemó, −<lost> de experiencia Mo’Bosses.</warn> <gray>Tu nivel se queda.</gray>"
+full_moon: "<pri>[Mo’Bosses]</pri> <boss>Sale la luna llena.</boss> <gray>Esta noche los jefes llegan más a menudo, y los raros aún más.</gray>"
+# Sobre la barra de todos los que luchan contra un jefe cuando se une un jugador más. <players>, <percent> (vida por encima de la suya).
+group_health: "<boss><boss_name></boss> <warn>se fortalece: <players> luchadores, +<percent>% de vida</warn>"
 
 # /mobosses reset. <player>: de quién borró el progreso un administrador.
 reset:
@@ -86,6 +90,7 @@ kill_notes:
   small_share: "<dark_gray>  ›</dark_gray> <warn>Quitaste el <share>% de la vida del jefe: una derrota pide el <kill>% y el botín el <loot>%.</warn>"
   no_loot: "<dark_gray>  ›</dark_gray> <warn>Sin botín: quitaste el <share>% de la vida del jefe y el botín pide el <loot>%.</warn>"
   rewards_cooldown: "<dark_gray>  ›</dark_gray> <gray>Esta vez no hay pociones de recompensa: las siguientes llegan en <seconds> s.</gray>"
+  spawner: "<dark_gray>  ›</dark_gray> <warn>Un jefe de generador, cazado en un solo sitio: <percent>% de la recompensa.</warn> <gray>Se recupera con el tiempo.</gray>"
   pets: "<dark_gray>  ›</dark_gray> <gray>Tus mascotas hicieron el <pets>% de tu daño; contra este jefe cuenta un <weight>% en experiencia.</gray>"
 
 # Para todos cuando los jugadores matan a un jefe. <player>: todos los que lo golpearon; <experience>: la experiencia vanilla que soltó.

@@ -14,7 +14,6 @@ import ru.mairwunnx.mobosses.config.Configs
 import ru.mairwunnx.mobosses.config.Ids
 import ru.mairwunnx.mobosses.config.LootTable
 import ru.mairwunnx.mobosses.config.RewardSettings
-import ru.mairwunnx.mobosses.algebra.Rolls
 
 /**
  * The config files with every game id resolved, built once per load. Whatever didn't resolve was
@@ -115,8 +114,6 @@ class Catalog(val configs: Configs, ids: Ids, log: Log) {
   }
 
   /** The class picked by weight; Common when every weight is zero. */
-  fun randomClass(random: kotlin.random.Random): BossClass = Rolls.weighted(classes.all.map { it to it.chance }, random) ?: classes.all.first()
-
   private companion object {
     fun <V, R> enchantments(map: Map<String, V>, where: String, ids: Ids, value: (V) -> R): Map<Enchantment, R> =
       map.mapNotNull { (id, v) -> ids.enchantment(id, "$where.enchantments")?.let { it to value(v) } }.toMap()

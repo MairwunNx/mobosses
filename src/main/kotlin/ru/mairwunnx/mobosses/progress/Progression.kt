@@ -114,6 +114,29 @@ class Progression(private val plugin: MoBossesPlugin) : Listener {
     return store.reset(player).whenComplete { _, error -> if (error == null) cache.computeIfPresent(player) { _, _ -> Progress() } }
   }
 
+  /**
+   * After a player died to a boss: their experience drops to the least that keeps their level, so the
+   * way to the next one starts over. [done] gets what they lost, on the server thread.
+   */
+  fun penalize(player: Player, done: (lost: Long) -> Unit) {
+    val id = player.uniqueId
+    val curve = plugin.catalog.settings.progression.levelCurve
+    val change = { p: Progress -> p.copy(experience = Leveling.levelFloor(curve, p.experience, p.kills)) }
+    val store = store
+    if (store == null) {
+      val before = of(id)
+      cache.computeIfPresent(id) { _, p -> change(p) }
+      return (before.experience - of(id).experience).takeIf { it > 0 }?.let(done) ?: Unit
+    }
+    store.update(id, player.name, change).whenComplete { result, error ->
+      if (error != null) return@whenComplete plugin.log.warn("Can't save the progress of ${player.name}: ${error.message}")
+      val (before, after) = result
+      cache.computeIfPresent(id) { _, _ -> after }
+      val lost = before.experience - after.experience
+      if (lost > 0) Bukkit.getScheduler().runTask(plugin, Runnable { done(lost) })
+    }
+  }
+
   /** Adds a player's experience from a kill, and the kill itself when it [counts]. The server thread. */
   fun add(player: Player, experience: Long, counts: Boolean) {
     val id = player.uniqueId

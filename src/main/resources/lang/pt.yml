@@ -35,6 +35,10 @@ info: |-
   <gray>Bônus de sobrevivência</gray> <num>+<bonus>%</num> <dark_gray>· <hours> h <minutes> min sem morrer</dark_gray>
 info_ready: "a qualquer momento"
 survival_lost: "<pri>[Mo’Bosses]</pri> <warn>Seu bônus de sobrevivência acabou: +<bonus>% de chefes depois de <hours> h <minutes> min sem morrer.</warn>"
+death_penalty: "<pri>[Mo’Bosses]</pri> <warn>Você caiu para</warn> <boss><boss_name></boss><warn>: seu progresso rumo ao nível <next> queimou, −<lost> de experiência Mo’Bosses.</warn> <gray>Seu nível fica.</gray>"
+full_moon: "<pri>[Mo’Bosses]</pri> <boss>A lua cheia nasce.</boss> <gray>Esta noite os chefes vêm mais vezes, e os raros mais ainda.</gray>"
+# Acima da barra de todos que lutam contra um chefe quando mais um jogador entra na luta. <players>, <percent> (vida acima da própria).
+group_health: "<boss><boss_name></boss> <warn>fica mais forte: <players> lutadores, +<percent>% de vida</warn>"
 
 # /mobosses reset. <player>: de quem um admin apagou o progresso.
 reset:
@@ -86,6 +90,7 @@ kill_notes:
   small_share: "<dark_gray>  ›</dark_gray> <warn>Você tirou <share>% da vida do chefe: um abate pede <kill>% e o saque <loot>%.</warn>"
   no_loot: "<dark_gray>  ›</dark_gray> <warn>Sem saque: você tirou <share>% da vida do chefe, e o saque pede <loot>%.</warn>"
   rewards_cooldown: "<dark_gray>  ›</dark_gray> <gray>Desta vez não há poções de recompensa: as próximas vêm em <seconds> s.</gray>"
+  spawner: "<dark_gray>  ›</dark_gray> <warn>Um chefe de spawner, farmado num só lugar: <percent>% da recompensa.</warn> <gray>Ela volta com o tempo.</gray>"
   pets: "<dark_gray>  ›</dark_gray> <gray>Seus pets causaram <pets>% do seu dano; contra este chefe ele vale <weight>% na experiência.</gray>"
 
 # Para todos quando jogadores matam um chefe. <player>: todos que o atingiram; <experience>: a experiência vanilla que ele deixou cair.

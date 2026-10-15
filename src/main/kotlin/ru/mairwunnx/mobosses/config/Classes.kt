@@ -12,27 +12,27 @@ import kotlinx.serialization.Serializable
 data class Classes(
   val common: BossClass = BossClass(
     key = "common", health = 1.0, damage = 1.0, experience = 1.5, defense = 1.30, toughness = 1.05, color = "WHITE", chance = 63.0,
-    abilityThresholds = AbilityThresholds(28, 34, 45, 35, 38, 70, 67, 30, 75, 40, 55, 50, 60, 20, 80, 55, 65),
+    abilityThresholds = AbilityThresholds(28, 34, 45, 35, 38, 70, 67, 30, 75, 40, 55, 50, 60, 20, 80, 18, 65),
   ),
   val uncommon: BossClass = BossClass(
     key = "uncommon", health = 1.3, damage = 1.1, experience = 2.0, defense = 1.42, toughness = 1.13, color = "YELLOW", chance = 28.0,
-    abilityThresholds = AbilityThresholds(20, 30, 40, 25, 32, 60, 50, 28, 65, 35, 50, 45, 50, 15, 70, 48, 56),
+    abilityThresholds = AbilityThresholds(20, 30, 40, 25, 32, 60, 50, 28, 65, 35, 50, 45, 50, 15, 70, 16, 56),
   ),
   val rare: BossClass = BossClass(
     key = "rare", health = 1.6, damage = 1.3, experience = 3.0, defense = 1.56, toughness = 1.23, color = "AQUA", chance = 9.0,
-    abilityThresholds = AbilityThresholds(18, 28, 35, 22, 28, 55, 45, 25, 60, 30, 45, 40, 45, 10, 60, 42, 48),
+    abilityThresholds = AbilityThresholds(18, 28, 35, 22, 28, 55, 45, 25, 60, 30, 45, 40, 45, 10, 60, 14, 48),
   ),
   val epic: BossClass = BossClass(
     key = "epic", health = 2.2, damage = 1.7, experience = 4.0, defense = 1.83, toughness = 1.42, color = "DARK_PURPLE", chance = 3.0,
-    abilityThresholds = AbilityThresholds(12, 22, 30, 18, 26, 45, 40, 20, 50, 25, 40, 35, 35, 6, 50, 35, 40),
+    abilityThresholds = AbilityThresholds(12, 22, 30, 18, 26, 45, 40, 20, 50, 25, 40, 35, 35, 6, 50, 12, 40),
   ),
   val legendary: BossClass = BossClass(
     key = "legendary", health = 3.0, damage = 2.2, experience = 6.0, defense = 2.18, toughness = 1.67, color = "GOLD", chance = 2.0,
-    abilityThresholds = AbilityThresholds(8, 18, 25, 14, 18, 35, 28, 14, 40, 20, 32, 28, 25, 3, 42, 28, 32),
+    abilityThresholds = AbilityThresholds(8, 18, 25, 14, 18, 35, 28, 14, 40, 20, 32, 28, 25, 3, 42, 10, 32),
   ),
   val mythic: BossClass = BossClass(
     key = "mythic", health = 4.0, damage = 2.8, experience = 8.0, defense = 2.62, toughness = 1.97, color = "RED", chance = 1.0,
-    abilityThresholds = AbilityThresholds(5, 12, 18, 10, 14, 30, 25, 10, 30, 15, 25, 20, 15, 1, 35, 22, 25),
+    abilityThresholds = AbilityThresholds(5, 12, 18, 10, 14, 30, 25, 10, 30, 15, 25, 20, 15, 1, 35, 8, 25),
   ),
 ) {
   /** From Common to Mythic, each under the key it has in this file whatever its `key` field says. */

@@ -37,6 +37,17 @@ class Keys(plugin: Plugin) {
   val obeliskHits = NamespacedKey(plugin, "obelisk_hits")
   /** On a boss's copies: the boss they copy. */
   val decoy = NamespacedKey(plugin, "decoy")
+  /** On bosses: the max health they started with, the health groups added, and how many fighters it counts. */
+  val baseHealth = NamespacedKey(plugin, "base_health")
+  val addedHealth = NamespacedKey(plugin, "added_health")
+  val fighters = NamespacedKey(plugin, "fighters")
+  /** On bosses from spawners, for spawner fatigue. */
+  val fromSpawner = NamespacedKey(plugin, "from_spawner")
+  /** On players: loot drops since their last rare or better item, and the count that brings one. */
+  val lootDry = NamespacedKey(plugin, "loot_dry")
+  val lootPityAt = NamespacedKey(plugin, "loot_pity_at")
+  /** On players: their recent kills of spawner bosses, `world|x|z|millis;…`. */
+  val spawnerKills = NamespacedKey(plugin, "spawner_kills")
   /** On name labels, so a stray one from a crash can be cleared. */
   val label = NamespacedKey(plugin, "label")
   /** On players: when they may get rewards again, in epoch milliseconds. */

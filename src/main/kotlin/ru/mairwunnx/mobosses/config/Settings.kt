@@ -19,6 +19,9 @@ data class Settings(
   val spawn: Spawn = Spawn(),
   val despawn: Despawn = Despawn(),
   @SerialName("survival_bonus") val survivalBonus: SurvivalBonus = SurvivalBonus(),
+  @SerialName("full_moon") val fullMoon: FullMoon = FullMoon(),
+  @SerialName("group_health") val groupHealth: GroupHealth = GroupHealth(),
+  @SerialName("spawner_fatigue") val spawnerFatigue: SpawnerFatigue = SpawnerFatigue(),
   val progression: Progression = Progression(),
   val formula: Formulas = Formulas(),
   val effects: Effects = Effects(),
@@ -66,6 +69,46 @@ data class Settings(
     @SerialName("max_bonus") val maxBonus: Double = 1.0,
     @SerialName("half_at_minutes") val halfAtMinutes: Int = 180,
     @SerialName("idle_minutes") val idleMinutes: Int = 3,
+  )
+
+  /** Nights of the hunt: under a full moon, more bosses, and rarer classes more often. Other phases change nothing. */
+  @Serializable
+  data class FullMoon(
+    val enabled: Boolean = true,
+    /** Multiplies the spawn chance. */
+    val chance: Double = 1.5,
+    /** Multiplies the weight of the rarest class; the ones between get a share of it by rank, Common none. */
+    @SerialName("rarer_classes") val rarerClasses: Double = 2.0,
+    /** Tells the players in the world as the full moon rises. */
+    val announce: Boolean = true,
+  )
+
+  /**
+   * A boss grows as more players truly fight it: each one who has dealt [fighterShare] of its health
+   * adds [perPlayer] of its starting health, up to [maxPlayers]. Someone standing by changes nothing,
+   * and it never shrinks back.
+   */
+  @Serializable
+  data class GroupHealth(
+    val enabled: Boolean = true,
+    @SerialName("per_player") val perPlayer: Double = 0.35,
+    @SerialName("max_players") val maxPlayers: Int = 6,
+    @SerialName("fighter_share") val fighterShare: Double = 0.05,
+  )
+
+  /**
+   * Bosses from spawners give less to a player who keeps killing them in one spot: each such kill
+   * within [radius] counts, fading by half every [halfLifeMinutes]; past [free] of them, every one
+   * more takes [step] off the reward, down to [floor]. It comes back with time.
+   */
+  @Serializable
+  data class SpawnerFatigue(
+    val enabled: Boolean = true,
+    val radius: Int = 32,
+    @SerialName("half_life_minutes") val halfLifeMinutes: Int = 20,
+    val free: Double = 3.0,
+    val step: Double = 0.25,
+    val floor: Double = 0.2,
   )
 
   /** Bosses nobody comes near for a while leave the world, as vanilla mobs do, instead of piling up in caves for good. */
@@ -122,6 +165,8 @@ data class Settings(
     /** In a group of N players, no share threshold (kills, loot, rewards) asks for more than this over N. */
     @SerialName("group_share") val groupShare: Double = 0.6,
     @SerialName("pet_damage") val petDamage: PetDamage = PetDamage(),
+    /** Dying to a boss burns the progress toward the next level; the level itself stays. */
+    @SerialName("death_penalty") val deathPenalty: Boolean = true,
   )
 
   /**
@@ -295,6 +340,20 @@ data class Settings(
     @SerialName("random_durability") val randomDurability: RandomDurability = RandomDurability(),
     /** The share of a boss's health a player must deal to get loot. */
     @SerialName("min_damage_share") val minDamageShare: Double = 0.27777777,
+    val pity: Pity = Pity(),
+    /** How much the survival bonus tips loot toward rare and better items: their weights grow by bonus × this × their tier. */
+    @SerialName("survival_luck") val survivalLuck: Double = 1.0,
+  )
+
+  /**
+   * A player whose loot brought nothing rare or better for a while gets a rare item at least: after a
+   * number of drops rolled anew each time between [minDrops] and [maxDrops], so nobody sees a pattern.
+   */
+  @Serializable
+  data class Pity(
+    val enabled: Boolean = true,
+    @SerialName("min_drops") val minDrops: Int = 8,
+    @SerialName("max_drops") val maxDrops: Int = 12,
   )
 
   @Serializable

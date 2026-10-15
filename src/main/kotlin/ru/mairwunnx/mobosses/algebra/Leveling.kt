@@ -22,6 +22,21 @@ object Leveling {
     return (1 + (curve.maxLevel - 1) * progress).roundToInt().coerceIn(1, curve.maxLevel.coerceAtLeast(1))
   }
 
+  /**
+   * The least experience that keeps a player at their level with their kills: what dying to a boss
+   * leaves them, so the progress toward the next level burns and the level itself stays.
+   */
+  fun levelFloor(curve: Settings.LevelCurve, experience: Long, kills: Int): Long {
+    val level = playerLevel(curve, experience, kills)
+    var low = 0L
+    var high = experience.coerceAtLeast(0)
+    while (low < high) {
+      val mid = low + (high - low) / 2
+      if (playerLevel(curve, mid, kills) >= level) high = mid else low = mid + 1
+    }
+    return low
+  }
+
   /** What a level grows from: experience and kills together. The board ranks by it, so it never disagrees with levels. */
   fun score(curve: Settings.LevelCurve, experience: Long, kills: Int): Double =
     sqrt(experience.coerceAtLeast(0).toDouble()) / curve.expScale.coerceAtLeast(MIN) + kills.coerceAtLeast(0).toDouble() / curve.killScale.coerceAtLeast(MIN)

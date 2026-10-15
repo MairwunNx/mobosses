@@ -81,6 +81,19 @@ class Store(private val settings: Settings.Database, folder: File) : AutoCloseab
     Unit
   }
 
+  /** Changes a player's record in one transaction and returns it before and after. */
+  fun update(player: UUID, name: String, change: (Progress) -> Progress): CompletableFuture<Pair<Progress, Progress>> = query {
+    val current = PlayerProgressTable.selectAll().where { PlayerProgressTable.uuid eq player.toString() }.forUpdate().singleOrNull()?.let(::progress) ?: Progress()
+    val next = change(current)
+    if (next != current) PlayerProgressTable.upsert {
+      it[uuid] = player.toString()
+      it[bossKills] = next.kills
+      it[totalExperience] = next.experience
+      it[this.name] = name
+    }
+    current to next
+  }
+
   /**
    * The best hunters, by [score], what their level grows from, then by experience. The score takes a
    * square root that SQLite may lack, so the rows are sorted here; a row is a few bytes, even for

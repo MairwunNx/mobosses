@@ -10,19 +10,21 @@ import ru.mairwunnx.mobosses.algebra.Leveling
 import ru.mairwunnx.mobosses.boss.Boss
 import ru.mairwunnx.mobosses.lang.Message
 import ru.mairwunnx.mobosses.config.Settings
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason
+import ru.mairwunnx.mobosses.algebra.Rolls
 import java.util.UUID
 import kotlin.random.Random
 
 /**
  * Whether a spawning mob becomes a boss, and at what level. A mob of a type in `bosses.yml` rolls
  * its chance, times the world, time, and weather multipliers and the nearest player's survival
- * bonus, when players are near; the players
+ * bonus and a full moon, when players are near; the players
  * within `group_radius` set its level together, and a minion's summoner sets a minion's.
  */
 class NaturalSpawns(private val plugin: MoBossesPlugin) {
   private val limiter = SpawnLimiter(plugin)
 
-  fun roll(entity: Mob, summoner: UUID?) {
+  fun roll(entity: Mob, summoner: UUID?, reason: SpawnReason) {
     val catalog = plugin.catalog
     val spawn = catalog.settings.spawn
     if (!catalog.settings.enabled || !spawn.enabled || !entity.hasAI()) return
@@ -32,7 +34,7 @@ class NaturalSpawns(private val plugin: MoBossesPlugin) {
 
     val nearest = players(at, spawn.spawnRadius.toDouble()).minByOrNull { it.location.distanceSquared(at) } ?: return
     if (spawn.checkVerticalZone && onSurface(nearest.location, spawn) != onSurface(at, spawn)) return
-    if (Random.nextDouble() >= chance(type.spec.spawnChance, spawn, at) * plugin.survival.multiplier(nearest)) return
+    if (Random.nextDouble() >= chance(type.spec.spawnChance, spawn, at) * plugin.survival.multiplier(nearest) * plugin.fullMoon.chance(at.world)) return
 
     val group = players(at, spawn.groupRadius.toDouble()).ifEmpty { listOf(nearest) }
     if (!limiter.allows(at, group)) return plugin.log.debug { "No ${type.key} boss at ${at.blockX} ${at.blockY} ${at.blockZ}: too many bosses near, or its players' cooldown" }
@@ -47,7 +49,9 @@ class NaturalSpawns(private val plugin: MoBossesPlugin) {
     } else {
       Leveling.bossLevel(progression.variance, Leveling.groupLevel(group.map { plugin.progression.level(it.uniqueId) }), progression.levelCurve.maxLevel, Random)
     }
-    val boss = plugin.bosses.make(entity, type, catalog.randomClass(Random), level, summoner).also(plugin.bosses::vanillaName)
+    val clazz = Rolls.weighted(catalog.classes.all.map { it to plugin.fullMoon.weight(at.world, it) }, Random) ?: catalog.classes.all.first()
+    val boss = plugin.bosses.make(entity, type, clazz, level, summoner).also(plugin.bosses::vanillaName)
+    if (reason == SpawnReason.SPAWNER || reason == SpawnReason.TRIAL_SPAWNER) boss.fromSpawner = true
     limiter.spawned(group)
     announce(boss)
   }

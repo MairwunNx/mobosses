@@ -24,7 +24,7 @@ class SpawnListener(private val plugin: MoBossesPlugin) : Listener {
   fun onSpawn(event: CreatureSpawnEvent) {
     val entity = event.entity as? Mob ?: return
     if (spawningByCommand || event.spawnReason !in plugin.catalog.spawnReasons || plugin.decoys.isDecoy(entity)) return
-    natural.roll(entity, plugin.minions.summonerOf(entity))
+    natural.roll(entity, plugin.minions.summonerOf(entity), event.spawnReason)
   }
 
   @EventHandler

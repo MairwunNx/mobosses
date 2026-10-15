@@ -16,6 +16,7 @@ import ru.mairwunnx.mobosses.boss.Boss
 import ru.mairwunnx.mobosses.hooks.PlanData
 import ru.mairwunnx.mobosses.lang.Message
 import java.util.UUID
+import kotlin.random.Random
 
 /**
  * A boss's death. Each player's share of its health, their pets' damage included, decides their part
@@ -29,7 +30,8 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
   fun onDeath(event: EntityDeathEvent) {
     val boss = plugin.bosses.get(event.entity) ?: return
     val maxHealth = boss.entity.getAttribute(Attribute.MAX_HEALTH)?.value ?: 0.0
-    val shares = Shares.of(boss.damage, maxHealth)
+    // Health groups added counts as the boss's, so the shares still add up to the whole of it.
+    val shares = Shares.of(boss.damage, plugin.groupHealth.whole(boss, maxHealth))
     if (shares.isNotEmpty()) {
       val formula = plugin.catalog.settings.formula
       val experience = Stats.experience(formula.experience, event.droppedExp, boss.clazz.experience, boss.type.spec.expModifier, boss.level)
@@ -52,20 +54,22 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
   private fun pay(player: Player, boss: Boss, share: Double, petWorth: Double, group: Int, experience: Int) {
     val settings = plugin.catalog.settings
     val progression = settings.progression
-    val vanilla = Math.round(experience * share * petWorth).toInt()
+    // A spawner boss farmed in one spot gives less, and comes back to full with time.
+    val fatigue = if (boss.fromSpawner) plugin.fatigue.take(player, boss.entity.location) else 1.0
+    val vanilla = Math.round(experience * share * petWorth * fatigue).toInt()
     player.giveExp(vanilla)
 
     val level = plugin.progression.level(player.uniqueId)
     val worth = Leveling.bossExperience(progression.expGain, boss.entity.getAttribute(Attribute.MAX_HEALTH)?.baseValue ?: 0.0, boss.clazz.experience, boss.level)
     val counts = Leveling.countsAsKill(progression, share, group, level, boss.level)
     val relevance = Leveling.relevance(progression.relevance, level, boss.level)
-    val gained = Leveling.gained(worth * share * petWorth * relevance, counts)
+    val gained = Leveling.gained(worth * share * petWorth * relevance * fatigue, counts)
     plugin.progression.add(player, gained, counts)
     if (PlanData.available) PlanData.update(player)
 
     // Four players who split a boss evenly each deal 25%; the thresholds come down to meet them.
     val lootShare = Leveling.threshold(settings.loot.minDamageShare, progression.groupShare, group)
-    if (share >= lootShare) plugin.loot.drop(boss, player)
+    if (share >= lootShare && Random.nextDouble() < fatigue) plugin.loot.drop(boss, player)
     val rewardsShare = Leveling.threshold(plugin.catalog.rewards.minDamageShare, progression.groupShare, group)
     val rewardsIn = if (share >= rewardsShare) plugin.rewards.give(player, boss) else null
     val volume = (0.2f + 0.15f * plugin.catalog.classes.rank(boss.clazz.key).coerceAtLeast(0)).coerceAtMost(1f)
@@ -92,6 +96,7 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
       !counts -> notes += Message.NOTE_NOT_COUNTED to levels
       share < lootShare -> notes += Message.NOTE_NO_LOOT to arrayOf(percent("share", share), percent("loot", lootShare))
     }
+    if (fatigue < 0.95) notes += Message.NOTE_SPAWNER to arrayOf(percent("percent", fatigue))
     rewardsIn?.let { notes += Message.NOTE_REWARDS_COOLDOWN to arrayOf(Placeholder.unparsed("seconds", it.toString())) }
     if (petWorth <= 0.95) {
       val pets = (boss.petDamage[player.uniqueId] ?: 0.0) / (boss.damage[player.uniqueId] ?: 1.0)

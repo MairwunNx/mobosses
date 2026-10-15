@@ -35,6 +35,10 @@ info: |-
   <gray>Überlebensbonus</gray> <num>+<bonus> %</num> <dark_gray>· <hours> h <minutes> min ohne Tod</dark_gray>
 info_ready: "jeden Moment"
 survival_lost: "<pri>[Mo’Bosses]</pri> <warn>Dein Überlebensbonus ist weg: +<bonus> % auf Bosse nach <hours> h <minutes> min ohne Tod.</warn>"
+death_penalty: "<pri>[Mo’Bosses]</pri> <warn>Du bist gefallen durch</warn> <boss><boss_name></boss><warn>: Dein Fortschritt zu Stufe <next> ist verbrannt, −<lost> Mo’Bosses-Erfahrung.</warn> <gray>Deine Stufe bleibt.</gray>"
+full_moon: "<pri>[Mo’Bosses]</pri> <boss>Ein Vollmond geht auf.</boss> <gray>Heute Nacht kommen Bosse öfter, seltene noch öfter.</gray>"
+# Über der Hotbar aller, die einen Boss bekämpfen, wenn noch ein Spieler mitkämpft. <players>, <percent> (Leben über dem eigenen).
+group_health: "<boss><boss_name></boss> <warn>wird stärker: <players> Kämpfer, +<percent> % Leben</warn>"
 
 # /mobosses reset. <player>: wessen Fortschritt ein Admin gelöscht hat.
 reset:
@@ -86,6 +90,7 @@ kill_notes:
   small_share: "<dark_gray>  ›</dark_gray> <warn>Du hast <share> % vom Leben des Bosses abgezogen: Ein Kill braucht <kill> %, Beute <loot> %.</warn>"
   no_loot: "<dark_gray>  ›</dark_gray> <warn>Keine Beute: Du hast <share> % vom Leben des Bosses abgezogen, Beute braucht <loot> %.</warn>"
   rewards_cooldown: "<dark_gray>  ›</dark_gray> <gray>Diesmal keine Tränke als Belohnung: Die nächsten gibt es in <seconds> s.</gray>"
+  spawner: "<dark_gray>  ›</dark_gray> <warn>Ein Spawner-Boss, an einer Stelle gefarmt: <percent> % der Belohnung.</warn> <gray>Das erholt sich mit der Zeit.</gray>"
   pets: "<dark_gray>  ›</dark_gray> <gray>Deine Tiere haben <pets> % deines Schadens gemacht; bei diesem Boss zählt er zu <weight> % für Erfahrung.</gray>"
 
 # An alle, wenn Spieler einen Boss besiegen. <player>: alle, die ihn getroffen haben; <experience>: die Vanilla-Erfahrung, die er fallen ließ.

@@ -45,6 +45,10 @@ import ru.mairwunnx.mobosses.protect.TemporaryBlockListener
 import ru.mairwunnx.mobosses.protect.WorldGuardFlags
 import ru.mairwunnx.mobosses.spawn.SpawnListener
 import ru.mairwunnx.mobosses.spawn.SurvivalBonus
+import ru.mairwunnx.mobosses.spawn.FullMoon
+import ru.mairwunnx.mobosses.combat.GroupHealth
+import ru.mairwunnx.mobosses.combat.SpawnerFatigue
+import ru.mairwunnx.mobosses.progress.DeathPenalty
 import java.io.File
 
 class MoBossesPlugin : JavaPlugin() {
@@ -72,6 +76,9 @@ class MoBossesPlugin : JavaPlugin() {
   val despawns = Despawns(this)
   val decoys = Decoys(this)
   val survival = SurvivalBonus(this)
+  val fullMoon = FullMoon(this)
+  val groupHealth = GroupHealth(this)
+  val fatigue = SpawnerFatigue(this)
   val blockChanges = BlockChanges(this)
   val menuStats = Stats(this)
 
@@ -87,13 +94,13 @@ class MoBossesPlugin : JavaPlugin() {
 
   override fun onEnable() {
     if (!reload()) log.warn("Started with errors in the config files; fix them and run /mobosses reload")
-    listOf(playerLanguages, progression, spawns, survival, DamageListener(this), DeathListener(this), MeteorListener(this), ArrowListener(this), AbilityEntities(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener(this))
+    listOf(playerLanguages, progression, spawns, survival, DeathPenalty(this), DamageListener(this), DeathListener(this), MeteorListener(this), ArrowListener(this), AbilityEntities(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener(this))
       .forEach { server.pluginManager.registerEvents(it, this) }
     registerCommand("mobosses", "Your Mo’Bosses level and the best hunters; for admins, reload, spawn, or remove bosses", listOf("mb", "moboss"), MoBossesCommand(this))
     tasks += server.scheduler.runTaskTimer(this, Runnable { visuals.tick(); bars.tick(); PlanData.bossesAlive = bosses.all.size }, 20L, 20L)
     tasks += server.scheduler.runTaskTimer(this, Runnable { nameTags.tick() }, 10L, 10L)
     tasks += server.scheduler.runTaskTimer(this, Runnable { despawns.tick() }, 100L, 100L)
-    tasks += server.scheduler.runTaskTimer(this, Runnable { survival.tick() }, 1200L, 1200L)
+    tasks += server.scheduler.runTaskTimer(this, Runnable { survival.tick(); fullMoon.tick() }, 1200L, 1200L)
 
     // What the last run left: cobwebs after a crash, and bosses and minions in chunks already loaded.
     blockChanges.temporary.recover()

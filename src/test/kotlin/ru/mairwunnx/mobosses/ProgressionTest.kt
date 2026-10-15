@@ -7,6 +7,7 @@ import ru.mairwunnx.mobosses.boss.Codec
 import ru.mairwunnx.mobosses.combat.Shares
 import ru.mairwunnx.mobosses.config.Settings
 import ru.mairwunnx.mobosses.spawn.SurvivalBonus
+import ru.mairwunnx.mobosses.combat.SpawnerFatigue
 import java.util.UUID
 import kotlin.random.Random
 import kotlin.test.Test
@@ -111,6 +112,22 @@ class ProgressionTest {
     assertEquals(0.5, SurvivalBonus.bonus(cfg, 180))
     assertEquals(0.75, SurvivalBonus.bonus(cfg, 540))
     assertTrue(SurvivalBonus.bonus(cfg, 100_000) < 1.0)
+  }
+
+  @Test fun `dying to a boss keeps the level and burns the way to the next`() {
+    val curve = progression.levelCurve
+    val level = Leveling.playerLevel(curve, 40_000, 120)
+    val floor = Leveling.levelFloor(curve, 40_000, 120)
+    assertTrue(floor < 40_000)
+    assertEquals(level, Leveling.playerLevel(curve, floor, 120))
+    assertTrue(Leveling.playerLevel(curve, floor - 1, 120) < level, "one less would drop the level")
+  }
+
+  @Test fun `spawner fatigue starts after a few kills and has a floor`() {
+    val cfg = settings.spawnerFatigue
+    assertEquals(1.0, SpawnerFatigue.factor(cfg.free, cfg.step, cfg.floor, 3.0))
+    assertEquals(0.8, SpawnerFatigue.factor(cfg.free, cfg.step, cfg.floor, 4.0), 1e-9)
+    assertEquals(0.2, SpawnerFatigue.factor(cfg.free, cfg.step, cfg.floor, 100.0))
   }
 
   @Test fun `a creeper's blast grows past a charged creeper's`() {

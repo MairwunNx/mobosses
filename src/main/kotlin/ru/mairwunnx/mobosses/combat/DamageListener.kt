@@ -37,7 +37,10 @@ class DamageListener(private val plugin: MoBossesPlugin) : Listener {
     val pet = (source as? Tameable)?.takeIf { it.isTamed }
     val player = source as? Player ?: pet?.owner as? Player
     // A hit can't be worth more than the health left: overkill used to push a share past the whole boss.
-    player?.let { boss.addDamage(it.uniqueId, event.finalDamage.coerceIn(0.0, boss.entity.health), byPet = pet != null) }
+    player?.let {
+      boss.addDamage(it.uniqueId, event.finalDamage.coerceIn(0.0, boss.entity.health), byPet = pet != null)
+      plugin.groupHealth.update(boss)
+    }
     if (source !is Player) {
       // Only pets and golems: other mobs that hit the boss by chance don't wake its abilities.
       if (pet == null && source !is Golem) return

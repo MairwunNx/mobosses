@@ -82,6 +82,37 @@ survival_bonus:
   half_at_minutes: 180
   idle_minutes: 3
 
+# Nights of the hunt: on a full-moon night in a world with a sky, the spawn
+# chance grows by chance, and the rarest class's weight by rarer_classes, the
+# ones between by their share, Common's not at all. Other phases change nothing.
+full_moon:
+  enabled: true
+  chance: 1.5
+  rarer_classes: 2.0
+  announce: true   # “full_moon” to the players in the world as it rises.
+
+# A boss grows as more players truly fight it: a player counts once they've
+# dealt fighter_share of its health, and each one past the first adds per_player
+# of it, up to max_players. Someone who only stood by changes nothing; the boss's
+# health grows in step, so one at half stays at half, and never shrinks back.
+group_health:
+  enabled: true
+  per_player: 0.35
+  max_players: 6
+  fighter_share: 0.05
+
+# Bosses from spawners give less to a player who keeps killing them in one spot:
+# each such kill within radius counts, fading by half every half_life_minutes;
+# past free of them, each one more takes step off the experience and the loot
+# chance, down to floor. Natural bosses are never affected.
+spawner_fatigue:
+  enabled: true
+  radius: 32
+  half_life_minutes: 20
+  free: 3.0
+  step: 0.25
+  floor: 0.2
+
 # A boss with no player within radius for after_minutes leaves, without loot,
 # as vanilla mobs do, so bosses don't pile up in caves for good. One found again
 # long after its chunk unloaded leaves as the chunk loads.
@@ -153,6 +184,9 @@ progression:
     min_weight: 0.5
     power: 1.5
     offset: 300.0
+  # Dying to a boss, by its blow, its shot, or its ability, burns the progress
+  # toward the next level: experience drops to the least that keeps the level.
+  death_penalty: true
 
 # ---------------------------------------------------------------------------
 #  Boss stats
@@ -255,6 +289,17 @@ loot:
     min_durability: 0.1   # At least 10% of their durability left,
     max_durability: 0.9   # at most 90%; better classes lean toward the top.
   min_damage_share: 0.27777777   # The share of the boss's health a player must deal for loot.
+  # A player whose drops from bosses that can give rare loot brought nothing rare
+  # or better gets a rare item at least, after a count rolled anew each time
+  # between min_drops and max_drops, so it shows no pattern. Never above the
+  # boss's class: Common and Uncommon bosses don't count toward it.
+  pity:
+    enabled: true
+    min_drops: 8
+    max_drops: 12
+  # The survival bonus tips loot toward rare and better items: their weights
+  # grow by bonus × survival_luck × 1 for rare, 1.5 epic, 2 legendary, 2.5 mythic.
+  survival_luck: 1.0
 
 broadcast:
   kills: true       # “kill” to everyone when players kill a boss.

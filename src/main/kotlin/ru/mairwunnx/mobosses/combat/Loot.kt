@@ -14,17 +14,27 @@ import ru.mairwunnx.mobosses.boss.Boss
 import ru.mairwunnx.mobosses.boss.Catalog
 import ru.mairwunnx.mobosses.config.LootTable
 import ru.mairwunnx.mobosses.lang.Message
+import org.bukkit.persistence.PersistentDataType
+import ru.mairwunnx.mobosses.spawn.SurvivalBonus
 import kotlin.math.ceil
 import kotlin.random.Random
 
 /**
  * One item from `loottable.yml` for each player who dealt enough of a boss's health. A boss drops
- * loot of its class and the classes below, at falling odds the further down. Names and lore come in
- * the language of the player who gets the item.
+ * loot of its class and the classes below, at falling odds the further down, never above. The
+ * survival bonus tips the odds toward rare and better items, and a player whose drops from bosses
+ * that could give one brought none for a while gets one for sure: after a count rolled anew each time,
+ * so it shows no pattern. Names and lore come in the language of the player who gets the item.
  */
 class Loot(private val plugin: MoBossesPlugin) {
   fun drop(boss: Boss, player: Player) {
-    val item = roll(boss) ?: return plugin.log.debug { "No loot for ${player.name} from a level ${boss.level} ${boss.clazz.key} boss" }
+    val luck = SurvivalBonus.bonus(plugin.catalog.settings.survivalBonus, plugin.survival.minutes(player)) * plugin.catalog.settings.loot.survivalLuck
+    val pool = pool(boss, luck)
+    // Only a pool with something rare in it moves the pity count: a Common boss neither owes one nor pays it.
+    val rarePool = pool.filter { (loot, _) -> isRare(loot) }
+    val item = (if (rarePool.isNotEmpty() && pityDue(player)) Rolls.weighted(rarePool, Random) else null) ?: Rolls.weighted(pool, Random)
+      ?: return plugin.log.debug { "No loot for ${player.name} from a level ${boss.level} ${boss.clazz.key} boss" }
+    if (rarePool.isNotEmpty()) track(player, isRare(item))
     val stack = stack(item, boss.level, plugin.texts.languageOf(player))
     boss.entity.world.dropItemNaturally(boss.entity.location, stack) {
       it.owner = player.uniqueId
@@ -34,15 +44,43 @@ class Loot(private val plugin: MoBossesPlugin) {
     announce(item, stack, player)
   }
 
-  /** A weighted pick among the items for the boss's level and class; null when none fits. */
-  fun roll(boss: Boss, random: Random = Random): Catalog.Loot? {
+  /** The items for the boss's level and class, with their weights, rare ones tipped up by [luck]. */
+  fun pool(boss: Boss, luck: Double = 0.0): List<Pair<Catalog.Loot, Double>> {
     val classes = plugin.catalog.classes
     val bossRank = classes.rank(boss.clazz.key)
-    return Rolls.weighted(plugin.catalog.loot.mapNotNull { loot ->
+    return plugin.catalog.loot.mapNotNull { loot ->
       val itemRank = classes.rank(loot.spec.mobclass)
       if (itemRank < 0 || itemRank > bossRank || boss.level !in loot.spec.minLevel..loot.spec.maxLevel) null
-      else loot to loot.spec.weight * crossClass(bossRank - itemRank)
-    }, random)
+      else loot to loot.spec.weight * crossClass(bossRank - itemRank) * (1.0 + luck.coerceAtLeast(0.0) * (LUCK_TIER[loot.spec.itemClass?.lowercase()] ?: 0.0))
+    }
+  }
+
+  private fun isRare(loot: Catalog.Loot) = loot.spec.itemClass?.lowercase() in LUCK_TIER
+
+  private fun pityDue(player: Player): Boolean {
+    val pity = plugin.catalog.settings.loot.pity
+    if (!pity.enabled) return false
+    val data = player.persistentDataContainer
+    val dry = data.get(plugin.keys.lootDry, PersistentDataType.INTEGER) ?: 0
+    val at = data.get(plugin.keys.lootPityAt, PersistentDataType.INTEGER) ?: rollPity().also { data.set(plugin.keys.lootPityAt, PersistentDataType.INTEGER, it) }
+    return dry >= at
+  }
+
+  /** A rare item starts the count over, with a new count to reach; anything else adds one. */
+  private fun track(player: Player, rare: Boolean) {
+    val data = player.persistentDataContainer
+    if (rare) {
+      data.set(plugin.keys.lootDry, PersistentDataType.INTEGER, 0)
+      data.set(plugin.keys.lootPityAt, PersistentDataType.INTEGER, rollPity())
+    } else {
+      data.set(plugin.keys.lootDry, PersistentDataType.INTEGER, (data.get(plugin.keys.lootDry, PersistentDataType.INTEGER) ?: 0) + 1)
+    }
+  }
+
+  private fun rollPity(): Int {
+    val pity = plugin.catalog.settings.loot.pity
+    val low = pity.minDrops.coerceAtLeast(1)
+    return Random.nextInt(low, pity.maxDrops.coerceAtLeast(low) + 1)
   }
 
   private fun stack(loot: Catalog.Loot, level: Int, code: String): ItemStack {
@@ -109,6 +147,9 @@ class Loot(private val plugin: MoBossesPlugin) {
   }
 
   private companion object {
+    /** How much the survival bonus tips each rare item class up: rarer ones more. */
+    val LUCK_TIER = mapOf("rare" to 1.0, "epic" to 1.5, "legendary" to 2.0, "mythic" to 2.5)
+
     /** How far toward `max_durability` each class pulls. */
     val WEAR_BIAS = mapOf("common" to 0.0, "uncommon" to 0.3, "rare" to 0.6, "epic" to 1.0, "legendary" to 1.4, "mythic" to 2.0)
 

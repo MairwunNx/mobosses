@@ -64,6 +64,25 @@ class Boss(
     get() = entity.persistentDataContainer.get(keys.enraged, PersistentDataType.BOOLEAN) == true
     set(value) = entity.persistentDataContainer.set(keys.enraged, PersistentDataType.BOOLEAN, value)
 
+  /** The max health it started with, before groups grew it; null until a group first does. */
+  var baseHealth: Double?
+    get() = entity.persistentDataContainer.get(keys.baseHealth, PersistentDataType.DOUBLE)
+    set(value) = if (value == null) entity.persistentDataContainer.remove(keys.baseHealth) else entity.persistentDataContainer.set(keys.baseHealth, PersistentDataType.DOUBLE, value)
+
+  /** The health groups added to it, which the shares split along with the rest. */
+  var addedHealth: Double
+    get() = entity.persistentDataContainer.get(keys.addedHealth, PersistentDataType.DOUBLE) ?: 0.0
+    set(value) = entity.persistentDataContainer.set(keys.addedHealth, PersistentDataType.DOUBLE, value)
+
+  /** How many players its health counts. */
+  var fighters: Int
+    get() = entity.persistentDataContainer.get(keys.fighters, PersistentDataType.INTEGER) ?: 1
+    set(value) = entity.persistentDataContainer.set(keys.fighters, PersistentDataType.INTEGER, value)
+
+  var fromSpawner: Boolean
+    get() = entity.persistentDataContainer.get(keys.fromSpawner, PersistentDataType.BOOLEAN) == true
+    set(value) = entity.persistentDataContainer.set(keys.fromSpawner, PersistentDataType.BOOLEAN, value)
+
   /** Past its second phase: it casts faster for the rest of the fight. */
   var phaseTwo: Boolean
     get() = entity.persistentDataContainer.get(keys.phaseTwo, PersistentDataType.BOOLEAN) == true

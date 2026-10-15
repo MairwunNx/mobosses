@@ -36,7 +36,7 @@ common:
     enrage: 60
     signature: 20
     obelisk: 80
-    chain: 55
+    chain: 18
     doubles: 65
 
 uncommon:
@@ -64,7 +64,7 @@ uncommon:
     enrage: 50
     signature: 15
     obelisk: 70
-    chain: 48
+    chain: 16
     doubles: 56
 
 rare:
@@ -92,7 +92,7 @@ rare:
     enrage: 45
     signature: 10
     obelisk: 60
-    chain: 42
+    chain: 14
     doubles: 48
 
 epic:
@@ -120,7 +120,7 @@ epic:
     enrage: 35
     signature: 6
     obelisk: 50
-    chain: 35
+    chain: 12
     doubles: 40
 
 legendary:
@@ -148,7 +148,7 @@ legendary:
     enrage: 25
     signature: 3
     obelisk: 42
-    chain: 28
+    chain: 10
     doubles: 32
 
 mythic:
@@ -176,5 +176,5 @@ mythic:
     enrage: 15
     signature: 1
     obelisk: 35
-    chain: 22
+    chain: 8
     doubles: 25
