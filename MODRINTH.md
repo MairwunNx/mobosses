@@ -24,6 +24,7 @@
 - 🔎 **CoreProtect:** whatever bosses do to blocks is logged under `#mobosses`, ready to roll back.
 - 🧩 **PlaceholderAPI:** `%mobosses_level%`, `%mobosses_xp%`, `%mobosses_kills%`, and `<papi:…>` tags in messages.
 - 🧩 **MiniPlaceholders:** its tags in messages, and `<mobosses_level>`, `<mobosses_xp>`, `<mobosses_kills>` in TAB and elsewhere.
+- 🔌 **WorldAPI:** hunters, players’ cards and bestiaries, boss counts, and live events for a site or a bot.
 - 📊 **Plan:** each player’s level, experience, and kills on their page; on the server’s, the bosses alive, spawned, and killed, the best hunters, and bosses by class and type.
 - 💪 **Never weaker than vanilla:** every boss has at least its mob’s health, damage, and armor, and its gear only gets better.
 - 💾 **SQLite, MySQL, MariaDB, or PostgreSQL** for players’ levels.
