@@ -53,7 +53,9 @@ class Achievements(private val plugin: MoBossesPlugin) : Listener {
     if (!enabled) return
     val advancement = Bukkit.getAdvancement(key(achievement)) ?: return
     val progress = player.getAdvancementProgress(advancement)
-    if (!progress.isDone) progress.awardCriteria(CRITERION)
+    if (progress.isDone) return
+    progress.awardCriteria(CRITERION)
+    plugin.worldApi.achievement(player, achievement.id)
   }
 
   /** Level and kill milestones, from the player's progress now: after a kill, and at login for what came before. */

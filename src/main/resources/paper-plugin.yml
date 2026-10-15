@@ -69,3 +69,7 @@ dependencies:
       load: BEFORE
       required: false
       join-classpath: true
+    # Reached through its bridge in Bukkit's services, with no classes of its own.
+    WorldAPI:
+      load: BEFORE
+      required: false

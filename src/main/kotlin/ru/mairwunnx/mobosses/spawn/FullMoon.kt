@@ -32,13 +32,14 @@ class FullMoon(private val plugin: MoBossesPlugin) {
     return clazz.chance * (1.0 + (plugin.catalog.settings.fullMoon.rarerClasses.coerceAtLeast(1.0) - 1.0) * rank / top)
   }
 
-  /** Every minute: worlds where a full moon just rose tell their players. */
+  /** Every minute: worlds where a full moon just rose tell their players, and WorldAPI's clients. */
   fun tick() {
-    if (!plugin.catalog.settings.fullMoon.announce) return
     Bukkit.getWorlds().filter(::isUp).forEach { world ->
       val day = world.fullTime / 24000
       if (announced[world.name] == day) return@forEach
       announced[world.name] = day
+      plugin.worldApi.fullMoon(world.name)
+      if (!plugin.catalog.settings.fullMoon.announce) return@forEach
       plugin.texts.sendAll(world.players, Message.FULL_MOON) { emptyArray() }
       world.players.forEach { it.playSound(it.location, Sound.AMBIENT_CAVE, 0.8f, 0.6f) }
     }

@@ -29,6 +29,7 @@ object PhaseTwo {
     val cfg = cast.settings.phaseTwo
     val entity = cast.boss.entity
     cast.boss.phaseTwo = true
+    cast.plugin.worldApi.phaseTwo(cast.boss)
     entity.addPotionEffect(PotionEffect(PotionEffectType.RESISTANCE, cfg.invulnerableSeconds.coerceAtLeast(0) * 20, 4, false, true, true))
     entity.world.spawnParticle(Particle.EXPLOSION_EMITTER, cast.at, 1)
     entity.world.spawnParticle(Particle.SOUL_FIRE_FLAME, cast.at.clone().add(0.0, 1.0, 0.0), 80, 1.2, 1.0, 1.2, 0.05)

@@ -26,6 +26,7 @@
 - 🔎 **CoreProtect logging:** whatever bosses do to blocks shows up under `#mobosses`, ready to roll back.
 - 🧩 **PlaceholderAPI**, if you have it: `%mobosses_level%`, `%mobosses_xp%`, and `%mobosses_kills%` for scoreboards and chat, and `<papi:…>` tags in messages.
 - 🧩 **MiniPlaceholders**, if you have it: its tags work in messages, and `<mobosses_level>`, `<mobosses_xp>`, `<mobosses_kills>` work in TAB and elsewhere.
+- 🔌 **[WorldAPI](https://modrinth.com/plugin/worldapi)**, if you have it: the best hunters, players’ cards and bestiaries, boss counts, and live events for kills, levels, and achievements, for a site or a bot, under `/extensions/mobosses`.
 - 📊 **Plan**, if you have it: each player’s level, experience, and kills on their page, and the bosses alive on the server’s.
 - 💾 **SQLite, MySQL, MariaDB, or PostgreSQL** for players’ levels.
 - 🧯 **No piles of bosses:** a cooldown per player and a cap on bosses nearby keep mob farms and spawner rooms from turning into boss factories.

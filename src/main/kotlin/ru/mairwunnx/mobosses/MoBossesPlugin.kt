@@ -12,6 +12,7 @@ import ru.mairwunnx.mobosses.boss.BossBars
 import ru.mairwunnx.mobosses.boss.Bosses
 import ru.mairwunnx.mobosses.boss.Catalog
 import ru.mairwunnx.mobosses.boss.Decoys
+import ru.mairwunnx.mobosses.hooks.WorldApiLink
 import ru.mairwunnx.mobosses.achievement.Achievements
 import ru.mairwunnx.mobosses.boss.Despawns
 import ru.mairwunnx.mobosses.boss.Keys
@@ -77,6 +78,7 @@ class MoBossesPlugin : JavaPlugin() {
   val despawns = Despawns(this)
   val decoys = Decoys(this)
   val achievements = Achievements(this)
+  val worldApi = WorldApiLink(this)
   val survival = SurvivalBonus(this)
   val fullMoon = FullMoon(this)
   val groupHealth = GroupHealth(this)
@@ -96,7 +98,7 @@ class MoBossesPlugin : JavaPlugin() {
 
   override fun onEnable() {
     if (!reload()) log.warn("Started with errors in the config files; fix them and run /mobosses reload")
-    listOf(playerLanguages, progression, spawns, survival, DeathPenalty(this), achievements, DamageListener(this), DeathListener(this), MeteorListener(this), ArrowListener(this), AbilityEntities(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener())
+    listOf(playerLanguages, progression, spawns, survival, DeathPenalty(this), achievements, worldApi, DamageListener(this), DeathListener(this), MeteorListener(this), ArrowListener(this), AbilityEntities(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener())
       .forEach { server.pluginManager.registerEvents(it, this) }
     registerCommand("mobosses", "Your Mo’Bosses level and the best hunters; for admins, reload, spawn, or remove bosses", listOf("mb", "moboss"), MoBossesCommand(this))
     tasks += server.scheduler.runTaskTimer(this, Runnable { visuals.tick(); bars.tick(); PlanData.bossesAlive = bosses.all.size }, 20L, 20L)
@@ -112,6 +114,7 @@ class MoBossesPlugin : JavaPlugin() {
       log.info("PlaceholderAPI found: %mobosses_level%, %mobosses_xp%, and %mobosses_kills% work, and so do <papi:…> tags in messages")
     }
     if (PlanData.available) PlanData.register(this)
+    worldApi.connect()
     if (MiniPlaceholderTags.available) {
       miniPlaceholders = MiniPlaceholderTags.register(this)
       log.info("MiniPlaceholders found: its tags work in messages, and <mobosses_level>, <mobosses_xp>, <mobosses_kills> work elsewhere")
