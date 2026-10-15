@@ -2,6 +2,8 @@ package ru.mairwunnx.mobosses.ability.kinds
 
 import org.bukkit.Particle
 import org.bukkit.Sound
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 import ru.mairwunnx.mobosses.ability.Ability
 import ru.mairwunnx.mobosses.ability.Cast
 import ru.mairwunnx.mobosses.config.AbilitySettings
@@ -27,7 +29,11 @@ object Grapple : Ability {
       .maxByOrNull { it.location.distanceSquared(cast.at) } ?: return false
     val pull = cast.at.toVector().subtract(target.location.toVector())
     val distance = pull.length()
-    target.velocity = pull.normalize().multiply(cfg.grappleStrength * (0.6 + distance / cfg.grappleRange)).setY(0.4 + distance / 40)
+    val above = target.location.y - cast.at.y
+    // Off a pillar the pull drags down, not up; slow falling keeps the drop from killing outright.
+    val lift = if (above > 2) 0.1 else 0.4 + distance / 40
+    target.velocity = pull.setY(0).normalize().multiply(cfg.grappleStrength * (0.6 + distance / cfg.grappleRange)).setY(lift)
+    if (above > 2) target.addPotionEffect(PotionEffect(PotionEffectType.SLOW_FALLING, 60, 0))
     target.world.spawnParticle(Particle.CRIT, target.location.add(0.0, 1.0, 0.0), 20, 0.3, 0.5, 0.3, 0.1)
     cast.sound(Sound.ENTITY_FISHING_BOBBER_RETRIEVE, 1f, 0.6f, target.location)
     return true

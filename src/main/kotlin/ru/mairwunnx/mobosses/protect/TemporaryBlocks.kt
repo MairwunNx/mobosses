@@ -19,6 +19,14 @@ class TemporaryBlocks(private val plugin: MoBossesPlugin, private val changes: B
 
   fun originalAt(block: Block): BlockData? = entries[id(block)]?.original
 
+  fun contains(block: Block) = id(block) in entries
+
+  /** A player broke it: nothing to put back. */
+  fun forget(block: Block) {
+    entries.remove(id(block))?.task?.cancel() ?: return
+    save()
+  }
+
   fun add(block: Block, placed: BlockData, original: BlockData, ticks: Long) {
     entries.remove(id(block))?.task?.cancel()
     val entry = Entry(block, placed, original)
@@ -42,7 +50,8 @@ class TemporaryBlocks(private val plugin: MoBossesPlugin, private val changes: B
 
   private fun restore(entry: Entry, save: Boolean = true) {
     entries.remove(id(entry.block))
-    if (entry.block.blockData == entry.placed) changes.put(entry.block, entry.original)
+    // By material: fire changes its age while it burns.
+    if (entry.block.type == entry.placed.material) changes.put(entry.block, entry.original)
     if (save) save()
   }
 

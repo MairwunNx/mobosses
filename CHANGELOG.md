@@ -33,8 +33,25 @@ The “Release” workflow takes the notes for a version from its section here, 
 - Cobwebs from abilities go back even after a crash, on the next start.
 - Meteors and arrows from abilities aren’t saved, so a restart never drops one later.
 
+### Abilities
+
+- **Cooldowns are rolled once**, when an ability goes off. They used to be rolled again on every hit, so a boss under many hits fired nearly at the base cooldown.
+- **When the picked ability finds nothing to do**, like a fire ring over water, the boss tries another instead of wasting the hit.
+- The **fire ring** goes out after `fire_ring_seconds` and never starts next to anything that burns, so it scorches the ground but doesn’t set a house on fire, and with `doFireTick` off it no longer stays for good.
+- The **web ring** slows players only when it placed webs, and its cobwebs drop nothing when broken.
+- The **teleport strike** lands only on solid ground the boss fits on, out of water and lava, in sight of its target, and where the protection plugins would let it spawn: no more bosses falling into ravines or stuck in walls.
+- The **grapple** pulls a player off a pillar down, not up, with a moment of slow falling, instead of throwing them into the air.
+- **Arrow arcs and arrow rain** hit players only: pets, villagers, horses, and the boss’s own minions stay out of it.
+- **Arrow rain and meteors** start under the ceiling in caves instead of in the rock above.
+- **Regeneration** waits until the boss has lost a fifth of its health.
+- The **shockwave** roars first and slams a moment later, so a player who watches the boss can step back.
+
 ### Fixed
 
+- Minions that rolled into bosses didn’t count toward a boss’s minion limit.
+- A boss that healed could give out shares adding up to more than the whole boss, and so more experience and loot.
+- A death another plugin cancelled still paid out the rewards, and paid again when the boss died for real.
+- A zero for `exp_scale`, `kill_scale`, or `offset` in the config broke the level math.
 - Toughness came from the mob’s own, which is zero for nearly every mob, so the toughness formula did nothing; skeletons got no armor the same way. Both grow from `base_points` now.
 
 ## 2.0.0

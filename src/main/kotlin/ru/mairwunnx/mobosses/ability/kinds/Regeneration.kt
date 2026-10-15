@@ -3,6 +3,7 @@ package ru.mairwunnx.mobosses.ability.kinds
 import org.bukkit.Location
 import org.bukkit.Particle
 import org.bukkit.Sound
+import org.bukkit.attribute.Attribute
 import org.bukkit.entity.AbstractArrow
 import org.bukkit.entity.Player
 import org.bukkit.entity.Trident
@@ -31,6 +32,12 @@ object Regeneration : Ability {
     PotionEffectType.POISON, PotionEffectType.WITHER, PotionEffectType.HUNGER, PotionEffectType.SLOWNESS,
     PotionEffectType.MINING_FATIGUE, PotionEffectType.WEAKNESS, PotionEffectType.BLINDNESS, PotionEffectType.UNLUCK, PotionEffectType.DARKNESS,
   )
+
+  /** Only a hurt boss heals: at full health it would waste the cast. */
+  override fun usable(cast: Cast): Boolean {
+    val max = cast.boss.entity.getAttribute(Attribute.MAX_HEALTH)?.value ?: return false
+    return cast.boss.entity.health < max * 0.8
+  }
 
   override fun cast(cast: Cast): Boolean {
     val cfg = cast.settings

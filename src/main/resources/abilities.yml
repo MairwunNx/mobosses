@@ -73,6 +73,7 @@ regen_slow_players: true        # Slows players in the aura.
 fire_ring_min_radius: 4.0
 fire_ring_max_radius: 7.0
 fire_ring_density: 0.7   # The share of the ring's 64 points that catch fire.
+fire_ring_seconds: 6      # Seconds before the fire goes out.
 
 # ---------------------------------------------------------------------------
 #  Web ring: cobwebs around the nearest player, and slowness for players inside.

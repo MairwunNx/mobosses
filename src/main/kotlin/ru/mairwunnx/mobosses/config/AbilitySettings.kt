@@ -61,6 +61,8 @@ data class AbilitySettings(
   @SerialName("fire_ring_min_radius") val fireRingMinRadius: Double = 4.0,
   @SerialName("fire_ring_max_radius") val fireRingMaxRadius: Double = 7.0,
   @SerialName("fire_ring_density") val fireRingDensity: Double = 0.7,
+  /** Seconds the fire stays before it goes out. */
+  @SerialName("fire_ring_seconds") val fireRingSeconds: Int = 6,
 
   @SerialName("web_ring_radius") val webRingRadius: Double = 3.0,
   /** Seconds the cobwebs stay. */

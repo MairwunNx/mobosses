@@ -35,10 +35,12 @@ class Boss(
     write(keys.damage, next.mapKeys { it.key.toString() })
   }
 
-  fun lastUsed(ability: String): Long = read(keys.cooldowns)[ability]?.toLong() ?: 0L
+  /** When an ability, or [SHARED] for any, may go off again, in epoch milliseconds. */
+  fun readyAt(ability: String): Long = read(keys.cooldowns)[ability]?.toLong() ?: 0L
 
-  /** Records an ability going off, and the shared cooldown with it. */
-  fun used(ability: String, at: Long) = write(keys.cooldowns, read(keys.cooldowns) + mapOf(ability to at.toDouble(), SHARED to at.toDouble()))
+  /** Records an ability going off: when it and the shared cooldown end, each rolled once. */
+  fun used(ability: String, readyAt: Long, sharedReadyAt: Long) =
+    write(keys.cooldowns, read(keys.cooldowns) + mapOf(ability to readyAt.toDouble(), SHARED to sharedReadyAt.toDouble()))
 
   var enraged: Boolean
     get() = entity.persistentDataContainer.get(keys.enraged, PersistentDataType.BOOLEAN) == true

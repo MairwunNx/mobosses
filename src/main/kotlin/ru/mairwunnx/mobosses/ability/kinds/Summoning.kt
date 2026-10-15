@@ -30,7 +30,9 @@ object Summoning : Ability {
   override fun usable(cast: Cast) =
     cast.plugin.catalog.minions.containsKey(cast.boss.entity.type) && (cast.boss.summoner == null || cast.settings.summoningByMiniBosses) && room(cast) > 0
 
-  private fun room(cast: Cast) = cast.settings.summoningMaxAlive - cast.plugin.minions.alive(cast.boss.uuid)
+  /** Minions that rolled into bosses count too. */
+  private fun room(cast: Cast) =
+    cast.settings.summoningMaxAlive - cast.plugin.minions.alive(cast.boss.uuid) - cast.plugin.bosses.all.count { it.summoner == cast.boss.uuid && it.entity.isValid }
 
   override fun cast(cast: Cast): Boolean {
     val minion = cast.plugin.catalog.minions[cast.boss.entity.type] ?: return false

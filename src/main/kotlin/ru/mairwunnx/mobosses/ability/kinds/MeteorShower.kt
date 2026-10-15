@@ -10,6 +10,7 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.util.Vector
 import ru.mairwunnx.mobosses.ability.Ability
 import ru.mairwunnx.mobosses.ability.Cast
+import ru.mairwunnx.mobosses.ability.Targets
 import ru.mairwunnx.mobosses.algebra.Rolls
 import ru.mairwunnx.mobosses.config.AbilitySettings
 import ru.mairwunnx.mobosses.config.AbilityThresholds
@@ -23,6 +24,8 @@ import kotlin.random.Random
  * restart doesn't drop one later.
  */
 object MeteorShower : Ability {
+  private const val MIN_ROOM = 4.0
+
   override val key = "meteor_shower"
   override val message = Message.METEOR_SHOWER
   override fun enabled(settings: AbilitySettings) = settings.meteorShowerEnabled
@@ -32,7 +35,7 @@ object MeteorShower : Ability {
   override fun cast(cast: Cast): Boolean {
     val cfg = cast.settings
     val radius = Rolls.linear(cfg.meteorRadiusBase, cfg.meteorRadiusPerLevel, cfg.meteorRadiusMax, cast.level)
-    var target = cast.nearest(radius) ?: return false
+    var target = cast.nearest(radius)?.takeIf { Targets.headroom(it.location, cast.settings.meteorHeight) >= MIN_ROOM } ?: return false
     val waves = Rolls.linear(cfg.meteorWavesBase, cfg.meteorWavesPerLevel, cfg.meteorWavesMax, cast.level)
     val perWave = Rolls.linear(cfg.meteorsPerWaveBase, cfg.meteorsPerWavePerLevel, cfg.meteorsPerWaveMax, cast.level)
     val damage = Rolls.linear(cfg.meteorDamageBase, cfg.meteorDamagePerLevel, cfg.meteorDamageMax, cast.level)
@@ -51,7 +54,9 @@ object MeteorShower : Ability {
   private fun meteor(cast: Cast, target: Player, damage: Double) {
     val cfg = cast.settings
     val at = target.location
-    val spawn = Location(at.world, at.x + Random.nextDouble(-0.8, 0.8), at.y + cfg.meteorHeight, at.z + Random.nextDouble(-0.8, 0.8))
+    // Under a cave roof the meteor starts below it.
+    val height = Targets.headroom(at, cfg.meteorHeight).takeIf { it >= MIN_ROOM } ?: return
+    val spawn = Location(at.world, at.x + Random.nextDouble(-0.8, 0.8), at.y + height, at.z + Random.nextDouble(-0.8, 0.8))
     val meteor = at.world.spawn(spawn, FallingBlock::class.java) { block ->
       block.blockData = Material.MAGMA_BLOCK.createBlockData()
       block.dropItem = false

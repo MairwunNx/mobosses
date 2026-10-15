@@ -42,6 +42,14 @@ object Targets {
     return null
   }
 
+  /** How many blocks of open air are over [at], up to [max]: under a roof, arrows and meteors start below it. */
+  fun headroom(at: Location, max: Double): Double {
+    val start = at.blockY + 2
+    val top = (at.y + max).toInt()
+    for (y in start..top) if (at.world.getBlockAt(at.blockX, y, at.blockZ).type.isSolid) return (y - at.y - 1).coerceAtLeast(0.0)
+    return max
+  }
+
   /** Air or a plant an ability may replace; never water, lava, or anything waterlogged. */
   fun isOpen(block: Block): Boolean {
     val type = block.type

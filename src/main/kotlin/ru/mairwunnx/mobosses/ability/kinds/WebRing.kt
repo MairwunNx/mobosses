@@ -37,7 +37,7 @@ object WebRing : Ability {
       if (above.type !in REPLACEABLE || !cast.plugin.blockChanges.setFor(above, web, cfg.webRingDuration * 20L)) continue
       if (placed++ % 3 == 0) cast.sound(Sound.BLOCK_WOOL_PLACE, 0.3f, 0.8f, above.location)
     }
-    if (cfg.webRingPotionEnabled) {
+    if (placed > 0 && cfg.webRingPotionEnabled) {
       val seconds = min(cfg.webRingPotionBaseDuration + cast.level * cfg.webRingPotionLevelModifier, cfg.webRingPotionMaxDuration.toDouble())
       cast.players(center, cfg.webRingRadius + 1).forEach { it.addPotionEffect(PotionEffect(PotionEffectType.SLOWNESS, (seconds * 20).toInt(), 1)) }
     }

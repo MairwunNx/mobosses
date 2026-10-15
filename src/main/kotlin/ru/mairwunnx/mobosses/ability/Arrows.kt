@@ -3,13 +3,14 @@ package ru.mairwunnx.mobosses.ability
 import org.bukkit.Location
 import org.bukkit.entity.AbstractArrow
 import org.bukkit.entity.Arrow
+import org.bukkit.persistence.PersistentDataType
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.potion.PotionType
 import org.bukkit.util.Vector
 import kotlin.random.Random
 
-/** Arrows abilities shoot: the boss's, never picked up, gone after a while and never saved. */
+/** Arrows abilities shoot: the boss's, never picked up, gone after a while and never saved; [ArrowListener] lets them hit players only. */
 object Arrows {
   class Tip(val effects: List<PotionEffectType>, val seconds: Int, val minAmplifier: Int, val maxAmplifier: Int)
 
@@ -20,6 +21,7 @@ object Arrows {
       a.damage = damage
       a.isCritical = false
       a.isPersistent = false
+      a.persistentDataContainer.set(cast.plugin.keys.arrow, PersistentDataType.BOOLEAN, true)
       a.setGravity(gravity)
       tip?.effects?.randomOrNull()?.let { type ->
         val low = tip.minAmplifier.coerceAtLeast(0)

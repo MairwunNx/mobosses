@@ -12,7 +12,7 @@ object Rolls {
     val base = curve.base.coerceAtLeast(0)
     val max = curve.max.coerceAtLeast(base)
     val lp = level.coerceAtLeast(1).toDouble().pow(curve.power)
-    val ideal = base + (max - base) * (lp / (curve.offset + lp))
+    val ideal = base + (max - base) * (lp / (curve.offset.coerceAtLeast(0.0) + lp))
     val varied = if (curve.variance > 0.0) ideal * rng.nextDouble(1 - curve.variance, 1 + curve.variance) else ideal
     return varied.roundToInt().coerceIn(base, max)
   }

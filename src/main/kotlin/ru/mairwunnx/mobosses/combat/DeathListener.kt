@@ -21,7 +21,7 @@ import java.util.UUID
  * share past the thresholds brings loot and rewards, and the kill counts toward their level.
  */
 class DeathListener(private val plugin: MoBossesPlugin) : Listener {
-  @EventHandler(priority = EventPriority.HIGH)
+  @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
   fun onDeath(event: EntityDeathEvent) {
     val boss = plugin.bosses.get(event.entity) ?: return
     val shares = Shares.of(boss.damage, boss.entity.getAttribute(Attribute.MAX_HEALTH)?.value ?: 0.0)

@@ -11,8 +11,10 @@ class Keys(plugin: Plugin) {
   val level = NamespacedKey(plugin, "level")
   /** Who dealt how much: `uuid=damage;…`. */
   val damage = NamespacedKey(plugin, "damage")
-  /** When each ability last went off, in epoch milliseconds: `ability=millis;…`, with `*` for the shared cooldown. */
-  val cooldowns = NamespacedKey(plugin, "cooldowns")
+  /** When each ability may go off again, in epoch milliseconds: `ability=millis;…`, with `*` for the shared cooldown. */
+  val cooldowns = NamespacedKey(plugin, "ready")
+  /** On ability arrows: they hit players only. */
+  val arrow = NamespacedKey(plugin, "arrow")
   val enraged = NamespacedKey(plugin, "enraged")
   /** On minions: the type of the boss that summoned them, for their name. */
   val minionOf = NamespacedKey(plugin, "minion_of")

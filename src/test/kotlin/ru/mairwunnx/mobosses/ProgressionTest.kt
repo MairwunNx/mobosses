@@ -65,11 +65,13 @@ class ProgressionTest {
     assertEquals(0.0, Stats.armor(settings.formula.toughness.copy(basePoints = 0.0), 0.0, 1.97, 50))
   }
 
-  @Test fun `shares are capped at the whole boss`() {
+  @Test fun `shares never add up past the whole boss`() {
     val a = UUID(0, 1)
     val b = UUID(0, 2)
-    assertEquals(mapOf(a to 0.25, b to 1.0), Shares.of(mapOf(a to 25.0, b to 400.0), 100.0))
-    assertEquals(emptyMap(), Shares.of(mapOf(a to 25.0), 0.0))
+    assertEquals(mapOf(a to 0.25, b to 0.5), Shares.of(mapOf(a to 25.0, b to 50.0), 100.0))
+    // A boss that healed took 140 damage on 100 health: the shares split the 140.
+    assertEquals(mapOf(a to 0.5, b to 0.5), Shares.of(mapOf(a to 70.0, b to 70.0), 100.0))
+    assertEquals(emptyMap(), Shares.of(emptyMap(), 0.0))
   }
 
   @Test fun `saved maps read back, and a damaged pair costs only itself`() {

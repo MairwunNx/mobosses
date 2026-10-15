@@ -10,10 +10,13 @@ import kotlin.random.Random
 
 /** Players' levels and the levels of the bosses they meet. */
 object Leveling {
+  /** Keeps a zero in the config from dividing by zero. */
+  private const val MIN = 1e-9
+
   /** A player's level from their Mo’Bosses experience and the kills that counted, 1 to `max_level`. */
   fun playerLevel(curve: Settings.LevelCurve, experience: Long, kills: Int): Int {
-    val raw = sqrt(experience.coerceAtLeast(0).toDouble()) / curve.expScale + kills.coerceAtLeast(0).toDouble() / curve.killScale
-    val progress = raw.pow(curve.power) / (curve.offset + raw.pow(curve.power))
+    val raw = sqrt(experience.coerceAtLeast(0).toDouble()) / curve.expScale.coerceAtLeast(MIN) + kills.coerceAtLeast(0).toDouble() / curve.killScale.coerceAtLeast(MIN)
+    val progress = raw.pow(curve.power) / (curve.offset.coerceAtLeast(MIN) + raw.pow(curve.power))
     // Rounded, not cut: the curve only nears its top, and cutting kept max_level out of reach.
     return (1 + (curve.maxLevel - 1) * progress).roundToInt().coerceIn(1, curve.maxLevel.coerceAtLeast(1))
   }
@@ -37,7 +40,7 @@ object Leveling {
   /** A minion that rolls into a boss is this much weaker than the boss that summoned it. */
   fun childLevel(parentLevel: Int, curve: Settings.MiniBossesCurve, rng: Random): Int {
     val lp = parentLevel.coerceAtLeast(1).toDouble().pow(curve.power)
-    val progress = lp / (curve.offset + lp)
+    val progress = lp / (curve.offset.coerceAtLeast(MIN) + lp)
     val curveDelta = (curve.minDelta + (curve.maxDelta - curve.minDelta) * progress).roundToInt()
     val percentDelta = floor(parentLevel * curve.percentCap).toInt().coerceAtLeast(curve.minDelta)
     val jitter = if (curve.jitter > 0) rng.nextInt(-curve.jitter, curve.jitter + 1) else 0

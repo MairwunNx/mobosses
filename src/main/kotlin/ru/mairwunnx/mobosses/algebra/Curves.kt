@@ -11,7 +11,7 @@ object Curves {
   /** The scale for a level and the progress, 0 to 1, that also flattens classes. */
   fun scale(curve: Settings.Curve, level: Int): Pair<Double, Double> {
     val lp = level.coerceAtLeast(1).toDouble().pow(curve.power)
-    val progress = lp / (curve.offset + lp)
+    val progress = lp / (curve.offset.coerceAtLeast(0.0) + lp)
     return 1.0 + (curve.maxScale - 1.0) * progress to progress
   }
 

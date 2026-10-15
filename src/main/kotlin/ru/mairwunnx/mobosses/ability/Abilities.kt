@@ -34,15 +34,19 @@ class Abilities(private val plugin: MoBossesPlugin) {
     if (Enrage.enabled(settings) && boss.level >= Enrage.threshold(boss.clazz.abilityThresholds) && Enrage.usable(cast) && Enrage.cast(cast)) announce(Enrage, cast)
 
     val now = System.currentTimeMillis()
-    if (now - boss.lastUsed(Boss.SHARED) <= Rolls.biased(settings.generalCooldown.toDouble(), settings.generalCooldownBias, Random)) return
+    if (now < boss.readyAt(Boss.SHARED)) return
     val ready = PICKED.filter { ability ->
-      ability.enabled(settings) && boss.level >= ability.threshold(boss.clazz.abilityThresholds) &&
-        ability.cooldown(settings).let { (cooldown, bias) -> now - boss.lastUsed(ability.key) > Rolls.biased(cooldown.toDouble(), bias, Random) } &&
-        ability.usable(cast)
+      ability.enabled(settings) && boss.level >= ability.threshold(boss.clazz.abilityThresholds) && now >= boss.readyAt(ability.key) && ability.usable(cast)
     }
-    val ability = ready.randomOrNull() ?: return
-    if (!ability.cast(cast)) return
-    boss.used(ability.key, now)
+    // One that finds nothing to do, like a fire ring over water, gives way to the next.
+    val ability = ready.shuffled().firstOrNull { it.cast(cast) } ?: return
+    // Each cooldown's random stretch is rolled once, here, so more hits don't mean more chances.
+    val (cooldown, bias) = ability.cooldown(settings)
+    boss.used(
+      ability.key,
+      now + Rolls.biased(cooldown.toDouble(), bias, Random).toLong(),
+      now + Rolls.biased(settings.generalCooldown.toDouble(), settings.generalCooldownBias, Random).toLong(),
+    )
     announce(ability, cast)
   }
 

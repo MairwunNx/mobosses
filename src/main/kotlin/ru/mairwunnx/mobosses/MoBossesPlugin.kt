@@ -3,6 +3,7 @@ package ru.mairwunnx.mobosses
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitTask
 import ru.mairwunnx.mobosses.ability.Abilities
+import ru.mairwunnx.mobosses.ability.ArrowListener
 import ru.mairwunnx.mobosses.ability.kinds.MeteorListener
 import ru.mairwunnx.mobosses.boss.BossBars
 import ru.mairwunnx.mobosses.boss.Bosses
@@ -31,6 +32,7 @@ import ru.mairwunnx.mobosses.protect.BlockChanges
 import ru.mairwunnx.mobosses.protect.BlockLog
 import ru.mairwunnx.mobosses.protect.BlockLogListener
 import ru.mairwunnx.mobosses.protect.Guards
+import ru.mairwunnx.mobosses.protect.TemporaryBlockListener
 import ru.mairwunnx.mobosses.protect.WorldGuardFlags
 import ru.mairwunnx.mobosses.spawn.SpawnListener
 import java.io.File
@@ -70,7 +72,7 @@ class MoBossesPlugin : JavaPlugin() {
 
   override fun onEnable() {
     if (!reload()) log.warn("Started with errors in the config files; fix them and run /mobosses reload")
-    listOf(playerLanguages, progression, spawns, DamageListener(this), DeathListener(this), MeteorListener(this), BlockLogListener(this))
+    listOf(playerLanguages, progression, spawns, DamageListener(this), DeathListener(this), MeteorListener(this), ArrowListener(this), BlockLogListener(this), TemporaryBlockListener(this))
       .forEach { server.pluginManager.registerEvents(it, this) }
     registerCommand("mobosses", "Reload Mo’Bosses, spawn a boss, or remove every boss", listOf("mb", "moboss"), MoBossesCommand(this))
     tasks += server.scheduler.runTaskTimer(this, Runnable { visuals.tick(); bars.tick() }, 20L, 20L)
