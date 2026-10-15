@@ -30,6 +30,10 @@ class Languages(private val texts: Map<String, Map<String, String>>, val default
   fun render(code: String, key: String, vararg resolvers: TagResolver, target: Pointered? = null): Component? =
     text(code, key)?.takeIf { it.isNotBlank() }?.let { deserialize(it, *resolvers, target = target) }
 
+  /** A message line by line, for item lore; empty when the message is off. */
+  fun lines(code: String, message: Message, vararg resolvers: TagResolver): List<Component> =
+    text(code, message.key)?.takeIf { it.isNotBlank() }?.split('\n')?.map { deserialize(it, *resolvers) }.orEmpty()
+
   /** A name from the language files, or [key]'s last part when no language has it. */
   fun name(code: String, key: String): Component = render(code, key) ?: Component.text(key.substringAfterLast('.'))
 

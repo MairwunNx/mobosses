@@ -175,8 +175,68 @@ data class AbilitySettings(
   @SerialName("enrage_strength_amplifier_per_level") val enrageStrengthPerLevel: Double = 0.02,
   @SerialName("enrage_strength_amplifier_max") val enrageStrengthMax: Int = 2,
   @SerialName("enrage_speed_amplifier") val enrageSpeedAmplifier: Int = 0,
+
+  /** Each boss type's own abilities, on top of the shared ones; entries left out keep their defaults. */
+  val signature: Map<String, Signature> = DEFAULT_SIGNATURE,
 ) {
+  @Serializable
+  data class Signature(
+    val enabled: Boolean = true,
+    val cooldown: Long = 12000,
+    @SerialName("cooldown_bias") val cooldownBias: Double = 1.3,
+    /** Multiplies its damage and durations. */
+    val strength: Double = 1.0,
+    /** The boss types that have it, like `WITCH`; leave it out for the usual ones. */
+    val types: List<String>? = null,
+  )
+
+  /** The signature abilities with any the file leaves out filled in. */
+  val signatures: Map<String, Signature> get() = DEFAULT_SIGNATURE + signature
+
   companion object {
+    /** The usual boss types for each signature ability, and its cooldown. */
+    val SIGNATURE_TYPES: Map<String, List<String>> = mapOf(
+      "potion_volley" to listOf("WITCH"),
+      "fireball_barrage" to listOf("BLAZE"),
+      "aimed_volley" to listOf("SKELETON", "STRAY", "BOGGED", "PILLAGER"),
+      "pounce" to listOf("SPIDER", "CAVE_SPIDER"),
+      "swap" to listOf("ENDERMAN"),
+      "trident_storm" to listOf("DROWNED"),
+      "fang_line" to listOf("EVOKER"),
+      "whirlwind" to listOf("VINDICATOR", "PIGLIN_BRUTE"),
+      "wither_aura" to listOf("WITHER_SKELETON"),
+      "sandstorm" to listOf("HUSK"),
+      "infection" to listOf("ZOMBIE", "ZOMBIE_VILLAGER"),
+      "wind_burst" to listOf("BREEZE"),
+      "war_cry" to listOf("PIGLIN"),
+      "terror" to listOf("PHANTOM"),
+      "phase" to listOf("VEX"),
+      "stampede" to listOf("RAVAGER", "HOGLIN"),
+      "curse" to listOf("GUARDIAN"),
+      "fuse" to listOf("CREEPER"),
+    )
+
+    val DEFAULT_SIGNATURE: Map<String, Signature> = mapOf(
+      "potion_volley" to Signature(cooldown = 9000, types = SIGNATURE_TYPES.getValue("potion_volley")),
+      "fireball_barrage" to Signature(cooldown = 8000, types = SIGNATURE_TYPES.getValue("fireball_barrage")),
+      "aimed_volley" to Signature(cooldown = 7000, types = SIGNATURE_TYPES.getValue("aimed_volley")),
+      "pounce" to Signature(cooldown = 6000, types = SIGNATURE_TYPES.getValue("pounce")),
+      "swap" to Signature(cooldown = 14000, types = SIGNATURE_TYPES.getValue("swap")),
+      "trident_storm" to Signature(cooldown = 9000, types = SIGNATURE_TYPES.getValue("trident_storm")),
+      "fang_line" to Signature(cooldown = 8000, types = SIGNATURE_TYPES.getValue("fang_line")),
+      "whirlwind" to Signature(cooldown = 8000, types = SIGNATURE_TYPES.getValue("whirlwind")),
+      "wither_aura" to Signature(cooldown = 12000, types = SIGNATURE_TYPES.getValue("wither_aura")),
+      "sandstorm" to Signature(cooldown = 14000, types = SIGNATURE_TYPES.getValue("sandstorm")),
+      "infection" to Signature(cooldown = 12000, types = SIGNATURE_TYPES.getValue("infection")),
+      "wind_burst" to Signature(cooldown = 8000, types = SIGNATURE_TYPES.getValue("wind_burst")),
+      "war_cry" to Signature(cooldown = 18000, types = SIGNATURE_TYPES.getValue("war_cry")),
+      "terror" to Signature(cooldown = 16000, types = SIGNATURE_TYPES.getValue("terror")),
+      "phase" to Signature(cooldown = 15000, types = SIGNATURE_TYPES.getValue("phase")),
+      "stampede" to Signature(cooldown = 9000, types = SIGNATURE_TYPES.getValue("stampede")),
+      "curse" to Signature(cooldown = 30000, types = SIGNATURE_TYPES.getValue("curse")),
+      "fuse" to Signature(cooldown = 12000, types = SIGNATURE_TYPES.getValue("fuse")),
+    )
+
     val NEGATIVE_EFFECTS = listOf(
       "SLOWNESS", "POISON", "WEAKNESS", "MINING_FATIGUE", "BLINDNESS", "HUNGER",
       "WITHER", "LEVITATION", "NAUSEA", "DARKNESS", "UNLUCK", "BAD_OMEN",

@@ -2,10 +2,13 @@ package ru.mairwunnx.mobosses.spawn
 
 import org.bukkit.GameMode
 import org.bukkit.Location
+import org.bukkit.Sound
 import org.bukkit.entity.Mob
 import org.bukkit.entity.Player
 import ru.mairwunnx.mobosses.MoBossesPlugin
 import ru.mairwunnx.mobosses.algebra.Leveling
+import ru.mairwunnx.mobosses.boss.Boss
+import ru.mairwunnx.mobosses.lang.Message
 import ru.mairwunnx.mobosses.config.Settings
 import java.util.UUID
 import kotlin.random.Random
@@ -43,8 +46,19 @@ class NaturalSpawns(private val plugin: MoBossesPlugin) {
     } else {
       Leveling.bossLevel(progression.variance, Leveling.groupLevel(group.map { plugin.progression.level(it.uniqueId) }), progression.levelCurve.maxLevel, Random)
     }
-    plugin.bosses.make(entity, type, catalog.randomClass(Random), level, summoner).also(plugin.bosses::vanillaName)
+    val boss = plugin.bosses.make(entity, type, catalog.randomClass(Random), level, summoner).also(plugin.bosses::vanillaName)
     limiter.spawned(group)
+    announce(boss)
+  }
+
+  /** Players near a new boss of `broadcast.spawns_from` or rarer hear about it, with a warning sound. */
+  private fun announce(boss: Boss) {
+    val broadcast = plugin.catalog.settings.broadcast
+    val from = plugin.catalog.classes.rank(broadcast.spawnsFrom)
+    if (from < 0 || plugin.catalog.classes.rank(boss.clazz.key) < from) return
+    val near = players(boss.entity.location, broadcast.spawnsRadius.toDouble())
+    plugin.texts.sendAll(near, Message.BOSS_NEARBY) { code -> plugin.texts.boss(code, boss) }
+    near.forEach { it.playSound(it.location, Sound.ENTITY_ELDER_GUARDIAN_CURSE, 0.6f, 1.4f) }
   }
 
   /** The chance with the multipliers for the world, the time of day, and the weather. */

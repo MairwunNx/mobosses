@@ -25,6 +25,19 @@ class Texts(private val plugin: MoBossesPlugin) {
     plugin.languages.render(code, message, *resolvers, *personal(to), target = to as? Player)?.let(to::sendMessage)
   }
 
+  /** A message over the hotbar instead of in the chat, for warnings that come often, like abilities in a fight. */
+  fun actionBar(to: Player, message: Message, vararg resolvers: TagResolver) {
+    plugin.languages.render(languageOf(to), message, *resolvers, *personal(to), target = to)?.let(to::sendActionBar)
+  }
+
+  /** Sends a message to [players], each in their language; [resolvers] fill it per language. */
+  fun sendAll(players: Collection<Player>, message: Message, resolvers: (code: String) -> Array<TagResolver>) {
+    players.forEach { player ->
+      val code = languageOf(player)
+      plugin.languages.render(code, message, *resolvers(code), *personal(player), target = player)?.let(player::sendMessage)
+    }
+  }
+
   /** Sends a message to every player online, each in their language, and to the console in the default one. */
   fun broadcast(message: Message, resolvers: (code: String) -> Array<TagResolver>) {
     Bukkit.getOnlinePlayers().forEach { player ->
@@ -32,7 +45,7 @@ class Texts(private val plugin: MoBossesPlugin) {
       plugin.languages.render(code, message, *resolvers(code), *personal(player), target = player)?.let(player::sendMessage)
     }
     val code = plugin.languages.default
-    plugin.languages.render(code, message, *resolvers(code))?.let(Bukkit.getConsoleSender()::sendMessage)
+    plugin.languages.render(code, message, *resolvers(code), Placeholders.empty)?.let(Bukkit.getConsoleSender()::sendMessage)
   }
 
   /** `<boss_name>`, `<class>`, `<class_color>`, and `<level>` for a boss, in a language. */
@@ -53,5 +66,6 @@ class Texts(private val plugin: MoBossesPlugin) {
     minion.name?.let { plugin.languages.deserialize(it) } ?: plugin.languages.render(code, "minions.${minion.summoner.key.key}")
 
   /** Tags that read the player who gets the message: PlaceholderAPI's and MiniPlaceholders'. */
-  private fun personal(to: CommandSender): Array<TagResolver> = if (to is Player) arrayOf(Placeholders.resolver(to), MiniPlaceholderTags.resolver()) else emptyArray()
+  private fun personal(to: CommandSender): Array<TagResolver> =
+    if (to is Player) arrayOf(Placeholders.resolver(to), MiniPlaceholderTags.resolver()) else arrayOf(Placeholders.empty)
 }

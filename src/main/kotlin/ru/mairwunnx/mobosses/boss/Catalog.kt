@@ -97,6 +97,12 @@ class Catalog(val configs: Configs, ids: Ids, log: Log) {
   val arcEffects = abilities.arcNegativeEffects.mapIndexedNotNull { i, id -> ids.effect(id, "abilities.yml: arrow_arc_negative_effects[$i]") }
   val rainEffects = abilities.rainNegativeEffects.mapIndexedNotNull { i, id -> ids.effect(id, "abilities.yml: arrow_rain_negative_effects[$i]") }
 
+  /** Which boss types have each signature ability. */
+  val signatureTypes: Map<String, Set<EntityType>> = abilities.signatures.mapValues { (key, signature) ->
+    (signature.types ?: ru.mairwunnx.mobosses.config.AbilitySettings.SIGNATURE_TYPES[key].orEmpty())
+      .mapNotNull { ids.entity(it, "abilities.yml: signature.$key.types") }.toSet()
+  }
+
   val killSound: Sound? = settings.killSound.takeIf { it.enabled }?.let { ids.sound(it.key, "config.yml: kill_sound.key") }
 
   val spawnReasons: Set<SpawnReason> = settings.spawn.allowedSpawnReasons.mapNotNull { name ->

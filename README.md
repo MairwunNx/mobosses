@@ -11,12 +11,14 @@
 - 📈 **Levels that grow with you.** Each player has a Mo’Bosses level, from the experience and kills they’ve gathered. A boss takes the average level of the players near it, now and then a little lower, so weaker bosses keep turning up. Bosses far below your level count for little, so farming them levels nobody up.
 - 💪 **Never weaker than vanilla:** a level 1 boss has at least its mob’s health, damage, and armor, and its gear only gets better.
 - 🧮 **Scaling by curves.** Health, damage, and armor climb fast at first and level off toward a ceiling, so a level 100 boss is hard without being absurd. Class differences shrink at high levels.
-- ✨ **Thirteen abilities:** lightning, minions, regeneration, a ring of fire, a ring of cobwebs, a teleport behind you, a meteor shower, an arc of arrows, arrow rain, a shockwave, a frost nova, a grapple that pulls archers off their pillars, and enrage at low health. Each class unlocks them at its own levels, with cooldowns.
+- 🎯 **A signature ability for every boss type:** witches throw potions, endermen swap places with you, evokers send fangs through the ground, ravagers stampede, and 14 more.
+- ✨ **Thirteen shared abilities:** lightning, minions, regeneration, a ring of fire, a ring of cobwebs, a teleport behind you, a meteor shower, an arc of arrows, arrow rain, a shockwave, a frost nova, a grapple that pulls archers off their pillars, and enrage at low health. Each class unlocks them at its own levels, with cooldowns.
 - 🧟 **Minions** that a boss summons, up to a dozen at a time, and that may turn into weaker bosses themselves.
 - 🗡️ **Gear by level:** a level 5 zombie swings a wooden sword; a level 60 one may carry enchanted netherite.
 - 🎁 **Loot tables by level and class:** over 500 entries, 199 with their own names and lore, and random durability that favors better classes. Each player who dealt enough damage gets their own drop, which only they can pick up.
 - 💪 **Rewards:** a few potion effects and absorption hearts after a kill, stronger for rarer classes.
 - 📊 **Boss bars** with the boss’s health, shown to the players who hit it.
+- 📖 **A menu and stats for players:** `/mobosses` shows your level, rank, and kills, the best hunters, and the bosses by class; `/mobosses info` and `/mobosses top` do it in the chat.
 - 🌍 **Every player reads their own language,** even the names over bosses’ heads: English, Russian, Spanish, Portuguese, and German come bundled, picked by the player’s IP or game language.
 - 🛡️ **Protected areas stay protected:** GriefPrevention claims and WorldGuard regions keep bosses and their abilities out.
 - 🔎 **CoreProtect logging:** whatever bosses do to blocks shows up under `#mobosses`, ready to roll back.
@@ -51,7 +53,7 @@ When a mob spawns, Mo’Bosses looks up its type in `bosses.yml`. If a player is
 
 After a boss spawns for a group, its players wait about a minute for the next one, and no boss spawns while three are already close. Both live in `spawn` in `config.yml`.
 
-Hitting a boss shows you its health bar. Each hit may set off an ability: a random one the boss has reached the level for, once the cooldowns have passed. Abilities hurt players in survival and adventure only; the boss’s own minions, pets, and villagers stay out of it.
+Hitting a boss shows you its health bar. Each hit may set off an ability: a random one the boss has reached the level for, once the cooldowns have passed, among the shared ones and its type’s own. Everyone fighting it sees the warning over the hotbar. A new Epic boss or rarer announces itself to the players near it. Abilities hurt players in survival and adventure only; the boss’s own minions, pets, and villagers stay out of it.
 
 When the boss dies, each player’s share of its health decides their part of the vanilla experience and the Mo’Bosses experience. The kill counts toward your level when you dealt 15% of the boss’s health and it wasn’t 20 or more levels below you; bosses below your level give you less experience. Players who dealt more than about a quarter of it (`loot.min_damage_share`) also get a piece of loot and the rewards.
 
@@ -89,11 +91,14 @@ Every file lives in `plugins/MoBosses/`, and every key has a default, so you can
 
 | Command | Permission | What it does |
 |---|---|---|
+| `/mobosses` | `mobosses.use` | Opens the menu: your card, the best hunters, the bosses by class, and, for admins, reload and remove-all buttons |
+| `/mobosses info [player]` | `mobosses.use` | Your level, rank, experience, kills, and how long until a boss may spawn near you; another player’s needs `mobosses.info.others` |
+| `/mobosses top` | `mobosses.use` | The best hunters |
 | `/mobosses reload` | `mobosses.reload` | Reloads every config and language file; bosses keep going |
 | `/mobosses spawn <entity> <level> <class> [x y z [world]]` | `mobosses.spawn` | Spawns a boss two blocks ahead of you, or at the coordinates, which the console must give |
 | `/mobosses killall` | `mobosses.killall` | Removes every boss in loaded chunks, without loot or experience |
 
-`mobosses.admin` gives all three; operators have it by default. The command also answers to `/mb` and `/moboss`, and suggests every argument.
+Everyone has `mobosses.use`. `mobosses.admin` gives all the rest; operators have it by default. The command also answers to `/mb` and `/moboss`, and suggests every argument.
 
 ## Protected areas
 
@@ -141,7 +146,7 @@ Every message is [MiniMessage](https://docs.advntr.dev/minimessage/format). With
 
 ## Plan
 
-With [Plan](https://modrinth.com/plugin/plan) installed, Mo’Bosses adds its section to Plan’s pages. A player’s “Plugins” tab shows their level, experience, and kills; the level is also a column in the players table. The server’s “Plugins Overview” shows the bosses alive. Plan keeps the last values while a player is away.
+With [Plan](https://modrinth.com/plugin/plan) installed, Mo’Bosses adds its section to Plan’s pages. A player’s “Plugins” tab shows their level, experience, and kills; the level is also a column in the players table. The server’s “Plugins Overview” shows the bosses alive, spawned, and killed, a table of the best hunters, and tables of bosses by class and by type. Plan keeps the last values while a player is away.
 
 ## Databases
 

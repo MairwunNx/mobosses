@@ -6,7 +6,8 @@
 # and toughness; formula in config.yml shrinks the difference at high levels.
 # color: a color name (WHITE, YELLOW, AQUA, DARK_PURPLE, GOLD, RED, …) or #RRGGBB,
 # for the name, the glow, and the boss bar. ability_thresholds: the boss level
-# each ability starts at. Class names live in lang/ under classes.<class>.
+# each ability starts at; signature is for each boss type's own abilities.
+# Class names live in lang/ under classes.<class>.
 # Loot follows this order: a boss drops loot of its class and the ones below.
 
 
@@ -33,6 +34,7 @@ common:
     frost_nova: 55
     grapple: 50
     enrage: 60
+    signature: 20
 
 uncommon:
   key: uncommon
@@ -57,6 +59,7 @@ uncommon:
     frost_nova: 50
     grapple: 45
     enrage: 50
+    signature: 15
 
 rare:
   key: rare
@@ -81,6 +84,7 @@ rare:
     frost_nova: 45
     grapple: 40
     enrage: 45
+    signature: 10
 
 epic:
   key: epic
@@ -105,6 +109,7 @@ epic:
     frost_nova: 40
     grapple: 35
     enrage: 35
+    signature: 6
 
 legendary:
   key: legendary
@@ -129,6 +134,7 @@ legendary:
     frost_nova: 32
     grapple: 28
     enrage: 25
+    signature: 3
 
 mythic:
   key: mythic
@@ -153,3 +159,4 @@ mythic:
     frost_nova: 25
     grapple: 20
     enrage: 15
+    signature: 1

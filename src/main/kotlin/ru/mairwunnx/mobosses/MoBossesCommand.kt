@@ -5,10 +5,12 @@ import io.papermc.paper.command.brigadier.CommandSourceStack
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import org.bukkit.Bukkit
 import org.bukkit.Location
+import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import ru.mairwunnx.mobosses.lang.Message
+import ru.mairwunnx.mobosses.menu.Menu
 
 /**
  * `/mobosses reload`, `/mobosses spawn <entity> <level> <class> [x y z [world]]`, and
@@ -21,10 +23,13 @@ class MoBossesCommand(private val plugin: MoBossesPlugin) : BasicCommand {
   override fun execute(source: CommandSourceStack, args: Array<String>) {
     val sender = source.sender
     val sub = args.firstOrNull()?.lowercase()
+    if (sub == null && sender is Player && sender.hasPermission(USE)) return Menu.open(plugin, sender)
     val permission = SUBCOMMANDS[sub] ?: return plugin.texts.send(sender, Message.USAGE)
     if (!sender.hasPermission(permission)) return plugin.texts.send(sender, Message.NO_PERMISSION)
 
     when (sub) {
+      "info" -> info(sender, args.getOrNull(1))
+      "top" -> top(sender)
       "reload" -> plugin.texts.send(sender, if (plugin.reload()) Message.RELOADED else Message.RELOAD_FAILED)
       "spawn" -> spawn(sender, args.drop(1))
       "killall" -> {
@@ -33,6 +38,38 @@ class MoBossesCommand(private val plugin: MoBossesPlugin) : BasicCommand {
         if (bosses.isEmpty()) plugin.texts.send(sender, Message.KILLED_NONE)
         else plugin.texts.send(sender, Message.KILLED_ALL, Placeholder.unparsed("count", bosses.size.toString()))
       }
+    }
+  }
+
+  /** A player's card: yours, or with `mobosses.info.others`, anyone's who ever played. */
+  private fun info(sender: CommandSender, name: String?) {
+    val target: OfflinePlayer = when {
+      name == null -> sender as? Player ?: return plugin.texts.send(sender, Message.USAGE)
+      !sender.hasPermission(INFO_OTHERS) && !name.equals(sender.name, ignoreCase = true) -> return plugin.texts.send(sender, Message.NO_PERMISSION)
+      else -> Bukkit.getPlayerExact(name) ?: Bukkit.getOfflinePlayerIfCached(name)
+        ?: return plugin.texts.send(sender, Message.PLAYER_NOT_FOUND, Placeholder.unparsed("player", name))
+    }
+    plugin.menuStats.card(target).whenComplete { card, error ->
+      Bukkit.getScheduler().runTask(plugin, Runnable {
+        if (error != null) return@Runnable plugin.texts.send(sender, Message.NO_DATABASE)
+        plugin.texts.send(sender, Message.INFO, *plugin.menuStats.resolvers(plugin.texts.languageOf(sender), card))
+      })
+    }
+  }
+
+  private fun top(sender: CommandSender) {
+    plugin.menuStats.top().whenComplete { hunters, error ->
+      Bukkit.getScheduler().runTask(plugin, Runnable {
+        if (error != null) return@Runnable plugin.texts.send(sender, Message.NO_DATABASE)
+        if (hunters.isEmpty()) return@Runnable plugin.texts.send(sender, Message.TOP_EMPTY)
+        plugin.texts.send(sender, Message.TOP_HEADER)
+        hunters.forEachIndexed { i, hunter ->
+          plugin.texts.send(
+            sender, Message.TOP_LINE, Placeholder.unparsed("rank", (i + 1).toString()), Placeholder.unparsed("player", plugin.menuStats.name(hunter)),
+            Placeholder.unparsed("level", plugin.menuStats.level(hunter.progress).toString()), Placeholder.unparsed("kills", hunter.progress.kills.toString()),
+          )
+        }
+      })
     }
   }
 
@@ -86,6 +123,7 @@ class MoBossesCommand(private val plugin: MoBossesPlugin) : BasicCommand {
     val last = args.lastOrNull().orEmpty()
     val options = when {
       args.size <= 1 -> SUBCOMMANDS.filterValues(sender::hasPermission).keys.toList()
+      args.size == 2 && args[0].equals("info", ignoreCase = true) && sender.hasPermission(INFO_OTHERS) -> Bukkit.getOnlinePlayers().map { it.name }
       !args[0].equals("spawn", ignoreCase = true) || !sender.hasPermission(SUBCOMMANDS.getValue("spawn")) -> emptyList()
       args.size == 2 -> typeKeys()
       args.size == 3 -> listOf("1", "10", "25", "50", "75", "100")
@@ -98,6 +136,8 @@ class MoBossesCommand(private val plugin: MoBossesPlugin) : BasicCommand {
   }
 
   private companion object {
-    val SUBCOMMANDS = linkedMapOf("reload" to "mobosses.reload", "spawn" to "mobosses.spawn", "killall" to "mobosses.killall")
+    const val USE = "mobosses.use"
+    const val INFO_OTHERS = "mobosses.info.others"
+    val SUBCOMMANDS = linkedMapOf("info" to USE, "top" to USE, "reload" to "mobosses.reload", "spawn" to "mobosses.spawn", "killall" to "mobosses.killall")
   }
 }

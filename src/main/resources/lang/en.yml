@@ -10,7 +10,7 @@
 reloaded: "<pri>[Mo’Bosses]</pri> <ok>Reloaded.</ok>"
 reload_failed: "<pri>[Mo’Bosses]</pri> <warn>Reloaded with errors.</warn> <gray>Check the server log.</gray>"
 no_permission: "<err>You can’t use this command.</err>"
-usage: '<gray>Use</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray>, or</gray> <white>/mobosses killall</white>'
+usage: '<gray>Use</gray> <white>/mobosses</white> <gray>for the menu,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>; admins:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray>,</gray> <white>/mobosses killall</white>'
 # <entities>, <classes>: what there is to pick from.
 spawn_usage: '<gray>Use</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray>. Entities:</gray> <white><entities></white><gray>. Classes:</gray> <white><classes></white>'
 spawned: "<pri>[Mo’Bosses]</pri> <ok>Spawned</ok> <class_color>[Lv. <level>] [<class>]</class_color> <boss_name>"
@@ -23,10 +23,40 @@ bad_level: "<err>The level must be a number from 1 to <max>, not <level>.</err>"
 # <count>: how many.
 killed_all: "<pri>[Mo’Bosses]</pri> <ok>Bosses removed: <num><count></num>.</ok>"
 killed_none: "<pri>[Mo’Bosses]</pri> <warn>There are no bosses to remove.</warn>"
+player_not_found: "<err>No player named <player> has played here.</err>"
+no_database: "<warn>Statistics need the database, and it isn’t open right now.</warn>"
+
+# /mobosses info. <player>, <level>, <max>, <rank> (on the board), <experience>, <kills>, <cooldown> (until a boss may spawn near them).
+info: |-
+  <pri>Mo’Bosses</pri> <dark_gray>·</dark_gray> <white><player></white>
+  <gray>Level</gray> <num><level></num><dark_gray>/<max></dark_gray> <dark_gray>·</dark_gray> <gray>Rank</gray> <num>#<rank></num>
+  <gray>Experience</gray> <xp><experience></xp> <dark_gray>·</dark_gray> <gray>Bosses killed</gray> <num><kills></num>
+  <gray>Next boss near you</gray> <white><cooldown></white>
+info_ready: "any moment"
+
+# /mobosses top and the menu. <rank>, <player>, <level>, <kills>.
+top:
+  header: "<pri>Mo’Bosses</pri> <dark_gray>·</dark_gray> <gray>the best hunters</gray>"
+  line: "<num>#<rank></num> <white><player></white> <dark_gray>·</dark_gray> <gray>level</gray> <num><level></num> <dark_gray>·</dark_gray> <gray>kills</gray> <num><kills></num>"
+  empty: "<gray>No hunters yet. Be the first.</gray>"
+
+# The /mobosses menu. The card's lines come from info above; <alive> is the bosses around now.
+menu:
+  title: "Mo’Bosses"
+  you: "<white><player></white>"
+  top: "<gold>The best hunters</gold>"
+  bosses: "<boss>Bosses</boss> <gray>· <alive> around now</gray>"
+  bosses_line: "<class><gray>: spawned</gray> <num><spawned></num><gray>, killed</gray> <num><killed></num>"
+  reload: "<green>Reload Mo’Bosses</green>"
+  killall: "<red>Remove every boss</red>"
+  close: "<gray>Close</gray>"
 
 # Over the boss's head, each player reads it in their own language.
 boss_tag: "<class_color>[Lv. <level>] [<class>] <boss_name>"
 boss_bar: "<boss_name> <class_color>[Lv. <level>]"
+
+# To the players near a new boss of broadcast.spawns_from or rarer.
+boss_nearby: "<pri>[Mo’Bosses]</pri> <warn>A boss appeared nearby:</warn> <class_color>[Lv. <level>] [<class>]</class_color> <boss><boss_name></boss>"
 
 # To everyone when players kill a boss. <player>: everyone who hit it; <experience>: the vanilla experience it dropped.
 kill: "<pri>[Mo’Bosses]</pri> <ok><player></ok> defeated <boss><boss_name></boss> <num>Lv. <level></num>/<class> for <xp><experience></xp> experience!"
@@ -52,6 +82,24 @@ abilities:
   shockwave: "<boss><boss_name></boss> slams the ground!"
   frost_nova: "<boss><boss_name></boss> breathes a <item>frost nova</item>!"
   grapple: "<boss><boss_name></boss> drags you closer!"
+  potion_volley: "<boss><boss_name></boss> hurls <item>potions</item> at you!"
+  fireball_barrage: "<boss><boss_name></boss> unleashes a <item>fireball barrage</item>!"
+  aimed_volley: "<boss><boss_name></boss> looses an <item>aimed volley</item>!"
+  pounce: "<boss><boss_name></boss> pounces!"
+  swap: "<boss><boss_name></boss> <item>swaps places</item> with you!"
+  trident_storm: "<boss><boss_name></boss> hurls <item>tridents</item>!"
+  fang_line: "<boss><boss_name></boss> sends <item>fangs</item> through the ground!"
+  whirlwind: "<boss><boss_name></boss> spins into a <item>whirlwind</item>!"
+  wither_aura: "<boss><boss_name></boss> breathes a <item>withering cloud</item>!"
+  sandstorm: "<boss><boss_name></boss> raises a <item>sandstorm</item>!"
+  infection: "<boss><boss_name></boss> spreads an <item>infection</item>!"
+  wind_burst: "<boss><boss_name></boss> fires <item>wind charges</item>!"
+  war_cry: "<boss><boss_name></boss> lets out a <item>war cry</item>!"
+  terror: "<boss><boss_name></boss> brings the <item>dark</item> down!"
+  phase: "<boss><boss_name></boss> <item>fades from sight</item>!"
+  stampede: "<boss><boss_name></boss> <item>charges</item>!"
+  curse: "<boss><boss_name></boss> lays a <item>curse</item> on you!"
+  fuse: "<boss><boss_name></boss>’s <item>fuse</item> is lit!"
   enrage: "<boss><boss_name></boss> flies into a <err>rage</err>!"
 
 classes:
@@ -993,3 +1041,23 @@ items:
     name: "<light_purple>Absolute Compendium V"
     lore:
       - "<dark_purple>Power, labor, luck, flame, eternity."
+  judges_hammer:
+    name: "<gold>Judge’s Hammer"
+    lore:
+      - "<yellow>The sentence falls from above."
+      - "<gray>The higher the leap, the heavier the verdict."
+  storm_core:
+    name: "<light_purple>Heart of the Storm"
+    lore:
+      - "<dark_purple>It hums like thunder before rain."
+      - "<gray>A smith would know what to do."
+  skybreaker:
+    name: "<light_purple>Skybreaker"
+    lore:
+      - "<dark_purple>It brought down the sky once."
+      - "<gray>Armor means nothing to it."
+  fallen_wings:
+    name: "<light_purple>Wings of the Fallen"
+    lore:
+      - "<dark_purple>Taken from someone who flew too high."
+      - "<gray>Mind the landing."

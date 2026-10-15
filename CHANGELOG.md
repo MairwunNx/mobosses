@@ -2,6 +2,29 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.2.0
+
+### New
+
+- 🎯 **A signature ability for every boss type**, 18 in all, on top of the shared ones: witches throw potions, blazes fire fireball barrages, skeletons, strays, bogged, and pillagers loose aimed volleys, spiders pounce, endermen swap places with you, drowned hurl tridents, evokers send fangs along the ground, vindicators and brutes whirl, wither skeletons breathe a withering cloud, husks raise sandstorms, zombies spread infection, breezes fire wind charges, piglins rally their kind, phantoms bring darkness, vexes fade from sight, ravagers and hoglins stampede, guardians curse you with mining fatigue, and creepers light their fuse early. Each class gets them from its `signature` level in `classes.yml`; `signature` in `abilities.yml` switches each one, sets its cooldown and strength, and picks its boss types.
+- 📖 **`/mobosses` opens a menu** for every player: their level, rank, experience, kills, and how long until a boss may spawn near them; the best hunters; and the bosses by class. Admins also get reload and remove-all buttons.
+- ℹ️ **`/mobosses info [player]`** shows the same card in the chat, and **`/mobosses top`** the best hunters. Both need `mobosses.use`, which everyone has; another player's card needs `mobosses.info.others`.
+- 📊 **More in Plan:** the server page counts the bosses spawned and killed, and has tables of the best hunters and of bosses by class and by type.
+- 📢 **A rare boss doesn’t sneak up on you:** players near a new Epic boss or rarer hear about it, with a warning sound (`broadcast.spawns_from`, `spawns_radius`).
+- 🛡️ **New gear for bosses:** copper armor between leather and iron for zombies, husks, drowned, skeletons, strays, bogged, wither skeletons, and piglins; copper swords and axes; spears of every material, golden ones for piglins; and maces for high-level zombies, vindicators, and brutes. Archers keep their bows.
+- 🎁 **37 new loot entries** from recent game versions: wind charges, breeze rods, trial keys and ominous ones, ominous bottles, armor trim and netherite templates, echo shards, wolf armor, copper armor, spears from copper to netherite, elytra, and, at the top, two named maces and a heavy core.
+
+### Changed
+
+- Ability warnings show over the hotbar instead of in the chat, and everyone fighting the boss sees them, not only the player whose hit set one off (`broadcast.abilities_in: chat` brings the chat back).
+- Statistics of bosses go to the database: a new `boss_stats` table, and a `name` column on players for the boards. Existing databases get both on the next start.
+
+### Fixed
+
+- Piglin, brute, and hoglin bosses in the overworld turned into zombified ones after a few seconds and stopped being bosses.
+- The kill announcement left out players who had logged off before the boss fell.
+- The console printed `<papi:…>` tags as text instead of leaving them empty.
+
 ## 2.1.0
 
 ### New

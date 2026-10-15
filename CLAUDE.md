@@ -20,8 +20,9 @@ A Paper 26.3 plugin that turns ordinary mobs into bosses of six classes, with ab
 | `boss/` | `Catalog` (configs with ids resolved), `Bosses` (live bosses: make, adopt, forget), `BossFactory` and `Equipment` (stats and gear), `Boss` (the fight state, kept on the entity through `Keys` and `Codec`), `Minions`, `NameTags` (names per language), `BossBars`, `Visuals` |
 | `spawn/` | `SpawnListener` (events), `NaturalSpawns` (the roll and the level), `SpawnLimiter` (cooldowns per player, the cap on bosses nearby) |
 | `combat/` | `DamageListener` (shares, bars, abilities on hit), `DeathListener` (experience, kills, loot, rewards, the kill message), `Shares`, `Loot`, `Rewards` |
-| `ability/` | `Ability` and its context `Cast`; `Abilities` picks one on a hit; `kinds/` holds one object per ability; `Targets` decides who may be hit and where the ground is; `Arrows` shoots for the arrow abilities |
-| `progress/` | Players’ levels: `Progression` (a cache filled at login) and `Store` (Exposed over SQLite, MySQL/MariaDB, or PostgreSQL) on a thread of its own |
+| `menu/` | `Stats` (cards, the board, boss counts, from the database off the server thread), `Menu` (the `/mobosses` inventory), `MenuListener` |
+| `ability/` | `Ability` and its context `Cast`; `Abilities` picks one on a hit; `kinds/` holds one object per shared ability and `signature/` one per boss type's own (`Signature` reads `signature` in abilities.yml); `Targets` decides who may be hit and where the ground is; `Arrows` shoots for the arrow abilities |
+| `progress/` | Players’ levels and boss statistics: `Progression` (a cache filled at login) and `Store` (Exposed over SQLite, MySQL/MariaDB, or PostgreSQL) on a thread of its own; `Tables` holds `player_progress` (1.x’s, plus `name`) and `boss_stats` |
 | `lang/` | `Message`, `Languages`, `LanguageFiles`, `LocaleResolver`, `GeoIp`, `PlayerLanguages` (who reads what), `Texts` (rendering, boss names, classes, minions) |
 | `protect/` | `Guard` and `Guards`, the GriefPrevention and WorldGuard adapters and flags, `BlockLog` and `CoreProtectLog`, `BlockLogListener`, and `BlockChanges` with `TemporaryBlocks`, the only way abilities touch blocks |
 | `hooks/` | PlaceholderAPI (the `<papi:…>` tag and `%mobosses_…%`), MiniPlaceholders (`MiniPlaceholderTags`), and Plan (`PlanData`). Plan and MiniPlaceholders ask from other threads, so they read only the progress cache and counts the server thread keeps |
@@ -30,7 +31,7 @@ A Paper 26.3 plugin that turns ordinary mobs into bosses of six classes, with ab
 
 - Bukkit calls stay on the server thread; the database, GeoIP downloads, and nothing else run off it. PlaceholderAPI may ask from any thread, so the expansion reads only the progress cache.
 - A boss is whatever carries `mobosses:type`, `mobosses:class`, and `mobosses:level`. Fight state that must outlive a restart (damage shares, cooldowns, enrage) lives on the boss; cooldowns that must outlive a relog (rewards, spawns) live on the player. Never keep it only in memory, and never force-load chunks for a boss; 1.x did, and leaked loaded chunks.
-- Names over mobs are `TextDisplay` passengers, not saved, invisible by default, and shown per player by `NameTags`. Anything that teleports a boss passes `RETAIN_PASSENGERS`.
+- Names over mobs are `TextDisplay` passengers, not saved, invisible by default, and shown per player by `NameTags`. A plain teleport keeps passengers since 1.21.10 (checked on 26.3); `NameTags` puts back any label a mob sheds.
 - Ability entities (meteors, arrows) are `isPersistent = false`, so a restart never brings one back.
 - A new ability is an object in `ability/kinds/` in `Abilities.PICKED`, with its keys in `AbilitySettings` and `abilities.yml`, a threshold in `AbilityThresholds` and `classes.yml`, and a message in every language.
 - Abilities change blocks only through `BlockChanges.set` or `setFor`: that asks the guards, logs to CoreProtect before the change, in the same tick, and restores temporary blocks on shutdown.

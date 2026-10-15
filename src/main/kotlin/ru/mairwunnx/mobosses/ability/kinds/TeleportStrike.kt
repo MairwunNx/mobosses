@@ -1,6 +1,5 @@
 package ru.mairwunnx.mobosses.ability.kinds
 
-import io.papermc.paper.entity.TeleportFlag
 import org.bukkit.Location
 import org.bukkit.Particle
 import org.bukkit.Sound
@@ -45,8 +44,8 @@ object TeleportStrike : Ability {
     from.world.spawnParticle(Particle.PORTAL, from, 30, 0.5, 1.0, 0.5, 0.1)
     cast.sound(Sound.ENTITY_ENDERMAN_TELEPORT)
     to.direction = target.location.toVector().subtract(to.toVector())
-    // Its name labels ride along.
-    if (!cast.boss.entity.teleport(to, TeleportFlag.EntityState.RETAIN_PASSENGERS)) return false
+    // Its name labels ride along: since 1.21.10 a teleport keeps passengers.
+    if (!cast.boss.entity.teleport(to)) return false
     cast.sound(Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1.2f, to)
     return true
   }

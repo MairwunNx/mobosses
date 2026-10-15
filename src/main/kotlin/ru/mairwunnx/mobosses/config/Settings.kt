@@ -241,8 +241,13 @@ data class Settings(
     val kills: Boolean = true,
     /** “loot.rare” and up to everyone when a player gets loot of that class. */
     @SerialName("rare_loot") val rareLoot: Boolean = true,
-    /** “abilities.*” to the player who hit the boss when it uses an ability. */
+    /** “abilities.*” to the players fighting the boss when it uses an ability. */
     val abilities: Boolean = true,
+    /** Where ability warnings show: `action_bar`, over the hotbar, or `chat`. */
+    @SerialName("abilities_in") val abilitiesIn: String = "action_bar",
+    /** “boss_nearby” to the players near a new boss of this class or rarer; `none` turns it off. */
+    @SerialName("spawns_from") val spawnsFrom: String = "epic",
+    @SerialName("spawns_radius") val spawnsRadius: Int = 64,
   )
 
   @Serializable

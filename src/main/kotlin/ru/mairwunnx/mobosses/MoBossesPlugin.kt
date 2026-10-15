@@ -29,6 +29,8 @@ import ru.mairwunnx.mobosses.lang.Languages
 import ru.mairwunnx.mobosses.lang.LocaleResolver
 import ru.mairwunnx.mobosses.lang.PlayerLanguages
 import ru.mairwunnx.mobosses.lang.Texts
+import ru.mairwunnx.mobosses.menu.MenuListener
+import ru.mairwunnx.mobosses.menu.Stats
 import ru.mairwunnx.mobosses.progress.Progression
 import ru.mairwunnx.mobosses.protect.BlockChanges
 import ru.mairwunnx.mobosses.protect.BlockLog
@@ -62,6 +64,7 @@ class MoBossesPlugin : JavaPlugin() {
   val rewards = Rewards(this)
   val spawns = SpawnListener(this)
   val blockChanges = BlockChanges(this)
+  val menuStats = Stats(this)
 
   private val tasks = mutableListOf<BukkitTask>()
   private var geoIpTask: BukkitTask? = null
@@ -75,9 +78,9 @@ class MoBossesPlugin : JavaPlugin() {
 
   override fun onEnable() {
     if (!reload()) log.warn("Started with errors in the config files; fix them and run /mobosses reload")
-    listOf(playerLanguages, progression, spawns, DamageListener(this), DeathListener(this), MeteorListener(this), ArrowListener(this), BlockLogListener(this), TemporaryBlockListener(this))
+    listOf(playerLanguages, progression, spawns, DamageListener(this), DeathListener(this), MeteorListener(this), ArrowListener(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener(this))
       .forEach { server.pluginManager.registerEvents(it, this) }
-    registerCommand("mobosses", "Reload Mo’Bosses, spawn a boss, or remove every boss", listOf("mb", "moboss"), MoBossesCommand(this))
+    registerCommand("mobosses", "Your Mo’Bosses level and the best hunters; for admins, reload, spawn, or remove bosses", listOf("mb", "moboss"), MoBossesCommand(this))
     tasks += server.scheduler.runTaskTimer(this, Runnable { visuals.tick(); bars.tick(); PlanData.bossesAlive = bosses.all.size }, 20L, 20L)
     tasks += server.scheduler.runTaskTimer(this, Runnable { nameTags.tick() }, 10L, 10L)
 

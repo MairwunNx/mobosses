@@ -3,16 +3,21 @@ package ru.mairwunnx.mobosses.progress
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.jetbrains.exposed.v1.core.DatabaseConfig
-import org.jetbrains.exposed.v1.core.Table
+import org.jetbrains.exposed.v1.core.ResultRow
+import org.jetbrains.exposed.v1.core.SortOrder
+import org.jetbrains.exposed.v1.core.and
+import org.jetbrains.exposed.v1.core.greater
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.vendors.MariaDBDialect
 import org.jetbrains.exposed.v1.core.vendors.MysqlDialect
 import org.jetbrains.exposed.v1.jdbc.Database
+import org.jetbrains.exposed.v1.jdbc.JdbcTransaction
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.TransactionManager
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
 import org.jetbrains.exposed.v1.jdbc.upsert
+import org.jetbrains.exposed.v1.jdbc.vendors.currentDialectMetadata
 import ru.mairwunnx.mobosses.config.Settings
 import java.io.File
 import java.util.UUID
@@ -20,18 +25,6 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
-
-/** A player's Mo’Bosses record: bosses they helped kill and the experience those kills brought. */
-data class Progress(val kills: Int = 0, val experience: Long = 0)
-
-/** The table 1.x made; its name, columns, and index stay, so 1.x databases keep working. */
-object PlayerProgressTable : Table("player_progress") {
-  val uuid = varchar("uuid", 36).index()
-  val bossKills = integer("boss_kills")
-  val totalExperience = long("total_experience")
-
-  override val primaryKey = PrimaryKey(uuid)
-}
 
 /**
  * Players' progress in SQLite, MySQL or MariaDB, or PostgreSQL. Every query runs on one thread of
@@ -47,7 +40,7 @@ class Store(private val settings: Settings.Database, folder: File) : AutoCloseab
   init {
     try {
       database = Database.connect(pool, databaseConfig = DatabaseConfig { explicitDialect = mysqlDialect() })
-      worker.submit { transaction(database) { SchemaUtils.create(PlayerProgressTable) } }.get()
+      worker.submit { transaction(database) { createSchema() } }.get()
     } catch (error: Exception) {
       worker.shutdownNow()
       pool.close()
@@ -63,32 +56,71 @@ class Store(private val settings: Settings.Database, folder: File) : AutoCloseab
       Type.MYSQL -> "MySQL at ${settings.mysql.host}:${settings.mysql.port}/${settings.mysql.database}"
     }
 
-  fun load(player: UUID): CompletableFuture<Progress> = CompletableFuture.supplyAsync({
-    transaction(database) {
-      PlayerProgressTable.selectAll().where { PlayerProgressTable.uuid eq player.toString() }.singleOrNull()
-        ?.let { Progress(it[PlayerProgressTable.bossKills], it[PlayerProgressTable.totalExperience]) }
-        ?: Progress()
-    }
-  }, worker)
+  fun load(player: UUID): CompletableFuture<Progress> = query {
+    PlayerProgressTable.selectAll().where { PlayerProgressTable.uuid eq player.toString() }.singleOrNull()?.let(::progress) ?: Progress()
+  }
 
   /**
    * Adds to a player's record and returns the new totals. It reads and writes in one transaction, so
    * a record the server hasn't loaded, or one another server shares, never gets overwritten.
    */
-  fun add(player: UUID, kills: Int, experience: Long): CompletableFuture<Progress> = CompletableFuture.supplyAsync({
-    transaction(database) {
-      val current = PlayerProgressTable.selectAll().where { PlayerProgressTable.uuid eq player.toString() }.forUpdate().singleOrNull()
-        ?.let { Progress(it[PlayerProgressTable.bossKills], it[PlayerProgressTable.totalExperience]) }
-        ?: Progress()
-      val next = Progress(current.kills + kills, current.experience + experience)
-      PlayerProgressTable.upsert {
-        it[uuid] = player.toString()
-        it[bossKills] = next.kills
-        it[totalExperience] = next.experience
-      }
-      next
+  fun add(player: UUID, name: String, kills: Int, experience: Long): CompletableFuture<Progress> = query {
+    val current = PlayerProgressTable.selectAll().where { PlayerProgressTable.uuid eq player.toString() }.forUpdate().singleOrNull()?.let(::progress) ?: Progress()
+    val next = Progress(current.kills + kills, current.experience + experience)
+    PlayerProgressTable.upsert {
+      it[uuid] = player.toString()
+      it[bossKills] = next.kills
+      it[totalExperience] = next.experience
+      it[this.name] = name
     }
-  }, worker)
+    next
+  }
+
+  /** The best hunters, by experience. */
+  fun top(limit: Int): CompletableFuture<List<Hunter>> = query {
+    PlayerProgressTable.selectAll().orderBy(PlayerProgressTable.totalExperience to SortOrder.DESC).limit(limit)
+      .map { Hunter(it[PlayerProgressTable.uuid], it[PlayerProgressTable.name], progress(it)) }
+  }
+
+  /** A player's place on the board: 1 plus how many have more experience. */
+  fun rank(player: UUID): CompletableFuture<Int> = query {
+    val own = PlayerProgressTable.selectAll().where { PlayerProgressTable.uuid eq player.toString() }.singleOrNull()?.get(PlayerProgressTable.totalExperience) ?: 0L
+    PlayerProgressTable.selectAll().where { PlayerProgressTable.totalExperience greater own }.count().toInt() + 1
+  }
+
+  /** Counts a boss that spawned, or one players killed. */
+  fun count(type: String, clazz: String, killed: Boolean) {
+    query {
+      val key = (BossStatsTable.type eq type) and (BossStatsTable.clazz eq clazz)
+      val row = BossStatsTable.selectAll().where { key }.forUpdate().singleOrNull()
+      BossStatsTable.upsert {
+        it[this.type] = type
+        it[this.clazz] = clazz
+        it[spawned] = (row?.get(spawned) ?: 0L) + if (killed) 0 else 1
+        it[this.killed] = (row?.get(this.killed) ?: 0L) + if (killed) 1 else 0
+      }
+    }
+  }
+
+  fun counts(): CompletableFuture<List<BossCount>> = query {
+    BossStatsTable.selectAll().map { BossCount(it[BossStatsTable.type], it[BossStatsTable.clazz], it[BossStatsTable.spawned], it[BossStatsTable.killed]) }
+  }
+
+  private fun progress(row: ResultRow) = Progress(row[PlayerProgressTable.bossKills], row[PlayerProgressTable.totalExperience])
+
+  private fun <T> query(block: JdbcTransaction.() -> T): CompletableFuture<T> = CompletableFuture.supplyAsync({ transaction(database) { block() } }, worker)
+
+  /** Creates the tables a new database lacks, and the columns an older one lacks, like 1.x's file without `name`. */
+  private fun JdbcTransaction.createSchema() {
+    val tables = arrayOf(PlayerProgressTable, BossStatsTable)
+    SchemaUtils.create(*tables)
+    currentDialectMetadata.resetCaches()
+    val columns = currentDialectMetadata.tableColumns(*tables)
+    tables.forEach { table ->
+      val names = columns[table].orEmpty().map { it.name.lowercase() }
+      table.columns.filter { it.name.lowercase() !in names }.forEach { column -> column.ddl.forEach(::exec) }
+    }
+  }
 
   /** Finishes the queued queries, waiting up to ten seconds, then closes the pool. */
   override fun close() {

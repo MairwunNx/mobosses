@@ -64,7 +64,8 @@ class ResourcesTest {
     assertEquals("Гнилой", configs.bosses.getValue("ZOMBIE").name)
     assertEquals("Common", configs.classes.common.displayName)
     assertTrue(BossSpec.parse(resource("bosses.yml")).keys.containsAll(configs.bosses.keys))
-    assertEquals(LootTable.parse(resource("loottable.yml")).items.size, configs.loot.items.size)
+    // Every one of 1.x's loot entries reads; 2.2 ships more.
+    assertEquals(577, configs.loot.items.size)
     assertTrue(configs.loot.items.first { it.material == "STONE_SWORD" && it.title != null }.lore.isNotEmpty())
     // Everything else equals what 2.1 ships, but for the defaults 2.1 changed, which a 1.x file keeps.
     val v1 = Settings()

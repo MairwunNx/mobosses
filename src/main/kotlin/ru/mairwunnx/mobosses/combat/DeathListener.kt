@@ -30,6 +30,7 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
       val experience = Stats.experience(plugin.catalog.settings.formula.experience, event.droppedExp, boss.clazz.experience, boss.type.spec.expModifier, boss.level)
       event.droppedExp = 0
       shares.forEach { (id, share) -> Bukkit.getPlayer(id)?.let { pay(it, boss, share, experience) } }
+      plugin.progression.count(boss.type.key, boss.clazz.key, killed = true)
       announce(boss, shares, experience)
     }
     boss.type.deathSound?.let { boss.entity.world.playSound(boss.entity.location, it, 1f, 1f) }
@@ -56,7 +57,8 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
 
   private fun announce(boss: Boss, shares: Map<UUID, Double>, experience: Int) {
     if (!plugin.catalog.settings.broadcast.kills) return
-    val names = shares.keys.mapNotNull { Bukkit.getPlayer(it)?.name }.joinToString(", ")
+    // Players who left before the boss fell are named too.
+    val names = shares.keys.mapNotNull { Bukkit.getPlayer(it)?.name ?: Bukkit.getOfflinePlayer(it).name }.joinToString(", ")
     plugin.texts.broadcast(Message.KILL) { code ->
       arrayOf(Placeholder.unparsed("player", names), Placeholder.unparsed("experience", experience.toString()), *plugin.texts.boss(code, boss))
     }

@@ -206,7 +206,10 @@ loot:
 broadcast:
   kills: true       # “kill” to everyone when players kill a boss.
   rare_loot: true   # “loot.*” to everyone for rare, epic, legendary, and mythic loot.
-  abilities: true   # “abilities.*” to the player whose hit set an ability off.
+  abilities: true   # “abilities.*” to everyone fighting the boss.
+  abilities_in: action_bar   # action_bar, over the hotbar, or chat.
+  spawns_from: epic          # “boss_nearby” to players near a new boss this rare or rarer; none turns it off.
+  spawns_radius: 64
 
 kill_sound:
   enabled: true

@@ -2,6 +2,8 @@ package ru.mairwunnx.mobosses.boss
 
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Creeper
+import org.bukkit.entity.Hoglin
+import org.bukkit.entity.PiglinAbstract
 import org.bukkit.entity.LivingEntity
 import org.bukkit.persistence.PersistentDataType
 import ru.mairwunnx.mobosses.algebra.Stats
@@ -30,6 +32,9 @@ class BossFactory(private val data: Keys) {
     }
     entity.getAttribute(Attribute.ATTACK_DAMAGE)?.let { it.baseValue = Stats.damage(formula.damage, it.defaultValue, clazz.damage, level).coerceAtLeast(it.defaultValue) }
     if (entity is Creeper && type.spec.isPowered == true) entity.isPowered = true
+    // A piglin or hoglin in the overworld turns into a zombified one after a few seconds, and the boss would go with it.
+    if (entity is PiglinAbstract) entity.isImmuneToZombification = true
+    if (entity is Hoglin) entity.isImmuneToZombification = true
     if (!Equipment.equip(entity, type, level)) {
       entity.getAttribute(Attribute.ARMOR)?.let { it.baseValue = Stats.armor(formula.armor, it.defaultValue, clazz.defense, level).coerceAtLeast(it.defaultValue) }
       entity.getAttribute(Attribute.ARMOR_TOUGHNESS)?.let { it.baseValue = Stats.armor(formula.toughness, it.defaultValue, clazz.toughness, level).coerceAtLeast(it.defaultValue) }

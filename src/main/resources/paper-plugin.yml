@@ -7,10 +7,18 @@ authors: [ MairwunNx ]
 description: "Ordinary mobs spawn as bosses of six classes, with abilities, minions, health bars, loot, and player levels, each player reading it in their own language."
 website: "https://github.com/MairwunNx/mobosses"
 permissions:
+  mobosses.use:
+    description: Open the /mobosses menu and use /mobosses info and /mobosses top
+    default: true
+  mobosses.info.others:
+    description: Use /mobosses info on other players
+    default: op
   mobosses.admin:
     description: Use every /mobosses command
     default: op
     children:
+      mobosses.use: true
+      mobosses.info.others: true
       mobosses.reload: true
       mobosses.spawn: true
       mobosses.killall: true

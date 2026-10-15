@@ -11,6 +11,7 @@ import ru.mairwunnx.mobosses.MoBossesPlugin
 import ru.mairwunnx.mobosses.algebra.Leveling
 import ru.mairwunnx.mobosses.config.Settings
 import java.io.File
+import java.util.concurrent.CompletableFuture
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
@@ -52,6 +53,23 @@ class Progression(private val plugin: MoBossesPlugin) : Listener {
   /** Any thread: PlaceholderAPI asks from its own. */
   fun of(player: UUID): Progress = cache[player] ?: Progress()
 
+  /** A player's record straight from the database, for players who aren't online. */
+  fun load(player: UUID): CompletableFuture<Progress> = store?.load(player) ?: CompletableFuture.completedFuture(Progress())
+
+  /** The best hunters; empty without a database. Any thread. */
+  fun top(limit: Int): CompletableFuture<List<Hunter>> = store?.top(limit) ?: CompletableFuture.completedFuture(emptyList())
+
+  /** A player's place on the board; null without a database. */
+  fun rank(player: UUID): CompletableFuture<Int?> = store?.rank(player)?.thenApply { it } ?: CompletableFuture.completedFuture(null)
+
+  /** Bosses by type and class; empty without a database. */
+  fun counts(): CompletableFuture<List<BossCount>> = store?.counts() ?: CompletableFuture.completedFuture(emptyList())
+
+  /** Counts a boss that spawned, or that players killed, for the statistics. */
+  fun count(type: String, clazz: String, killed: Boolean) {
+    store?.count(type, clazz, killed)
+  }
+
   /** Null for a player whose progress isn't loaded, so Plan keeps what it stored last instead of a zero. */
   fun known(player: UUID): Progress? = cache[player]
 
@@ -88,7 +106,7 @@ class Progression(private val plugin: MoBossesPlugin) : Listener {
     val id = player.uniqueId
     val kills = if (counts) 1 else 0
     cache[id] = of(id).let { Progress(it.kills + kills, it.experience + experience) }
-    store?.add(id, kills, experience)?.whenComplete { saved, error ->
+    store?.add(id, player.name, kills, experience)?.whenComplete { saved, error ->
       if (error != null) plugin.log.warn("Can't save the progress of ${player.name}: ${error.message}")
       // The database's totals win: they count kills from before a failed load, or from another server on the same database.
       else cache.computeIfPresent(id) { _, _ -> saved }

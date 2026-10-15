@@ -24,6 +24,9 @@ object Placeholders {
     Tag.selfClosingInserting(if (available) render(player, name) else Component.empty())
   }
 
+  /** For readers that aren't players, like the console: the tags render empty instead of showing as text. */
+  val empty: TagResolver = TagResolver.resolver("papi") { _, _ -> Tag.selfClosingInserting(Component.empty()) }
+
   private fun render(player: Player, name: String): Component =
     legacy.deserialize(PlaceholderAPI.setPlaceholders(player, "%$name%"))
 }

@@ -8,17 +8,19 @@
 - ⚔️ **Six classes**, from Common to Mythic. Each multiplies a boss’s health, damage, experience, armor, and toughness, and decides which abilities it gets and when.
 - 📈 **Levels that grow with your players.** A boss takes the average level of the players near it, now and then a little lower. Weak bosses count for little, so farming them levels nobody up.
 - 🧮 **Scaling by curves:** stats climb fast at first and level off toward a ceiling, so a level 100 boss is hard without being absurd.
-- ✨ **Thirteen abilities:** lightning, minions, regeneration, a ring of fire, a ring of cobwebs, a teleport behind you, a meteor shower, an arc of arrows, arrow rain, a shockwave, a frost nova, a grapple against pillar archers, and enrage, each unlocked by class and level.
+- 🎯 **A signature ability for every boss type:** witches throw potions, endermen swap places with you, evokers send fangs through the ground, ravagers stampede, and 14 more.
+- ✨ **Thirteen shared abilities:** lightning, minions, regeneration, a ring of fire, a ring of cobwebs, a teleport behind you, a meteor shower, an arc of arrows, arrow rain, a shockwave, a frost nova, a grapple against pillar archers, and enrage, each unlocked by class and level.
 - 🗡️ **Gear by level**, from a wooden sword to enchanted netherite.
 - 🎁 **Loot tables by level and class:** over 500 entries, 199 with their own names and lore. Each player who dealt enough damage gets their own drop.
 - 💪 **Rewards:** potion effects and absorption hearts after a kill.
 - 📊 **Boss bars** for the players who hit the boss.
+- 📖 **A menu and stats:** `/mobosses` shows each player their level, rank, and kills, the best hunters, and the bosses by class.
 - 🌍 **Every player reads their own language,** even the names over bosses’ heads: English, Russian, Spanish, Portuguese, and German come bundled, picked by IP or game language.
 - 🛡️ **GriefPrevention and WorldGuard:** no bosses or block-changing abilities in claims and protected regions.
 - 🔎 **CoreProtect:** whatever bosses do to blocks is logged under `#mobosses`, ready to roll back.
 - 🧩 **PlaceholderAPI:** `%mobosses_level%`, `%mobosses_xp%`, `%mobosses_kills%`, and `<papi:…>` tags in messages.
 - 🧩 **MiniPlaceholders:** its tags in messages, and `<mobosses_level>`, `<mobosses_xp>`, `<mobosses_kills>` in TAB and elsewhere.
-- 📊 **Plan:** each player’s level, experience, and kills on their page, and the bosses alive on the server’s.
+- 📊 **Plan:** each player’s level, experience, and kills on their page; on the server’s, the bosses alive, spawned, and killed, the best hunters, and bosses by class and type.
 - 💪 **Never weaker than vanilla:** every boss has at least its mob’s health, damage, and armor, and its gear only gets better.
 - 💾 **SQLite, MySQL, MariaDB, or PostgreSQL** for players’ levels.
 - 🧯 **No piles of bosses:** a cooldown per player and a cap on bosses nearby keep mob farms from turning into boss factories.
@@ -56,11 +58,14 @@ Each rule has its own switch in `config.yml`, on by default. `/mobosses spawn` i
 
 | Command | What it does |
 |---|---|
+| `/mobosses` | The menu: your card, the best hunters, the bosses by class |
+| `/mobosses info [player]` | A player’s level, rank, experience, and kills |
+| `/mobosses top` | The best hunters |
 | `/mobosses reload` | Reloads every config and language file |
 | `/mobosses spawn <entity> <level> <class> [x y z [world]]` | Spawns a boss ahead of you, or at the coordinates |
 | `/mobosses killall` | Removes every boss in loaded chunks, without loot |
 
-Each needs its own permission: `mobosses.reload`, `mobosses.spawn`, `mobosses.killall`. `mobosses.admin` gives all three; operators have it by default.
+Everyone has `mobosses.use` for the menu, `info`, and `top`. The rest need `mobosses.reload`, `mobosses.spawn`, `mobosses.killall`; `mobosses.admin` gives them all, and operators have it by default.
 
 ## Links
 

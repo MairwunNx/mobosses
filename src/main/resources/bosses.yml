@@ -113,6 +113,15 @@ ZOMBIE:
       - { material: "NETHERITE_SHOVEL", min_lvl: 95, enchantments: { sharpness: 3, efficiency: 5, fortune: 3, unbreaking: 3 } }
       - { material: "NETHERITE_PICKAXE", min_lvl: 97, enchantments: { sharpness: 2, efficiency: 5, fortune: 3, unbreaking: 3 } }
       - { material: "NETHERITE_HOE", min_lvl: 99, enchantments: { sharpness: 4, efficiency: 5, fortune: 3, unbreaking: 3 } }
+      - { material: "STONE_SPEAR", min_lvl: 6 }
+      - { material: "COPPER_SWORD", min_lvl: 9 }
+      - { material: "COPPER_SPEAR", min_lvl: 10 }
+      - { material: "COPPER_AXE", min_lvl: 11, enchantments: { sharpness: 1 } }
+      - { material: "IRON_SPEAR", min_lvl: 18, enchantments: { sharpness: 1 } }
+      - { material: "DIAMOND_SPEAR", min_lvl: 38, enchantments: { sharpness: 2 } }
+      - { material: "NETHERITE_SPEAR", min_lvl: 60, enchantments: { sharpness: 3 } }
+      - { material: "MACE", min_lvl: 75, enchantments: { density: 2 } }
+      - { material: "MACE", min_lvl: 85, enchantments: { density: 3, breach: 1 } }
     armors:
       - { min_lvl: 1, helmet: { material: "LEATHER_HELMET" } }
       - { min_lvl: 3, boots: { material: "LEATHER_BOOTS" } }
@@ -137,6 +146,9 @@ ZOMBIE:
       - { min_lvl: 82, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 3 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 3 } } }
       - { min_lvl: 88, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 4, unbreaking: 3 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 4, thorns: 3 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { protection: 3, unbreaking: 2 } } }
       - { min_lvl: 95, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 4 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 4 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { protection: 3 } }, boots: { material: "NETHERITE_BOOTS", enchantments: { protection: 3 } } }
+      - { min_lvl: 9, helmet: { material: "COPPER_HELMET" }, boots: { material: "COPPER_BOOTS" } }
+      - { min_lvl: 11, helmet: { material: "COPPER_HELMET" }, chestplate: { material: "COPPER_CHESTPLATE" }, leggings: { material: "COPPER_LEGGINGS" } }
+      - { min_lvl: 14, helmet: { material: "COPPER_HELMET", enchantments: { protection: 1 } }, chestplate: { material: "COPPER_CHESTPLATE", enchantments: { protection: 1 } }, leggings: { material: "COPPER_LEGGINGS", enchantments: { protection: 1 } }, boots: { material: "COPPER_BOOTS", enchantments: { protection: 1 } } }
   effects:
     particles: "FLAME"
     sounds:
@@ -213,6 +225,9 @@ SKELETON:
       - { min_lvl: 82, helmet: { material: "NETHERITE_HELMET", enchantments: { projectile_protection: 4, respiration: 3 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { projectile_protection: 4, unbreaking: 2 } } }
       - { min_lvl: 85, helmet: { material: "NETHERITE_HELMET", enchantments: { projectile_protection: 4 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 3 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { projectile_protection: 3 } } }
       - { min_lvl: 92, helmet: { material: "NETHERITE_HELMET", enchantments: { projectile_protection: 4, unbreaking: 3 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { projectile_protection: 4, thorns: 2 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { projectile_protection: 4 } }, boots: { material: "NETHERITE_BOOTS", enchantments: { projectile_protection: 3, feather_falling: 4 } } }
+      - { min_lvl: 9, helmet: { material: "COPPER_HELMET" }, boots: { material: "COPPER_BOOTS" } }
+      - { min_lvl: 11, helmet: { material: "COPPER_HELMET" }, chestplate: { material: "COPPER_CHESTPLATE" }, leggings: { material: "COPPER_LEGGINGS" } }
+      - { min_lvl: 14, helmet: { material: "COPPER_HELMET", enchantments: { protection: 1 } }, chestplate: { material: "COPPER_CHESTPLATE", enchantments: { protection: 1 } }, leggings: { material: "COPPER_LEGGINGS", enchantments: { protection: 1 } }, boots: { material: "COPPER_BOOTS", enchantments: { protection: 1 } } }
   effects:
     particles: "CRIT"
     sounds:
@@ -260,6 +275,9 @@ PIGLIN:
       - { material: "NETHERITE_SWORD", min_lvl: 90, enchantments: { sharpness: 5, fire_aspect: 2, sweeping: 3 } }
       - { material: "NETHERITE_AXE", min_lvl: 93, enchantments: { sharpness: 5, fire_aspect: 2, unbreaking: 3, efficiency: 4 } }
       - { material: "NETHERITE_SWORD", min_lvl: 96, enchantments: { sharpness: 5, fire_aspect: 2, sweeping: 3, knockback: 2, unbreaking: 3 } }
+      - { material: "GOLDEN_SPEAR", min_lvl: 4, enchantments: { sharpness: 1 } }
+      - { material: "GOLDEN_SPEAR", min_lvl: 20, enchantments: { sharpness: 3 } }
+      - { material: "GOLDEN_SPEAR", min_lvl: 40, enchantments: { sharpness: 4, unbreaking: 2 } }
     armors:
       - { min_lvl: 1, chestplate: { material: "GOLDEN_CHESTPLATE" } }
       - { min_lvl: 5, boots: { material: "GOLDEN_BOOTS" } }
@@ -278,6 +296,9 @@ PIGLIN:
       - { min_lvl: 78, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 4, fire_protection: 4, unbreaking: 2 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 4, thorns: 1, unbreaking: 3 } } }
       - { min_lvl: 85, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 4, unbreaking: 3, respiration: 2 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { protection: 4, fire_protection: 4 } }, boots: { material: "NETHERITE_BOOTS", enchantments: { protection: 3, soul_speed: 3 } } }
       - { min_lvl: 90, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 4, unbreaking: 3 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 4, thorns: 2 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { protection: 4 } }, boots: { material: "NETHERITE_BOOTS", enchantments: { protection: 4, feather_falling: 4 } } }
+      - { min_lvl: 9, helmet: { material: "COPPER_HELMET" }, boots: { material: "COPPER_BOOTS" } }
+      - { min_lvl: 11, helmet: { material: "COPPER_HELMET" }, chestplate: { material: "COPPER_CHESTPLATE" }, leggings: { material: "COPPER_LEGGINGS" } }
+      - { min_lvl: 14, helmet: { material: "COPPER_HELMET", enchantments: { protection: 1 } }, chestplate: { material: "COPPER_CHESTPLATE", enchantments: { protection: 1 } }, leggings: { material: "COPPER_LEGGINGS", enchantments: { protection: 1 } }, boots: { material: "COPPER_BOOTS", enchantments: { protection: 1 } } }
   effects:
     particles: "LAVA"
     sounds:
@@ -383,6 +404,10 @@ WITHER_SKELETON:
       - { material: "NETHERITE_AXE", min_lvl: 85, enchantments: { sharpness: 5, fire_aspect: 2, unbreaking: 2 } }
       - { material: "NETHERITE_AXE", min_lvl: 90, enchantments: { sharpness: 5, unbreaking: 3 } }
       - { material: "NETHERITE_SWORD", min_lvl: 95, enchantments: { sharpness: 5, fire_aspect: 2, sweeping: 3, knockback: 2, unbreaking: 3 } }
+      - { material: "COPPER_SWORD", min_lvl: 3, enchantments: { sharpness: 2 } }
+      - { material: "IRON_SPEAR", min_lvl: 10, enchantments: { sharpness: 2 } }
+      - { material: "DIAMOND_SPEAR", min_lvl: 35, enchantments: { sharpness: 3 } }
+      - { material: "NETHERITE_SPEAR", min_lvl: 60, enchantments: { sharpness: 4 } }
     armors:
       - { min_lvl: 1, helmet: { material: "CHAINMAIL_HELMET" } }
       - { min_lvl: 5, boots: { material: "LEATHER_BOOTS", enchantments: { fire_protection: 1 } } }
@@ -403,6 +428,9 @@ WITHER_SKELETON:
       - { min_lvl: 85, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 3, fire_protection: 4 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 3, thorns: 2 } }, boots: { material: "NETHERITE_BOOTS", enchantments: { protection: 2 } } }
       - { min_lvl: 90, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 4 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 4 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { protection: 3 } } }
       - { min_lvl: 95, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 4, fire_protection: 4, unbreaking: 3 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 4, thorns: 3 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { protection: 4 } }, boots: { material: "NETHERITE_BOOTS", enchantments: { protection: 4, fire_protection: 4 } } }
+      - { min_lvl: 9, helmet: { material: "COPPER_HELMET" }, boots: { material: "COPPER_BOOTS" } }
+      - { min_lvl: 11, helmet: { material: "COPPER_HELMET" }, chestplate: { material: "COPPER_CHESTPLATE" }, leggings: { material: "COPPER_LEGGINGS" } }
+      - { min_lvl: 14, helmet: { material: "COPPER_HELMET", enchantments: { protection: 1 } }, chestplate: { material: "COPPER_CHESTPLATE", enchantments: { protection: 1 } }, leggings: { material: "COPPER_LEGGINGS", enchantments: { protection: 1 } }, boots: { material: "COPPER_BOOTS", enchantments: { protection: 1 } } }
   effects:
     particles: "LARGE_SMOKE"
     sounds:
@@ -437,6 +465,10 @@ VINDICATOR:
       - { material: "NETHERITE_SWORD", min_lvl: 85, enchantments: { sharpness: 5, knockback: 2, sweeping: 3, unbreaking: 3 } }
       - { material: "NETHERITE_AXE", min_lvl: 90, enchantments: { sharpness: 5, efficiency: 3, unbreaking: 3 } }
       - { material: "NETHERITE_AXE", min_lvl: 95, enchantments: { sharpness: 5, efficiency: 5, knockback: 2, unbreaking: 3 } }
+      - { material: "IRON_SPEAR", min_lvl: 10, enchantments: { sharpness: 2 } }
+      - { material: "DIAMOND_SPEAR", min_lvl: 35, enchantments: { sharpness: 3 } }
+      - { material: "NETHERITE_SPEAR", min_lvl: 60, enchantments: { sharpness: 4 } }
+      - { material: "MACE", min_lvl: 70, enchantments: { density: 2 } }
   effects:
     particles: "ANGRY_VILLAGER"
     sounds:
@@ -463,6 +495,9 @@ STRAY:
       - { min_lvl: 45, chestplate: { material: "IRON_CHESTPLATE", enchantments: { protection: 2 } }, leggings: { material: "IRON_LEGGINGS" } }
       - { min_lvl: 65, helmet: { material: "DIAMOND_HELMET", enchantments: { protection: 3 } }, chestplate: { material: "DIAMOND_CHESTPLATE", enchantments: { protection: 3 } } }
       - { min_lvl: 85, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 4 } }, boots: { material: "NETHERITE_BOOTS", enchantments: { frost_walker: 2, protection: 3 } } }
+      - { min_lvl: 9, helmet: { material: "COPPER_HELMET" }, boots: { material: "COPPER_BOOTS" } }
+      - { min_lvl: 11, helmet: { material: "COPPER_HELMET" }, chestplate: { material: "COPPER_CHESTPLATE" }, leggings: { material: "COPPER_LEGGINGS" } }
+      - { min_lvl: 14, helmet: { material: "COPPER_HELMET", enchantments: { protection: 1 } }, chestplate: { material: "COPPER_CHESTPLATE", enchantments: { protection: 1 } }, leggings: { material: "COPPER_LEGGINGS", enchantments: { protection: 1 } }, boots: { material: "COPPER_BOOTS", enchantments: { protection: 1 } } }
   effects:
     particles: "SNOWFLAKE"
     sounds:
@@ -513,6 +548,13 @@ HUSK:
       - { material: "NETHERITE_SWORD", min_lvl: 94, enchantments: { sharpness: 5, knockback: 2 } }
       - { material: "NETHERITE_SWORD", min_lvl: 98, enchantments: { sharpness: 5, fire_aspect: 2, unbreaking: 3 } }
       - { material: "NETHERITE_SWORD", min_lvl: 100, enchantments: { sharpness: 6, fire_aspect: 2, knockback: 2, unbreaking: 3 } }
+      - { material: "STONE_SPEAR", min_lvl: 6 }
+      - { material: "COPPER_SWORD", min_lvl: 9 }
+      - { material: "COPPER_SPEAR", min_lvl: 10 }
+      - { material: "COPPER_AXE", min_lvl: 11, enchantments: { sharpness: 1 } }
+      - { material: "IRON_SPEAR", min_lvl: 18, enchantments: { sharpness: 1 } }
+      - { material: "DIAMOND_SPEAR", min_lvl: 38, enchantments: { sharpness: 2 } }
+      - { material: "NETHERITE_SPEAR", min_lvl: 60, enchantments: { sharpness: 3 } }
     armors:
       - { min_lvl: 5, helmet: { material: "LEATHER_HELMET", enchantments: { aqua_affinity: 1 } } }
       - { min_lvl: 15, chestplate: { material: "LEATHER_CHESTPLATE" }, boots: { material: "LEATHER_BOOTS" } }
@@ -520,6 +562,9 @@ HUSK:
       - { min_lvl: 40, chestplate: { material: "IRON_CHESTPLATE", enchantments: { protection: 1 } }, leggings: { material: "IRON_LEGGINGS" } }
       - { min_lvl: 60, helmet: { material: "DIAMOND_HELMET", enchantments: { protection: 2, respiration: 2 } }, boots: { material: "DIAMOND_BOOTS" } }
       - { min_lvl: 80, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 3 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 4 } } }
+      - { min_lvl: 9, helmet: { material: "COPPER_HELMET" }, boots: { material: "COPPER_BOOTS" } }
+      - { min_lvl: 11, helmet: { material: "COPPER_HELMET" }, chestplate: { material: "COPPER_CHESTPLATE" }, leggings: { material: "COPPER_LEGGINGS" } }
+      - { min_lvl: 14, helmet: { material: "COPPER_HELMET", enchantments: { protection: 1 } }, chestplate: { material: "COPPER_CHESTPLATE", enchantments: { protection: 1 } }, leggings: { material: "COPPER_LEGGINGS", enchantments: { protection: 1 } }, boots: { material: "COPPER_BOOTS", enchantments: { protection: 1 } } }
   effects:
     particles: "WHITE_ASH"
     sounds:
@@ -626,6 +671,9 @@ DROWNED:
       - { min_lvl: 80, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 3, respiration: 3 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 4 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { protection: 3 } } }
       - { min_lvl: 85, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 3, respiration: 3, aqua_affinity: 1 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { protection: 4 } }, boots: { material: "NETHERITE_BOOTS", enchantments: { depth_strider: 3, protection: 3 } } }
       - { min_lvl: 92, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 4, respiration: 3, aqua_affinity: 1, unbreaking: 3 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 4, thorns: 2 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { protection: 4 } }, boots: { material: "NETHERITE_BOOTS", enchantments: { protection: 4, depth_strider: 3 } } }
+      - { min_lvl: 9, helmet: { material: "COPPER_HELMET" }, boots: { material: "COPPER_BOOTS" } }
+      - { min_lvl: 11, helmet: { material: "COPPER_HELMET" }, chestplate: { material: "COPPER_CHESTPLATE" }, leggings: { material: "COPPER_LEGGINGS" } }
+      - { min_lvl: 14, helmet: { material: "COPPER_HELMET", enchantments: { protection: 1 } }, chestplate: { material: "COPPER_CHESTPLATE", enchantments: { protection: 1 } }, leggings: { material: "COPPER_LEGGINGS", enchantments: { protection: 1 } }, boots: { material: "COPPER_BOOTS", enchantments: { protection: 1 } } }
   effects:
     particles: "BUBBLE_POP"
     sounds:
@@ -793,6 +841,13 @@ ZOMBIE_VILLAGER:
       - { material: "NETHERITE_SHOVEL", min_lvl: 95, enchantments: { sharpness: 3, efficiency: 5, fortune: 3, unbreaking: 3 } }
       - { material: "NETHERITE_PICKAXE", min_lvl: 97, enchantments: { sharpness: 2, efficiency: 5, fortune: 3, unbreaking: 3 } }
       - { material: "NETHERITE_HOE", min_lvl: 99, enchantments: { sharpness: 4, efficiency: 5, fortune: 3, unbreaking: 3 } }
+      - { material: "STONE_SPEAR", min_lvl: 6 }
+      - { material: "COPPER_SWORD", min_lvl: 9 }
+      - { material: "COPPER_SPEAR", min_lvl: 10 }
+      - { material: "COPPER_AXE", min_lvl: 11, enchantments: { sharpness: 1 } }
+      - { material: "IRON_SPEAR", min_lvl: 18, enchantments: { sharpness: 1 } }
+      - { material: "DIAMOND_SPEAR", min_lvl: 38, enchantments: { sharpness: 2 } }
+      - { material: "NETHERITE_SPEAR", min_lvl: 60, enchantments: { sharpness: 3 } }
     armors:
       - { min_lvl: 1, helmet: { material: "LEATHER_HELMET" } }
       - { min_lvl: 3, boots: { material: "LEATHER_BOOTS" } }
@@ -817,6 +872,9 @@ ZOMBIE_VILLAGER:
       - { min_lvl: 82, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 3 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 3 } } }
       - { min_lvl: 88, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 4, unbreaking: 3 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 4, thorns: 3 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { protection: 3, unbreaking: 2 } } }
       - { min_lvl: 95, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 4 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 4 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { protection: 3 } }, boots: { material: "NETHERITE_BOOTS", enchantments: { protection: 3 } } }
+      - { min_lvl: 9, helmet: { material: "COPPER_HELMET" }, boots: { material: "COPPER_BOOTS" } }
+      - { min_lvl: 11, helmet: { material: "COPPER_HELMET" }, chestplate: { material: "COPPER_CHESTPLATE" }, leggings: { material: "COPPER_LEGGINGS" } }
+      - { min_lvl: 14, helmet: { material: "COPPER_HELMET", enchantments: { protection: 1 } }, chestplate: { material: "COPPER_CHESTPLATE", enchantments: { protection: 1 } }, leggings: { material: "COPPER_LEGGINGS", enchantments: { protection: 1 } }, boots: { material: "COPPER_BOOTS", enchantments: { protection: 1 } } }
   effects:
     particles: "SOUL_FIRE_FLAME"
     sounds:
@@ -893,6 +951,9 @@ BOGGED:
       - { min_lvl: 82, helmet: { material: "NETHERITE_HELMET", enchantments: { projectile_protection: 4, respiration: 3 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { projectile_protection: 4, unbreaking: 2 } } }
       - { min_lvl: 85, helmet: { material: "NETHERITE_HELMET", enchantments: { projectile_protection: 4 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 3 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { projectile_protection: 3 } } }
       - { min_lvl: 92, helmet: { material: "NETHERITE_HELMET", enchantments: { projectile_protection: 4, unbreaking: 3 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { projectile_protection: 4, thorns: 2 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { projectile_protection: 4 } }, boots: { material: "NETHERITE_BOOTS", enchantments: { projectile_protection: 3, feather_falling: 4 } } }
+      - { min_lvl: 9, helmet: { material: "COPPER_HELMET" }, boots: { material: "COPPER_BOOTS" } }
+      - { min_lvl: 11, helmet: { material: "COPPER_HELMET" }, chestplate: { material: "COPPER_CHESTPLATE" }, leggings: { material: "COPPER_LEGGINGS" } }
+      - { min_lvl: 14, helmet: { material: "COPPER_HELMET", enchantments: { protection: 1 } }, chestplate: { material: "COPPER_CHESTPLATE", enchantments: { protection: 1 } }, leggings: { material: "COPPER_LEGGINGS", enchantments: { protection: 1 } }, boots: { material: "COPPER_BOOTS", enchantments: { protection: 1 } } }
   effects:
     particles: "minecraft:spore_blossom_air"
     sounds:
@@ -973,6 +1034,9 @@ PIGLIN_BRUTE:
       - { material: "NETHERITE_SWORD", min_lvl: 90, enchantments: { sharpness: 5, fire_aspect: 2, sweeping: 3 } }
       - { material: "NETHERITE_AXE", min_lvl: 93, enchantments: { sharpness: 5, fire_aspect: 2, unbreaking: 3, efficiency: 4 } }
       - { material: "NETHERITE_SWORD", min_lvl: 96, enchantments: { sharpness: 5, fire_aspect: 2, sweeping: 3, knockback: 2, unbreaking: 3 } }
+      - { material: "GOLDEN_SPEAR", min_lvl: 5, enchantments: { sharpness: 2 } }
+      - { material: "GOLDEN_SPEAR", min_lvl: 30, enchantments: { sharpness: 4 } }
+      - { material: "MACE", min_lvl: 70, enchantments: { density: 2 } }
     armors:
       - { min_lvl: 1, chestplate: { material: "GOLDEN_CHESTPLATE" } }
       - { min_lvl: 5, boots: { material: "GOLDEN_BOOTS" } }
@@ -991,6 +1055,9 @@ PIGLIN_BRUTE:
       - { min_lvl: 78, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 4, fire_protection: 4, unbreaking: 2 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 4, thorns: 1, unbreaking: 3 } } }
       - { min_lvl: 85, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 4, unbreaking: 3, respiration: 2 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { protection: 4, fire_protection: 4 } }, boots: { material: "NETHERITE_BOOTS", enchantments: { protection: 3, soul_speed: 3 } } }
       - { min_lvl: 90, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 4, unbreaking: 3 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 4, thorns: 2 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { protection: 4 } }, boots: { material: "NETHERITE_BOOTS", enchantments: { protection: 4, feather_falling: 4 } } }
+      - { min_lvl: 9, helmet: { material: "COPPER_HELMET" }, boots: { material: "COPPER_BOOTS" } }
+      - { min_lvl: 11, helmet: { material: "COPPER_HELMET" }, chestplate: { material: "COPPER_CHESTPLATE" }, leggings: { material: "COPPER_LEGGINGS" } }
+      - { min_lvl: 14, helmet: { material: "COPPER_HELMET", enchantments: { protection: 1 } }, chestplate: { material: "COPPER_CHESTPLATE", enchantments: { protection: 1 } }, leggings: { material: "COPPER_LEGGINGS", enchantments: { protection: 1 } }, boots: { material: "COPPER_BOOTS", enchantments: { protection: 1 } } }
   effects:
     particles: "minecraft:lava"
     sounds:

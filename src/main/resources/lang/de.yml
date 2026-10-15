@@ -10,7 +10,7 @@
 reloaded: "<pri>[Mo’Bosses]</pri> <ok>Neu geladen.</ok>"
 reload_failed: "<pri>[Mo’Bosses]</pri> <warn>Mit Fehlern neu geladen.</warn> <gray>Sieh ins Serverlog.</gray>"
 no_permission: "<err>Diesen Befehl darfst du nicht nutzen.</err>"
-usage: '<gray>Nutze</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray> oder</gray> <white>/mobosses killall</white>'
+usage: '<gray>Nutze</gray> <white>/mobosses</white> <gray>für das Menü,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>; als Admin:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray> oder</gray> <white>/mobosses killall</white>'
 # <entities>, <classes>: was zur Auswahl steht.
 spawn_usage: '<gray>Nutze</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray>. Wesen:</gray> <white><entities></white><gray>. Klassen:</gray> <white><classes></white>'
 spawned: "<pri>[Mo’Bosses]</pri> <ok>Gespawnt:</ok> <class_color>[Lvl. <level>] [<class>]</class_color> <boss_name>"
@@ -23,10 +23,40 @@ bad_level: "<err>Die Stufe muss eine Zahl von 1 bis <max> sein, nicht <level>.</
 # <count>: wie viele.
 killed_all: "<pri>[Mo’Bosses]</pri> <ok>Bosse entfernt: <num><count></num>.</ok>"
 killed_none: "<pri>[Mo’Bosses]</pri> <warn>Es gibt keine Bosse, die du entfernen könntest.</warn>"
+player_not_found: "<err>Ein Spieler namens <player> hat hier noch nie gespielt.</err>"
+no_database: "<warn>Die Statistik braucht die Datenbank, und die ist gerade nicht offen.</warn>"
+
+# /mobosses info. <player>, <level>, <max>, <rank> (auf der Bestenliste), <experience>, <kills>, <cooldown> (bis in der Nähe des Spielers ein Boss erscheinen kann).
+info: |-
+  <pri>Mo’Bosses</pri> <dark_gray>·</dark_gray> <white><player></white>
+  <gray>Stufe</gray> <num><level></num><dark_gray>/<max></dark_gray> <dark_gray>·</dark_gray> <gray>Rang</gray> <num>#<rank></num>
+  <gray>Erfahrung</gray> <xp><experience></xp> <dark_gray>·</dark_gray> <gray>Besiegte Bosse</gray> <num><kills></num>
+  <gray>Nächster Boss bei dir</gray> <white><cooldown></white>
+info_ready: "jeden Moment"
+
+# /mobosses top und das Menü. <rank>, <player>, <level>, <kills>.
+top:
+  header: "<pri>Mo’Bosses</pri> <dark_gray>·</dark_gray> <gray>die besten Jäger</gray>"
+  line: "<num>#<rank></num> <white><player></white> <dark_gray>·</dark_gray> <gray>Stufe</gray> <num><level></num> <dark_gray>·</dark_gray> <gray>Bosse</gray> <num><kills></num>"
+  empty: "<gray>Noch keine Jäger. Sei der Erste.</gray>"
+
+# Das Menü von /mobosses. Die Zeilen der Karte kommen aus info oben; <alive> sind die Bosse, die gerade leben.
+menu:
+  title: "Mo’Bosses"
+  you: "<white><player></white>"
+  top: "<gold>Die besten Jäger</gold>"
+  bosses: "<boss>Bosse</boss> <gray>· gerade <alive> unterwegs</gray>"
+  bosses_line: "<class><gray>: gespawnt</gray> <num><spawned></num><gray>, besiegt</gray> <num><killed></num>"
+  reload: "<green>Mo’Bosses neu laden</green>"
+  killall: "<red>Alle Bosse entfernen</red>"
+  close: "<gray>Schließen</gray>"
 
 # Über dem Kopf des Bosses, jeder liest ihn in seiner Sprache.
 boss_tag: "<class_color>[Lvl. <level>] [<class>] <boss_name>"
 boss_bar: "<boss_name> <class_color>[Lvl. <level>]"
+
+# An die Spieler in der Nähe eines neuen Bosses der Klasse broadcast.spawns_from oder seltener.
+boss_nearby: "<pri>[Mo’Bosses]</pri> <warn>In der Nähe ist ein Boss erschienen:</warn> <class_color>[Lvl. <level>] [<class>]</class_color> <boss><boss_name></boss>"
 
 # An alle, wenn Spieler einen Boss besiegen. <player>: alle, die ihn getroffen haben; <experience>: die Vanilla-Erfahrung, die er fallen ließ.
 kill: "<pri>[Mo’Bosses]</pri> <boss><boss_name></boss> <num>Lvl. <level></num>/<class> fällt durch <ok><player></ok> – <xp><experience></xp> Erfahrung!"
@@ -52,6 +82,24 @@ abilities:
   shockwave: "<boss><boss_name></boss> schlägt auf den Boden!"
   frost_nova: "<boss><boss_name></boss> stößt eine <item>Frostwelle</item> aus!"
   grapple: "<boss><boss_name></boss> zieht dich zu sich!"
+  potion_volley: "<boss><boss_name></boss> schleudert <item>Tränke</item> nach dir!"
+  fireball_barrage: "<boss><boss_name></boss> entfesselt einen <item>Feuerballhagel</item>!"
+  aimed_volley: "<boss><boss_name></boss> feuert eine <item>gezielte Salve</item> ab!"
+  pounce: "<boss><boss_name></boss> springt dich an!"
+  swap: "<boss><boss_name></boss> <item>tauscht den Platz</item> mit dir!"
+  trident_storm: "<boss><boss_name></boss> schleudert <item>Dreizacke</item>!"
+  fang_line: "<boss><boss_name></boss> schickt <item>Fänge</item> durch den Boden!"
+  whirlwind: "<boss><boss_name></boss> wird zum <item>Wirbelwind</item>!"
+  wither_aura: "<boss><boss_name></boss> haucht eine <item>welkende Wolke</item> aus!"
+  sandstorm: "<boss><boss_name></boss> entfacht einen <item>Sandsturm</item>!"
+  infection: "<boss><boss_name></boss> verbreitet eine <item>Seuche</item>!"
+  wind_burst: "<boss><boss_name></boss> feuert <item>Windladungen</item> ab!"
+  war_cry: "<boss><boss_name></boss> stößt einen <item>Kriegsschrei</item> aus!"
+  terror: "<boss><boss_name></boss> lässt <item>Dunkelheit</item> herabsinken!"
+  phase: "<boss><boss_name></boss> <item>verschwindet aus dem Blick</item>!"
+  stampede: "<boss><boss_name></boss> <item>stürmt los</item>!"
+  curse: "<boss><boss_name></boss> belegt dich mit einem <item>Fluch</item>!"
+  fuse: "<boss><boss_name></boss> zündet die <item>Lunte</item>!"
   enrage: "<boss><boss_name></boss> gerät in <err>Raserei</err>!"
 
 classes:
@@ -993,3 +1041,23 @@ items:
     name: "<light_purple>Absolutes Kompendium V"
     lore:
       - "<dark_purple>Kraft, Arbeit, Glück, Flamme, Ewigkeit."
+  judges_hammer:
+    name: "<gold>Richterhammer"
+    lore:
+      - "<yellow>Das Urteil fällt von oben."
+      - "<gray>Je höher der Sprung, desto härter das Urteil."
+  storm_core:
+    name: "<light_purple>Herz des Sturms"
+    lore:
+      - "<dark_purple>Brummt wie Donner vor dem Regen."
+      - "<gray>Ein Schmied wüsste, was zu tun ist."
+  skybreaker:
+    name: "<light_purple>Himmelsbrecher"
+    lore:
+      - "<dark_purple>Einst holte er den Himmel herab."
+      - "<gray>Rüstung bedeutet ihm nichts."
+  fallen_wings:
+    name: "<light_purple>Schwingen des Gefallenen"
+    lore:
+      - "<dark_purple>Genommen von einem, der zu hoch flog."
+      - "<gray>Achte auf die Landung."

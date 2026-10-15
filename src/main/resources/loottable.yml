@@ -729,5 +729,50 @@ level_loot:
   - { material: NETHERITE_INGOT, mobclass: mythic, min_level: 92, max_level: 100, amount: "2-4", weight: 0.45, itemClass: mythic }
   - { material: ENCHANTED_BOOK, mobclass: mythic, min_level: 92, max_level: 100, amount: "1", weight: 0.18, enchantments: { sharpness: "5", efficiency: "5", fortune: "3", looting: "3", protection: "4", fire_aspect: "2", unbreaking: "3", }, itemClass: mythic, id: absolute_compendium_5 }
 
+  # =================== MODERN FINDS, ACROSS LEVELS ===================
+  # Common
+  - { material: RESIN_CLUMP, mobclass: common, min_level: 0, max_level: 40, amount: "2-6", weight: 4.0 }
+  - { material: ARMADILLO_SCUTE, mobclass: common, min_level: 5, max_level: 40, amount: "1-3", weight: 3.0 }
+  # Uncommon
+  - { material: COPPER_HELMET, mobclass: uncommon, min_level: 5, max_level: 30, amount: "1", weight: 1.2, random_durability: true }
+  - { material: COPPER_CHESTPLATE, mobclass: uncommon, min_level: 5, max_level: 30, amount: "1", weight: 1.0, random_durability: true }
+  - { material: COPPER_LEGGINGS, mobclass: uncommon, min_level: 5, max_level: 30, amount: "1", weight: 1.0, random_durability: true }
+  - { material: COPPER_BOOTS, mobclass: uncommon, min_level: 5, max_level: 30, amount: "1", weight: 1.2, random_durability: true }
+  - { material: COPPER_SWORD, mobclass: uncommon, min_level: 5, max_level: 30, amount: "1", weight: 1.0, random_durability: true }
+  - { material: COPPER_SPEAR, mobclass: uncommon, min_level: 5, max_level: 30, amount: "1", weight: 1.0, random_durability: true }
+  - { material: WIND_CHARGE, mobclass: uncommon, min_level: 10, max_level: 100, amount: "2-6", weight: 3.0 }
+  - { material: BUNDLE, mobclass: uncommon, min_level: 5, max_level: 60, amount: "1", weight: 1.5 }
+  - { material: SPYGLASS, mobclass: uncommon, min_level: 10, max_level: 60, amount: "1", weight: 1.0 }
+  # Rare
+  - { material: IRON_SPEAR, mobclass: rare, min_level: 15, max_level: 45, amount: "1", weight: 0.8, random_durability: true, enchantments: { sharpness: "1-2" } }
+  - { material: BREEZE_ROD, mobclass: rare, min_level: 20, max_level: 100, amount: "1-3", weight: 1.5 }
+  - { material: TRIAL_KEY, mobclass: rare, min_level: 20, max_level: 100, amount: "1", weight: 1.0, itemClass: rare }
+  - { material: GOAT_HORN, mobclass: rare, min_level: 10, max_level: 70, amount: "1", weight: 0.6 }
+  - { material: DISC_FRAGMENT_5, mobclass: rare, min_level: 30, max_level: 100, amount: "1-2", weight: 0.6 }
+  # Epic
+  - { material: DIAMOND_SPEAR, mobclass: epic, min_level: 35, max_level: 90, amount: "1", weight: 0.4, random_durability: true, enchantments: { sharpness: "2-4", unbreaking: "1-2" }, itemClass: epic }
+  - { material: SHULKER_SHELL, mobclass: epic, min_level: 40, max_level: 100, amount: "1-2", weight: 0.6, itemClass: epic }
+  - { material: ECHO_SHARD, mobclass: epic, min_level: 40, max_level: 100, amount: "1-2", weight: 0.5, itemClass: epic }
+  - { material: WOLF_ARMOR, mobclass: epic, min_level: 20, max_level: 100, amount: "1", weight: 0.5, random_durability: true }
+  - { material: DIAMOND_HORSE_ARMOR, mobclass: epic, min_level: 30, max_level: 100, amount: "1", weight: 0.4 }
+  - { material: CREAKING_HEART, mobclass: epic, min_level: 30, max_level: 100, amount: "1", weight: 0.3 }
+  - { material: LODESTONE, mobclass: epic, min_level: 30, max_level: 100, amount: "1", weight: 0.3 }
+  - { material: RECOVERY_COMPASS, mobclass: epic, min_level: 30, max_level: 100, amount: "1", weight: 0.3, itemClass: epic }
+  # Legendary
+  - { material: OMINOUS_TRIAL_KEY, mobclass: legendary, min_level: 40, max_level: 100, amount: "1", weight: 0.4, itemClass: legendary }
+  - { material: OMINOUS_BOTTLE, mobclass: legendary, min_level: 40, max_level: 100, amount: "1", weight: 0.3 }
+  - { material: NETHERITE_UPGRADE_SMITHING_TEMPLATE, mobclass: legendary, min_level: 60, max_level: 100, amount: "1", weight: 0.25, itemClass: legendary }
+  - { material: SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE, mobclass: legendary, min_level: 50, max_level: 100, amount: "1", weight: 0.15, itemClass: legendary }
+  - { material: FLOW_ARMOR_TRIM_SMITHING_TEMPLATE, mobclass: legendary, min_level: 50, max_level: 100, amount: "1", weight: 0.15, itemClass: legendary }
+  - { material: BOLT_ARMOR_TRIM_SMITHING_TEMPLATE, mobclass: legendary, min_level: 50, max_level: 100, amount: "1", weight: 0.15, itemClass: legendary }
+  - { material: MUSIC_DISC_CREATOR, mobclass: legendary, min_level: 50, max_level: 100, amount: "1", weight: 0.1, itemClass: legendary }
+  - { material: SNIFFER_EGG, mobclass: legendary, min_level: 40, max_level: 100, amount: "1", weight: 0.08, itemClass: legendary }
+  - { material: NETHERITE_SPEAR, mobclass: legendary, min_level: 70, max_level: 100, amount: "1", weight: 0.12, random_durability: true, enchantments: { sharpness: "4-5", unbreaking: "2-3" }, itemClass: legendary }
+  - { material: MACE, mobclass: legendary, min_level: 60, max_level: 100, amount: "1", weight: 0.06, random_durability: true, enchantments: { density: "1-3" }, itemClass: legendary, id: judges_hammer }
+  # Mythic
+  - { material: HEAVY_CORE, mobclass: mythic, min_level: 70, max_level: 100, amount: "1", weight: 0.06, itemClass: mythic, id: storm_core }
+  - { material: MACE, mobclass: mythic, min_level: 80, max_level: 100, amount: "1", weight: 0.04, random_durability: true, enchantments: { density: "3-5", breach: "2-3", unbreaking: "3" }, itemClass: mythic, id: skybreaker }
+  - { material: ELYTRA, mobclass: mythic, min_level: 85, max_level: 100, amount: "1", weight: 0.05, random_durability: true, itemClass: mythic, id: fallen_wings }
+
 loot_settings:
   per_level_drop_factor: 0.08

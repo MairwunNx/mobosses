@@ -10,7 +10,7 @@
 reloaded: "<pri>[Mo’Bosses]</pri> <ok>Перезагружено.</ok>"
 reload_failed: "<pri>[Mo’Bosses]</pri> <warn>Перезагружено с ошибками.</warn> <gray>Подробности в логе сервера.</gray>"
 no_permission: "<err>Вам недоступна эта команда.</err>"
-usage: '<gray>Команды:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray> и</gray> <white>/mobosses killall</white>'
+usage: '<gray>Команды:</gray> <white>/mobosses</white><gray> — меню,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>; для админов:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray> и</gray> <white>/mobosses killall</white>'
 # <entities>, <classes>: из чего можно выбрать.
 spawn_usage: '<gray>Команда:</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray>. Существа:</gray> <white><entities></white><gray>. Классы:</gray> <white><classes></white>'
 spawned: "<pri>[Mo’Bosses]</pri> <ok>Призван</ok> <class_color>[Ур. <level>] [<class>]</class_color> <boss_name>"
@@ -23,10 +23,40 @@ bad_level: "<err>Уровень — число от 1 до <max>, а не <level
 # <count>: сколько.
 killed_all: "<pri>[Mo’Bosses]</pri> <ok>Убрано боссов: <num><count></num>.</ok>"
 killed_none: "<pri>[Mo’Bosses]</pri> <warn>Боссов нет, убирать некого.</warn>"
+player_not_found: "<err>Игрок <player> здесь ещё не играл.</err>"
+no_database: "<warn>Статистике нужна база данных, а она сейчас недоступна.</warn>"
+
+# /mobosses info. <player>, <level>, <max>, <rank> (место в таблице), <experience>, <kills>, <cooldown> (сколько ждать босса рядом с игроком).
+info: |-
+  <pri>Mo’Bosses</pri> <dark_gray>·</dark_gray> <white><player></white>
+  <gray>Уровень</gray> <num><level></num><dark_gray>/<max></dark_gray> <dark_gray>·</dark_gray> <gray>Место</gray> <num>#<rank></num>
+  <gray>Опыт</gray> <xp><experience></xp> <dark_gray>·</dark_gray> <gray>Убито боссов</gray> <num><kills></num>
+  <gray>Следующий босс рядом</gray> <white><cooldown></white>
+info_ready: "в любой момент"
+
+# /mobosses top и меню. <rank>, <player>, <level>, <kills>.
+top:
+  header: "<pri>Mo’Bosses</pri> <dark_gray>·</dark_gray> <gray>лучшие охотники</gray>"
+  line: "<num>#<rank></num> <white><player></white> <dark_gray>·</dark_gray> <gray>уровень</gray> <num><level></num> <dark_gray>·</dark_gray> <gray>убийств</gray> <num><kills></num>"
+  empty: "<gray>Охотников пока нет. Станьте первым.</gray>"
+
+# Меню /mobosses. Строки карточки берутся из info выше; <alive> — сколько боссов живо сейчас.
+menu:
+  title: "Mo’Bosses"
+  you: "<white><player></white>"
+  top: "<gold>Лучшие охотники</gold>"
+  bosses: "<boss>Боссы</boss> <gray>· сейчас живы: <alive></gray>"
+  bosses_line: "<class><gray>: призвано</gray> <num><spawned></num><gray>, убито</gray> <num><killed></num>"
+  reload: "<green>Перезагрузить Mo’Bosses</green>"
+  killall: "<red>Убрать всех боссов</red>"
+  close: "<gray>Закрыть</gray>"
 
 # Над головой босса, каждому игроку на его языке.
 boss_tag: "<class_color>[Ур. <level>] [<class>] <boss_name>"
 boss_bar: "<boss_name> <class_color>[Ур. <level>]"
+
+# Игрокам рядом с новым боссом класса broadcast.spawns_from или реже.
+boss_nearby: "<pri>[Mo’Bosses]</pri> <warn>Рядом появился босс:</warn> <class_color>[Ур. <level>] [<class>]</class_color> <boss><boss_name></boss>"
 
 # Всем, когда игроки убивают босса. <player>: все, кто его бил; <experience>: обычный опыт, который из него выпал.
 kill: "<pri>[Mo’Bosses]</pri> <ok><player></ok> побеждает <boss><boss_name></boss> <num>Ур. <level></num>/<class> и получает <xp><experience></xp> опыта!"
@@ -52,6 +82,24 @@ abilities:
   shockwave: "<boss><boss_name></boss> бьёт по земле!"
   frost_nova: "<boss><boss_name></boss> выпускает <item>ледяную волну</item>!"
   grapple: "<boss><boss_name></boss> подтаскивает вас к себе!"
+  potion_volley: "<boss><boss_name></boss> швыряет в вас <item>зелья</item>!"
+  fireball_barrage: "<boss><boss_name></boss> обрушивает <item>шквал огненных шаров</item>!"
+  aimed_volley: "<boss><boss_name></boss> даёт <item>прицельный залп</item>!"
+  pounce: "<boss><boss_name></boss> прыгает на вас!"
+  swap: "<boss><boss_name></boss> <item>меняется с вами местами</item>!"
+  trident_storm: "<boss><boss_name></boss> мечет <item>трезубцы</item>!"
+  fang_line: "<boss><boss_name></boss> пускает <item>клыки</item> из-под земли!"
+  whirlwind: "<boss><boss_name></boss> закручивается в <item>вихрь</item>!"
+  wither_aura: "<boss><boss_name></boss> выдыхает <item>иссушающее облако</item>!"
+  sandstorm: "<boss><boss_name></boss> поднимает <item>песчаную бурю</item>!"
+  infection: "<boss><boss_name></boss> разносит <item>заразу</item>!"
+  wind_burst: "<boss><boss_name></boss> выпускает <item>заряды ветра</item>!"
+  war_cry: "<boss><boss_name></boss> издаёт <item>боевой клич</item>!"
+  terror: "<boss><boss_name></boss> насылает <item>тьму</item>!"
+  phase: "<boss><boss_name></boss> <item>исчезает из виду</item>!"
+  stampede: "<boss><boss_name></boss> <item>бросается в атаку</item>!"
+  curse: "<boss><boss_name></boss> накладывает на вас <item>проклятие</item>!"
+  fuse: "<boss><boss_name></boss> поджигает <item>фитиль</item>!"
   enrage: "<boss><boss_name></boss> приходит в <err>ярость</err>!"
 
 classes:
@@ -993,3 +1041,23 @@ items:
     name: "<light_purple>Абсолютный свод V"
     lore:
       - "<dark_purple>Сила, труд, удача, пламя, вечность."
+  judges_hammer:
+    name: "<gold>Молот судьи"
+    lore:
+      - "<yellow>Приговор падает сверху."
+      - "<gray>Чем выше прыжок, тем тяжелее вердикт."
+  storm_core:
+    name: "<light_purple>Сердце бури"
+    lore:
+      - "<dark_purple>Гудит, как гром перед дождём."
+      - "<gray>Кузнец знает, что с ним делать."
+  skybreaker:
+    name: "<light_purple>Небокрушитель"
+    lore:
+      - "<dark_purple>Однажды он обрушил небо."
+      - "<gray>Броня для него — ничто."
+  fallen_wings:
+    name: "<light_purple>Крылья падшего"
+    lore:
+      - "<dark_purple>Сняты с того, кто взлетел слишком высоко."
+      - "<gray>Осторожнее с приземлением."
