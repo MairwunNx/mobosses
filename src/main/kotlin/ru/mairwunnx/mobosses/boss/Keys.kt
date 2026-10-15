@@ -30,6 +30,13 @@ class Keys(plugin: Plugin) {
   val summoner = NamespacedKey(plugin, "summoner")
   /** On meteors: they land without leaving a block. */
   val meteor = NamespacedKey(plugin, "meteor")
+  /** On bosses past their second phase. */
+  val phaseTwo = NamespacedKey(plugin, "phase_two")
+  /** On obelisks: the boss they heal; and the hits they have left. */
+  val obelisk = NamespacedKey(plugin, "obelisk")
+  val obeliskHits = NamespacedKey(plugin, "obelisk_hits")
+  /** On a boss's copies: the boss they copy. */
+  val decoy = NamespacedKey(plugin, "decoy")
   /** On name labels, so a stray one from a crash can be cleared. */
   val label = NamespacedKey(plugin, "label")
   /** On players: when they may get rewards again, in epoch milliseconds. */

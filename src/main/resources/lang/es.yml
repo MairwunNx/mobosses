@@ -131,6 +131,12 @@ abilities:
   curse: "¡<boss><boss_name></boss> te lanza una <item>maldición</item>!"
   fuse: "¡La <item>mecha</item> de <boss><boss_name></boss> está encendida!"
   enrage: "¡<boss><boss_name></boss> entra en <err>furia</err>!"
+  obelisk: "<boss><boss_name></boss> alza un <item>obelisco</item> que lo cura: ¡rómpelo!"
+  obelisk_broken: "<gray>¡</gray><white><player></white> <ok>rompió el obelisco</ok> <gray>de</gray> <boss><boss_name></boss><gray>!</gray>"
+  chain: "<boss><boss_name></boss> lanza una <item>cadena</item>: el encadenado no puede alejarse; ¡tres golpes cuerpo a cuerpo la rompen!"
+  chain_broken: "<ok>¡Rompiste la cadena de</ok> <boss><boss_name></boss><ok>!</ok>"
+  doubles: "<boss><boss_name></boss> se divide en <item>dobles</item>: ¡encuentra al verdadero!"
+  phase_two: "¡<boss><boss_name></boss> entra en su <hp>segunda fase</hp>!"
 
 classes:
   common: "Común"

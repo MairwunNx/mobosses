@@ -217,6 +217,75 @@ enrage_strength_amplifier_max: 2
 enrage_speed_amplifier: 0
 
 # ---------------------------------------------------------------------------
+#  Obelisk: the boss raises an end crystal a few blocks away that heals it
+#  through a beam while it stays within range, a share of its max health
+#  each second, until it falls or seconds pass. Players break it with a
+#  few hits, more at higher levels; nothing else can. At level 100: 1.2% a
+#  second, up to 18% over the whole time.
+# ---------------------------------------------------------------------------
+obelisk:
+  enabled: true
+  cooldown: 40000
+  cooldown_bias: 1.2
+  seconds: 15
+  heal_share_base: 0.004
+  heal_share_per_level: 0.00008
+  heal_share_max: 0.012
+  hits_base: 2
+  hits_per_level: 0.04
+  hits_max: 6
+  range: 16.0
+
+# ---------------------------------------------------------------------------
+#  Chain: the boss chains the farthest player in sight, one who keeps at
+#  least min_distance away, like an archer. A chained player who strays
+#  past length is yanked back and hurt; break_hits blows to the
+#  boss in melee break it early.
+# ---------------------------------------------------------------------------
+chain:
+  enabled: true
+  cooldown: 18000
+  cooldown_bias: 1.3
+  range: 24.0
+  min_distance: 8.0
+  length: 8.0
+  seconds_base: 5.0
+  seconds_per_level: 0.05
+  seconds_max: 10.0
+  damage_base: 2.0
+  damage_per_level: 0.05
+  damage_max: 8.0
+  break_hits: 3
+
+# ---------------------------------------------------------------------------
+#  Doubles: the boss vanishes in smoke and comes back among copies that look
+#  just like it, up to count_max. A copy falls to one hit and drops only
+#  what its mob would, and 1 experience; the rest vanish after seconds.
+# ---------------------------------------------------------------------------
+doubles:
+  enabled: true
+  cooldown: 35000
+  cooldown_bias: 1.2
+  count_base: 2
+  count_per_level: 0.04
+  count_max: 6
+  seconds: 20
+  radius: 5.0
+
+# ---------------------------------------------------------------------------
+#  Second phase: a boss of min_level or higher, once below health_share of
+#  its health, can't be hurt for a few seconds,
+#  throws everyone back, casts an ability at once, and from then on casts
+#  faster: its cooldowns times cooldown_factor. Not tied to classes.
+# ---------------------------------------------------------------------------
+phase_two:
+  enabled: true
+  min_level: 40
+  health_share: 0.5
+  invulnerable_seconds: 3
+  cooldown_factor: 0.65
+
+# ---------------------------------------------------------------------------
 #  Signature abilities: each boss type's own, on top of the shared ones. A
 #  class gets them from its signature level in classes.yml. strength scales
 #  their damage and durations; types lists the boss types that have one.

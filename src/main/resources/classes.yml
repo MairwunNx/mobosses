@@ -35,6 +35,9 @@ common:
     grapple: 50
     enrage: 60
     signature: 20
+    obelisk: 80
+    chain: 55
+    doubles: 65
 
 uncommon:
   key: uncommon
@@ -60,6 +63,9 @@ uncommon:
     grapple: 45
     enrage: 50
     signature: 15
+    obelisk: 70
+    chain: 48
+    doubles: 56
 
 rare:
   key: rare
@@ -85,6 +91,9 @@ rare:
     grapple: 40
     enrage: 45
     signature: 10
+    obelisk: 60
+    chain: 42
+    doubles: 48
 
 epic:
   key: epic
@@ -110,6 +119,9 @@ epic:
     grapple: 35
     enrage: 35
     signature: 6
+    obelisk: 50
+    chain: 35
+    doubles: 40
 
 legendary:
   key: legendary
@@ -135,6 +147,9 @@ legendary:
     grapple: 28
     enrage: 25
     signature: 3
+    obelisk: 42
+    chain: 28
+    doubles: 32
 
 mythic:
   key: mythic
@@ -160,3 +175,6 @@ mythic:
     grapple: 20
     enrage: 15
     signature: 1
+    obelisk: 35
+    chain: 22
+    doubles: 25

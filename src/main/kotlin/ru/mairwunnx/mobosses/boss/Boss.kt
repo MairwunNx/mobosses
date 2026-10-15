@@ -64,6 +64,11 @@ class Boss(
     get() = entity.persistentDataContainer.get(keys.enraged, PersistentDataType.BOOLEAN) == true
     set(value) = entity.persistentDataContainer.set(keys.enraged, PersistentDataType.BOOLEAN, value)
 
+  /** Past its second phase: it casts faster for the rest of the fight. */
+  var phaseTwo: Boolean
+    get() = entity.persistentDataContainer.get(keys.phaseTwo, PersistentDataType.BOOLEAN) == true
+    set(value) = entity.persistentDataContainer.set(keys.phaseTwo, PersistentDataType.BOOLEAN, value)
+
   var aura: BukkitTask? = null
 
   private fun read(key: NamespacedKey) = Codec.decode(entity.persistentDataContainer.get(key, PersistentDataType.STRING))

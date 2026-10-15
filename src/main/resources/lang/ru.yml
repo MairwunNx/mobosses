@@ -131,6 +131,12 @@ abilities:
   curse: "<boss><boss_name></boss> накладывает на вас <item>проклятие</item>!"
   fuse: "<boss><boss_name></boss> поджигает <item>фитиль</item>!"
   enrage: "<boss><boss_name></boss> приходит в <err>ярость</err>!"
+  obelisk: "<boss><boss_name></boss> воздвигает <item>обелиск</item>, который его лечит: разбейте его!"
+  obelisk_broken: "<white><player></white> <ok>разбил обелиск</ok> <gray>босса</gray> <boss><boss_name></boss><gray>!</gray>"
+  chain: "<boss><boss_name></boss> набрасывает <item>цепь</item>: прикованный не уйдёт далеко; три удара вблизи её рвут!"
+  chain_broken: "<ok>Вы разорвали цепь</ok> <boss><boss_name></boss><ok>!</ok>"
+  doubles: "<boss><boss_name></boss> распадается на <item>двойников</item>: найдите настоящего!"
+  phase_two: "<boss><boss_name></boss> переходит во <hp>вторую фазу</hp>!"
 
 classes:
   common: "Обычный"

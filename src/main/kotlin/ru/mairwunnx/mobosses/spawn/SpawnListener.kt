@@ -23,7 +23,7 @@ class SpawnListener(private val plugin: MoBossesPlugin) : Listener {
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   fun onSpawn(event: CreatureSpawnEvent) {
     val entity = event.entity as? Mob ?: return
-    if (spawningByCommand || event.spawnReason !in plugin.catalog.spawnReasons) return
+    if (spawningByCommand || event.spawnReason !in plugin.catalog.spawnReasons || plugin.decoys.isDecoy(entity)) return
     natural.roll(entity, plugin.minions.summonerOf(entity))
   }
 
@@ -45,5 +45,6 @@ class SpawnListener(private val plugin: MoBossesPlugin) : Listener {
   fun onRemove(event: EntityRemoveFromWorldEvent) {
     plugin.bosses.get(event.entity)?.let(plugin.bosses::forget)
     plugin.minions.forget(event.entity)
+    plugin.decoys.forget(event.entity)
   }
 }

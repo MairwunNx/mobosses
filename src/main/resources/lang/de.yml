@@ -131,6 +131,12 @@ abilities:
   curse: "<boss><boss_name></boss> belegt dich mit einem <item>Fluch</item>!"
   fuse: "<boss><boss_name></boss> zündet die <item>Lunte</item>!"
   enrage: "<boss><boss_name></boss> gerät in <err>Raserei</err>!"
+  obelisk: "<boss><boss_name></boss> errichtet einen <item>Obelisken</item>, der ihn heilt: Zerschlag ihn!"
+  obelisk_broken: "<white><player></white> <ok>hat den Obelisken</ok> <gray>von</gray> <boss><boss_name></boss> <ok>zerschlagen!</ok>"
+  chain: "<boss><boss_name></boss> wirft eine <item>Kette</item>: Wer gefesselt ist, kommt nicht weit; drei Schläge aus der Nähe sprengen sie!"
+  chain_broken: "<ok>Du hast die Kette von</ok> <boss><boss_name></boss> <ok>gesprengt!</ok>"
+  doubles: "<boss><boss_name></boss> teilt sich in <item>Doppelgänger</item>: Finde den echten!"
+  phase_two: "<boss><boss_name></boss> geht in die <hp>zweite Phase</hp>!"
 
 classes:
   common: "Gewöhnlich"

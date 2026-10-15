@@ -3,6 +3,7 @@ package ru.mairwunnx.mobosses.boss
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
+import org.bukkit.Particle
 import ru.mairwunnx.mobosses.MoBossesPlugin
 
 /**
@@ -38,6 +39,8 @@ class Visuals(private val plugin: MoBossesPlugin) {
       boss.aura = Bukkit.getScheduler().runTaskTimer(plugin, Runnable {
         if (!boss.entity.isValid) return@Runnable
         boss.entity.world.spawnParticle(particle, boss.entity.location.add(0.0, 1.0, 0.0), 5, 0.5, 0.5, 0.5, 0.0)
+        // A boss in its second phase burns with soul fire.
+        if (boss.phaseTwo) boss.entity.world.spawnParticle(Particle.SOUL_FIRE_FLAME, boss.entity.location.add(0.0, 1.0, 0.0), 3, 0.4, 0.6, 0.4, 0.01)
       }, 0L, effects.particles.updateInterval.coerceAtLeast(1).toLong())
     }
   }

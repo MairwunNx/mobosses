@@ -176,6 +176,12 @@ data class AbilitySettings(
   @SerialName("enrage_strength_amplifier_max") val enrageStrengthMax: Int = 2,
   @SerialName("enrage_speed_amplifier") val enrageSpeedAmplifier: Int = 0,
 
+  /** Abilities added in 2.3, each in a section of its own. */
+  val obelisk: ObeliskSettings = ObeliskSettings(),
+  val chain: ChainSettings = ChainSettings(),
+  val doubles: DoublesSettings = DoublesSettings(),
+  @SerialName("phase_two") val phaseTwo: PhaseTwoSettings = PhaseTwoSettings(),
+
   /** Each boss type's own abilities, on top of the shared ones; entries left out keep their defaults. */
   val signature: Map<String, Signature> = DEFAULT_SIGNATURE,
 ) {
@@ -188,6 +194,70 @@ data class AbilitySettings(
     val strength: Double = 1.0,
     /** The boss types that have it, like `WITCH`; leave it out for the usual ones. */
     val types: List<String>? = null,
+  )
+
+  @Serializable
+  data class ObeliskSettings(
+    val enabled: Boolean = true,
+    val cooldown: Long = 40000,
+    @SerialName("cooldown_bias") val cooldownBias: Double = 1.2,
+    /** How long the obelisk stands, unless players break it first. */
+    val seconds: Int = 15,
+    /** The share of the boss's max health it heals each second, by level, up to the max. */
+    @SerialName("heal_share_base") val healBase: Double = 0.004,
+    @SerialName("heal_share_per_level") val healPerLevel: Double = 0.00008,
+    @SerialName("heal_share_max") val healMax: Double = 0.012,
+    /** Hits it takes to break, by level, up to the max. */
+    @SerialName("hits_base") val hitsBase: Int = 2,
+    @SerialName("hits_per_level") val hitsPerLevel: Double = 0.04,
+    @SerialName("hits_max") val hitsMax: Int = 6,
+    /** It heals the boss only while the boss is this close. */
+    val range: Double = 16.0,
+  )
+
+  @Serializable
+  data class ChainSettings(
+    val enabled: Boolean = true,
+    val cooldown: Long = 18000,
+    @SerialName("cooldown_bias") val cooldownBias: Double = 1.3,
+    /** Chains the farthest player in sight within this range, but only one at least min_distance away: an archer, not a fighter. */
+    val range: Double = 24.0,
+    @SerialName("min_distance") val minDistance: Double = 8.0,
+    /** How far the chained player may stray before it yanks them back and hurts. */
+    val length: Double = 8.0,
+    @SerialName("seconds_base") val secondsBase: Double = 5.0,
+    @SerialName("seconds_per_level") val secondsPerLevel: Double = 0.05,
+    @SerialName("seconds_max") val secondsMax: Double = 10.0,
+    @SerialName("damage_base") val damageBase: Double = 2.0,
+    @SerialName("damage_per_level") val damagePerLevel: Double = 0.05,
+    @SerialName("damage_max") val damageMax: Double = 8.0,
+    /** Blows to the boss in melee that break it early. */
+    @SerialName("break_hits") val breakHits: Int = 3,
+  )
+
+  @Serializable
+  data class DoublesSettings(
+    val enabled: Boolean = true,
+    val cooldown: Long = 35000,
+    @SerialName("cooldown_bias") val cooldownBias: Double = 1.2,
+    /** How many copies, by level, up to the max. */
+    @SerialName("count_base") val countBase: Int = 2,
+    @SerialName("count_per_level") val countPerLevel: Double = 0.04,
+    @SerialName("count_max") val countMax: Int = 6,
+    val seconds: Int = 20,
+    val radius: Double = 5.0,
+  )
+
+  @Serializable
+  data class PhaseTwoSettings(
+    val enabled: Boolean = true,
+    /** Only bosses of this level or higher have a second phase. */
+    @SerialName("min_level") val minLevel: Int = 40,
+    /** Once, when the boss drops below this share of its health. */
+    @SerialName("health_share") val healthShare: Double = 0.5,
+    @SerialName("invulnerable_seconds") val invulnerableSeconds: Int = 3,
+    /** Its cooldowns, times this, for the rest of the fight. */
+    @SerialName("cooldown_factor") val cooldownFactor: Double = 0.65,
   )
 
   /** The signature abilities with any the file leaves out filled in. */

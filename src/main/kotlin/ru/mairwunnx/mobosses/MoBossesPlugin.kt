@@ -3,11 +3,15 @@ package ru.mairwunnx.mobosses
 import org.bukkit.plugin.java.JavaPlugin
 import org.bukkit.scheduler.BukkitTask
 import ru.mairwunnx.mobosses.ability.Abilities
+import ru.mairwunnx.mobosses.ability.AbilityEntities
 import ru.mairwunnx.mobosses.ability.ArrowListener
+import ru.mairwunnx.mobosses.ability.kinds.Chain
+import ru.mairwunnx.mobosses.ability.kinds.Obelisk
 import ru.mairwunnx.mobosses.ability.kinds.MeteorListener
 import ru.mairwunnx.mobosses.boss.BossBars
 import ru.mairwunnx.mobosses.boss.Bosses
 import ru.mairwunnx.mobosses.boss.Catalog
+import ru.mairwunnx.mobosses.boss.Decoys
 import ru.mairwunnx.mobosses.boss.Despawns
 import ru.mairwunnx.mobosses.boss.Keys
 import ru.mairwunnx.mobosses.boss.Minions
@@ -66,6 +70,7 @@ class MoBossesPlugin : JavaPlugin() {
   val rewards = Rewards(this)
   val spawns = SpawnListener(this)
   val despawns = Despawns(this)
+  val decoys = Decoys(this)
   val survival = SurvivalBonus(this)
   val blockChanges = BlockChanges(this)
   val menuStats = Stats(this)
@@ -82,7 +87,7 @@ class MoBossesPlugin : JavaPlugin() {
 
   override fun onEnable() {
     if (!reload()) log.warn("Started with errors in the config files; fix them and run /mobosses reload")
-    listOf(playerLanguages, progression, spawns, survival, DamageListener(this), DeathListener(this), MeteorListener(this), ArrowListener(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener(this))
+    listOf(playerLanguages, progression, spawns, survival, DamageListener(this), DeathListener(this), MeteorListener(this), ArrowListener(this), AbilityEntities(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener(this))
       .forEach { server.pluginManager.registerEvents(it, this) }
     registerCommand("mobosses", "Your Mo’Bosses level and the best hunters; for admins, reload, spawn, or remove bosses", listOf("mb", "moboss"), MoBossesCommand(this))
     tasks += server.scheduler.runTaskTimer(this, Runnable { visuals.tick(); bars.tick(); PlanData.bossesAlive = bosses.all.size }, 20L, 20L)
@@ -112,6 +117,9 @@ class MoBossesPlugin : JavaPlugin() {
     miniPlaceholders?.close()
     // Cobwebs and the like go back now, or they'd stay in the world for good.
     blockChanges.temporary.restoreAll()
+    Obelisk.removeAll()
+    Chain.clear()
+    decoys.removeAll()
     nameTags.clearAll()
     bars.clear()
     bosses.forgetAll()

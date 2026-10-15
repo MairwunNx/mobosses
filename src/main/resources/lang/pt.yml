@@ -131,6 +131,12 @@ abilities:
   curse: "<boss><boss_name></boss> lança uma <item>maldição</item> em você!"
   fuse: "O <item>pavio</item> de <boss><boss_name></boss> está aceso!"
   enrage: "<boss><boss_name></boss> fica <err>furioso</err>!"
+  obelisk: "<boss><boss_name></boss> ergue um <item>obelisco</item> que o cura: quebre-o!"
+  obelisk_broken: "<white><player></white> <ok>quebrou o obelisco</ok> <gray>de</gray> <boss><boss_name></boss><gray>!</gray>"
+  chain: "<boss><boss_name></boss> lança uma <item>corrente</item>: quem está preso não vai longe; três golpes corpo a corpo a quebram!"
+  chain_broken: "<ok>Você quebrou a corrente de</ok> <boss><boss_name></boss><ok>!</ok>"
+  doubles: "<boss><boss_name></boss> se divide em <item>sósias</item>: encontre o verdadeiro!"
+  phase_two: "<boss><boss_name></boss> entra na <hp>segunda fase</hp>!"
 
 classes:
   common: "Comum"

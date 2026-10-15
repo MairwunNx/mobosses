@@ -10,7 +10,8 @@
 - 📈 **Levels that grow with your players.** A boss takes the average level of the players near it, now and then a little lower. Weak bosses count for little, so farming them levels nobody up.
 - 🧮 **Scaling by curves:** stats climb fast at first and level off toward a ceiling. Top bosses have more health than the Ender Dragon and the Warden, and hit nearly as hard as the Warden at level 100.
 - 🎯 **A signature ability for every boss type:** witches throw potions, endermen swap places with you, evokers send fangs through the ground, ravagers stampede, and 14 more.
-- ✨ **Thirteen shared abilities:** lightning, minions, regeneration, a ring of fire, a ring of cobwebs, a teleport behind you, a meteor shower, an arc of arrows, arrow rain, a shockwave, a frost nova, a grapple against pillar archers, and enrage, each unlocked by class and level.
+- ✨ **Sixteen shared abilities:** lightning, minions, regeneration, a ring of fire, a ring of cobwebs, a teleport behind you, a meteor shower, an arc of arrows, arrow rain, a shockwave, a frost nova, a grapple against pillar archers, a healing obelisk to break, a chain that holds archers close, doubles to find the real boss among, and enrage, each unlocked by class and level.
+- 🔥 **A second phase** at half health for bosses of level 40 and up.
 - 🗡️ **Gear by level**, from a wooden sword to enchanted netherite.
 - 🎁 **Loot tables by level and class:** over 500 entries, 199 with their own names and lore. Each player who dealt enough damage gets their own drop.
 - 💪 **Rewards:** potion effects and absorption hearts after a kill.

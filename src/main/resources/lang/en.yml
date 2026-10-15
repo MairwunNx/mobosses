@@ -131,6 +131,12 @@ abilities:
   curse: "<boss><boss_name></boss> lays a <item>curse</item> on you!"
   fuse: "<boss><boss_name></boss>’s <item>fuse</item> is lit!"
   enrage: "<boss><boss_name></boss> flies into a <err>rage</err>!"
+  obelisk: "<boss><boss_name></boss> raises an <item>obelisk</item> that heals it: break it!"
+  obelisk_broken: "<white><player></white> <ok>broke the obelisk</ok> <gray>of</gray> <boss><boss_name></boss><gray>!</gray>"
+  chain: "<boss><boss_name></boss> casts a <item>chain</item>: the chained can’t get away; three blows in melee break it!"
+  chain_broken: "<ok>You broke the chain of</ok> <boss><boss_name></boss><ok>!</ok>"
+  doubles: "<boss><boss_name></boss> splits into <item>doubles</item>: find the real one!"
+  phase_two: "<boss><boss_name></boss> enters its <hp>second phase</hp>!"
 
 classes:
   common: "Common"

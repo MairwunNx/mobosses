@@ -12,7 +12,8 @@
 - 💪 **Never weaker than vanilla:** a level 1 boss has at least its mob’s health, damage, and armor, and its gear only gets better.
 - 🧮 **Scaling by curves.** Health, damage, and armor climb fast at first and level off toward a ceiling, so a level 100 boss is hard without being absurd. Class differences shrink at high levels.
 - 🎯 **A signature ability for every boss type:** witches throw potions, endermen swap places with you, evokers send fangs through the ground, ravagers stampede, and 14 more.
-- ✨ **Thirteen shared abilities:** lightning, minions, regeneration, a ring of fire, a ring of cobwebs, a teleport behind you, a meteor shower, an arc of arrows, arrow rain, a shockwave, a frost nova, a grapple that pulls archers off their pillars, and enrage at low health. Each class unlocks them at its own levels, with cooldowns.
+- ✨ **Sixteen shared abilities:** lightning, minions, regeneration, a ring of fire, a ring of cobwebs, a teleport behind you, a meteor shower, an arc of arrows, arrow rain, a shockwave, a frost nova, a grapple that pulls archers off their pillars, an obelisk that heals the boss until you break it, a chain that holds an archer close, doubles to find the real boss among, and enrage at low health. Each class unlocks them at its own levels, with cooldowns.
+- 🔥 **A second phase:** at half health a boss of level 40 or higher turns, throws everyone back, and casts faster to the end.
 - 🧟 **Minions** that a boss summons, up to a dozen at a time, and that may turn into weaker bosses themselves.
 - 🗡️ **Gear by level:** a level 5 zombie swings a wooden sword; a level 60 one may carry enchanted netherite.
 - 🎁 **Loot tables by level and class:** over 500 entries, 199 with their own names and lore, and random durability that favors better classes. Each player who dealt enough damage gets their own drop, which only they can pick up.

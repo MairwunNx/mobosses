@@ -30,7 +30,7 @@ class NameTags(private val plugin: MoBossesPlugin) {
   fun tick() {
     if (!plugin.catalog.settings.nameTags.perPlayer) return clearAll()
     val radius = plugin.catalog.settings.nameTags.radius.toDouble()
-    val named = plugin.bosses.all.map { it.entity } + plugin.minions.all
+    val named = plugin.bosses.all.map { it.entity } + plugin.minions.all + plugin.decoys.all
     labels.keys.toList().filter { id -> named.none { it.uniqueId == id } }.forEach { id -> labels.remove(id)?.values?.forEach { it.display.remove() } }
 
     named.forEach { entity ->
@@ -83,7 +83,8 @@ class NameTags(private val plugin: MoBossesPlugin) {
   }
 
   private fun text(entity: LivingEntity, code: String): Component? {
-    plugin.bosses.get(entity)?.let { return plugin.languages.render(code, Message.BOSS_TAG, *plugin.texts.boss(code, it)) }
+    // A boss's copy wears the boss's name, so nothing tells them apart.
+    (plugin.bosses.get(entity) ?: plugin.decoys.bossOf(entity))?.let { return plugin.languages.render(code, Message.BOSS_TAG, *plugin.texts.boss(code, it)) }
     val type = plugin.minions.typeOf(entity) ?: return null
     val minion = plugin.catalog.minions.values.firstOrNull { it.summoner.key.key == type }
     return if (minion != null) plugin.texts.minionName(code, minion) else plugin.languages.render(code, "minions.$type")
