@@ -7,42 +7,17 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
-import org.bukkit.event.EventHandler
-import org.bukkit.event.EventPriority
-import org.bukkit.event.Listener
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent
-import org.bukkit.event.player.PlayerQuitEvent
 import ru.mairwunnx.mobosses.MoBossesPlugin
 import ru.mairwunnx.mobosses.boss.Boss
 import ru.mairwunnx.mobosses.boss.Catalog
 import ru.mairwunnx.mobosses.config.BossClass
 import ru.mairwunnx.mobosses.hooks.Placeholders
-import java.util.UUID
-import java.util.concurrent.ConcurrentHashMap
 
-/**
- * Each player's language and the texts they get. The country lookup runs during login, off the
- * server thread; the language follows from it and from the game's language setting, as in Mo’Joins.
- */
-class Texts(private val plugin: MoBossesPlugin) : Listener {
-  private val countries = ConcurrentHashMap<UUID, String>()
+/** The texts players get: messages in each one's language, and the names of bosses, classes, and minions. */
+class Texts(private val plugin: MoBossesPlugin) {
+  fun languageOf(player: Player): String = plugin.playerLanguages.of(player)
 
-  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  fun onPreLogin(event: AsyncPlayerPreLoginEvent) {
-    if (event.loginResult != AsyncPlayerPreLoginEvent.Result.ALLOWED) return
-    plugin.geoIp.country(event.address)?.let { countries[event.uniqueId] = it }
-  }
-
-  @EventHandler(priority = EventPriority.MONITOR)
-  fun onQuit(event: PlayerQuitEvent) {
-    countries.remove(event.player.uniqueId)
-  }
-
-  fun country(player: Player): String? = countries[player.uniqueId]
-
-  fun languageOf(player: Player): String = plugin.resolver.resolve(countries[player.uniqueId], player.locale())
-
-  fun languageOf(sender: CommandSender): String = (sender as? Player)?.let(::languageOf) ?: plugin.languages.default
+  fun languageOf(sender: CommandSender): String = plugin.playerLanguages.of(sender)
 
   fun send(to: CommandSender, message: Message, vararg resolvers: TagResolver) {
     val code = languageOf(to)

@@ -133,6 +133,46 @@ data class AbilitySettings(
   @SerialName("arrow_rain_effect_amplifier_min") val rainEffectAmplifierMin: Int = 0,
   @SerialName("arrow_rain_effect_amplifier_max") val rainEffectAmplifierMax: Int = 1,
   @SerialName("arrow_rain_negative_effects") val rainNegativeEffects: List<String> = NEGATIVE_EFFECTS,
+
+  /** A boss keeps no more minions alive than this; a summon only tops them up. */
+  @SerialName("summoning_max_alive") val summoningMaxAlive: Int = 12,
+  /** Whether minions that rolled into bosses summon their own. Off keeps a fight from snowballing. */
+  @SerialName("summoning_by_mini_bosses") val summoningByMiniBosses: Boolean = false,
+
+  @SerialName("is_shockwave_enabled") val shockwaveEnabled: Boolean = true,
+  @SerialName("shockwave_cooldown") val shockwaveCooldown: Long = 9000,
+  @SerialName("shockwave_cooldown_bias") val shockwaveCooldownBias: Double = 1.3,
+  @SerialName("shockwave_radius") val shockwaveRadius: Double = 5.0,
+  @SerialName("shockwave_damage_base") val shockwaveDamageBase: Double = 3.0,
+  @SerialName("shockwave_damage_per_level") val shockwaveDamagePerLevel: Double = 0.08,
+  @SerialName("shockwave_damage_max") val shockwaveDamageMax: Double = 14.0,
+  @SerialName("shockwave_knockback") val shockwaveKnockback: Double = 1.2,
+  @SerialName("shockwave_lift") val shockwaveLift: Double = 0.5,
+
+  @SerialName("is_frost_nova_enabled") val frostNovaEnabled: Boolean = true,
+  @SerialName("frost_nova_cooldown") val frostNovaCooldown: Long = 14000,
+  @SerialName("frost_nova_cooldown_bias") val frostNovaCooldownBias: Double = 1.2,
+  @SerialName("frost_nova_radius") val frostNovaRadius: Double = 6.0,
+  @SerialName("frost_nova_seconds_base") val frostNovaSecondsBase: Double = 3.0,
+  @SerialName("frost_nova_seconds_per_level") val frostNovaSecondsPerLevel: Double = 0.05,
+  @SerialName("frost_nova_seconds_max") val frostNovaSecondsMax: Double = 8.0,
+  @SerialName("frost_nova_slowness_amplifier") val frostNovaSlownessAmplifier: Int = 1,
+
+  @SerialName("is_grapple_enabled") val grappleEnabled: Boolean = true,
+  @SerialName("grapple_cooldown") val grappleCooldown: Long = 12000,
+  @SerialName("grapple_cooldown_bias") val grappleCooldownBias: Double = 1.3,
+  /** Pulls the farthest player in sight within this range, but only one at least min_distance away. */
+  @SerialName("grapple_range") val grappleRange: Double = 24.0,
+  @SerialName("grapple_min_distance") val grappleMinDistance: Double = 6.0,
+  @SerialName("grapple_strength") val grappleStrength: Double = 1.2,
+
+  @SerialName("is_enrage_enabled") val enrageEnabled: Boolean = true,
+  /** Once, when the boss drops below this share of its health. */
+  @SerialName("enrage_health_share") val enrageHealthShare: Double = 0.3,
+  @SerialName("enrage_strength_amplifier_base") val enrageStrengthBase: Int = 0,
+  @SerialName("enrage_strength_amplifier_per_level") val enrageStrengthPerLevel: Double = 0.02,
+  @SerialName("enrage_strength_amplifier_max") val enrageStrengthMax: Int = 2,
+  @SerialName("enrage_speed_amplifier") val enrageSpeedAmplifier: Int = 0,
 ) {
   companion object {
     val NEGATIVE_EFFECTS = listOf(

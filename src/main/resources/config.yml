@@ -10,8 +10,8 @@ enabled: true   # false stops new bosses and abilities; bosses already around st
 debug: false    # true logs spawns, levels, abilities, and loot.
 
 locales:
-  # Players nothing else matches, the console, and the name tags over bosses get
-  # this language. A name tag is the same for everyone who sees it.
+  # Players nothing else matches and the console get this language, and so do
+  # death messages, which the game shows to everyone the same.
   default: en
   # Where a player's language comes from, tried in order:
   #   ip     — the country of their IP address, through the lists below;
@@ -37,8 +37,9 @@ geoip:
 #  Spawning
 # ---------------------------------------------------------------------------
 # A mob of a type in bosses.yml becomes a boss with that type's spawn_chance,
-# times the multipliers below, when a player is within spawn_radius. The nearest
-# player's Mo’Bosses level sets the boss's level.
+# times the multipliers below, when a player is within spawn_radius. The players
+# within group_radius set the boss's level together, by their average, so one
+# veteran doesn't drag newcomers into level 90 fights.
 spawn:
   enabled: true
   max_bosses_per_world: 10000000   # Loaded bosses per world.
@@ -61,6 +62,15 @@ spawn:
   # Spawn reasons that can make a boss. CUSTOM covers minions bosses summon.
   # https://jd.papermc.io/paper/org/bukkit/event/entity/CreatureSpawnEvent.SpawnReason.html
   allowed_spawn_reasons: [ NATURAL, JOCKEY, SPAWNER, TRIAL_SPAWNER, EGG, SPAWNER_EGG, VILLAGE_INVASION, NETHER_PORTAL, DROWNED, RAID, PATROL, COMMAND, CUSTOM ]
+  group_radius: 24
+  # Against piles of bosses, from mob farms and spawners too: after a boss spawns
+  # for a group, its players wait player_cooldown_seconds (stretched at random by
+  # up to the bias) for the next one, across relogs and restarts; and no boss
+  # spawns while max_nearby are already within nearby_radius.
+  player_cooldown_seconds: 60
+  player_cooldown_bias: 1.3
+  max_nearby: 3
+  nearby_radius: 48
 
 # ---------------------------------------------------------------------------
 #  Player levels
@@ -71,8 +81,8 @@ progression:
     max_level: 100
     exp_scale: 30.0    # Higher: experience counts for less.
     kill_scale: 20.0   # Lower: kills count for more.
-    power: 1.3         # Higher: a steeper climb in the second half.
-    offset: 20.0       # Higher: longer at low levels.
+    power: 1.6         # Higher: a steeper climb in the second half.
+    offset: 60.0       # Higher: longer at low levels.
 
   # A minion that rolls into a boss is this many levels below its summoner.
   mini_bosses_level_curve:
@@ -83,20 +93,32 @@ progression:
     percent_cap: 0.28  # Never more than 28% of the summoner's level.
     jitter: 1          # A random ±1; 0 turns it off.
 
-  # Mo’Bosses experience for a kill, split by each player's share of the damage.
+  # Mo’Bosses experience for a kill, split by each player's share of the damage
+  # and weighed by relevance below.
   exp_gain:
     health_factor: 0.01   # Per point of the boss's max health.
     level_factor: 0.005   # Times the level to the power below.
     level_power: 2.0
     rarity_mul: true      # Times the class's experience multiplier.
 
-  # Now and then a boss comes weaker than the player, more often at high levels.
+  # Now and then a boss comes weaker, by a share of its level: more often and by
+  # more at high levels, but never from level 80 down to 20.
   variance:
     base_chance: 0.15
-    extra_chance: 0.45    # Added at level 100.
-    min_reduction: 5
-    max_reduction: 80
+    extra_chance: 0.35    # Added at max_level.
+    min_cut: 0.05         # 5% of the level,
+    max_cut: 0.30         # up to 30% at max_level.
     power: 1.2
+
+  # Bosses far below a player's level give them little, so farming weak ones
+  # doesn't level anyone up; stronger ones give a little more. A boss gap levels
+  # below gives floor of its experience and its kill doesn't count; each level
+  # above adds 1/gap, up to bonus.
+  relevance:
+    gap: 20
+    floor: 0.1
+    bonus: 1.5
+  min_share: 0.15   # The share of a boss's health a player must deal for the kill to count.
 
 # ---------------------------------------------------------------------------
 #  Boss stats
@@ -117,22 +139,26 @@ formula:
     flatten: 0.40
   # The vanilla experience a boss drops.
   experience:
-    max_scale: 270.0
-    power: 2.0
-    offset: 1000.0
+    max_scale: 40.0
+    power: 1.6
+    offset: 400.0
   # Armor and toughness apply to bosses without an armor set from bosses.yml.
+  # base_points stands in for mobs with less of their own: most have no
+  # toughness and skeletons no armor, and nothing times a multiplier is nothing.
   armor:
     max_scale: 2.0
     power: 1.2
     offset: 180.0
     flatten: 0.35
     cap_points: 28
+    base_points: 2.0
   toughness:
     max_scale: 2.2
     power: 1.1
     offset: 200.0
     flatten: 0.30
     cap_points: 12
+    base_points: 2.0
   # How many minions a summon brings.
   minions:
     base_count: 2
@@ -152,6 +178,13 @@ effects:
     enabled: true
     classes: [ uncommon, rare, epic, legendary, mythic ]   # An empty list means all.
   visibility_radius: 32   # Glow and particles show only with a player this close.
+
+# Names over bosses and minions. per_player shows each player the names in their
+# own language, through invisible text displays only they see; off shows the
+# game's name tag in the default language to everyone, as 1.x did.
+name_tags:
+  per_player: true
+  radius: 32
 
 boss_bar:
   enabled: true

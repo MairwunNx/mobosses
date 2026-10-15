@@ -63,7 +63,7 @@ class MoBossesCommand(private val plugin: MoBossesPlugin) : BasicCommand {
     }
     if (entity == null || !entity.isValid) return plugin.texts.send(sender, Message.SPAWN_FAILED, Placeholder.unparsed("reason", "the spawn was cancelled"))
 
-    val boss = plugin.bosses.make(entity, type, clazz, level)
+    val boss = plugin.bosses.make(entity, type, clazz, level).also(plugin.bosses::vanillaName)
     plugin.texts.send(sender, Message.SPAWNED, *plugin.texts.boss(plugin.texts.languageOf(sender), boss))
   }
 

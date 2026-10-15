@@ -21,6 +21,7 @@ data class Settings(
   val formula: Formulas = Formulas(),
   val effects: Effects = Effects(),
   @SerialName("boss_bar") val bossBar: BossBar = BossBar(),
+  @SerialName("name_tags") val nameTags: NameTags = NameTags(),
   val loot: Loot = Loot(),
   val broadcast: Broadcast = Broadcast(),
   @SerialName("kill_sound") val killSound: KillSound = KillSound(),
@@ -67,6 +68,14 @@ data class Settings(
       "NATURAL", "JOCKEY", "SPAWNER", "TRIAL_SPAWNER", "EGG", "SPAWNER_EGG", "VILLAGE_INVASION",
       "NETHER_PORTAL", "DROWNED", "RAID", "PATROL", "COMMAND", "CUSTOM",
     ),
+    /** The players this close to the mob set its level together, by their average. */
+    @SerialName("group_radius") val groupRadius: Int = 24,
+    /** After a boss spawns for a player, the next one waits this long, stretched by up to the bias. */
+    @SerialName("player_cooldown_seconds") val playerCooldownSeconds: Int = 60,
+    @SerialName("player_cooldown_bias") val playerCooldownBias: Double = 1.3,
+    /** No new boss while this many are already within nearby_radius. */
+    @SerialName("max_nearby") val maxNearby: Int = 3,
+    @SerialName("nearby_radius") val nearbyRadius: Int = 48,
   )
 
   @Serializable
@@ -81,6 +90,9 @@ data class Settings(
     @SerialName("mini_bosses_level_curve") val miniBossesLevelCurve: MiniBossesCurve = MiniBossesCurve(),
     @SerialName("exp_gain") val expGain: ExpGain = ExpGain(),
     val variance: Variance = Variance(),
+    val relevance: Relevance = Relevance(),
+    /** The share of a boss's health a player must deal for the kill to count toward their level. */
+    @SerialName("min_share") val minShare: Double = 0.15,
   )
 
   @Serializable
@@ -88,8 +100,8 @@ data class Settings(
     @SerialName("max_level") val maxLevel: Int = 100,
     @SerialName("exp_scale") val expScale: Double = 30.0,
     @SerialName("kill_scale") val killScale: Double = 20.0,
-    val power: Double = 1.3,
-    val offset: Double = 20.0,
+    val power: Double = 1.6,
+    val offset: Double = 60.0,
   )
 
   @Serializable
@@ -110,22 +122,32 @@ data class Settings(
     @SerialName("rarity_mul") val rarityMul: Boolean = true,
   )
 
+  /** Now and then a boss comes weaker: by a share of the level, more often and by more at high levels. */
   @Serializable
   data class Variance(
     @SerialName("base_chance") val baseChance: Double = 0.15,
-    @SerialName("extra_chance") val extraChance: Double = 0.45,
-    @SerialName("min_reduction") val minReduction: Int = 5,
-    @SerialName("max_reduction") val maxReduction: Int = 80,
+    @SerialName("extra_chance") val extraChance: Double = 0.35,
+    @SerialName("min_cut") val minCut: Double = 0.05,
+    @SerialName("max_cut") val maxCut: Double = 0.30,
     val power: Double = 1.2,
+  )
+
+  /** Bosses far below a player's level give them less, so farming weak ones doesn't level anyone up; stronger ones give a little more. */
+  @Serializable
+  data class Relevance(
+    /** Levels below the player at which a boss stops counting. */
+    val gap: Int = 20,
+    val floor: Double = 0.1,
+    val bonus: Double = 1.5,
   )
 
   @Serializable
   data class Formulas(
     val health: Curve = Curve(maxScale = 20.0, power = 1.8, offset = 400.0, flatten = 0.35),
     val damage: Curve = Curve(maxScale = 6.0, power = 1.2, offset = 600.0, flatten = 0.40),
-    val experience: Curve = Curve(maxScale = 270.0, power = 2.0, offset = 1000.0),
-    val armor: CappedCurve = CappedCurve(maxScale = 2.0, power = 1.2, offset = 180.0, flatten = 0.35, capPoints = 28),
-    val toughness: CappedCurve = CappedCurve(maxScale = 2.2, power = 1.1, offset = 200.0, flatten = 0.30, capPoints = 12),
+    val experience: Curve = Curve(maxScale = 40.0, power = 1.6, offset = 400.0),
+    val armor: CappedCurve = CappedCurve(maxScale = 2.0, power = 1.2, offset = 180.0, flatten = 0.35, capPoints = 28, basePoints = 2.0),
+    val toughness: CappedCurve = CappedCurve(maxScale = 2.2, power = 1.1, offset = 200.0, flatten = 0.30, capPoints = 12, basePoints = 2.0),
     val minions: MinionsCurve = MinionsCurve(),
   )
 
@@ -146,6 +168,8 @@ data class Settings(
     val offset: Double = 1.0,
     val flatten: Double? = null,
     @SerialName("cap_points") val capPoints: Int = 30,
+    /** The starting value for mobs that have less of their own: most mobs have no toughness, and skeletons no armor. */
+    @SerialName("base_points") val basePoints: Double = 0.0,
   ) {
     val curve get() = Curve(maxScale, power, offset, flatten)
   }
@@ -187,6 +211,14 @@ data class Settings(
     val style: String = "NOTCHED_20",
     /** A player farther than this from the boss, or in another world, stops seeing its bar. */
     @SerialName("hide_distance") val hideDistance: Int = 64,
+  )
+
+  @Serializable
+  data class NameTags(
+    /** Names over bosses and minions in each viewer's language; off shows the default language to everyone. */
+    @SerialName("per_player") val perPlayer: Boolean = true,
+    /** How close a player must be to read a name. */
+    val radius: Int = 32,
   )
 
   @Serializable

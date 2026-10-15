@@ -7,41 +7,6 @@ import net.kyori.adventure.text.minimessage.MiniMessage
 import net.kyori.adventure.text.minimessage.tag.Tag
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer
-import ru.mairwunnx.mobosses.config.Settings
-import java.util.Locale
-
-/** The fixed keys a language file sets. A key missing from one language comes from the default language, then from English. */
-enum class Message(val key: String) {
-  RELOADED("reloaded"),
-  RELOAD_FAILED("reload_failed"),
-  NO_PERMISSION("no_permission"),
-  USAGE("usage"),
-  SPAWN_USAGE("spawn_usage"),
-  SPAWNED("spawned"),
-  SPAWN_FAILED("spawn_failed"),
-  SPAWN_WHERE("spawn_where"),
-  UNKNOWN_ENTITY("unknown_entity"),
-  UNKNOWN_CLASS("unknown_class"),
-  BAD_LEVEL("bad_level"),
-  KILLED_ALL("killed_all"),
-  KILLED_NONE("killed_none"),
-  BOSS_TAG("boss_tag"),
-  BOSS_BAR("boss_bar"),
-  KILL("kill"),
-  LOOT_RARE("loot.rare"),
-  LOOT_EPIC("loot.epic"),
-  LOOT_LEGENDARY("loot.legendary"),
-  LOOT_MYTHIC("loot.mythic"),
-  LIGHTNING("abilities.lightning"),
-  SUMMONING("abilities.summoning"),
-  REGENERATION("abilities.regeneration"),
-  FIRE_RING("abilities.fire_ring"),
-  WEB_RING("abilities.web_ring"),
-  TELEPORT_STRIKE("abilities.teleport_strike"),
-  METEOR_SHOWER("abilities.meteor_shower"),
-  ARROW_ARC("abilities.arrow_arc"),
-  ARROW_RAIN("abilities.arrow_rain"),
-}
 
 /**
  * The texts of every language, by code (`en`, `ru`, `pt_br`), flattened: `items.x.name` for a nested
@@ -94,40 +59,5 @@ class Languages(private val texts: Map<String, Map<String, String>>, val default
       tag("xp", "#7C4DFF", bold = true),
       tag("item", "#7C4DFF", bold = true),
     )
-  }
-}
-
-/** Picks a player's language from their country and their game's language setting. */
-class LocaleResolver(private val settings: Settings.Locales, private val available: Set<String>, defaultCode: String = settings.default) {
-  private val byCountry: Map<String, String> = buildMap {
-    settings.countries.forEach { (code, countries) -> countries.forEach { putIfAbsent(it.uppercase(), normalize(code)) } }
-  }
-
-  val default: String = normalize(defaultCode).takeIf { it in available } ?: Languages.FALLBACK
-
-  fun resolve(country: String?, client: Locale?): String {
-    for (source in settings.sources) {
-      val code = when (source) {
-        Settings.Source.IP -> country?.let { byCountry[it.uppercase()] }
-        Settings.Source.CLIENT -> client?.let(::fromClient)
-      }
-      if (code != null && code in available) return code
-    }
-    return default
-  }
-
-  /** `pt_BR` matches a `pt_br` file first, then `pt`. */
-  private fun fromClient(locale: Locale): String? {
-    val full = normalize(locale.toString())
-    val language = normalize(locale.language)
-    return when {
-      full in available -> full
-      language in available -> language
-      else -> null
-    }
-  }
-
-  companion object {
-    fun normalize(code: String) = code.trim().lowercase().replace('-', '_')
   }
 }

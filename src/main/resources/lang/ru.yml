@@ -24,7 +24,7 @@ bad_level: "<err>Уровень — число от 1 до <max>, а не <level
 killed_all: "<pri>[Mo’Bosses]</pri> <ok>Убрано боссов: <num><count></num>.</ok>"
 killed_none: "<pri>[Mo’Bosses]</pri> <warn>Боссов нет, убирать некого.</warn>"
 
-# Над головой босса, на языке по умолчанию для всех.
+# Над головой босса, каждому игроку на его языке.
 boss_tag: "<class_color>[Ур. <level>] [<class>] <boss_name>"
 boss_bar: "<boss_name> <class_color>[Ур. <level>]"
 
@@ -49,6 +49,10 @@ abilities:
   meteor_shower: "<boss><boss_name></boss> вызывает <item>метеоритный дождь</item>!"
   arrow_arc: "<boss><boss_name></boss> выпускает <item>веер стрел</item>!"
   arrow_rain: "<boss><boss_name></boss> обрушивает <item>дождь стрел</item>!"
+  shockwave: "<boss><boss_name></boss> бьёт по земле!"
+  frost_nova: "<boss><boss_name></boss> выпускает <item>ледяную волну</item>!"
+  grapple: "<boss><boss_name></boss> подтаскивает вас к себе!"
+  enrage: "<boss><boss_name></boss> приходит в <err>ярость</err>!"
 
 classes:
   common: "Обычный"
@@ -77,24 +81,40 @@ bosses:
   phantom: "БПЛА"
   vex: "Дух"
   zombie_villager: "Зомбачелло"
+  bogged: "Болотник"
+  blaze: "Горячка"
+  breeze: "Сквозняк"
+  cave_spider: "Ядовитка"
+  piglin_brute: "Вышибала"
+  hoglin: "Клыкач"
+  ravager: "Бульдозер"
+  guardian: "Глазастик"
 
 # По боссу, который их призывает, как в minions.yml.
 minions:
-  zombie: "Гниль"
-  spider: "Пауканчик"
-  skeleton: "Скелетончик"
-  enderman: "Эндерчервь"
-  wither_skeleton: "Скелетик"
-  pillager: "Разбойник"
-  evoker: "Патологоанатом"
-  witch: "Прислужник жрицы"
-  vindicator: "Дух"
-  stray: "Замороженный"
-  husk: "Запесоченный"
-  drowned: "Затонувший"
-  phantom: "Дрон"
-  vex: "Дух"
-  zombie_villager: "Зомбик"
+  zombie: "Гнилушка"
+  spider: "Паучок"
+  skeleton: "Костяной оруженосец"
+  enderman: "Пустотная мошка"
+  wither_skeleton: "Пепельный оруженосец"
+  pillager: "Налётчик"
+  evoker: "Наёмный клинок"
+  witch: "Околдованный прислужник"
+  vindicator: "Мстительный дух"
+  stray: "Ледышка"
+  husk: "Пыльный прислужник"
+  drowned: "Глубинный прислужник"
+  phantom: "Ночной дрон"
+  vex: "Блуждающий огонёк"
+  zombie_villager: "Гнилой житель"
+  bogged: "Болотный оруженосец"
+  blaze: "Уголёк"
+  breeze: "Порыв"
+  cave_spider: "Ядовитый паучонок"
+  piglin_brute: "Громила"
+  hoglin: "Хоглинёнок"
+  ravager: "Передовой"
+  guardian: "Глубинный страж"
 
 # Названия и описания лута по id из loottable.yml.
 items:

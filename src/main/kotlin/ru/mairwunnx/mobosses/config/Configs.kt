@@ -13,8 +13,8 @@ class Configs(
   val abilities: AbilitySettings,
   val classes: Classes,
   val bosses: Map<String, BossSpec>,
-  val minions: Minions,
-  val rewards: Rewards,
+  val minions: MinionSettings,
+  val rewards: RewardSettings,
   val loot: LootTable,
   val ok: Boolean,
 ) {
@@ -44,8 +44,8 @@ class Configs(
         abilities = file("abilities.yml", AbilitySettings::parse),
         classes = file("classes.yml", Classes::parse),
         bosses = file("bosses.yml", BossSpec::parse),
-        minions = file("minions.yml", Minions::parse),
-        rewards = file("rewards.yml", Rewards::parse),
+        minions = file("minions.yml", MinionSettings::parse),
+        rewards = file("rewards.yml", RewardSettings::parse),
         loot = file("loottable.yml", LootTable::parse),
         ok = ok,
       )

@@ -24,7 +24,7 @@ bad_level: "<err>O nível deve ser um número de 1 a <max>, não <level>.</err>"
 killed_all: "<pri>[Mo’Bosses]</pri> <ok>Chefes removidos: <num><count></num>.</ok>"
 killed_none: "<pri>[Mo’Bosses]</pri> <warn>Não há chefes para remover.</warn>"
 
-# Acima da cabeça do chefe, no idioma padrão para todos.
+# Acima da cabeça do chefe, cada jogador lê no próprio idioma.
 boss_tag: "<class_color>[Nv. <level>] [<class>] <boss_name>"
 boss_bar: "<boss_name> <class_color>[Nv. <level>]"
 
@@ -49,6 +49,10 @@ abilities:
   meteor_shower: "<boss><boss_name></boss> invoca uma <item>chuva de meteoros</item>!"
   arrow_arc: "<boss><boss_name></boss> dispara um <item>arco de flechas</item>!"
   arrow_rain: "<boss><boss_name></boss> faz cair uma <item>chuva de flechas</item>!"
+  shockwave: "<boss><boss_name></boss> golpeia o chão!"
+  frost_nova: "<boss><boss_name></boss> solta uma <item>onda de gelo</item>!"
+  grapple: "<boss><boss_name></boss> puxa você para perto!"
+  enrage: "<boss><boss_name></boss> fica <err>furioso</err>!"
 
 classes:
   common: "Comum"
@@ -77,24 +81,40 @@ bosses:
   phantom: "O Drone"
   vex: "O Espectro"
   zombie_villager: "Zumbachello"
+  bogged: "Ossos de Lama"
+  blaze: "Cabeça Quente"
+  breeze: "Ventania"
+  cave_spider: "Presa Venenosa"
+  piglin_brute: "O Leão de Chácara"
+  hoglin: "Presudo"
+  ravager: "A Escavadeira"
+  guardian: "Olhudo"
 
 # Pelo chefe que os invoca, como em minions.yml.
 minions:
   zombie: "Podrinho"
   spider: "Aranhinha"
-  skeleton: "Ossinho"
-  enderman: "Enderverme"
-  wither_skeleton: "Witherzinho"
+  skeleton: "Escudeiro de Osso"
+  enderman: "Ácaro do Vazio"
+  wither_skeleton: "Escudeiro de Cinzas"
   pillager: "Saqueador"
-  evoker: "Legista"
-  witch: "Lacaio da Sacerdotisa"
-  vindicator: "Espírito"
-  stray: "Congelado"
-  husk: "Arenoso"
-  drowned: "Encharcado"
-  phantom: "Drone"
-  vex: "Espírito"
-  zombie_villager: "Zumbizinho"
+  evoker: "Lâmina de Aluguel"
+  witch: "Servo Enfeitiçado"
+  vindicator: "Espírito Vingativo"
+  stray: "Geladinho"
+  husk: "Servo do Pó"
+  drowned: "Servo das Profundezas"
+  phantom: "Drone Noturno"
+  vex: "Fogo-fátuo"
+  zombie_villager: "Aldeão Podre"
+  bogged: "Escudeiro do Pântano"
+  blaze: "Brasinha"
+  breeze: "Rajadinha"
+  cave_spider: "Cria Venenosa"
+  piglin_brute: "Brutamontes"
+  hoglin: "Hoglinzinho"
+  ravager: "Batedor"
+  guardian: "Vigia Abissal"
 
 # Nomes e descrições do saque, pelo id em loottable.yml.
 items:

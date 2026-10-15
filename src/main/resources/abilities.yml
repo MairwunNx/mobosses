@@ -157,3 +157,60 @@ arrow_rain_effect_duration_seconds: 6
 arrow_rain_effect_amplifier_min: 0
 arrow_rain_effect_amplifier_max: 1
 arrow_rain_negative_effects: [ SLOWNESS, POISON, WEAKNESS, MINING_FATIGUE, BLINDNESS, HUNGER, WITHER, LEVITATION, NAUSEA, DARKNESS, UNLUCK, BAD_OMEN ]
+
+# ---------------------------------------------------------------------------
+#  Summoning limits: a boss keeps no more minions alive than this, and a
+#  summon only tops them up. Minions that rolled into bosses don't summon
+#  their own unless summoning_by_mini_bosses is on.
+# ---------------------------------------------------------------------------
+summoning_max_alive: 12
+summoning_by_mini_bosses: false
+
+# ---------------------------------------------------------------------------
+#  Shockwave: the boss slams the ground; players around it take damage and
+#  fly back, the closer the harder.
+# ---------------------------------------------------------------------------
+is_shockwave_enabled: true
+shockwave_cooldown: 9000
+shockwave_cooldown_bias: 1.3
+shockwave_radius: 5.0
+shockwave_damage_base: 3.0
+shockwave_damage_per_level: 0.08
+shockwave_damage_max: 14.0
+shockwave_knockback: 1.2
+shockwave_lift: 0.5
+
+# ---------------------------------------------------------------------------
+#  Frost nova: players around the boss freeze as in powder snow and slow down.
+#  Leather armor keeps the freezing off, as in the game.
+# ---------------------------------------------------------------------------
+is_frost_nova_enabled: true
+frost_nova_cooldown: 14000
+frost_nova_cooldown_bias: 1.2
+frost_nova_radius: 6.0
+frost_nova_seconds_base: 3.0
+frost_nova_seconds_per_level: 0.05
+frost_nova_seconds_max: 8.0
+frost_nova_slowness_amplifier: 1
+
+# ---------------------------------------------------------------------------
+#  Grapple: the boss yanks the farthest player it can see toward itself, an
+#  answer to shooting it from a pillar or across a ravine.
+# ---------------------------------------------------------------------------
+is_grapple_enabled: true
+grapple_cooldown: 12000
+grapple_cooldown_bias: 1.3
+grapple_range: 24.0
+grapple_min_distance: 6.0
+grapple_strength: 1.2
+
+# ---------------------------------------------------------------------------
+#  Enrage: once, when its health drops below the share, the boss gets
+#  strength and speed until it dies. No cooldown: it happens once per boss.
+# ---------------------------------------------------------------------------
+is_enrage_enabled: true
+enrage_health_share: 0.3
+enrage_strength_amplifier_base: 0
+enrage_strength_amplifier_per_level: 0.02
+enrage_strength_amplifier_max: 2
+enrage_speed_amplifier: 0

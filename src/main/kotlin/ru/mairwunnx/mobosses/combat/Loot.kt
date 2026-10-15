@@ -1,4 +1,4 @@
-package ru.mairwunnx.mobosses.boss
+package ru.mairwunnx.mobosses.combat
 
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
@@ -9,7 +9,10 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.EnchantmentStorageMeta
 import ru.mairwunnx.mobosses.MoBossesPlugin
-import ru.mairwunnx.mobosses.algebra.Formulas
+import ru.mairwunnx.mobosses.algebra.Rolls
+import ru.mairwunnx.mobosses.boss.Boss
+import ru.mairwunnx.mobosses.boss.Catalog
+import ru.mairwunnx.mobosses.config.LootTable
 import ru.mairwunnx.mobosses.lang.Message
 import kotlin.math.ceil
 import kotlin.random.Random
@@ -33,19 +36,13 @@ class Loot(private val plugin: MoBossesPlugin) {
 
   /** A weighted pick among the items for the boss's level and class; null when none fits. */
   fun roll(boss: Boss, random: Random = Random): Catalog.Loot? {
-    val bossRank = plugin.catalog.classes.rank(boss.clazz.key)
-    val candidates = plugin.catalog.loot.mapNotNull { loot ->
-      val itemRank = plugin.catalog.classes.rank(loot.spec.mobclass)
-      if (itemRank < 0 || itemRank > bossRank || boss.level !in loot.spec.minLevel..loot.spec.maxLevel) return@mapNotNull null
-      (loot to loot.spec.weight * crossClass(bossRank - itemRank)).takeIf { it.second > 0.0 }
-    }
-    if (candidates.isEmpty()) return null
-    var roll = random.nextDouble() * candidates.sumOf { it.second }
-    for ((loot, weight) in candidates) {
-      roll -= weight
-      if (roll <= 0.0) return loot
-    }
-    return candidates.last().first
+    val classes = plugin.catalog.classes
+    val bossRank = classes.rank(boss.clazz.key)
+    return Rolls.weighted(plugin.catalog.loot.mapNotNull { loot ->
+      val itemRank = classes.rank(loot.spec.mobclass)
+      if (itemRank < 0 || itemRank > bossRank || boss.level !in loot.spec.minLevel..loot.spec.maxLevel) null
+      else loot to loot.spec.weight * crossClass(bossRank - itemRank)
+    }, random)
   }
 
   private fun stack(loot: Catalog.Loot, level: Int, code: String): ItemStack {
@@ -69,12 +66,12 @@ class Loot(private val plugin: MoBossesPlugin) {
   }
 
   /** The item's own name in a language, or null to keep the game's. */
-  fun name(spec: ru.mairwunnx.mobosses.config.LootTable.Item, code: String): Component? {
+  fun name(spec: LootTable.Item, code: String): Component? {
     val raw = spec.title ?: spec.id?.let { plugin.languages.text(code, "items.$it.name") } ?: return null
     return plain(plugin.languages.deserialize(raw))
   }
 
-  private fun lore(spec: ru.mairwunnx.mobosses.config.LootTable.Item, code: String): List<Component>? {
+  private fun lore(spec: LootTable.Item, code: String): List<Component>? {
     val lines = spec.lore.takeIf { it.isNotEmpty() } ?: spec.id?.let { plugin.languages.text(code, "items.$it.lore") }?.split('\n') ?: return null
     return lines.filter { it.isNotBlank() }.map { plain(plugin.languages.deserialize(it)) }.ifEmpty { null }
   }
@@ -91,7 +88,7 @@ class Loot(private val plugin: MoBossesPlugin) {
     if (!cfg.enabled || material.maxDurability <= 0) return
     val min = cfg.minDurability.coerceIn(0.1, 1.0)
     val max = cfg.maxDurability.coerceIn(min, 1.0)
-    val left = Formulas.biasedInRange(min, max, WEAR_BIAS[itemClass?.lowercase()] ?: 0.0, Random)
+    val left = Rolls.biasedInRange(min, max, WEAR_BIAS[itemClass?.lowercase()] ?: 0.0, Random)
     meta.damage = (material.maxDurability * (1.0 - left)).toInt().coerceIn(0, material.maxDurability - 1)
   }
 

@@ -1,27 +1,27 @@
-package ru.mairwunnx.mobosses.boss
+package ru.mairwunnx.mobosses.combat
 
 import org.bukkit.Particle
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import ru.mairwunnx.mobosses.MoBossesPlugin
-import java.util.UUID
+import org.bukkit.persistence.PersistentDataType
+import ru.mairwunnx.mobosses.boss.Boss
 import kotlin.random.Random
 
 /**
  * Potion effects from `rewards.yml` for players who dealt enough of a boss's health: a few from the
  * class's pool, longer and stronger with the boss's level, plus absorption hearts. A player who just
  * got rewards waits a while before the next ones, so farming weak bosses doesn't keep them buffed.
+ * The wait lives on the player, so leaving and coming back doesn't end it.
  */
 class Rewards(private val plugin: MoBossesPlugin) {
-  private val cooldownUntil = HashMap<UUID, Long>()
-
   fun give(player: Player, boss: Boss) {
     val cfg = plugin.catalog.rewards
     if (!cfg.enabled) return
     val now = System.currentTimeMillis()
-    cooldownUntil.entries.removeIf { it.value < now }
-    if (cooldownUntil.containsKey(player.uniqueId)) return plugin.log.debug { "${player.name} gets no rewards yet: cooldown" }
+    val until = player.persistentDataContainer.get(plugin.keys.rewardsUntil, PersistentDataType.LONG) ?: 0L
+    if (until > now) return plugin.log.debug { "${player.name} gets no rewards yet: cooldown" }
 
     if (cfg.extinguishPlayer) player.fireTicks = 0
     if (cfg.cleanseNegatives) NEGATIVE.forEach(player::removePotionEffect)
@@ -43,7 +43,7 @@ class Rewards(private val plugin: MoBossesPlugin) {
 
     val cooldown = (seconds * cfg.cooldownMultiplier.coerceAtLeast(0.0)).toInt()
       .coerceIn(cfg.cooldownMinSeconds.coerceAtLeast(0), cfg.cooldownMaxSeconds.coerceAtLeast(cfg.cooldownMinSeconds.coerceAtLeast(0)))
-    cooldownUntil[player.uniqueId] = now + cooldown * 1000L
+    player.persistentDataContainer.set(plugin.keys.rewardsUntil, PersistentDataType.LONG, now + cooldown * 1000L)
     plugin.log.debug { "${player.name} got $count effects for ${seconds}s, next rewards in ${cooldown}s" }
   }
 

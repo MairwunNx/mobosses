@@ -1,14 +1,11 @@
 package ru.mairwunnx.mobosses.boss
 
+import org.bukkit.Location
 import org.bukkit.World
-import org.bukkit.attribute.Attribute
-import org.bukkit.entity.Creeper
 import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
-import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 import ru.mairwunnx.mobosses.MoBossesPlugin
-import ru.mairwunnx.mobosses.algebra.Formulas
 import ru.mairwunnx.mobosses.config.BossClass
 import ru.mairwunnx.mobosses.config.BossSpec
 import ru.mairwunnx.mobosses.lang.Message
@@ -21,6 +18,7 @@ import java.util.UUID
  */
 class Bosses(private val plugin: MoBossesPlugin) {
   private val live = HashMap<UUID, Boss>()
+  private val factory = BossFactory(plugin.keys)
 
   val all: Collection<Boss> get() = live.values
 
@@ -30,39 +28,18 @@ class Bosses(private val plugin: MoBossesPlugin) {
 
   fun count(world: World) = live.values.count { it.entity.world == world }
 
+  fun near(at: Location, radius: Double) = live.values.count { it.entity.world == at.world && it.entity.location.distanceSquared(at) <= radius * radius }
+
   /** Scales [entity] into a boss and marks it as one, so it stays a boss after a restart. */
   fun make(entity: LivingEntity, type: Catalog.BossType, clazz: BossClass, level: Int, summoner: UUID? = null): Boss {
-    val catalog = plugin.catalog
-    val formula = catalog.settings.formula
     val lvl = level.coerceAtLeast(1)
-
-    entity.persistentDataContainer.apply {
-      set(plugin.keys.type, PersistentDataType.STRING, type.key)
-      set(plugin.keys.clazz, PersistentDataType.STRING, clazz.key)
-      set(plugin.keys.level, PersistentDataType.INTEGER, lvl)
-      summoner?.let { set(plugin.keys.summoner, PersistentDataType.STRING, it.toString()) }
-    }
-
-    // The type's own values, not the current ones: a minion that turns into a boss was already changed by its spawn.
-    entity.getAttribute(Attribute.MAX_HEALTH)?.let { attribute ->
-      attribute.baseValue = Formulas.health(formula.health, attribute.defaultValue, clazz.health, lvl)
-      entity.health = attribute.value
-    }
-    entity.getAttribute(Attribute.ATTACK_DAMAGE)?.let { it.baseValue = Formulas.damage(formula.damage, it.defaultValue, clazz.damage, lvl) }
-    if (entity is Creeper && type.spec.isPowered == true) entity.isPowered = true
-    if (!equip(entity, type, lvl)) {
-      entity.getAttribute(Attribute.ARMOR)?.let { it.baseValue = Formulas.armor(formula.armor, it.defaultValue, clazz.defense, lvl) }
-      entity.getAttribute(Attribute.ARMOR_TOUGHNESS)?.let { it.baseValue = Formulas.armor(formula.toughness, it.defaultValue, clazz.toughness, lvl) }
-    }
-
-    val boss = Boss(entity, type, clazz, lvl, summoner)
-    live[entity.uniqueId] = boss
-    nameTag(boss)
+    factory.apply(entity, type, clazz, lvl, summoner, plugin.catalog.settings.formula)
+    val boss = register(entity, type, clazz, lvl, summoner)
     plugin.log.debug { "${type.key} became a level $lvl ${clazz.key} boss at ${entity.world.name} ${entity.location.blockX} ${entity.location.blockY} ${entity.location.blockZ}" }
     return boss
   }
 
-  /** Takes up a boss whose chunk just loaded, or one that was here before a restart. Null for any other entity. */
+  /** Takes up a boss whose chunk just loaded, or one from before a restart. Null for any other entity. */
   fun adopt(entity: Entity): Boss? {
     if (entity !is LivingEntity || entity.isDead) return null
     live[entity.uniqueId]?.let { return it }
@@ -75,14 +52,15 @@ class Bosses(private val plugin: MoBossesPlugin) {
     val clazz = data.get(plugin.keys.clazz, PersistentDataType.STRING)?.let(catalog.classes::byKey) ?: catalog.classes.all.first()
     val level = data.get(plugin.keys.level, PersistentDataType.INTEGER) ?: 1
     val summoner = data.get(plugin.keys.summoner, PersistentDataType.STRING)?.let { runCatching { UUID.fromString(it) }.getOrNull() }
-    return Boss(entity, type, clazz, level, summoner).also { live[entity.uniqueId] = it }
+    return register(entity, type, clazz, level, summoner)
   }
 
-  /** Lets go of a boss: its bar, glow, aura, and cooldowns. The entity stays as it is. */
+  /** Lets go of a boss: its bar, glow, aura, and labels. The entity and its data stay. */
   fun forget(boss: Boss) {
     if (live.remove(boss.uuid) == null) return
     plugin.bars.remove(boss)
     plugin.visuals.off(boss)
+    plugin.nameTags.clear(boss.entity)
   }
 
   /** Removes a boss from the world without loot or experience, as `/mobosses killall` does. */
@@ -91,37 +69,23 @@ class Bosses(private val plugin: MoBossesPlugin) {
     boss.entity.remove()
   }
 
-  /** Lets go of every boss, for a reload or shutdown; the entities stay in the world. */
+  /** Lets go of every boss, for shutdown; the entities stay in the world. */
   fun forgetAll() = live.values.toList().forEach(::forget)
 
-  /** The name over the boss's head. Every player sees the same one, so it's in the default language. */
-  fun nameTag(boss: Boss) {
-    val code = plugin.languages.default
-    plugin.languages.render(code, Message.BOSS_TAG, *plugin.texts.boss(code, boss))?.let {
-      boss.entity.customName(it)
-      boss.entity.isCustomNameVisible = true
-    }
-  }
-
   /**
-   * Gear for the boss's level: a random pick among the weapons and armor sets it qualifies for,
-   * within 7 levels of the best one. True when it got armor, which then replaces its armor attributes.
+   * The game's own name for the boss, in the default language: death messages use it, and it keeps
+   * the boss from despawning. With per-player labels on, it stays hidden under them.
    */
-  private fun equip(entity: LivingEntity, type: Catalog.BossType, level: Int): Boolean {
-    val equipment = entity.equipment ?: return false
-    type.weapons.filter { it.minLevel <= level }.takeIf { it.isNotEmpty() }?.let { weapons ->
-      val best = weapons.maxOf { it.minLevel }
-      weapons.filter { it.minLevel >= best - 7 }.randomOrNull()?.let { equipment.setItemInMainHand(item(it)) }
-    }
-    val armors = type.armors.filter { it.minLevel <= level }.takeIf { it.isNotEmpty() } ?: return false
-    val best = armors.maxOf { it.minLevel }
-    val set = armors.filter { it.minLevel >= best - 7 }.randomOrNull() ?: return false
-    equipment.setHelmet(set.helmet?.let(::item))
-    equipment.setChestplate(set.chestplate?.let(::item))
-    equipment.setLeggings(set.leggings?.let(::item))
-    equipment.setBoots(set.boots?.let(::item))
-    return true
+  fun vanillaName(boss: Boss) {
+    val code = plugin.languages.default
+    plugin.languages.render(code, Message.BOSS_TAG, *plugin.texts.boss(code, boss))?.let { boss.entity.customName(it) }
+    boss.entity.isCustomNameVisible = !plugin.catalog.settings.nameTags.perPlayer
   }
 
-  private fun item(gear: Catalog.Gear) = ItemStack(gear.material).apply { gear.enchantments.forEach { (e, l) -> addUnsafeEnchantment(e, l.coerceAtLeast(1)) } }
+  private fun register(entity: LivingEntity, type: Catalog.BossType, clazz: BossClass, level: Int, summoner: UUID?): Boss {
+    val boss = Boss(entity, type, clazz, level, summoner, plugin.keys)
+    live[entity.uniqueId] = boss
+    plugin.minions.forget(entity)
+    return boss
+  }
 }

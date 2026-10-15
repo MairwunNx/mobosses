@@ -1,14 +1,17 @@
 package ru.mairwunnx.mobosses
 
-import ru.mairwunnx.mobosses.algebra.Formulas
+import ru.mairwunnx.mobosses.algebra.Leveling
+import ru.mairwunnx.mobosses.algebra.Rolls
+import ru.mairwunnx.mobosses.algebra.Stats
 import ru.mairwunnx.mobosses.config.Settings
 import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 /**
- * The formulas against numbers Mo’Bosses 1.12.0 produced with its bundled config: the release jar's
- * own functions, called from a small program, with the same seeds for the random parts.
+ * The formulas 2.1 kept, against numbers Mo’Bosses 1.12.0 produced with its bundled config: the
+ * release jar's own functions, called from a small program, with the same seeds for the random parts.
+ * Player levels and natural boss levels changed in 2.1; ProgressionTest covers them.
  */
 class FormulasTest {
   private val settings = Settings()
@@ -105,24 +108,13 @@ class FormulasTest {
       Row("T", 100, 4.0, 11.026222366407216),
     ).forEach { (stat, level, classMul, expected) ->
       val actual = when (stat) {
-        "H" -> Formulas.health(formula.health, 20.0, classMul, level)
-        "D" -> Formulas.damage(formula.damage, 3.0, classMul, level)
-        "A" -> Formulas.armor(formula.armor, 2.0, classMul, level)
-        else -> Formulas.armor(formula.toughness, 2.0, classMul, level)
+        "H" -> Stats.health(formula.health, 20.0, classMul, level)
+        "D" -> Stats.damage(formula.damage, 3.0, classMul, level)
+        "A" -> Stats.armor(formula.armor, 2.0, classMul, level)
+        else -> Stats.armor(formula.toughness, 2.0, classMul, level)
       }
       assertEquals(expected, actual, 1e-9, "$stat at level $level, class ×$classMul")
     }
-  }
-
-  @Test fun `player levels match 1x`() {
-    listOf(
-      Triple(0L, 0, 1),
-      Triple(100L, 1, 2),
-      Triple(2500L, 10, 12),
-      Triple(67921L, 1430, 93),
-      Triple(1000000L, 50, 84),
-      Triple(10000L, 0, 20),
-    ).forEach { (experience, kills, level) -> assertEquals(level, Formulas.playerLevel(settings.progression.levelCurve, experience, kills), "$experience experience, $kills kills") }
   }
 
   @Test fun `minion counts match 1x`() {
@@ -135,7 +127,7 @@ class FormulasTest {
       50 to 8,
       75 to 9,
       100 to 10,
-    ).forEach { (level, count) -> assertEquals(count, Formulas.minions(exact, level, Random(1)), "level $level") }
+    ).forEach { (level, count) -> assertEquals(count, Rolls.minions(exact, level, Random(1)), "level $level") }
     mapOf(
       1 to 2,
       5 to 3,
@@ -144,10 +136,10 @@ class FormulasTest {
       50 to 7,
       75 to 8,
       100 to 9,
-    ).forEach { (level, count) -> assertEquals(count, Formulas.minions(formula.minions, level, Random(42)), "level $level, ±15%") }
+    ).forEach { (level, count) -> assertEquals(count, Rolls.minions(formula.minions, level, Random(42)), "level $level, ±15%") }
   }
 
-  @Test fun `mini boss and natural boss levels match 1x`() {
+  @Test fun `mini boss levels match 1x`() {
     mapOf(
       1 to 1,
       5 to 3,
@@ -156,21 +148,7 @@ class FormulasTest {
       50 to 40,
       75 to 63,
       100 to 86,
-    ).forEach { (parent, child) -> assertEquals(child, Formulas.childLevel(parent, settings.progression.miniBossesLevelCurve, Random(7)), "parent $parent") }
-    mapOf(
-      0 to 80,
-      1 to 59,
-      2 to 80,
-      3 to 30,
-      4 to 20,
-      5 to 80,
-      6 to 49,
-      7 to 80,
-      8 to 80,
-      9 to 45,
-      10 to 80,
-      11 to 42,
-    ).forEach { (seed, level) -> assertEquals(level, Formulas.bossLevel(settings.progression.variance, 80, Random(seed)), "seed $seed") }
+    ).forEach { (parent, child) -> assertEquals(child, Leveling.childLevel(parent, settings.progression.miniBossesLevelCurve, Random(7)), "parent $parent") }
   }
 
   @Test fun `linear ability scaling matches 1x`() {
@@ -183,13 +161,13 @@ class FormulasTest {
       Triple(75, 13, 12.5),
       Triple(100, 16, 15.0),
     ).forEach { (level, strikes, damage) ->
-      assertEquals(strikes, Formulas.linear(6, 0.1, 26, level))
-      assertEquals(damage, Formulas.linear(5.0, 0.1, 20.0, level), 1e-9)
+      assertEquals(strikes, Rolls.linear(6, 0.1, 26, level))
+      assertEquals(damage, Rolls.linear(5.0, 0.1, 20.0, level), 1e-9)
     }
   }
 
   @Test fun `a bias of 1 or less leaves a cooldown as it is`() {
     // 1.x threw here, since Random.nextDouble(1.0, 1.0) has an empty range.
-    assertEquals(5000.0, Formulas.biased(5000.0, 1.0, Random(1)))
+    assertEquals(5000.0, Rolls.biased(5000.0, 1.0, Random(1)))
   }
 }

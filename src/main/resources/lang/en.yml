@@ -24,7 +24,7 @@ bad_level: "<err>The level must be a number from 1 to <max>, not <level>.</err>"
 killed_all: "<pri>[Mo’Bosses]</pri> <ok>Bosses removed: <num><count></num>.</ok>"
 killed_none: "<pri>[Mo’Bosses]</pri> <warn>There are no bosses to remove.</warn>"
 
-# Over the boss's head, in the default language for everyone.
+# Over the boss's head, each player reads it in their own language.
 boss_tag: "<class_color>[Lv. <level>] [<class>] <boss_name>"
 boss_bar: "<boss_name> <class_color>[Lv. <level>]"
 
@@ -49,6 +49,10 @@ abilities:
   meteor_shower: "<boss><boss_name></boss> calls a <item>meteor shower</item>!"
   arrow_arc: "<boss><boss_name></boss> looses an <item>arrow arc</item>!"
   arrow_rain: "<boss><boss_name></boss> brings down an <item>arrow rain</item>!"
+  shockwave: "<boss><boss_name></boss> slams the ground!"
+  frost_nova: "<boss><boss_name></boss> breathes a <item>frost nova</item>!"
+  grapple: "<boss><boss_name></boss> drags you closer!"
+  enrage: "<boss><boss_name></boss> flies into a <err>rage</err>!"
 
 classes:
   common: "Common"
@@ -77,24 +81,40 @@ bosses:
   phantom: "The Drone"
   vex: "The Wraith"
   zombie_villager: "Zombachello"
+  bogged: "Mudbones"
+  blaze: "Hothead"
+  breeze: "Gusty"
+  cave_spider: "Venom Fang"
+  piglin_brute: "The Bouncer"
+  hoglin: "Tusker"
+  ravager: "The Bulldozer"
+  guardian: "Goggle-Eye"
 
 # By the boss that summons them, as in minions.yml.
 minions:
   zombie: "Rotling"
   spider: "Spiderling"
-  skeleton: "Bonelet"
-  enderman: "Enderworm"
-  wither_skeleton: "Witherling"
+  skeleton: "Bone Squire"
+  enderman: "Void Mite"
+  wither_skeleton: "Ash Squire"
   pillager: "Raider"
-  evoker: "Coroner"
-  witch: "Priestess’s Lackey"
-  vindicator: "Spirit"
-  stray: "Frozen One"
-  husk: "Sandswept"
-  drowned: "Waterlogged"
-  phantom: "Drone"
-  vex: "Spirit"
-  zombie_villager: "Zombie Kid"
+  evoker: "Hired Blade"
+  witch: "Hexed Thrall"
+  vindicator: "Vengeful Spirit"
+  stray: "Frostling"
+  husk: "Dust Thrall"
+  drowned: "Deep Thrall"
+  phantom: "Night Drone"
+  vex: "Wisp"
+  zombie_villager: "Rotten Villager"
+  bogged: "Bog Squire"
+  blaze: "Ember"
+  breeze: "Gustling"
+  cave_spider: "Broodling"
+  piglin_brute: "Grunt"
+  hoglin: "Hoglet"
+  ravager: "Outrider"
+  guardian: "Deep Watcher"
 
 # Loot names and lore, by the id in loottable.yml.
 items:

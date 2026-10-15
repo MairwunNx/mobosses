@@ -5,8 +5,8 @@ import ru.mairwunnx.mobosses.config.BossSpec
 import ru.mairwunnx.mobosses.config.Classes
 import ru.mairwunnx.mobosses.config.Configs
 import ru.mairwunnx.mobosses.config.LootTable
-import ru.mairwunnx.mobosses.config.Minions
-import ru.mairwunnx.mobosses.config.Rewards
+import ru.mairwunnx.mobosses.config.MinionSettings
+import ru.mairwunnx.mobosses.config.RewardSettings
 import ru.mairwunnx.mobosses.config.Settings
 import ru.mairwunnx.mobosses.config.Yamls
 import ru.mairwunnx.mobosses.lang.Languages
@@ -27,14 +27,14 @@ class ResourcesTest {
     assertEquals(Settings(), clean("config.yml", Settings::parse))
     assertEquals(AbilitySettings(), clean("abilities.yml", AbilitySettings::parse))
     assertEquals(Classes(), clean("classes.yml", Classes::parse))
-    assertEquals(Rewards(), clean("rewards.yml", Rewards::parse))
+    assertEquals(RewardSettings(), clean("rewards.yml", RewardSettings::parse))
   }
 
   @Test fun `the bundled boss, minion, and loot files read without warnings`() {
     val bosses = clean("bosses.yml", BossSpec::parse)
-    assertEquals(17, bosses.size)
+    assertEquals(25, bosses.size)
     assertTrue(bosses.values.all { it.name == null }, "bosses.yml names bosses; they belong in lang/")
-    assertEquals(15, clean("minions.yml", Minions::parse).minions.size)
+    assertEquals(23, clean("minions.yml", MinionSettings::parse).minions.size)
     val loot = clean("loottable.yml", LootTable::parse)
     assertTrue(loot.items.size > 500)
     assertTrue(loot.items.none { it.title != null || it.lore.isNotEmpty() }, "loottable.yml has fixed names; they belong in lang/")
@@ -42,7 +42,7 @@ class ResourcesTest {
 
   @Test fun `every bundled language sets every key the bundled files use`() {
     val bosses = BossSpec.parse(resource("bosses.yml")).keys.map { "bosses.${it.lowercase()}" }
-    val minions = Minions.parse(resource("minions.yml")).minions.map { "minions.${it.summoner.lowercase()}" }
+    val minions = MinionSettings.parse(resource("minions.yml")).minions.map { "minions.${it.summoner.lowercase()}" }
     val classes = Classes.KEYS.map { "classes.$it" }
     val items = LootTable.parse(resource("loottable.yml")).items.mapNotNull { it.id }.distinct().map { "items.$it.name" }
     val keys = Message.entries.map { it.key } + bosses + minions + classes + items
@@ -63,13 +63,28 @@ class ResourcesTest {
     assertEquals(0.09, configs.bosses.getValue("ZOMBIE").spawnChance)
     assertEquals("Гнилой", configs.bosses.getValue("ZOMBIE").name)
     assertEquals("Common", configs.classes.common.displayName)
-    assertEquals(BossSpec.parse(resource("bosses.yml")).keys, configs.bosses.keys)
+    assertTrue(BossSpec.parse(resource("bosses.yml")).keys.containsAll(configs.bosses.keys))
     assertEquals(LootTable.parse(resource("loottable.yml")).items.size, configs.loot.items.size)
     assertTrue(configs.loot.items.first { it.material == "STONE_SWORD" && it.title != null }.lore.isNotEmpty())
-    // Everything else equals what 2.0 ships.
-    assertEquals(Settings().copy(language = "ru", bossBar = Settings.BossBar(style = "SEGMENTED_20")), configs.settings)
+    // Everything else equals what 2.1 ships, but for the defaults 2.1 changed, which a 1.x file keeps.
+    val v1 = Settings()
+    assertEquals(
+      v1.copy(
+        language = "ru",
+        bossBar = Settings.BossBar(style = "SEGMENTED_20"),
+        progression = v1.progression.copy(levelCurve = Settings.LevelCurve(power = 1.3, offset = 20.0), variance = Settings.Variance(extraChance = 0.45)),
+        formula = v1.formula.copy(
+          experience = Settings.Curve(maxScale = 270.0, power = 2.0, offset = 1000.0),
+          armor = v1.formula.armor.copy(basePoints = 0.0),
+          toughness = v1.formula.toughness.copy(basePoints = 0.0),
+        ),
+      ),
+      configs.settings,
+    )
+    // Abilities 2.1 added stay off for a 1.x classes.yml.
+    assertEquals(100, configs.classes.mythic.abilityThresholds.shockwave)
     assertEquals(AbilitySettings(), configs.abilities)
-    assertEquals(Rewards(), configs.rewards)
+    assertEquals(RewardSettings(), configs.rewards)
   }
 
   @Test fun `a bad value costs only itself`() {

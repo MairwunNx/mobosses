@@ -24,7 +24,7 @@ bad_level: "<err>Die Stufe muss eine Zahl von 1 bis <max> sein, nicht <level>.</
 killed_all: "<pri>[Mo’Bosses]</pri> <ok>Bosse entfernt: <num><count></num>.</ok>"
 killed_none: "<pri>[Mo’Bosses]</pri> <warn>Es gibt keine Bosse, die du entfernen könntest.</warn>"
 
-# Über dem Kopf des Bosses, für alle in der Standardsprache.
+# Über dem Kopf des Bosses, jeder liest ihn in seiner Sprache.
 boss_tag: "<class_color>[Lvl. <level>] [<class>] <boss_name>"
 boss_bar: "<boss_name> <class_color>[Lvl. <level>]"
 
@@ -49,6 +49,10 @@ abilities:
   meteor_shower: "<boss><boss_name></boss> ruft einen <item>Meteorschauer</item> herbei!"
   arrow_arc: "<boss><boss_name></boss> feuert einen <item>Pfeilfächer</item> ab!"
   arrow_rain: "<boss><boss_name></boss> lässt <item>Pfeilregen</item> niedergehen!"
+  shockwave: "<boss><boss_name></boss> schlägt auf den Boden!"
+  frost_nova: "<boss><boss_name></boss> stößt eine <item>Frostwelle</item> aus!"
+  grapple: "<boss><boss_name></boss> zieht dich zu sich!"
+  enrage: "<boss><boss_name></boss> gerät in <err>Raserei</err>!"
 
 classes:
   common: "Gewöhnlich"
@@ -77,24 +81,40 @@ bosses:
   phantom: "Die Drohne"
   vex: "Der Schemen"
   zombie_villager: "Zombachello"
+  bogged: "Schlammknochen"
+  blaze: "Hitzkopf"
+  breeze: "Windbö"
+  cave_spider: "Giftzahn"
+  piglin_brute: "Der Türsteher"
+  hoglin: "Hauer"
+  ravager: "Der Bulldozer"
+  guardian: "Glotzauge"
 
 # Nach dem Boss, der sie beschwört, wie in minions.yml.
 minions:
   zombie: "Fäulling"
   spider: "Spinnling"
-  skeleton: "Knöchelchen"
-  enderman: "Enderwurm"
-  wither_skeleton: "Witherling"
+  skeleton: "Knochenknappe"
+  enderman: "Leermilbe"
+  wither_skeleton: "Aschenknappe"
   pillager: "Plünderer"
-  evoker: "Leichenbeschauer"
-  witch: "Lakai der Priesterin"
-  vindicator: "Geist"
-  stray: "Erfrorener"
-  husk: "Sandverwehter"
-  drowned: "Vollgesogener"
-  phantom: "Drohne"
-  vex: "Geist"
-  zombie_villager: "Zombiekind"
+  evoker: "Söldnerklinge"
+  witch: "Verhexter Diener"
+  vindicator: "Rachegeist"
+  stray: "Frostling"
+  husk: "Staubdiener"
+  drowned: "Tiefendiener"
+  phantom: "Nachtdrohne"
+  vex: "Irrlicht"
+  zombie_villager: "Fauler Dorfbewohner"
+  bogged: "Sumpfknappe"
+  blaze: "Glutling"
+  breeze: "Windstoß"
+  cave_spider: "Giftbrut"
+  piglin_brute: "Schläger"
+  hoglin: "Hoglinferkel"
+  ravager: "Vorreiter"
+  guardian: "Tiefenwächter"
 
 # Namen und Beschreibungen der Beute, nach der id in loottable.yml.
 items:

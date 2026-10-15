@@ -2,12 +2,15 @@
 #                          Mo’Bosses minions                                  #
 ###############################################################################
 # What each boss type summons with its summoning ability: summoner is the boss's
-# entity type, entity the minion's. Zombies, husks, drowned, piglins, and zombie
-# villagers come as babies. A minion may roll into a weaker boss, as a natural
-# spawn does (mini_bosses_level_curve in config.yml).
+# entity type, entity the minion's. Zombies, husks, drowned, piglins, zombie
+# villagers, and hoglins come as babies. A boss keeps no more minions alive than
+# summoning_max_alive in abilities.yml, and minions despawn as vanilla mobs do.
+# A minion may roll into a weaker boss, as a natural spawn does
+# (mini_bosses_level_curve in config.yml).
 #
-# Minion names live in lang/ under minions.<summoner>. A name: key here shows
-# that name to everyone instead, as 1.x did.
+# Minion names live in lang/ under minions.<summoner>, and each player reads
+# them in their own language. A name: key here shows that name to everyone
+# instead, as 1.x did.
 
 minions:
   - { summoner: ZOMBIE, entity: ZOMBIE }
@@ -25,3 +28,11 @@ minions:
   - { summoner: PHANTOM, entity: PHANTOM }
   - { summoner: VEX, entity: VEX }
   - { summoner: ZOMBIE_VILLAGER, entity: ZOMBIE_VILLAGER }
+  - { summoner: BOGGED, entity: BOGGED }
+  - { summoner: BLAZE, entity: BLAZE }
+  - { summoner: BREEZE, entity: BREEZE }
+  - { summoner: CAVE_SPIDER, entity: CAVE_SPIDER }
+  - { summoner: PIGLIN_BRUTE, entity: PIGLIN }
+  - { summoner: HOGLIN, entity: HOGLIN }
+  - { summoner: RAVAGER, entity: PILLAGER }
+  - { summoner: GUARDIAN, entity: GUARDIAN }

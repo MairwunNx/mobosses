@@ -29,6 +29,10 @@ common:
     meteor_shower: 67
     arrow_arc: 30
     arrow_rain: 75
+    shockwave: 40
+    frost_nova: 55
+    grapple: 50
+    enrage: 60
 
 uncommon:
   key: uncommon
@@ -49,6 +53,10 @@ uncommon:
     meteor_shower: 50
     arrow_arc: 28
     arrow_rain: 65
+    shockwave: 35
+    frost_nova: 50
+    grapple: 45
+    enrage: 50
 
 rare:
   key: rare
@@ -69,6 +77,10 @@ rare:
     meteor_shower: 45
     arrow_arc: 25
     arrow_rain: 60
+    shockwave: 30
+    frost_nova: 45
+    grapple: 40
+    enrage: 45
 
 epic:
   key: epic
@@ -89,6 +101,10 @@ epic:
     meteor_shower: 40
     arrow_arc: 20
     arrow_rain: 50
+    shockwave: 25
+    frost_nova: 40
+    grapple: 35
+    enrage: 35
 
 legendary:
   key: legendary
@@ -109,6 +125,10 @@ legendary:
     meteor_shower: 28
     arrow_arc: 14
     arrow_rain: 40
+    shockwave: 20
+    frost_nova: 32
+    grapple: 28
+    enrage: 25
 
 mythic:
   key: mythic
@@ -129,3 +149,7 @@ mythic:
     meteor_shower: 25
     arrow_arc: 10
     arrow_rain: 30
+    shockwave: 15
+    frost_nova: 25
+    grapple: 20
+    enrage: 15

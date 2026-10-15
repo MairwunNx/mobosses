@@ -8,7 +8,9 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import ru.mairwunnx.mobosses.MoBossesPlugin
-import ru.mairwunnx.mobosses.algebra.Formulas
+import ru.mairwunnx.mobosses.algebra.Leveling
+import ru.mairwunnx.mobosses.config.Settings
+import java.io.File
 import java.util.UUID
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
@@ -21,12 +23,36 @@ import java.util.concurrent.TimeUnit
 class Progression(private val plugin: MoBossesPlugin) : Listener {
   private val cache = ConcurrentHashMap<UUID, Progress>()
 
-  @Volatile var store: Store? = null
+  @Volatile var store: Store? = null; private set
+  private var settings: Settings.Database? = null
+
+  /** Opens the database off the server thread, since a remote one can take a while; only when its settings changed. */
+  fun open(next: Settings.Database, folder: File) {
+    if (next == settings) return
+    settings = next
+    val old = store
+    store = null
+    Thread({
+      old?.close()
+      try {
+        store = Store(next, folder).also { plugin.log.info("Progress is stored in ${it.description}") }
+        loadOnline()
+      } catch (e: Exception) {
+        plugin.log.error("Can't open the database; players' progress lasts only until they leave: ${e.message}")
+      }
+    }, "Mo’Bosses database").start()
+  }
+
+  fun close() {
+    store?.close()
+    store = null
+    settings = null
+  }
 
   /** Any thread: PlaceholderAPI asks from its own. */
   fun of(player: UUID): Progress = cache[player] ?: Progress()
 
-  fun level(player: UUID): Int = plugin.catalog.settings.progression.levelCurve.let { Formulas.playerLevel(it, of(player).experience, of(player).kills) }
+  fun level(player: UUID): Int = plugin.catalog.settings.progression.levelCurve.let { Leveling.playerLevel(it, of(player).experience, of(player).kills) }
 
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   fun onPreLogin(event: AsyncPlayerPreLoginEvent) {
@@ -54,15 +80,16 @@ class Progression(private val plugin: MoBossesPlugin) : Listener {
     }
   }
 
-  /** Counts a kill the player helped with. The server thread. */
-  fun add(player: Player, experience: Long) {
+  /** Adds a player's experience from a kill, and the kill itself when it [counts]. The server thread. */
+  fun add(player: Player, experience: Long, counts: Boolean) {
     val id = player.uniqueId
-    cache[id] = of(id).let { Progress(it.kills + 1, it.experience + experience) }
-    store?.add(id, 1, experience)?.whenComplete { saved, error ->
+    val kills = if (counts) 1 else 0
+    cache[id] = of(id).let { Progress(it.kills + kills, it.experience + experience) }
+    store?.add(id, kills, experience)?.whenComplete { saved, error ->
       if (error != null) plugin.log.warn("Can't save the progress of ${player.name}: ${error.message}")
       // The database's totals win: they count kills from before a failed load, or from another server on the same database.
       else cache.computeIfPresent(id) { _, _ -> saved }
     }
-    plugin.log.debug { "${player.name}: +$experience experience, level ${level(id)}" }
+    plugin.log.debug { "${player.name}: +$experience experience${if (counts) " and a kill" else ""}, level ${level(id)}" }
   }
 }
