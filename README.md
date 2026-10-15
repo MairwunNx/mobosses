@@ -51,11 +51,15 @@ Mo’Bosses runs on Moonlands, my hard survival server with friends. Come in and
 
 When a mob spawns, Mo’Bosses looks up its type in `bosses.yml`. If a player is within `spawn.spawn_radius`, the mob becomes a boss with the type’s `spawn_chance`, times the multipliers for the world, the time of day, and the weather. The boss picks a class by weight, takes the average level of the players within `spawn.group_radius`, and gets its health, damage, gear, and name.
 
-After a boss spawns for a group, its players wait about a minute for the next one, and no boss spawns while three are already close. Both live in `spawn` in `config.yml`.
+After a boss spawns for a group, its players wait about a minute for the next one, and no boss spawns while three are already close. Both live in `spawn` in `config.yml`. A boss nobody comes within 64 blocks of for 10 minutes leaves without loot, as vanilla mobs do (`despawn`); bosses from `/mobosses spawn` stay.
 
-Hitting a boss shows you its health bar. Each hit may set off an ability: a random one the boss has reached the level for, once the cooldowns have passed, among the shared ones and its type’s own. Everyone fighting it sees the warning over the hotbar. A new Epic boss or rarer announces itself to the players near it. Abilities hurt players in survival and adventure only; the boss’s own minions, pets, and villagers stay out of it.
+Top bosses outlast the game's own: a zombie boss has more health than the Ender Dragon (200) from level 30 as a Common and from 20 as a Rare, and more than the Warden (500) from level 40 as an Epic, 20 as a Mythic, and 100 as a Common. Their hits grow with them, toward the Warden's at the top, and their arrows, fireballs, and tridents grow too. A creeper boss's blast widens with its level; one that blows itself up gives nobody anything.
 
-When the boss dies, each player’s share of its health decides their part of the vanilla experience and the Mo’Bosses experience. The kill counts toward your level when you dealt 15% of the boss’s health and it wasn’t 20 or more levels below you; bosses below your level give you less experience. Players who dealt more than about a quarter of it (`loot.min_damage_share`) also get a piece of loot and the rewards.
+Hitting a boss shows you its health bar. Each hit, yours, your pet's, or a golem's, may set off an ability: a random one the boss has reached the level for, once the cooldowns have passed, among the shared ones and its type’s own. Everyone fighting it sees the warning over the hotbar. A new Epic boss or rarer announces itself to the players near it. Abilities hurt players in survival and adventure, and the pets and golems that hit the boss in the last 15 seconds; its own minions, other pets, and villagers stay out of it.
+
+When the boss dies, each player’s share of its health, their pets' damage included, decides their part of the vanilla experience and the Mo’Bosses experience. The vanilla experience grows with the fight: a level 1 Common zombie gives 8, little more than a zombie; from level 30, when it outlasts the Ender Dragon, more than the dragon's 500; a level 100 Mythic gives 20,000. After a kill, each player reads in the chat what they got and, line by line, why it was less or more. In experience, pets' damage is worth almost all of yours at low levels and 60% at the top.
+
+The kill counts toward your level when you dealt 15% of the boss’s health and it wasn’t far below you: levels compare by ratio, so a level 80 player still counts a level 60 boss, but not a level 40 one. Bosses below your level give you less experience, a little for a few levels and most of it for half your level. Players who dealt more than about a quarter of it (`loot.min_damage_share`) also get a piece of loot and the rewards. In a group the thresholds come down, to 60% over the number of players at most, so four friends who split a boss evenly all get their loot.
 
 Bosses keep their type, class, level, cooldowns, and who hit them how hard on the entity itself. They survive restarts and chunk unloads, and pick up their glow, bar, names, and abilities again when their chunk loads. The rewards and spawn cooldowns live on each player, so a relog doesn’t reset them. Temporary blocks, like cobwebs, go back when they expire, when the server stops, or, after a crash, on the next start.
 
@@ -91,14 +95,15 @@ Every file lives in `plugins/MoBosses/`, and every key has a default, so you can
 
 | Command | Permission | What it does |
 |---|---|---|
-| `/mobosses` | `mobosses.use` | Opens the menu: your card, the best hunters, the bosses by class, and, for admins, reload and remove-all buttons |
+| `/mobosses` | `mobosses.use` | Opens the menu: your card, the best hunters, the bosses by class, a button to start over, and, for admins, reload and remove-all buttons |
 | `/mobosses info [player]` | `mobosses.use` | Your level, rank, experience, kills, and how long until a boss may spawn near you; another player’s needs `mobosses.info.others` |
 | `/mobosses top` | `mobosses.use` | The best hunters |
+| `/mobosses reset [confirm \| player]` | `mobosses.reset` | Starts you over: wipes your level, experience, and kills, after `confirm`. Spawn and reward cooldowns stay. Another player’s, at once, needs `mobosses.reset.others` |
 | `/mobosses reload` | `mobosses.reload` | Reloads every config and language file; bosses keep going |
 | `/mobosses spawn <entity> <level> <class> [x y z [world]]` | `mobosses.spawn` | Spawns a boss two blocks ahead of you, or at the coordinates, which the console must give |
 | `/mobosses killall` | `mobosses.killall` | Removes every boss in loaded chunks, without loot or experience |
 
-Everyone has `mobosses.use`. `mobosses.admin` gives all the rest; operators have it by default. The command also answers to `/mb` and `/moboss`, and suggests every argument.
+Everyone has `mobosses.use` and `mobosses.reset`. `mobosses.admin` gives all the rest; operators have it by default. The command also answers to `/mb` and `/moboss`, and suggests every argument.
 
 ## Protected areas
 

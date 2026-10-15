@@ -16,17 +16,21 @@ import kotlin.random.Random
  * The wait lives on the player, so leaving and coming back doesn't end it.
  */
 class Rewards(private val plugin: MoBossesPlugin) {
-  fun give(player: Player, boss: Boss) {
+  /** Null when it gave them or they're off; otherwise the seconds until the player may get rewards again. */
+  fun give(player: Player, boss: Boss): Long? {
     val cfg = plugin.catalog.rewards
-    if (!cfg.enabled) return
+    if (!cfg.enabled) return null
     val now = System.currentTimeMillis()
     val until = player.persistentDataContainer.get(plugin.keys.rewardsUntil, PersistentDataType.LONG) ?: 0L
-    if (until > now) return plugin.log.debug { "${player.name} gets no rewards yet: cooldown" }
+    if (until > now) {
+      plugin.log.debug { "${player.name} gets no rewards yet: cooldown" }
+      return ((until - now) / 1000).coerceAtLeast(1)
+    }
 
     if (cfg.extinguishPlayer) player.fireTicks = 0
     if (cfg.cleanseNegatives) NEGATIVE.forEach(player::removePotionEffect)
 
-    val tier = plugin.catalog.tiers[boss.clazz.key] ?: plugin.catalog.tiers["common"] ?: return
+    val tier = plugin.catalog.tiers[boss.clazz.key] ?: plugin.catalog.tiers["common"] ?: return null
     val seconds = (cfg.baseDurationSeconds + cfg.durationPerLevel * boss.level).toInt().coerceIn(1, cfg.maxDurationSeconds.coerceAtLeast(1))
     val ticks = seconds * 20
     val amplifier = (cfg.amplifierBase + cfg.amplifierPerLevel * boss.level).toInt().coerceIn(0, cfg.amplifierMax.coerceAtLeast(0))
@@ -45,6 +49,7 @@ class Rewards(private val plugin: MoBossesPlugin) {
       .coerceIn(cfg.cooldownMinSeconds.coerceAtLeast(0), cfg.cooldownMaxSeconds.coerceAtLeast(cfg.cooldownMinSeconds.coerceAtLeast(0)))
     player.persistentDataContainer.set(plugin.keys.rewardsUntil, PersistentDataType.LONG, now + cooldown * 1000L)
     plugin.log.debug { "${player.name} got $count effects for ${seconds}s, next rewards in ${cooldown}s" }
+    return null
   }
 
   private companion object {

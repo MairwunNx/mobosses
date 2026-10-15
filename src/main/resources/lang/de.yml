@@ -10,7 +10,7 @@
 reloaded: "<pri>[Mo’Bosses]</pri> <ok>Neu geladen.</ok>"
 reload_failed: "<pri>[Mo’Bosses]</pri> <warn>Mit Fehlern neu geladen.</warn> <gray>Sieh ins Serverlog.</gray>"
 no_permission: "<err>Diesen Befehl darfst du nicht nutzen.</err>"
-usage: '<gray>Nutze</gray> <white>/mobosses</white> <gray>für das Menü,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>; als Admin:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray> oder</gray> <white>/mobosses killall</white>'
+usage: '<gray>Nutze</gray> <white>/mobosses</white> <gray>für das Menü,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>,</gray> <white>/mobosses reset</white><gray>; als Admin:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray> oder</gray> <white>/mobosses killall</white>'
 # <entities>, <classes>: was zur Auswahl steht.
 spawn_usage: '<gray>Nutze</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray>. Wesen:</gray> <white><entities></white><gray>. Klassen:</gray> <white><classes></white>'
 spawned: "<pri>[Mo’Bosses]</pri> <ok>Gespawnt:</ok> <class_color>[Lvl. <level>] [<class>]</class_color> <boss_name>"
@@ -34,6 +34,12 @@ info: |-
   <gray>Nächster Boss bei dir</gray> <white><cooldown></white>
 info_ready: "jeden Moment"
 
+# /mobosses reset. <player>: wessen Fortschritt ein Admin gelöscht hat.
+reset:
+  ask: "<pri>[Mo’Bosses]</pri> <warn>Das löscht deine Stufe, deine Erfahrung und deine besiegten Bosse und nimmt dich von der Bestenliste. Rückgängig machen geht nicht.</warn> <gray>Weiter mit:</gray> <click:run_command:'/mobosses reset confirm'><white>/mobosses reset confirm</white></click>"
+  done: "<pri>[Mo’Bosses]</pri> <ok>Dein Fortschritt ist gelöscht: Du bist wieder auf Stufe 1.</ok>"
+  done_other: "<pri>[Mo’Bosses]</pri> <ok>Der Fortschritt von <player> ist gelöscht.</ok>"
+
 # /mobosses top und das Menü. <rank>, <player>, <level>, <kills>.
 top:
   header: "<pri>Mo’Bosses</pri> <dark_gray>·</dark_gray> <gray>die besten Jäger</gray>"
@@ -47,6 +53,13 @@ menu:
   top: "<gold>Die besten Jäger</gold>"
   bosses: "<boss>Bosse</boss> <gray>· gerade <alive> unterwegs</gray>"
   bosses_line: "<class><gray>: gespawnt</gray> <num><spawned></num><gray>, besiegt</gray> <num><killed></num>"
+  # Die erste Zeile benennt den Knopf, der Rest beschreibt ihn.
+  reset: |-
+    <red>Neu anfangen</red>
+    <gray>Löscht Stufe, Erfahrung und besiegte Bosse.</gray>
+  reset_confirm: |-
+    <red><b>Klick noch mal, um neu anzufangen</b></red>
+    <gray>Rückgängig machen geht nicht.</gray>
   reload: "<green>Mo’Bosses neu laden</green>"
   killall: "<red>Alle Bosse entfernen</red>"
   close: "<gray>Schließen</gray>"
@@ -57,6 +70,21 @@ boss_bar: "<boss_name> <class_color>[Lvl. <level>]"
 
 # An die Spieler in der Nähe eines neuen Bosses der Klasse broadcast.spawns_from oder seltener.
 boss_nearby: "<pri>[Mo’Bosses]</pri> <warn>In der Nähe ist ein Boss erschienen:</warn> <class_color>[Lvl. <level>] [<class>]</class_color> <boss><boss_name></boss>"
+
+# Nach einem Kill an jeden Beteiligten, im Chat (broadcast.kill_notes): warum er
+# weniger als alles bekam, oder mehr. <boss_level>, <your_level> (seine Stufe),
+# <percent>, <share> (wie viel Leben des Bosses er abzog), <kill> und <loot> (wie
+# viel es braucht), <seconds>, <pets> (der Anteil seiner Tiere), <weight>.
+# header: was er bekam, mit dem Boss, <share>, <experience>, <mobosses_experience>.
+kill_notes:
+  header: "<pri>[Mo’Bosses]</pri> <class_color>[Lvl. <level>] [<class>]</class_color> <boss_name> <gray>besiegt · dein Anteil <share> %:</gray> <xp>+<experience> Erfahrung</xp><gray>,</gray> <xp>+<mobosses_experience> Mo’Bosses-Erfahrung</xp>"
+  above: "<dark_gray>  ›</dark_gray> <ok>Der Boss war Stufe <boss_level>, über deiner <your_level>: +<percent> % Erfahrung.</ok>"
+  below: "<dark_gray>  ›</dark_gray> <warn>Der Boss war Stufe <boss_level>, unter deiner <your_level>: Du bekommst <percent> % seiner Erfahrung.</warn> <gray>Bosse auf deiner Stufe geben alles.</gray>"
+  not_counted: "<dark_gray>  ›</dark_gray> <warn>Das zählt nicht als Kill für deine Stufe: Ein Boss der Stufe <boss_level> ist zu schwach für Stufe <your_level>.</warn>"
+  small_share: "<dark_gray>  ›</dark_gray> <warn>Du hast <share> % vom Leben des Bosses abgezogen: Ein Kill braucht <kill> %, Beute <loot> %.</warn>"
+  no_loot: "<dark_gray>  ›</dark_gray> <warn>Keine Beute: Du hast <share> % vom Leben des Bosses abgezogen, Beute braucht <loot> %.</warn>"
+  rewards_cooldown: "<dark_gray>  ›</dark_gray> <gray>Diesmal keine Tränke als Belohnung: Die nächsten gibt es in <seconds> s.</gray>"
+  pets: "<dark_gray>  ›</dark_gray> <gray>Deine Tiere haben <pets> % deines Schadens gemacht; bei diesem Boss zählt er zu <weight> % für Erfahrung.</gray>"
 
 # An alle, wenn Spieler einen Boss besiegen. <player>: alle, die ihn getroffen haben; <experience>: die Vanilla-Erfahrung, die er fallen ließ.
 kill: "<pri>[Mo’Bosses]</pri> <boss><boss_name></boss> <num>Lvl. <level></num>/<class> fällt durch <ok><player></ok> – <xp><experience></xp> Erfahrung!"

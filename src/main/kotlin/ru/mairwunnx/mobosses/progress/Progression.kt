@@ -57,10 +57,13 @@ class Progression(private val plugin: MoBossesPlugin) : Listener {
   fun load(player: UUID): CompletableFuture<Progress> = store?.load(player) ?: CompletableFuture.completedFuture(Progress())
 
   /** The best hunters; empty without a database. Any thread. */
-  fun top(limit: Int): CompletableFuture<List<Hunter>> = store?.top(limit) ?: CompletableFuture.completedFuture(emptyList())
+  fun top(limit: Int): CompletableFuture<List<Hunter>> = store?.top(limit, score()) ?: CompletableFuture.completedFuture(emptyList())
 
   /** A player's place on the board; null without a database. */
-  fun rank(player: UUID): CompletableFuture<Int?> = store?.rank(player)?.thenApply { it } ?: CompletableFuture.completedFuture(null)
+  fun rank(player: UUID): CompletableFuture<Int?> = store?.rank(player, score())?.thenApply { it } ?: CompletableFuture.completedFuture(null)
+
+  /** The board ranks by what levels grow from, so it agrees with them. Taken now, on the asking thread, for the store's. */
+  private fun score(): (Progress) -> Double = plugin.catalog.settings.progression.levelCurve.let { curve -> { Leveling.score(curve, it.experience, it.kills) } }
 
   /** Bosses by type and class; empty without a database. */
   fun counts(): CompletableFuture<List<BossCount>> = store?.counts() ?: CompletableFuture.completedFuture(emptyList())
@@ -99,6 +102,16 @@ class Progression(private val plugin: MoBossesPlugin) : Listener {
         else cache.putIfAbsent(id, progress)
       }
     }
+  }
+
+  /**
+   * Wipes a player's progress, online or not. The cache empties at once, and again once the database
+   * is done: a kill still saving would otherwise put the old totals back.
+   */
+  fun reset(player: UUID): CompletableFuture<Unit> {
+    cache.computeIfPresent(player) { _, _ -> Progress() }
+    val store = store ?: return CompletableFuture.completedFuture(Unit)
+    return store.reset(player).whenComplete { _, error -> if (error == null) cache.computeIfPresent(player) { _, _ -> Progress() } }
   }
 
   /** Adds a player's experience from a kill, and the kill itself when it [counts]. The server thread. */

@@ -4,15 +4,14 @@ import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.jetbrains.exposed.v1.core.DatabaseConfig
 import org.jetbrains.exposed.v1.core.ResultRow
-import org.jetbrains.exposed.v1.core.SortOrder
 import org.jetbrains.exposed.v1.core.and
-import org.jetbrains.exposed.v1.core.greater
 import org.jetbrains.exposed.v1.core.eq
 import org.jetbrains.exposed.v1.core.vendors.MariaDBDialect
 import org.jetbrains.exposed.v1.core.vendors.MysqlDialect
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.JdbcTransaction
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
+import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.TransactionManager
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
@@ -76,17 +75,33 @@ class Store(private val settings: Settings.Database, folder: File) : AutoCloseab
     next
   }
 
-  /** The best hunters, by experience. */
-  fun top(limit: Int): CompletableFuture<List<Hunter>> = query {
-    PlayerProgressTable.selectAll().orderBy(PlayerProgressTable.totalExperience to SortOrder.DESC).limit(limit)
-      .map { Hunter(it[PlayerProgressTable.uuid], it[PlayerProgressTable.name], progress(it)) }
+  /** Wipes a player's record: they start again at level 1 and leave the board. */
+  fun reset(player: UUID): CompletableFuture<Unit> = query {
+    PlayerProgressTable.deleteWhere { PlayerProgressTable.uuid eq player.toString() }
+    Unit
   }
 
-  /** A player's place on the board: 1 plus how many have more experience. */
-  fun rank(player: UUID): CompletableFuture<Int> = query {
-    val own = PlayerProgressTable.selectAll().where { PlayerProgressTable.uuid eq player.toString() }.singleOrNull()?.get(PlayerProgressTable.totalExperience) ?: 0L
-    PlayerProgressTable.selectAll().where { PlayerProgressTable.totalExperience greater own }.count().toInt() + 1
+  /**
+   * The best hunters, by [score], what their level grows from, then by experience. The score takes a
+   * square root that SQLite may lack, so the rows are sorted here; a row is a few bytes, even for
+   * thousands of players.
+   */
+  fun top(limit: Int, score: (Progress) -> Double): CompletableFuture<List<Hunter>> = query {
+    hunters().sortedWith(order(score)).take(limit)
   }
+
+  /** A player's place on the board: 1 plus how many rank above them. */
+  fun rank(player: UUID, score: (Progress) -> Double): CompletableFuture<Int> = query {
+    val all = hunters()
+    val own = all.firstOrNull { it.uuid == player.toString() } ?: Hunter(player.toString(), null, Progress())
+    val order = order(score)
+    all.count { it.uuid != own.uuid && order.compare(it, own) < 0 } + 1
+  }
+
+  private fun hunters() = PlayerProgressTable.selectAll().map { Hunter(it[PlayerProgressTable.uuid], it[PlayerProgressTable.name], progress(it)) }
+
+  private fun order(score: (Progress) -> Double) =
+    compareByDescending<Hunter> { score(it.progress) }.thenByDescending { it.progress.experience }
 
   /** Counts a boss that spawned, or one players killed. */
   fun count(type: String, clazz: String, killed: Boolean) {

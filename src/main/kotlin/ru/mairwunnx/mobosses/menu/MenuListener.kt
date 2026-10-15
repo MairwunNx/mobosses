@@ -16,6 +16,10 @@ class MenuListener(private val plugin: MoBossesPlugin) : Listener {
     val player = event.whoClicked as? Player ?: return
     if (event.clickedInventory?.holder !== menu) return
     when (menu.actions[event.rawSlot]) {
+      Menu.Action.RESET -> if (!menu.resetArmed) menu.armReset() else {
+        player.closeInventory()
+        player.performCommand("mobosses reset confirm")
+      }
       Menu.Action.RELOAD -> {
         player.closeInventory()
         player.performCommand("mobosses reload")

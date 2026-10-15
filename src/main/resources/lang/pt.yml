@@ -10,7 +10,7 @@
 reloaded: "<pri>[Mo’Bosses]</pri> <ok>Recarregado.</ok>"
 reload_failed: "<pri>[Mo’Bosses]</pri> <warn>Recarregado com erros.</warn> <gray>Veja o log do servidor.</gray>"
 no_permission: "<err>Você não pode usar este comando.</err>"
-usage: '<gray>Use</gray> <white>/mobosses</white> <gray>para o menu,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>; admins:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray> ou</gray> <white>/mobosses killall</white>'
+usage: '<gray>Use</gray> <white>/mobosses</white> <gray>para o menu,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>,</gray> <white>/mobosses reset</white><gray>; admins:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray> ou</gray> <white>/mobosses killall</white>'
 # <entities>, <classes>: as opções disponíveis.
 spawn_usage: '<gray>Use</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray>. Entidades:</gray> <white><entities></white><gray>. Classes:</gray> <white><classes></white>'
 spawned: "<pri>[Mo’Bosses]</pri> <ok>Invocado:</ok> <class_color>[Nv. <level>] [<class>]</class_color> <boss_name>"
@@ -34,6 +34,12 @@ info: |-
   <gray>Próximo chefe perto de você</gray> <white><cooldown></white>
 info_ready: "a qualquer momento"
 
+# /mobosses reset. <player>: de quem um admin apagou o progresso.
+reset:
+  ask: "<pri>[Mo’Bosses]</pri> <warn>Isto apaga seu nível, sua experiência e seus abates, e tira você do placar. Não dá para desfazer.</warn> <gray>Para continuar:</gray> <click:run_command:'/mobosses reset confirm'><white>/mobosses reset confirm</white></click>"
+  done: "<pri>[Mo’Bosses]</pri> <ok>Seu progresso foi apagado: você voltou ao nível 1.</ok>"
+  done_other: "<pri>[Mo’Bosses]</pri> <ok>O progresso de <player> foi apagado.</ok>"
+
 # /mobosses top e o menu. <rank>, <player>, <level>, <kills>.
 top:
   header: "<pri>Mo’Bosses</pri> <dark_gray>·</dark_gray> <gray>os melhores caçadores</gray>"
@@ -47,6 +53,13 @@ menu:
   top: "<gold>Os melhores caçadores</gold>"
   bosses: "<boss>Chefes</boss> <gray>· <alive> vivos agora</gray>"
   bosses_line: "<class><gray>: surgiram</gray> <num><spawned></num><gray>, derrotados</gray> <num><killed></num>"
+  # A primeira linha dá nome ao botão; o resto o descreve.
+  reset: |-
+    <red>Começar do zero</red>
+    <gray>Apaga o nível, a experiência e os abates.</gray>
+  reset_confirm: |-
+    <red><b>Clique de novo para começar do zero</b></red>
+    <gray>Não dá para desfazer.</gray>
   reload: "<green>Recarregar Mo’Bosses</green>"
   killall: "<red>Remover todos os chefes</red>"
   close: "<gray>Fechar</gray>"
@@ -57,6 +70,21 @@ boss_bar: "<boss_name> <class_color>[Nv. <level>]"
 
 # Para os jogadores perto de um chefe novo da classe broadcast.spawns_from ou mais rara.
 boss_nearby: "<pri>[Mo’Bosses]</pri> <warn>Um chefe surgiu por perto:</warn> <class_color>[Nv. <level>] [<class>]</class_color> <boss><boss_name></boss>"
+
+# Depois de um abate, para cada jogador que participou, no chat
+# (broadcast.kill_notes): por que recebeu menos que tudo, ou mais. <boss_level>,
+# <your_level> (o dele), <percent>, <share> (a vida do chefe que tirou), <kill> e <loot>
+# (o que é preciso), <seconds>, <pets> (a parte dos pets no dano dele), <weight>.
+# header: o que recebeu, com o chefe, <share>, <experience>, <mobosses_experience>.
+kill_notes:
+  header: "<pri>[Mo’Bosses]</pri> <class_color>[Nv. <level>] [<class>]</class_color> <boss_name> <gray>derrotado · sua parte <share>%:</gray> <xp>+<experience> de experiência</xp><gray>,</gray> <xp>+<mobosses_experience> do Mo’Bosses</xp>"
+  above: "<dark_gray>  ›</dark_gray> <ok>O chefe era nível <boss_level>, acima do seu <your_level>: +<percent>% de experiência.</ok>"
+  below: "<dark_gray>  ›</dark_gray> <warn>O chefe era nível <boss_level>, abaixo do seu <your_level>: você recebeu <percent>% da experiência dele.</warn> <gray>Chefes do seu nível dão tudo.</gray>"
+  not_counted: "<dark_gray>  ›</dark_gray> <warn>Não conta como abate para o seu nível: um chefe nível <boss_level> é fraco demais para o nível <your_level>.</warn>"
+  small_share: "<dark_gray>  ›</dark_gray> <warn>Você tirou <share>% da vida do chefe: um abate pede <kill>% e o saque <loot>%.</warn>"
+  no_loot: "<dark_gray>  ›</dark_gray> <warn>Sem saque: você tirou <share>% da vida do chefe, e o saque pede <loot>%.</warn>"
+  rewards_cooldown: "<dark_gray>  ›</dark_gray> <gray>Desta vez não há poções de recompensa: as próximas vêm em <seconds> s.</gray>"
+  pets: "<dark_gray>  ›</dark_gray> <gray>Seus pets causaram <pets>% do seu dano; contra este chefe ele vale <weight>% na experiência.</gray>"
 
 # Para todos quando jogadores matam um chefe. <player>: todos que o atingiram; <experience>: a experiência vanilla que ele deixou cair.
 kill: "<pri>[Mo’Bosses]</pri> <ok><player></ok> derrotou <boss><boss_name></boss> <num>Nv. <level></num>/<class> e ganhou <xp><experience></xp> de experiência!"

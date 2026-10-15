@@ -1,5 +1,6 @@
 package ru.mairwunnx.mobosses
 
+import ru.mairwunnx.mobosses.algebra.Leveling
 import ru.mairwunnx.mobosses.config.Settings
 import ru.mairwunnx.mobosses.progress.BossCount
 import ru.mairwunnx.mobosses.progress.Progress
@@ -11,6 +12,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class StoreTest {
+  private val score = { p: Progress -> Leveling.score(Settings.LevelCurve(), p.experience, p.kills) }
   private val player = UUID.fromString("0f3f4a1c-6d2b-4b8e-9a51-3f1e2d7c8b90")
 
   /** A file as 1.x left it: the same statements Exposed 0.50 ran, and a player's row. */
@@ -40,9 +42,12 @@ class StoreTest {
       store.add(UUID(0, 1), "Alex", 1, 50).get()
       store.add(UUID(0, 2), "Steve", 3, 500).get()
       store.add(UUID(0, 3), "Kai", 2, 200).get()
-      assertEquals(listOf("Steve", "Kai"), store.top(2).get().map { it.name })
-      assertEquals(2, store.rank(UUID(0, 3)).get())
-      assertEquals(4, store.rank(UUID(0, 9)).get(), "a player with nothing is last")
+      assertEquals(listOf("Steve", "Kai"), store.top(2, score).get().map { it.name })
+      assertEquals(2, store.rank(UUID(0, 3), score).get())
+      assertEquals(4, store.rank(UUID(0, 9), score).get(), "a player with nothing is last")
+      // Kills weigh in, as they do in levels: 40 kills and little experience beat 500 experience and 3 kills.
+      store.add(UUID(0, 4), "Mia", 40, 10).get()
+      assertEquals("Mia", store.top(1, score).get().single().name)
 
       store.count("zombie", "rare", killed = false)
       store.count("zombie", "rare", killed = false)
@@ -52,6 +57,19 @@ class StoreTest {
         setOf(BossCount("zombie", "rare", 2, 1), BossCount("blaze", "mythic", 1, 0)),
         store.counts().get().toSet(),
       )
+    }
+    folder.deleteRecursively()
+  }
+
+  @Test fun `a reset wipes one player and leaves the others`() {
+    val folder = Files.createTempDirectory("mobosses").toFile()
+    Store(Settings.Database(), folder).use { store ->
+      store.add(UUID(0, 1), "Alex", 4, 400).get()
+      store.add(UUID(0, 2), "Steve", 1, 100).get()
+      store.reset(UUID(0, 1)).get()
+      assertEquals(Progress(), store.load(UUID(0, 1)).get())
+      assertEquals(listOf("Steve"), store.top(10, score).get().map { it.name })
+      assertEquals(Progress(1, 10), store.add(UUID(0, 1), "Alex", 1, 10).get(), "a reset player starts again from nothing")
     }
     folder.deleteRecursively()
   }

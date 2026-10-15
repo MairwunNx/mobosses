@@ -31,14 +31,24 @@ fun main(args: Array<String>) {
 
   fun Double.digits(n: Int) = String.format(Locale.ROOT, "%.${n}f", this)
 
-  table("Health of a zombie (20)") { l, c -> Stats.health(formula.health, 20.0, c.health, l).digits(0) }
-  table("Damage of a zombie (3)") { l, c -> Stats.damage(formula.damage, 3.0, c.damage, l).digits(1) }
+  table("Health of a zombie (20); the Ender Dragon has 200, the Warden 500") { l, c -> Stats.health(formula.health, 20.0, c.health, l).digits(0) }
+  table("Health of a ravager (100)") { l, c -> Stats.health(formula.health, 100.0, c.health, l).digits(0) }
+  table("Damage of a zombie (3); the Ender Dragon hits for 10, the Warden for 30") { l, c -> Stats.damage(formula.damage, 3.0, c.damage, l).digits(1) }
+  table("Bosses' own arrows and fireballs, times") { l, c -> Stats.ranged(formula.damage, c.damage, l, formula.rangedDamage).digits(2) }
   table("Armor of a zombie (2)") { l, c -> Stats.armor(formula.armor, 2.0, c.defense, l).digits(1) }
   table("Toughness of any mob (0)") { l, c -> Stats.armor(formula.toughness, 0.0, c.toughness, l).digits(1) }
-  table("Vanilla experience from a zombie (5)") { l, c -> Stats.experience(formula.experience, 5, c.experience, 1.0, l).toString() }
-  table("Mo’Bosses experience from a whole zombie kill") { l, c ->
-    Leveling.bossExperience(settings.progression.expGain, Stats.health(formula.health, 20.0, c.health, l), c.experience, l).toString()
+  table("Vanilla experience from a zombie (5); the Wither gives 50, the Ender Dragon 500, 12,000 the first time") { l, c ->
+    Stats.experience(formula.experience, 5, c.experience, 1.0, l).toString()
   }
+  table("Mo’Bosses experience from a whole zombie kill") { l, c ->
+    Leveling.bossExperience(settings.progression.expGain, Stats.health(formula.health, 20.0, c.health, l), c.experience, l).digits(1)
+  }
+
+  println("\nA creeper's blast radius; a charged one's after the slash")
+  println(levels.joinToString("\t") { "$it: ${Stats.explosionRadius(formula.explosion, 3, it)}/${Stats.explosionRadius(formula.explosion, 6, it)}" })
+
+  println("\nPet damage's worth in experience")
+  println(levels.joinToString("\t") { "$it: ${Leveling.petWeight(settings.progression.petDamage, it).digits(2)}" })
 
   println("\nMinions per summon, without variance")
   println(levels.joinToString("\t") { "$it: ${Rolls.minions(formula.minions.copy(variance = 0.0), it, Random(0))}" })

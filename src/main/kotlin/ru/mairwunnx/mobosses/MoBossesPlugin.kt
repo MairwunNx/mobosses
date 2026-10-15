@@ -8,6 +8,7 @@ import ru.mairwunnx.mobosses.ability.kinds.MeteorListener
 import ru.mairwunnx.mobosses.boss.BossBars
 import ru.mairwunnx.mobosses.boss.Bosses
 import ru.mairwunnx.mobosses.boss.Catalog
+import ru.mairwunnx.mobosses.boss.Despawns
 import ru.mairwunnx.mobosses.boss.Keys
 import ru.mairwunnx.mobosses.boss.Minions
 import ru.mairwunnx.mobosses.boss.NameTags
@@ -63,6 +64,7 @@ class MoBossesPlugin : JavaPlugin() {
   val loot = Loot(this)
   val rewards = Rewards(this)
   val spawns = SpawnListener(this)
+  val despawns = Despawns(this)
   val blockChanges = BlockChanges(this)
   val menuStats = Stats(this)
 
@@ -83,6 +85,7 @@ class MoBossesPlugin : JavaPlugin() {
     registerCommand("mobosses", "Your Mo’Bosses level and the best hunters; for admins, reload, spawn, or remove bosses", listOf("mb", "moboss"), MoBossesCommand(this))
     tasks += server.scheduler.runTaskTimer(this, Runnable { visuals.tick(); bars.tick(); PlanData.bossesAlive = bosses.all.size }, 20L, 20L)
     tasks += server.scheduler.runTaskTimer(this, Runnable { nameTags.tick() }, 10L, 10L)
+    tasks += server.scheduler.runTaskTimer(this, Runnable { despawns.tick() }, 100L, 100L)
 
     // What the last run left: cobwebs after a crash, and bosses and minions in chunks already loaded.
     blockChanges.temporary.recover()

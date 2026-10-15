@@ -32,8 +32,12 @@ class SpawnListener(private val plugin: MoBossesPlugin) : Listener {
     val entity = event.entity
     if (plugin.nameTags.isStray(entity)) return Bukkit.getScheduler().runTask(plugin, Runnable { entity.remove() }).let {}
     val boss = plugin.bosses.adopt(entity)
-    if (boss != null) Bukkit.getScheduler().runTask(plugin, Runnable { if (boss.entity.isValid) plugin.bosses.vanillaName(boss) })
-    else plugin.minions.adopt(entity)
+    if (boss != null) {
+      Bukkit.getScheduler().runTask(plugin, Runnable { if (boss.entity.isValid) plugin.bosses.vanillaName(boss) })
+      plugin.despawns.loaded(boss)
+    } else {
+      plugin.minions.adopt(entity)
+    }
   }
 
   /** Dead, unloaded, or removed: the entity keeps its data, the plugin lets go of the rest. */

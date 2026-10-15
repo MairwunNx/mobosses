@@ -75,7 +75,7 @@ object MeteorShower : Ability {
       if (age >= lifetime) return@every
       hit.world.spawnParticle(Particle.EXPLOSION, hit, 2)
       hit.world.playSound(hit, Sound.ENTITY_GENERIC_EXPLODE, 0.55f, 1.1f)
-      cast.players(hit, cfg.meteorFireRadius).forEach {
+      cast.victims(hit, cfg.meteorFireRadius).forEach {
         it.damage(damage, cast.boss.entity)
         it.fireTicks = max(it.fireTicks, cfg.meteorIgniteSeconds * 20)
       }

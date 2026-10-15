@@ -17,6 +17,7 @@ data class Settings(
   val locales: Locales = Locales(),
   val geoip: GeoIpSettings = GeoIpSettings(),
   val spawn: Spawn = Spawn(),
+  val despawn: Despawn = Despawn(),
   val progression: Progression = Progression(),
   val formula: Formulas = Formulas(),
   val effects: Effects = Effects(),
@@ -51,6 +52,17 @@ data class Settings(
     /** A MaxMind-format country database, plain or gzipped. `{year}` and `{month}` fill in the current month. */
     val url: String = "https://download.db-ip.com/free/dbip-country-lite-{year}-{month}.mmdb.gz",
     @SerialName("refresh_days") val refreshDays: Int = 30,
+  )
+
+  /** Bosses nobody comes near for a while leave the world, as vanilla mobs do, instead of piling up in caves for good. */
+  @Serializable
+  data class Despawn(
+    val enabled: Boolean = true,
+    /** How long a boss may go without a player within [radius] before it leaves. */
+    @SerialName("after_minutes") val afterMinutes: Int = 10,
+    val radius: Int = 64,
+    /** Bosses from `/mobosses spawn` stay until killed or removed. */
+    @SerialName("keep_spawned_by_command") val keepSpawnedByCommand: Boolean = true,
   )
 
   @Serializable
@@ -93,6 +105,20 @@ data class Settings(
     val relevance: Relevance = Relevance(),
     /** The share of a boss's health a player must deal for the kill to count toward their level. */
     @SerialName("min_share") val minShare: Double = 0.15,
+    /** In a group of N players, no share threshold (kills, loot, rewards) asks for more than this over N. */
+    @SerialName("group_share") val groupShare: Double = 0.6,
+    @SerialName("pet_damage") val petDamage: PetDamage = PetDamage(),
+  )
+
+  /**
+   * What the damage of a player's pets is worth in the experience of a kill, against their own: almost
+   * all of it at low levels, down to [minWeight] at the top. For the share, loot, and kills it counts whole.
+   */
+  @Serializable
+  data class PetDamage(
+    @SerialName("min_weight") val minWeight: Double = 0.5,
+    val power: Double = 1.5,
+    val offset: Double = 300.0,
   )
 
   @Serializable
@@ -132,20 +158,35 @@ data class Settings(
     val power: Double = 1.2,
   )
 
-  /** Bosses far below a player's level give them less, so farming weak ones doesn't level anyone up; stronger ones give a little more. */
+  /**
+   * Bosses below a player's level give them less, so farming weak ones doesn't level anyone up;
+   * stronger ones give a little more. It compares levels by ratio, `(boss + offset) / (player +
+   * offset)`, so a few levels mean little to newcomers and a lot to no one.
+   */
   @Serializable
   data class Relevance(
-    /** Levels below the player at which a boss stops counting. */
-    val gap: Int = 20,
+    val offset: Double = 15.0,
+    /** Below 1, the ratio to this power is the share of experience a kill brings. */
+    val power: Double = 1.5,
     val floor: Double = 0.1,
     val bonus: Double = 1.5,
+    /** The lowest ratio at which a kill still counts toward the player's level. */
+    @SerialName("kill_ratio") val killRatio: Double = 0.65,
   )
 
   @Serializable
   data class Formulas(
-    val health: Curve = Curve(maxScale = 20.0, power = 1.8, offset = 400.0, flatten = 0.35),
-    val damage: Curve = Curve(maxScale = 6.0, power = 1.2, offset = 600.0, flatten = 0.40),
-    val experience: Curve = Curve(maxScale = 40.0, power = 1.6, offset = 400.0),
+    val health: Curve = Curve(maxScale = 32.0, power = 1.8, offset = 1000.0, flatten = 0.35, basePoints = 20.0),
+    val damage: Curve = Curve(maxScale = 6.0, power = 1.3, offset = 180.0, flatten = 0.40),
+    /** The share of the damage growth that bosses' own arrows, fireballs, and tridents get. */
+    @SerialName("ranged_damage") val rangedDamage: Double = 0.6,
+    val explosion: Explosion = Explosion(),
+    /**
+     * The vanilla experience a boss drops, over its mob's own (at least `base_points`): little more
+     * than the mob at first, past the Ender Dragon's 500 once a boss outlasts the dragon, and up to
+     * 20,000 for a level 100 Mythic, more than the dragon's first kill.
+     */
+    val experience: Curve = Curve(maxScale = 600.0, power = 3.0, offset = 200_000.0, basePoints = 5.0),
     val armor: CappedCurve = CappedCurve(maxScale = 2.0, power = 1.2, offset = 180.0, flatten = 0.35, capPoints = 28, basePoints = 2.0),
     val toughness: CappedCurve = CappedCurve(maxScale = 2.2, power = 1.1, offset = 200.0, flatten = 0.30, capPoints = 12, basePoints = 2.0),
     val minions: MinionsCurve = MinionsCurve(),
@@ -159,6 +200,8 @@ data class Settings(
     val offset: Double = 1.0,
     /** How much the class multipliers shrink toward 1 at high levels, 0 to 1. Unset means 0.3. */
     val flatten: Double? = null,
+    /** The starting value for mobs that have less of their own, so a silverfish boss isn't a joke. */
+    @SerialName("base_points") val basePoints: Double = 0.0,
   )
 
   @Serializable
@@ -173,6 +216,18 @@ data class Settings(
   ) {
     val curve get() = Curve(maxScale, power, offset, flatten)
   }
+
+  /**
+   * A creeper boss's blast radius: the game's, 3 or 6 when charged, plus up to [maxExtra] blocks,
+   * growing by level like the other curves. Added, not multiplied, so a level 100 creeper outblasts a
+   * charged one of the game's, and a charged boss doesn't end up with a crater of 16.
+   */
+  @Serializable
+  data class Explosion(
+    @SerialName("max_extra") val maxExtra: Double = 6.0,
+    val power: Double = 1.2,
+    val offset: Double = 60.0,
+  )
 
   @Serializable
   data class MinionsCurve(
@@ -248,6 +303,8 @@ data class Settings(
     /** “boss_nearby” to the players near a new boss of this class or rarer; `none` turns it off. */
     @SerialName("spawns_from") val spawnsFrom: String = "epic",
     @SerialName("spawns_radius") val spawnsRadius: Int = 64,
+    /** “kill_notes.*” to each player after a kill: why they got less, or more, than the whole of it. */
+    @SerialName("kill_notes") val killNotes: Boolean = true,
   )
 
   @Serializable

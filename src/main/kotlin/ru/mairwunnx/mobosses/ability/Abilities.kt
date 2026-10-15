@@ -22,13 +22,13 @@ import ru.mairwunnx.mobosses.boss.Boss
 import kotlin.random.Random
 
 /**
- * Picks abilities. Each time a player hits a boss, the boss may cast one it has reached the level
+ * Picks abilities. Each time a player, their pet, or a golem hits a boss, the boss may cast one it has reached the level
  * for, at random, once both the shared cooldown and that ability's own have passed; the cooldowns
  * live on the boss, so a restart doesn't hand it a free volley. Enrage isn't picked: it answers the
  * boss's health dropping, once.
  */
 class Abilities(private val plugin: MoBossesPlugin) {
-  fun onHit(boss: Boss, attacker: Player) {
+  fun onHit(boss: Boss, attacker: Player?) {
     val catalog = plugin.catalog
     if (!catalog.settings.enabled) return
     val settings = catalog.abilities
@@ -57,7 +57,7 @@ class Abilities(private val plugin: MoBossesPlugin) {
     plugin.log.debug { "${cast.boss.type.key} (${cast.boss.uuid}) cast ${ability.key}" }
     val broadcast = plugin.catalog.settings.broadcast
     if (!broadcast.abilities) return
-    val fighters = (cast.boss.damage.keys.mapNotNull(Bukkit::getPlayer) + cast.attacker).distinct()
+    val fighters = (cast.boss.damage.keys.mapNotNull(Bukkit::getPlayer) + listOfNotNull(cast.attacker)).distinct()
       .filter { it.world == cast.at.world && it.location.distanceSquared(cast.at) <= FIGHT * FIGHT }
     fighters.forEach { player ->
       val resolvers = plugin.texts.boss(plugin.texts.languageOf(player), cast.boss)

@@ -1,6 +1,7 @@
 package ru.mairwunnx.mobosses.lang
 
 import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.JoinConfiguration
 import net.kyori.adventure.text.minimessage.tag.Tag
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
@@ -23,6 +24,13 @@ class Texts(private val plugin: MoBossesPlugin) {
   fun send(to: CommandSender, message: Message, vararg resolvers: TagResolver) {
     val code = languageOf(to)
     plugin.languages.render(code, message, *resolvers, *personal(to), target = to as? Player)?.let(to::sendMessage)
+  }
+
+  /** Several messages as one block in the chat, line under line; the ones a language leaves empty drop out. */
+  fun sendBlock(to: Player, lines: List<Pair<Message, Array<out TagResolver>>>) {
+    val code = languageOf(to)
+    val rendered = lines.mapNotNull { (message, resolvers) -> plugin.languages.render(code, message, *resolvers, *personal(to), target = to) }
+    if (rendered.isNotEmpty()) to.sendMessage(Component.join(JoinConfiguration.newlines(), rendered))
   }
 
   /** A message over the hotbar instead of in the chat, for warnings that come often, like abilities in a fight. */

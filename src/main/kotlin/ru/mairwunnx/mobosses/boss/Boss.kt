@@ -27,13 +27,31 @@ class Boss(
 
   val color: TextColor get() = colorOf(clazz)
 
-  /** Damage each player dealt, capped by the health the boss had left at each hit. */
-  val damage: Map<UUID, Double> get() = read(keys.damage).mapNotNull { (k, v) -> runCatching { UUID.fromString(k) }.getOrNull()?.let { it to v } }.toMap()
+  /** Damage each player dealt, their pets' included, capped by the health the boss had left at each hit. */
+  val damage: Map<UUID, Double> get() = players(keys.damage)
 
-  fun addDamage(player: UUID, amount: Double) {
-    val next = damage.toMutableMap().apply { merge(player, amount, Double::plus) }
-    write(keys.damage, next.mapKeys { it.key.toString() })
+  /** The part of [damage] that each player's pets dealt. */
+  val petDamage: Map<UUID, Double> get() = players(keys.petDamage)
+
+  fun addDamage(player: UUID, amount: Double, byPet: Boolean = false) {
+    add(keys.damage, player, amount)
+    if (byPet) add(keys.petDamage, player, amount)
   }
+
+  /** When a player was last near, in epoch milliseconds; null for bosses from before 2.3. */
+  var seen: Long?
+    get() = entity.persistentDataContainer.get(keys.seen, PersistentDataType.LONG)
+    set(value) = if (value == null) entity.persistentDataContainer.remove(keys.seen) else entity.persistentDataContainer.set(keys.seen, PersistentDataType.LONG, value)
+
+  /** A boss from `/mobosses spawn`, which an admin placed and which doesn't despawn. */
+  var pinned: Boolean
+    get() = entity.persistentDataContainer.get(keys.pinned, PersistentDataType.BOOLEAN) == true
+    set(value) = entity.persistentDataContainer.set(keys.pinned, PersistentDataType.BOOLEAN, value)
+
+  private fun players(key: NamespacedKey) = read(key).mapNotNull { (k, v) -> runCatching { UUID.fromString(k) }.getOrNull()?.let { it to v } }.toMap()
+
+  private fun add(key: NamespacedKey, player: UUID, amount: Double) =
+    write(key, players(key).toMutableMap().apply { merge(player, amount, Double::plus) }.mapKeys { it.key.toString() })
 
   /** When an ability, or [SHARED] for any, may go off again, in epoch milliseconds. */
   fun readyAt(ability: String): Long = read(keys.cooldowns)[ability]?.toLong() ?: 0L

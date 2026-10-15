@@ -72,6 +72,15 @@ spawn:
   max_nearby: 3
   nearby_radius: 48
 
+# A boss with no player within radius for after_minutes leaves, without loot,
+# as vanilla mobs do, so bosses don't pile up in caves for good. One found again
+# long after its chunk unloaded leaves as the chunk loads.
+despawn:
+  enabled: true
+  after_minutes: 10
+  radius: 64
+  keep_spawned_by_command: true   # Bosses from /mobosses spawn stay.
+
 # ---------------------------------------------------------------------------
 #  Player levels
 # ---------------------------------------------------------------------------
@@ -110,15 +119,30 @@ progression:
     max_cut: 0.30         # up to 30% at max_level.
     power: 1.2
 
-  # Bosses far below a player's level give them little, so farming weak ones
-  # doesn't level anyone up; stronger ones give a little more. A boss gap levels
-  # below gives floor of its experience and its kill doesn't count; each level
-  # above adds 1/gap, up to bonus.
+  # Bosses below a player's level give them less, so farming weak ones levels
+  # nobody up; stronger ones give a little more. Levels compare by ratio,
+  # (boss + offset) / (player + offset), so a few levels apart mean little to
+  # newcomers. Below 1, the ratio to the power is the share of experience, never
+  # under floor; above 1, the ratio itself, up to bonus. Under kill_ratio the kill
+  # doesn't count: level 80 against a level 60 boss still counts, against 40 not.
   relevance:
-    gap: 20
+    offset: 15.0
+    power: 1.5
     floor: 0.1
     bonus: 1.5
+    kill_ratio: 0.65
   min_share: 0.15   # The share of a boss's health a player must deal for the kill to count.
+  # In a group of N players, no share threshold (this one, loot's, and rewards')
+  # asks for more than group_share / N: four friends who split a boss evenly all
+  # get loot.
+  group_share: 0.6
+  # A player's pets add to their share, and so to kills and loot, in full. In
+  # experience their damage is worth a bit less as bosses grow: almost all of it
+  # at low levels, min_weight of it at the top.
+  pet_damage:
+    min_weight: 0.5
+    power: 1.5
+    offset: 300.0
 
 # ---------------------------------------------------------------------------
 #  Boss stats
@@ -126,22 +150,41 @@ progression:
 # Each stat is the mob's vanilla value × the class multiplier × a curve by level
 # that starts at 1 and approaches max_scale. offset delays the climb, power makes
 # it steeper, and flatten (0 to 1) shrinks the class difference at high levels.
+# With these, a zombie boss outlasts the Ender Dragon (200) from level 30 as a
+# Common and from 20 as a Rare, and the Warden (500) from 40 as an Epic, 20 as a
+# Mythic, and 100 as a Common.
 formula:
   health:
-    max_scale: 20.0
+    max_scale: 32.0
     power: 1.8
-    offset: 400.0
+    offset: 1000.0
     flatten: 0.35
+    base_points: 20.0   # Smaller mobs, like spiders and vexes, start from a zombie's 20.
   damage:
     max_scale: 6.0
-    power: 1.2
-    offset: 600.0
+    power: 1.3
+    offset: 180.0
     flatten: 0.40
-  # The vanilla experience a boss drops.
+  # The share of the damage growth that a boss's own arrows, fireballs, and
+  # tridents get; abilities have their own damage.
+  ranged_damage: 0.6
+  # A creeper boss's blast radius: the game's (3, or 6 when charged) plus up to
+  # max_extra blocks by level: 3 to 8, or 6 to 11 when charged, at level 100.
+  # A creeper that blows itself up gives nobody anything: nobody killed it.
+  explosion:
+    max_extra: 6.0
+    power: 1.2
+    offset: 60.0
+  # The vanilla experience a boss drops: its mob's own (at least base_points) ×
+  # the class's experience × this curve. A level 1 Common zombie gives 8, a bit
+  # more than the zombie's 5; from level 30 a Common gives more than the Ender
+  # Dragon's 500, as it outlasts the dragon; a level 100 Mythic gives 20,000, more
+  # than the dragon's first kill, about level 86 from nothing. It splits by share.
   experience:
-    max_scale: 40.0
-    power: 1.6
-    offset: 400.0
+    max_scale: 600.0
+    power: 3.0
+    offset: 200000.0
+    base_points: 5.0
   # Armor and toughness apply to bosses without an armor set from bosses.yml.
   # base_points stands in for mobs with less of their own: most have no
   # toughness and skeletons no armor, and nothing times a multiplier is nothing.
@@ -210,6 +253,10 @@ broadcast:
   abilities_in: action_bar   # action_bar, over the hotbar, or chat.
   spawns_from: epic          # “boss_nearby” to players near a new boss this rare or rarer; none turns it off.
   spawns_radius: 64
+  # “kill_notes.*” to each player after a kill, in the chat: why they got less
+  # experience, no loot, no rewards, or no kill, and when a boss above their
+  # level gave more.
+  kill_notes: true
 
 kill_sound:
   enabled: true

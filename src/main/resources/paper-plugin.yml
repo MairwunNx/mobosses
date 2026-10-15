@@ -13,12 +13,20 @@ permissions:
   mobosses.info.others:
     description: Use /mobosses info on other players
     default: op
+  mobosses.reset:
+    description: Wipe your own level, experience, and kills with /mobosses reset or the menu
+    default: true
+  mobosses.reset.others:
+    description: Wipe another player's progress with /mobosses reset <player>
+    default: op
   mobosses.admin:
     description: Use every /mobosses command
     default: op
     children:
       mobosses.use: true
       mobosses.info.others: true
+      mobosses.reset: true
+      mobosses.reset.others: true
       mobosses.reload: true
       mobosses.spawn: true
       mobosses.killall: true

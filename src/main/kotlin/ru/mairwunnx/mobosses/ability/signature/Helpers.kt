@@ -1,5 +1,6 @@
 package ru.mairwunnx.mobosses.ability.signature
 
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
 import org.bukkit.util.Vector
@@ -17,10 +18,10 @@ internal fun aim(cast: Cast, target: Player, spread: Double): Vector {
 /** Players within [radius] of the boss, measured as a sphere. */
 internal fun around(cast: Cast, radius: Double): List<Player> = cast.players(cast.at, radius).filter { it.location.distanceSquared(cast.at) <= radius * radius }
 
-/** Pushes [player] away from the boss, and up a little. */
-internal fun knock(cast: Cast, player: Player, strength: Double, lift: Double) {
-  val away = player.location.toVector().subtract(cast.at.toVector()).setY(0)
-  player.velocity = (if (away.lengthSquared() < 1e-4) Vector(1, 0, 0) else away.normalize()).multiply(strength).setY(lift)
+/** Pushes [target] away from the boss, and up a little. */
+internal fun knock(cast: Cast, target: Entity, strength: Double, lift: Double) {
+  val away = target.location.toVector().subtract(cast.at.toVector()).setY(0)
+  target.velocity = (if (away.lengthSquared() < 1e-4) Vector(1, 0, 0) else away.normalize()).multiply(strength).setY(lift)
 }
 
 /** Effects for every player around the boss; false when nobody is there. */

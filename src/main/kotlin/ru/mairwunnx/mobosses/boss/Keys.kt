@@ -11,6 +11,14 @@ class Keys(plugin: Plugin) {
   val level = NamespacedKey(plugin, "level")
   /** Who dealt how much: `uuid=damage;…`. */
   val damage = NamespacedKey(plugin, "damage")
+  /** The part of [damage] each player's pets dealt: `uuid=damage;…`. */
+  val petDamage = NamespacedKey(plugin, "pet_damage")
+  /** When a player was last near the boss, in epoch milliseconds, for despawning. */
+  val seen = NamespacedKey(plugin, "seen")
+  /** On bosses from `/mobosses spawn`, which don't despawn. */
+  val pinned = NamespacedKey(plugin, "pinned")
+  /** On pets and golems that hit a boss: `boss-uuid=millis`, until when its abilities may hit them back. */
+  val aggressor = NamespacedKey(plugin, "aggressor")
   /** When each ability may go off again, in epoch milliseconds: `ability=millis;…`, with `*` for the shared cooldown. */
   val cooldowns = NamespacedKey(plugin, "ready")
   /** On ability arrows: they hit players only. */

@@ -29,19 +29,19 @@ object Shockwave : Ability {
     return true
   }
 
-  private fun inReach(cast: Cast) = cast.players(cast.at, cast.settings.shockwaveRadius).filter { it.location.distance(cast.at) <= cast.settings.shockwaveRadius }
+  private fun inReach(cast: Cast) = cast.victims(cast.at, cast.settings.shockwaveRadius).filter { it.location.distance(cast.at) <= cast.settings.shockwaveRadius }
 
   private fun slam(cast: Cast) {
     val cfg = cast.settings
     val damage = Rolls.linear(cfg.shockwaveDamageBase, cfg.shockwaveDamagePerLevel, cfg.shockwaveDamageMax, cast.level)
     cast.at.world.spawnParticle(Particle.EXPLOSION, cast.at, 3, cfg.shockwaveRadius / 3, 0.2, cfg.shockwaveRadius / 3, 0.0)
     cast.sound(Sound.ENTITY_GENERIC_EXPLODE, 0.8f, 0.7f)
-    inReach(cast).forEach { player ->
-      val away = player.location.toVector().subtract(cast.at.toVector()).setY(0)
+    inReach(cast).forEach { victim ->
+      val away = victim.location.toVector().subtract(cast.at.toVector()).setY(0)
       val closeness = 1.0 - (away.length() / cfg.shockwaveRadius).coerceIn(0.0, 1.0)
-      player.damage(damage * (0.5 + 0.5 * closeness), cast.boss.entity)
+      victim.damage(damage * (0.5 + 0.5 * closeness), cast.boss.entity)
       val push = if (away.lengthSquared() < 1e-4) away.setX(1.0) else away.normalize()
-      player.velocity = push.multiply(cfg.shockwaveKnockback * (0.5 + 0.5 * closeness)).setY(cfg.shockwaveLift)
+      victim.velocity = push.multiply(cfg.shockwaveKnockback * (0.5 + 0.5 * closeness)).setY(cfg.shockwaveLift)
     }
   }
 }

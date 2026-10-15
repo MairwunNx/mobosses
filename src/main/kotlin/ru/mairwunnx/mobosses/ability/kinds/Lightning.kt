@@ -41,7 +41,7 @@ object Lightning : Ability {
     }
     points.forEach { point ->
       point.world.strikeLightningEffect(point)
-      cast.players(point, 2.5).forEach { it.damage(damage, cast.boss.entity) }
+      cast.victims(point, 2.5).forEach { it.damage(damage, cast.boss.entity) }
     }
     cast.sound(Sound.ENTITY_LIGHTNING_BOLT_THUNDER)
     return true

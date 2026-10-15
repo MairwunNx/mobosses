@@ -11,11 +11,15 @@ import kotlin.test.assertEquals
 /**
  * The formulas 2.1 kept, against numbers Mo’Bosses 1.12.0 produced with its bundled config: the
  * release jar's own functions, called from a small program, with the same seeds for the random parts.
- * Player levels and natural boss levels changed in 2.1; ProgressionTest covers them.
+ * Player levels and natural boss levels changed in 2.1, and the health and damage curves' defaults in
+ * 2.3; ProgressionTest covers them. Here the curves run with 1.x's numbers.
  */
 class FormulasTest {
   private val settings = Settings()
-  private val formula = settings.formula
+  private val formula = settings.formula.copy(
+    health = Settings.Curve(maxScale = 20.0, power = 1.8, offset = 400.0, flatten = 0.35),
+    damage = Settings.Curve(maxScale = 6.0, power = 1.2, offset = 600.0, flatten = 0.40),
+  )
 
   private data class Row(val stat: String, val level: Int, val classMul: Double, val expected: Double)
 

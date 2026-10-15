@@ -9,6 +9,7 @@ import org.bukkit.persistence.PersistentDataType
 import ru.mairwunnx.mobosses.algebra.Stats
 import ru.mairwunnx.mobosses.config.BossClass
 import ru.mairwunnx.mobosses.config.Settings
+import kotlin.math.roundToInt
 import java.util.UUID
 
 /**
@@ -31,7 +32,12 @@ class BossFactory(private val data: Keys) {
       entity.health = it.value
     }
     entity.getAttribute(Attribute.ATTACK_DAMAGE)?.let { it.baseValue = Stats.damage(formula.damage, it.defaultValue, clazz.damage, level).coerceAtLeast(it.defaultValue) }
-    if (entity is Creeper && type.spec.isPowered == true) entity.isPowered = true
+    if (entity is Creeper) {
+      if (type.spec.isPowered == true) entity.isPowered = true
+      // The game doubles a charged creeper's radius when it blows, so it gets half of the whole.
+      val charge = if (entity.isPowered) 2 else 1
+      entity.explosionRadius = (Stats.explosionRadius(formula.explosion, CREEPER_RADIUS * charge, level) / charge.toDouble()).roundToInt()
+    }
     // A piglin or hoglin in the overworld turns into a zombified one after a few seconds, and the boss would go with it.
     if (entity is PiglinAbstract) entity.isImmuneToZombification = true
     if (entity is Hoglin) entity.isImmuneToZombification = true
@@ -39,5 +45,10 @@ class BossFactory(private val data: Keys) {
       entity.getAttribute(Attribute.ARMOR)?.let { it.baseValue = Stats.armor(formula.armor, it.defaultValue, clazz.defense, level).coerceAtLeast(it.defaultValue) }
       entity.getAttribute(Attribute.ARMOR_TOUGHNESS)?.let { it.baseValue = Stats.armor(formula.toughness, it.defaultValue, clazz.toughness, level).coerceAtLeast(it.defaultValue) }
     }
+  }
+
+  private companion object {
+    /** A creeper's blast radius in the game. */
+    const val CREEPER_RADIUS = 3
   }
 }

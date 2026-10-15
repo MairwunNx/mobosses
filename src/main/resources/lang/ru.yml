@@ -10,7 +10,7 @@
 reloaded: "<pri>[Mo’Bosses]</pri> <ok>Перезагружено.</ok>"
 reload_failed: "<pri>[Mo’Bosses]</pri> <warn>Перезагружено с ошибками.</warn> <gray>Подробности в логе сервера.</gray>"
 no_permission: "<err>Вам недоступна эта команда.</err>"
-usage: '<gray>Команды:</gray> <white>/mobosses</white><gray> — меню,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>; для админов:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray> и</gray> <white>/mobosses killall</white>'
+usage: '<gray>Команды:</gray> <white>/mobosses</white><gray> — меню,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>,</gray> <white>/mobosses reset</white><gray>; для админов:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray> и</gray> <white>/mobosses killall</white>'
 # <entities>, <classes>: из чего можно выбрать.
 spawn_usage: '<gray>Команда:</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray>. Существа:</gray> <white><entities></white><gray>. Классы:</gray> <white><classes></white>'
 spawned: "<pri>[Mo’Bosses]</pri> <ok>Призван</ok> <class_color>[Ур. <level>] [<class>]</class_color> <boss_name>"
@@ -34,6 +34,12 @@ info: |-
   <gray>Следующий босс рядом</gray> <white><cooldown></white>
 info_ready: "в любой момент"
 
+# /mobosses reset. <player>: чей прогресс сбросил админ.
+reset:
+  ask: "<pri>[Mo’Bosses]</pri> <warn>Это сотрёт ваш уровень, опыт и убийства и уберёт вас из таблицы. Отменить нельзя.</warn> <gray>Чтобы продолжить:</gray> <click:run_command:'/mobosses reset confirm'><white>/mobosses reset confirm</white></click>"
+  done: "<pri>[Mo’Bosses]</pri> <ok>Прогресс сброшен: вы снова на 1-м уровне.</ok>"
+  done_other: "<pri>[Mo’Bosses]</pri> <ok>Прогресс игрока <player> сброшен.</ok>"
+
 # /mobosses top и меню. <rank>, <player>, <level>, <kills>.
 top:
   header: "<pri>Mo’Bosses</pri> <dark_gray>·</dark_gray> <gray>лучшие охотники</gray>"
@@ -47,6 +53,13 @@ menu:
   top: "<gold>Лучшие охотники</gold>"
   bosses: "<boss>Боссы</boss> <gray>· сейчас живы: <alive></gray>"
   bosses_line: "<class><gray>: призвано</gray> <num><spawned></num><gray>, убито</gray> <num><killed></num>"
+  # Первая строка — название кнопки, остальные — её описание.
+  reset: |-
+    <red>Начать заново</red>
+    <gray>Сотрёт уровень, опыт и убийства.</gray>
+  reset_confirm: |-
+    <red><b>Нажмите ещё раз, чтобы начать заново</b></red>
+    <gray>Отменить нельзя.</gray>
   reload: "<green>Перезагрузить Mo’Bosses</green>"
   killall: "<red>Убрать всех боссов</red>"
   close: "<gray>Закрыть</gray>"
@@ -57,6 +70,21 @@ boss_bar: "<boss_name> <class_color>[Ур. <level>]"
 
 # Игрокам рядом с новым боссом класса broadcast.spawns_from или реже.
 boss_nearby: "<pri>[Mo’Bosses]</pri> <warn>Рядом появился босс:</warn> <class_color>[Ур. <level>] [<class>]</class_color> <boss><boss_name></boss>"
+
+# После убийства каждому участнику, в чат (broadcast.kill_notes): почему он
+# получил меньше целого или больше. <boss_level>, <your_level> (его уровень), <percent>,
+# <share> (сколько здоровья босса он снял), <kill> и <loot> (сколько нужно),
+# <seconds>, <pets> (доля питомцев в его уроне), <weight>.
+# header — что игрок получил: босс, <share>, <experience>, <mobosses_experience>.
+kill_notes:
+  header: "<pri>[Mo’Bosses]</pri> <class_color>[Ур. <level>] [<class>]</class_color> <boss_name> <gray>повержен · ваша доля <share>%:</gray> <xp>+<experience> опыта</xp><gray>,</gray> <xp>+<mobosses_experience> опыта Mo’Bosses</xp>"
+  above: "<dark_gray>  ›</dark_gray> <ok>Босс был <boss_level>-го уровня, выше вашего <your_level>-го: +<percent>% опыта.</ok>"
+  below: "<dark_gray>  ›</dark_gray> <warn>Босс был <boss_level>-го уровня, ниже вашего <your_level>-го: вы получили <percent>% его опыта.</warn> <gray>Боссы вашего уровня дают весь.</gray>"
+  not_counted: "<dark_gray>  ›</dark_gray> <warn>Убийство не засчитано в уровень: босс <boss_level>-го уровня слишком слаб для <your_level>-го.</warn>"
+  small_share: "<dark_gray>  ›</dark_gray> <warn>Вы сняли <share>% здоровья босса: для убийства нужно <kill>%, для добычи — <loot>%.</warn>"
+  no_loot: "<dark_gray>  ›</dark_gray> <warn>Без добычи: вы сняли <share>% здоровья босса, а нужно <loot>%.</warn>"
+  rewards_cooldown: "<dark_gray>  ›</dark_gray> <gray>Зелий-наград на этот раз нет: следующие — через <seconds> с.</gray>"
+  pets: "<dark_gray>  ›</dark_gray> <gray>Ваши питомцы нанесли <pets>% вашего урона; в опыте против этого босса он стоит <weight>%.</gray>"
 
 # Всем, когда игроки убивают босса. <player>: все, кто его бил; <experience>: обычный опыт, который из него выпал.
 kill: "<pri>[Mo’Bosses]</pri> <ok><player></ok> побеждает <boss><boss_name></boss> <num>Ур. <level></num>/<class> и получает <xp><experience></xp> опыта!"

@@ -35,6 +35,7 @@ class Bosses(private val plugin: MoBossesPlugin) {
     val lvl = level.coerceAtLeast(1)
     factory.apply(entity, type, clazz, lvl, summoner, plugin.catalog.settings.formula)
     val boss = register(entity, type, clazz, lvl, summoner)
+    boss.seen = System.currentTimeMillis()
     plugin.progression.count(type.key, clazz.key, killed = false)
     plugin.log.debug { "${type.key} became a level $lvl ${clazz.key} boss at ${entity.world.name} ${entity.location.blockX} ${entity.location.blockY} ${entity.location.blockZ}" }
     return boss

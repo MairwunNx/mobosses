@@ -2,6 +2,28 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.3.0
+
+### New
+
+- 🔄 **Start over:** `/mobosses reset` wipes your level, experience, and kills and takes you off the board, after `/mobosses reset confirm`; the menu has a button for it that asks twice. Bosses near you come at level 1 again; spawn and reward cooldowns stay. Everyone has `mobosses.reset`; `/mobosses reset <player>` wipes someone else’s at once and needs `mobosses.reset.others`, part of `mobosses.admin`.
+- 🐺 **Bosses fight back against pets and golems.** A wolf’s or a golem’s hit sets off abilities, as a player’s does, and area abilities (lightning, shockwave, meteors, frost nova, whirlwind) and ability shots hit the pets and golems that hit the boss in the last 15 seconds. A pet’s damage counts toward its owner’s share, and so toward kills and loot, in full; in experience it’s worth almost all of theirs at low levels and 60% at level 100 (`progression.pet_damage`).
+- 🕯️ **Forgotten bosses despawn:** one nobody comes within 64 blocks of for 10 minutes leaves without loot, so bosses no longer pile up in caves for good (`despawn`). Bosses from `/mobosses spawn` stay.
+- 💥 **A creeper boss’s blast grows with its level**, from the game’s 3 to 8 at level 100, past a charged creeper’s 6; a charged boss goes from 6 to 11 (`formula.explosion`). A creeper that blows itself up still gives nobody anything.
+- 💬 **Players learn why they got less:** after a kill, each one reads in the chat when a boss below their level gave part of its experience, or one above it more; when the kill didn’t count, or they dealt too little for loot, with the shares needed; when potion rewards are on cooldown; and what their pets’ damage was worth (`broadcast.kill_notes`).
+- 🏹 **Bosses’ own arrows, fireballs, and tridents grow with their level**, by 60% of their melee growth (`formula.ranged_damage`).
+
+### Changed
+
+- 🤝 **Groups get their loot:** in a group of N players, no share threshold, for loot, rewards, or the kill, asks more than 60% over N (`progression.group_share`). Four friends who split a boss evenly used to get no loot at all.
+- ❤️ **Top bosses are tougher than the game’s own.** A zombie boss has more health than the Ender Dragon from level 30 as a Common and 20 as a Rare, and more than the Warden from level 40 as an Epic, 20 as a Mythic, and 100 as a Common; the first levels stay about as they were. Small mobs start from a zombie’s 20 health (`formula.health.base_points`).
+- ⚔️ **Bosses hit harder as they grow:** at level 100 a Common zombie hits for 13 instead of 7, a Mythic for 31, close to the Warden; level 1 stays as it was, and level 10 hits about a third harder (`formula.damage`).
+- ✨ **Vanilla experience grows with the fight:** a level 1 Common zombie gives 8, little more than a zombie; from level 30, when it outlasts the Ender Dragon, a Common gives more than the dragon’s 500; a level 100 Mythic gives 20,000, more than the dragon’s first kill. Mobs that drop little start from 5 (`formula.experience`).
+- 📏 **Relevance compares levels by ratio** (`progression.relevance`): a boss a few levels below you costs little experience, one half your level most of it, and a level 80 player still counts a level 60 boss as a kill, but not a level 40 one. A boss cut by variance always counts now.
+- 🏅 **The board ranks by level**, from experience and kills together, as levels grow, instead of by experience alone.
+- A kill that counts gives at least 1 Mo’Bosses experience; the first bosses used to show 0.
+- Players who own an old `config.yml` keep their old `formula.health` and `formula.damage`; copy the new values from the bundled file to get the tougher bosses.
+
 ## 2.2.0
 
 ### New

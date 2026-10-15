@@ -15,11 +15,11 @@ import ru.mairwunnx.mobosses.ability.Cast
 import ru.mairwunnx.mobosses.ability.Targets
 import ru.mairwunnx.mobosses.lang.Message
 
-/** The boss spins with its weapon out: every player close by takes a blow and flies back. */
+/** The boss spins with its weapon out: every player close by, and every pet that bit it, takes a blow and flies back. */
 object Whirlwind : Signature("whirlwind", Message.WHIRLWIND) {
   override fun cast(cast: Cast): Boolean {
-    val players = around(cast, 3.5).ifEmpty { return false }
-    players.forEach {
+    val victims = cast.victims(cast.at, 3.5).filter { it.location.distanceSquared(cast.at) <= 3.5 * 3.5 }.ifEmpty { return false }
+    victims.forEach {
       it.damage(scaled(cast, 4.0, 0.08, 14.0), cast.boss.entity)
       knock(cast, it, 0.9, 0.35)
     }

@@ -35,7 +35,7 @@ A Paper 26.3 plugin that turns ordinary mobs into bosses of six classes, with ab
 - Ability entities (meteors, arrows) are `isPersistent = false`, so a restart never brings one back.
 - A new ability is an object in `ability/kinds/` in `Abilities.PICKED`, with its keys in `AbilitySettings` and `abilities.yml`, a threshold in `AbilityThresholds` and `classes.yml`, and a message in every language.
 - Abilities change blocks only through `BlockChanges.set` or `setFor`: that asks the guards, logs to CoreProtect before the change, in the same tick, and restores temporary blocks on shutdown.
-- Abilities hit players only, through `Targets`, which checks the game mode and `Guard.canHurt`.
+- Abilities hit players, through `Targets`, which checks the game mode and `Guard.canHurt`, and the pets and golems that hit the boss in the last 15 seconds (`Targets.isAggressor`, marked by `DamageListener`); area abilities reach both through `Cast.victims`. Nothing else: no villagers, other pets, or minions.
 - A boss is never weaker than its vanilla mob: `BossFactory` keeps every stat at least the mob’s own, and `Equipment` puts on only stronger pieces of the same kind. Keep both when changing stats or gear.
 - Optional plugins (PlaceholderAPI, Plan, MiniPlaceholders, GriefPrevention, WorldGuard, CoreProtect) are `compileOnly` and `join-classpath` in `paper-plugin.yml`; their classes are touched only after checking the plugin is enabled. WorldGuard flags register in `onLoad`, the only time WorldGuard takes them.
 - Game ids stay strings in the config models and resolve in `Catalog`; a bad one logs a warning and drops out, never failing the file.

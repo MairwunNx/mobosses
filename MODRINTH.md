@@ -7,7 +7,7 @@
 - 🐲 **25 kinds of bosses**, from zombies and skeletons to blazes, breezes, ravagers, and guardians.
 - ⚔️ **Six classes**, from Common to Mythic. Each multiplies a boss’s health, damage, experience, armor, and toughness, and decides which abilities it gets and when.
 - 📈 **Levels that grow with your players.** A boss takes the average level of the players near it, now and then a little lower. Weak bosses count for little, so farming them levels nobody up.
-- 🧮 **Scaling by curves:** stats climb fast at first and level off toward a ceiling, so a level 100 boss is hard without being absurd.
+- 🧮 **Scaling by curves:** stats climb fast at first and level off toward a ceiling. Top bosses have more health than the Ender Dragon and the Warden, and hit nearly as hard as the Warden at level 100.
 - 🎯 **A signature ability for every boss type:** witches throw potions, endermen swap places with you, evokers send fangs through the ground, ravagers stampede, and 14 more.
 - ✨ **Thirteen shared abilities:** lightning, minions, regeneration, a ring of fire, a ring of cobwebs, a teleport behind you, a meteor shower, an arc of arrows, arrow rain, a shockwave, a frost nova, a grapple against pillar archers, and enrage, each unlocked by class and level.
 - 🗡️ **Gear by level**, from a wooden sword to enchanted netherite.
@@ -36,7 +36,7 @@ Mo’Bosses needs Paper 26.3 or a fork of it, like Purpur, on Java 25. Configs a
 
 ## How it plays
 
-When a mob of a type in `bosses.yml` spawns near a player, it may become a boss, with its chance times the multipliers for the world, the time of day, and the weather. Each hit on a boss may set off an ability. Abilities hurt players in survival and adventure only; pets and villagers stay out of it. When the boss dies, each player’s share of its health decides their experience, and those who dealt more than about a quarter of it get loot and rewards.
+When a mob of a type in `bosses.yml` spawns near a player, it may become a boss, with its chance times the multipliers for the world, the time of day, and the weather. Each hit on a boss, by a player, their pet, or a golem, may set off an ability. Abilities hurt players in survival and adventure, and the pets and golems that hit the boss; other pets and villagers stay out of it. When the boss dies, each player’s share of its health, their pets' damage included, decides their experience, from a little over the mob's at level 1 to 20,000 for a level 100 Mythic; a note in the chat tells each player why they got less or more. Those who dealt more than about a quarter of it get loot and rewards, less in a group, so four friends who split a boss all get theirs. A boss nobody comes near for 10 minutes leaves, as vanilla mobs do.
 
 ## Languages
 
@@ -58,14 +58,15 @@ Each rule has its own switch in `config.yml`, on by default. `/mobosses spawn` i
 
 | Command | What it does |
 |---|---|
-| `/mobosses` | The menu: your card, the best hunters, the bosses by class |
+| `/mobosses` | The menu: your card, the best hunters, the bosses by class, a button to start over |
 | `/mobosses info [player]` | A player’s level, rank, experience, and kills |
 | `/mobosses top` | The best hunters |
+| `/mobosses reset [confirm \| player]` | Wipes your level, experience, and kills, or another player’s |
 | `/mobosses reload` | Reloads every config and language file |
 | `/mobosses spawn <entity> <level> <class> [x y z [world]]` | Spawns a boss ahead of you, or at the coordinates |
 | `/mobosses killall` | Removes every boss in loaded chunks, without loot |
 
-Everyone has `mobosses.use` for the menu, `info`, and `top`. The rest need `mobosses.reload`, `mobosses.spawn`, `mobosses.killall`; `mobosses.admin` gives them all, and operators have it by default.
+Everyone has `mobosses.use` for the menu, `info`, and `top`, and `mobosses.reset` to start over. Resetting someone else needs `mobosses.reset.others`. The rest need `mobosses.reload`, `mobosses.spawn`, `mobosses.killall`; `mobosses.admin` gives them all, and operators have it by default.
 
 ## Links
 

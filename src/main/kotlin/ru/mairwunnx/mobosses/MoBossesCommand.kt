@@ -9,13 +9,14 @@ import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import ru.mairwunnx.mobosses.hooks.PlanData
 import ru.mairwunnx.mobosses.lang.Message
 import ru.mairwunnx.mobosses.menu.Menu
 
 /**
- * `/mobosses reload`, `/mobosses spawn <entity> <level> <class> [x y z [world]]`, and
- * `/mobosses killall`, each under its own permission; `mobosses.admin` gives all three. A player
- * spawns a boss two blocks ahead of them; the console gives coordinates.
+ * `/mobosses` (the menu), `info`, `top`, and `reset` for players; `reload`, `spawn <entity> <level>
+ * <class> [x y z [world]]`, and `killall` for admins, each under its own permission, all of them
+ * under `mobosses.admin`. A player spawns a boss two blocks ahead of them; the console gives coordinates.
  */
 class MoBossesCommand(private val plugin: MoBossesPlugin) : BasicCommand {
   override fun canUse(sender: CommandSender) = SUBCOMMANDS.values.any(sender::hasPermission)
@@ -30,6 +31,7 @@ class MoBossesCommand(private val plugin: MoBossesPlugin) : BasicCommand {
     when (sub) {
       "info" -> info(sender, args.getOrNull(1))
       "top" -> top(sender)
+      "reset" -> reset(sender, args.getOrNull(1))
       "reload" -> plugin.texts.send(sender, if (plugin.reload()) Message.RELOADED else Message.RELOAD_FAILED)
       "spawn" -> spawn(sender, args.drop(1))
       "killall" -> {
@@ -73,6 +75,37 @@ class MoBossesCommand(private val plugin: MoBossesPlugin) : BasicCommand {
     }
   }
 
+  /**
+   * Your own progress after `confirm`, so a stray command wipes nothing; with `mobosses.reset.others`,
+   * anyone's at once. Cooldowns stay: a reset doesn't bring the next boss any sooner.
+   */
+  private fun reset(sender: CommandSender, arg: String?) {
+    if (arg == null || arg.equals(CONFIRM, ignoreCase = true)) {
+      val player = sender as? Player ?: return plugin.texts.send(sender, Message.USAGE)
+      return if (arg == null) plugin.texts.send(sender, Message.RESET_ASK) else reset(sender, player)
+    }
+    if (!sender.hasPermission(RESET_OTHERS)) return plugin.texts.send(sender, Message.NO_PERMISSION)
+    val target = Bukkit.getPlayerExact(arg) ?: Bukkit.getOfflinePlayerIfCached(arg)
+      ?: return plugin.texts.send(sender, Message.PLAYER_NOT_FOUND, Placeholder.unparsed("player", arg))
+    reset(sender, target)
+  }
+
+  private fun reset(sender: CommandSender, target: OfflinePlayer) {
+    plugin.progression.reset(target.uniqueId).whenComplete { _, error ->
+      Bukkit.getScheduler().runTask(plugin, Runnable {
+        if (error != null) {
+          plugin.log.warn("Can't reset the progress of ${target.name}: ${error.message}")
+          return@Runnable plugin.texts.send(sender, Message.NO_DATABASE)
+        }
+        plugin.log.info("${sender.name} reset the Mo’Bosses progress of ${target.name ?: target.uniqueId}")
+        val online = target.player
+        if (online != null && PlanData.available) PlanData.update(online)
+        online?.let { plugin.texts.send(it, Message.RESET_DONE) }
+        if (online != sender) plugin.texts.send(sender, Message.RESET_DONE_OTHER, Placeholder.unparsed("player", target.name ?: target.uniqueId.toString()))
+      })
+    }
+  }
+
   private fun spawn(sender: CommandSender, args: List<String>) {
     val catalog = plugin.catalog
     if (args.size !in setOf(3, 6, 7)) return usage(sender)
@@ -101,6 +134,7 @@ class MoBossesCommand(private val plugin: MoBossesPlugin) : BasicCommand {
     if (entity == null || !entity.isValid) return plugin.texts.send(sender, Message.SPAWN_FAILED, Placeholder.unparsed("reason", "the spawn was cancelled"))
 
     val boss = plugin.bosses.make(entity, type, clazz, level).also(plugin.bosses::vanillaName)
+    boss.pinned = true
     plugin.texts.send(sender, Message.SPAWNED, *plugin.texts.boss(plugin.texts.languageOf(sender), boss))
   }
 
@@ -124,6 +158,8 @@ class MoBossesCommand(private val plugin: MoBossesPlugin) : BasicCommand {
     val options = when {
       args.size <= 1 -> SUBCOMMANDS.filterValues(sender::hasPermission).keys.toList()
       args.size == 2 && args[0].equals("info", ignoreCase = true) && sender.hasPermission(INFO_OTHERS) -> Bukkit.getOnlinePlayers().map { it.name }
+      args.size == 2 && args[0].equals("reset", ignoreCase = true) ->
+        listOf(CONFIRM) + if (sender.hasPermission(RESET_OTHERS)) Bukkit.getOnlinePlayers().map { it.name } else emptyList()
       !args[0].equals("spawn", ignoreCase = true) || !sender.hasPermission(SUBCOMMANDS.getValue("spawn")) -> emptyList()
       args.size == 2 -> typeKeys()
       args.size == 3 -> listOf("1", "10", "25", "50", "75", "100")
@@ -138,6 +174,8 @@ class MoBossesCommand(private val plugin: MoBossesPlugin) : BasicCommand {
   private companion object {
     const val USE = "mobosses.use"
     const val INFO_OTHERS = "mobosses.info.others"
-    val SUBCOMMANDS = linkedMapOf("info" to USE, "top" to USE, "reload" to "mobosses.reload", "spawn" to "mobosses.spawn", "killall" to "mobosses.killall")
+    const val RESET_OTHERS = "mobosses.reset.others"
+    const val CONFIRM = "confirm"
+    val SUBCOMMANDS = linkedMapOf("info" to USE, "top" to USE, "reset" to "mobosses.reset", "reload" to "mobosses.reload", "spawn" to "mobosses.spawn", "killall" to "mobosses.killall")
   }
 }
