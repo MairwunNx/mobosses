@@ -20,6 +20,7 @@ import ru.mobosses.events.PlayerEventHandler
 import ru.mobosses.events.WorldEventHandler
 import ru.mobosses.managers.BossBarManager
 import ru.mobosses.managers.BossManager
+import ru.mobosses.managers.DamageManager
 import ru.mobosses.managers.DatabaseManager
 import ru.mobosses.managers.EffectsManager
 import ru.mobosses.managers.LootManager
@@ -48,6 +49,7 @@ class PluginUnit : JavaPlugin(), CommandExecutor {
   lateinit var effectsManager: EffectsManager private set
   lateinit var database: DatabaseManager private set
   lateinit var proximity: ProximityManager private set
+  lateinit var damageManager: DamageManager private set
 
   override fun onEnable() {
     logger = BukkitLogger(this)
@@ -76,10 +78,11 @@ class PluginUnit : JavaPlugin(), CommandExecutor {
     effectsManager = EffectsManager(this)
     lootManager = LootManager(this, durabilityManager)
     progressionManager = ProgressionManager(this, database)
+    damageManager = DamageManager()
     bossManager = BossManager(this, bossBarManager, effectsManager, progressionManager, messages)
     proximity = ProximityManager(this)
     server.pluginManager.registerEvents(WorldEventHandler(this, bossManager, bossBarManager), this)
-    server.pluginManager.registerEvents(PlayerEventHandler(this, bossManager, lootManager, progressionManager, effectsManager, bossBarManager, messages, rewards), this)
+    server.pluginManager.registerEvents(PlayerEventHandler(this, bossManager, lootManager, progressionManager, effectsManager, bossBarManager, messages, rewards, damageManager), this)
     getCommand("mobosses")?.setExecutor(this)
 
     proximity.initialize()
