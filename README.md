@@ -6,21 +6,23 @@
 
 ## What you get
 
+- 🐲 **25 kinds of bosses**, from zombies and skeletons to blazes, breezes, ravagers, and guardians.
 - ⚔️ **Six classes**, from Common to Mythic. Each multiplies a boss’s health, damage, experience, armor, and toughness, and decides which abilities it gets and when. Rarer classes come less often.
-- 📈 **Levels that grow with you.** Each player has a Mo’Bosses level, from the experience and kills they’ve gathered. A boss takes the level of the nearest player, now and then a little lower, so weaker bosses keep turning up.
+- 📈 **Levels that grow with you.** Each player has a Mo’Bosses level, from the experience and kills they’ve gathered. A boss takes the average level of the players near it, now and then a little lower, so weaker bosses keep turning up. Bosses far below your level count for little, so farming them levels nobody up.
 - 🧮 **Scaling by curves.** Health, damage, and armor climb fast at first and level off toward a ceiling, so a level 100 boss is hard without being absurd. Class differences shrink at high levels.
-- ✨ **Nine abilities:** lightning, minions, regeneration, a ring of fire, a ring of cobwebs, a teleport behind you, a meteor shower, an arc of arrows, and arrow rain. Each class unlocks them at its own levels, with cooldowns.
-- 🧟 **Minions** that a boss summons, and that may turn into weaker bosses themselves.
+- ✨ **Thirteen abilities:** lightning, minions, regeneration, a ring of fire, a ring of cobwebs, a teleport behind you, a meteor shower, an arc of arrows, arrow rain, a shockwave, a frost nova, a grapple that pulls archers off their pillars, and enrage at low health. Each class unlocks them at its own levels, with cooldowns.
+- 🧟 **Minions** that a boss summons, up to a dozen at a time, and that may turn into weaker bosses themselves.
 - 🗡️ **Gear by level:** a level 5 zombie swings a wooden sword; a level 60 one may carry enchanted netherite.
 - 🎁 **Loot tables by level and class:** over 500 entries, 199 with their own names and lore, and random durability that favors better classes. Each player who dealt enough damage gets their own drop, which only they can pick up.
 - 💪 **Rewards:** a few potion effects and absorption hearts after a kill, stronger for rarer classes.
 - 📊 **Boss bars** with the boss’s health, shown to the players who hit it.
-- 🌍 **Every player reads their own language:** English, Russian, Spanish, Portuguese, and German come bundled, picked by the player’s IP or game language.
+- 🌍 **Every player reads their own language,** even the names over bosses’ heads: English, Russian, Spanish, Portuguese, and German come bundled, picked by the player’s IP or game language.
 - 🛡️ **Protected areas stay protected:** GriefPrevention claims and WorldGuard regions keep bosses and their abilities out.
 - 🔎 **CoreProtect logging:** whatever bosses do to blocks shows up under `#mobosses`, ready to roll back.
 - 🧩 **PlaceholderAPI**, if you have it: `%mobosses_level%`, `%mobosses_xp%`, and `%mobosses_kills%` for scoreboards and chat, and `<papi:…>` tags in messages.
 - 💾 **SQLite, MySQL, MariaDB, or PostgreSQL** for players’ levels.
-- ⚙️ **`/mobosses reload`** applies changes without a restart, and bosses stay bosses across restarts.
+- 🧯 **No piles of bosses:** a cooldown per player and a cap on bosses nearby keep mob farms and spawner rooms from turning into boss factories.
+- ⚙️ **`/mobosses reload`** applies changes without a restart, and a fight survives restarts and relogs: bosses keep their level, cooldowns, and who hit them.
 
 ## My server
 
@@ -42,13 +44,15 @@ I play on Moonlands, a hard survival server I run for friends. It stays pure van
 
 ## How it plays
 
-When a mob spawns, Mo’Bosses looks up its type in `bosses.yml`. If a player is within `spawn.spawn_radius`, the mob becomes a boss with the type’s `spawn_chance`, times the multipliers for the world, the time of day, and the weather. The boss picks a class by weight, takes the nearest player’s level, and gets its health, damage, gear, and name.
+When a mob spawns, Mo’Bosses looks up its type in `bosses.yml`. If a player is within `spawn.spawn_radius`, the mob becomes a boss with the type’s `spawn_chance`, times the multipliers for the world, the time of day, and the weather. The boss picks a class by weight, takes the average level of the players within `spawn.group_radius`, and gets its health, damage, gear, and name.
+
+After a boss spawns for a group, its players wait about a minute for the next one, and no boss spawns while three are already close. Both live in `spawn` in `config.yml`.
 
 Hitting a boss shows you its health bar. Each hit may set off an ability: a random one the boss has reached the level for, once the cooldowns have passed. Abilities hurt players in survival and adventure only; the boss’s own minions, pets, and villagers stay out of it.
 
-When the boss dies, each player’s share of its health decides their part of the vanilla experience and the Mo’Bosses experience. Players who dealt more than about a quarter of it (`loot.min_damage_share`) also get a piece of loot and the rewards.
+When the boss dies, each player’s share of its health decides their part of the vanilla experience and the Mo’Bosses experience. The kill counts toward your level when you dealt 15% of the boss’s health and it wasn’t 20 or more levels below you; bosses below your level give you less experience. Players who dealt more than about a quarter of it (`loot.min_damage_share`) also get a piece of loot and the rewards.
 
-Bosses keep their type, class, and level on the entity itself. They survive restarts and chunk unloads, and pick up their glow, bar, and abilities again when their chunk loads. Temporary blocks, like cobwebs, go back when they expire or when the server stops.
+Bosses keep their type, class, level, cooldowns, and who hit them how hard on the entity itself. They survive restarts and chunk unloads, and pick up their glow, bar, names, and abilities again when their chunk loads. The rewards and spawn cooldowns live on each player, so a relog doesn’t reset them. Temporary blocks, like cobwebs, go back when they expire, when the server stops, or, after a crash, on the next start.
 
 ## Languages
 
@@ -59,7 +63,7 @@ The plugin tries the sources in `locales.sources`, in order:
 
 When nothing matches, the player gets `locales.default`. The country lookup needs no account and sends no address anywhere: on the first start, the plugin downloads DB-IP’s free country database (4 MB) into `plugins/MoBosses/geoip/` and refreshes it every 30 days. Players who connect through a proxy or a relay show up with its address, so they get the relay’s country.
 
-Each player’s language covers chat messages, ability warnings, kill and loot announcements, boss bars (one bar per language among the boss’s viewers), and the names and lore of loot, in the language of the player who got it. One thing can’t follow it: **the name tag over a boss’s head**, which every player sees the same. It comes in `locales.default`.
+Each player’s language covers chat messages, ability warnings, kill and loot announcements, boss bars (one bar per language among the boss’s viewers), the names over bosses and minions, and the names and lore of loot, in the language of the player who got it. The game shows one name tag to everyone, so the names are text displays riding the mob, one per language among the players near it, each shown only to its readers. Death messages, which the game writes the same for everyone, use `locales.default`; so does the plain name tag with `name_tags.per_player: false`.
 
 `lang/<language>.yml` holds the messages and the names of classes, bosses, minions, and loot items. A key missing from a file comes from the default language, then from English; an empty text turns a message off. To add a language, copy `lang/en.yml` to, say, `lang/it.yml`, translate it, add `it: [ IT, SM, VA ]` to `locales.countries`, and run `/mobosses reload`.
 
@@ -136,6 +140,7 @@ Your 1.x files and your database load as they are. What changed:
 - `language: ru` in `config.yml` still sets the default language, until you set `locales.default`.
 - A `name` in `bosses.yml` or `minions.yml`, or a `display_name` in `classes.yml`, shows to everyone as before. Remove it to use the names in `lang/`, each player in their own language. Loot with `title` and `lore` works the same; the bundled loot uses `id` instead.
 - `boss_bar.style` takes `NOTCHED_20` and the like; `SEGMENTED_20` still works.
+- An old `bosses.yml` lacks the bosses 2.1 added, and an old `classes.yml` the levels for its new abilities, which stay off until you add them. Copy them from the bundled files, which the jar holds and `plugins/MoBosses/` gets when a file is missing.
 
 The [changelog](https://github.com/MairwunNx/mobosses/blob/master/CHANGELOG.md) lists what 2.0 fixed.
 
@@ -149,7 +154,7 @@ cd mobosses
 ./gradlew build
 ```
 
-The jar lands in `build/libs/`. Releases come from the “Release” workflow on GitHub, which takes the version as input. `scripts/` has small calculators for the stat curves; they need nothing but Python 3.
+The jar lands in `build/libs/`. Releases come from the “Release” workflow on GitHub, which takes the version as input. `./gradlew balance` prints the stat curves, experience, and player levels from the real formulas, for the bundled config or, with `--args=path/to/plugins/MoBosses`, for yours.
 
 ## Stack
 

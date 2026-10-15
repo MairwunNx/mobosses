@@ -14,25 +14,25 @@ A Paper 26.3 plugin that turns ordinary mobs into bosses of six classes, with ab
 | Where | What it does |
 |---|---|
 | `MoBossesPlugin.kt` | Startup, `reload()`, and shutdown. Reload reads every file again and keeps the plugin, its command, and its bosses running |
-| `config/` | The config files through kaml, not strict. `Yamls.decode` drops a value that doesn’t fit, with a warning, so it takes its default; `Ids` resolves game ids against the registries, 1.x enum names included |
-| `boss/Catalog.kt` | The configs with every id resolved, built once per load |
-| `boss/Bosses.kt` | Live bosses. `make` scales a mob and writes its type, class, and level to its persistent data; `adopt` takes it back when its chunk loads; `forget` lets go of its bar, glow, and aura |
-| `boss/SpawnListener.kt` | Natural spawns become bosses by chance near a player; minions may become weaker bosses; chunk loads and unloads |
-| `boss/CombatListener.kt` | Damage shares, deaths (experience, loot, rewards, the kill message), meteors that mustn’t land as blocks, and CoreProtect entries for blocks bosses and minions change |
-| `boss/BossBars.kt`, `boss/Visuals.kt` | Bars, one per language per boss; the glow and particles while a player is near |
-| `boss/Loot.kt`, `boss/Rewards.kt` | One item per qualifying player, in their language; potion effects with a cooldown |
-| `ability/` | `Abilities` picks an ability on a hit; `Casts` casts it; `Targets` decides who may be hit and where the ground is |
-| `algebra/Formulas.kt` | The math, pure, as in 1.12.0 |
-| `progress/` | Players’ levels: a cache filled at login, and `Store` (Exposed over SQLite, MySQL/MariaDB, or PostgreSQL) on a thread of its own |
-| `lang/` | `Languages`, `LocaleResolver`, `GeoIp`, and `Texts`, which knows each player’s language and renders boss names, classes, and minions |
-| `protect/` | `Guard` and its adapters (GriefPrevention, WorldGuard), the WorldGuard flags, the CoreProtect log, and `BlockChanges`, the only way abilities touch blocks |
-| `hooks/` | PlaceholderAPI: the `<papi:…>` tag and the `%mobosses_…%` expansion |
 | `MoBossesCommand.kt` | `/mobosses reload`, `spawn`, `killall`, with suggestions |
+| `config/` | One model per file (`Settings`, `AbilitySettings`, `Classes`, `BossSpec`, `MinionSettings`, `RewardSettings`, `LootTable`), read by `Configs` through kaml, not strict. `Yamls.decode` drops a value that doesn’t fit, with a warning, so it takes its default; `Ids` resolves game ids against the registries, 1.x enum names included |
+| `algebra/` | The math, pure: `Curves` (the shared growth curve), `Stats` (health, damage, armor, vanilla experience), `Leveling` (player levels, boss levels, relevance), `Rolls` (minions, cooldowns, weighted picks) |
+| `boss/` | `Catalog` (configs with ids resolved), `Bosses` (live bosses: make, adopt, forget), `BossFactory` and `Equipment` (stats and gear), `Boss` (the fight state, kept on the entity through `Keys` and `Codec`), `Minions`, `NameTags` (names per language), `BossBars`, `Visuals` |
+| `spawn/` | `SpawnListener` (events), `NaturalSpawns` (the roll and the level), `SpawnLimiter` (cooldowns per player, the cap on bosses nearby) |
+| `combat/` | `DamageListener` (shares, bars, abilities on hit), `DeathListener` (experience, kills, loot, rewards, the kill message), `Shares`, `Loot`, `Rewards` |
+| `ability/` | `Ability` and its context `Cast`; `Abilities` picks one on a hit; `kinds/` holds one object per ability; `Targets` decides who may be hit and where the ground is; `Arrows` shoots for the arrow abilities |
+| `progress/` | Players’ levels: `Progression` (a cache filled at login) and `Store` (Exposed over SQLite, MySQL/MariaDB, or PostgreSQL) on a thread of its own |
+| `lang/` | `Message`, `Languages`, `LanguageFiles`, `LocaleResolver`, `GeoIp`, `PlayerLanguages` (who reads what), `Texts` (rendering, boss names, classes, minions) |
+| `protect/` | `Guard` and `Guards`, the GriefPrevention and WorldGuard adapters and flags, `BlockLog` and `CoreProtectLog`, `BlockLogListener`, and `BlockChanges` with `TemporaryBlocks`, the only way abilities touch blocks |
+| `hooks/` | PlaceholderAPI: the `<papi:…>` tag and the `%mobosses_…%` expansion |
 
 ## Rules that keep it working
 
 - Bukkit calls stay on the server thread; the database, GeoIP downloads, and nothing else run off it. PlaceholderAPI may ask from any thread, so the expansion reads only the progress cache.
-- A boss is whatever carries `mobosses:type`, `mobosses:class`, and `mobosses:level`. Never keep a boss only in memory, and never force-load chunks for one; 1.x did, and leaked loaded chunks.
+- A boss is whatever carries `mobosses:type`, `mobosses:class`, and `mobosses:level`. Fight state that must outlive a restart (damage shares, cooldowns, enrage) lives on the boss; cooldowns that must outlive a relog (rewards, spawns) live on the player. Never keep it only in memory, and never force-load chunks for a boss; 1.x did, and leaked loaded chunks.
+- Names over mobs are `TextDisplay` passengers, not saved, invisible by default, and shown per player by `NameTags`. Anything that teleports a boss passes `RETAIN_PASSENGERS`.
+- Ability entities (meteors, arrows) are `isPersistent = false`, so a restart never brings one back.
+- A new ability is an object in `ability/kinds/` in `Abilities.PICKED`, with its keys in `AbilitySettings` and `abilities.yml`, a threshold in `AbilityThresholds` and `classes.yml`, and a message in every language.
 - Abilities change blocks only through `BlockChanges.set` or `setFor`: that asks the guards, logs to CoreProtect before the change, in the same tick, and restores temporary blocks on shutdown.
 - Abilities hit players only, through `Targets`, which checks the game mode and `Guard.canHurt`.
 - Optional plugins (PlaceholderAPI, GriefPrevention, WorldGuard, CoreProtect) are `compileOnly` and `join-classpath` in `paper-plugin.yml`; their classes are touched only after checking the plugin is enabled. WorldGuard flags register in `onLoad`, the only time WorldGuard takes them.
@@ -45,7 +45,8 @@ A Paper 26.3 plugin that turns ordinary mobs into bosses of six classes, with ab
 ## Building and testing
 
 - `./gradlew build` runs the tests and builds `build/libs/mobosses-<version>.jar`, shaded and relocated under `ru.mairwunnx.mobosses.libs`. JDK 25; Gradle provisions it through the foojay resolver.
-- There is no MockBukkit for Paper 26.3; tests cover the pure parts: the formulas against numbers from the 1.12.0 jar, the bundled files, 1.x files, the language files, the resolver, and the SQLite store with a 1.x schema. The rest runs on a real Paper; see “Checking a change”.
+- There is no MockBukkit for Paper 26.3; tests cover the pure parts: the formulas (the curves against numbers from the 1.12.0 jar, the 2.1 progression on its own), the bundled files, 1.x files, the language files, the resolver, the codec, and the SQLite store with a 1.x schema. The rest runs on a real Paper; see “Checking a change”.
+- `./gradlew balance` prints the curves from the real formulas; `--args=<folder>` reads a server’s `config.yml` and `classes.yml`. Run it after changing a formula or its defaults, and say in the changelog what moved.
 
 ## Checking a change
 
@@ -56,7 +57,7 @@ A Paper 26.3 plugin that turns ordinary mobs into bosses of six classes, with ab
    ```
    The console must give coordinates to `spawn`; a flat world’s ground is at y -60. Pass `--dir` to keep the folder and run it again: bosses spawned in the first run must come back in the second. Spawn them in a chunk `forceload add` keeps loaded: an unloaded boss stays in the world, but `killall` only sees loaded ones.
 3. CoreProtect 24.1 lists the game only up to 26.2 and refuses to start on 26.3. Until a release supports 26.3, build its `master` with `-Dproject.branch=development` to test the logging, as 2.0.0 was tested.
-4. Natural spawns, fights, abilities, boss bars, and loot need a game client: a player has to stand near the mobs and hit them. Say so when a change touches them.
+4. Natural spawns, fights, abilities, boss bars, names over mobs, and loot need a game client: a player has to stand near the mobs and hit them. Say so when a change touches them.
 
 ## Versions
 

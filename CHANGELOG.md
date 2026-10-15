@@ -2,6 +2,41 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.1.0
+
+### New
+
+- 🏷️ **Names in each player’s language.** The names over bosses and minions now come in each viewer’s language, through text displays only they see. `name_tags.per_player: false` brings back the game’s own name tag in the default language.
+- 🐲 **Eight new bosses:** Bogged, Blaze, Breeze, Cave Spider, Piglin Brute, Hoglin, Ravager, and Guardian, each with minions. A `bosses.yml` from 1.x or 2.0 doesn’t have them; copy them from the bundled file to get them.
+- ✨ **Four new abilities.** A **shockwave** that knocks players back; a **frost nova** that freezes them as powder snow does; a **grapple** that pulls the farthest player in sight, against shooting a boss from a pillar; and **enrage**: once below 30% of its health, a boss hits harder and moves faster. A `classes.yml` without their levels keeps them off.
+- 🧟 **Minions have better names** in every language, and they despawn as vanilla mobs do instead of filling the world.
+- 📊 **`./gradlew balance`** prints the stat curves from the real formulas and a config; it replaces the Python scripts, which kept numbers of their own.
+
+### Fairer progression
+
+- Levels climb slower at first: 100 kills make level 19, not 29, so a new player doesn’t meet level 30 bosses after a weekend.
+- A kill counts toward your level only when you dealt 15% of the boss’s health (`progression.min_share`), and the boss wasn’t 20 or more levels below you. Bosses below your level give you less Mo’Bosses experience, and stronger ones a little more (`progression.relevance`), so farming weak bosses doesn’t level anyone up.
+- The players near a spawn set the boss’s level together, by their average (`spawn.group_radius`), so one veteran doesn’t pull newcomers into level 90 fights.
+- A weaker boss is weaker by 5% to 30% of the level (`variance.min_cut`, `max_cut`), no longer by up to 80 levels.
+- Vanilla experience from bosses dropped about sevenfold: a level 100 Mythic zombie gives 1286 points, not 9822.
+- Level 100 can be reached; the curve used to stop at 99.
+
+### Against piles of bosses
+
+- After a boss spawns for a group, its players wait about a minute for the next (`spawn.player_cooldown_seconds`), and no boss spawns while three are within 48 blocks (`max_nearby`, `nearby_radius`). Mob farms and spawner rooms stay farms, not boss factories.
+- A boss keeps at most 12 minions alive (`summoning_max_alive`), and minions that became bosses summon no minions of their own (`summoning_by_mini_bosses`).
+
+### Kept across relogs and restarts
+
+- Who hit a boss and how much, its cooldowns, and its enrage live on the boss: a restart mid-fight doesn’t cost anyone their loot or give the boss a free volley.
+- The rewards cooldown and the spawn cooldown live on each player, so leaving and coming back doesn’t reset them.
+- Cobwebs from abilities go back even after a crash, on the next start.
+- Meteors and arrows from abilities aren’t saved, so a restart never drops one later.
+
+### Fixed
+
+- Toughness came from the mob’s own, which is zero for nearly every mob, so the toughness formula did nothing; skeletons got no armor the same way. Both grow from `base_points` now.
+
 ## 2.0.0
 
 A rewrite for Paper 26.3 and Java 25. Your 1.x config files and your database load as they are; “Moved” below says what to look at.

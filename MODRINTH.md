@@ -4,20 +4,22 @@
 
 ## What you get
 
+- 🐲 **25 kinds of bosses**, from zombies and skeletons to blazes, breezes, ravagers, and guardians.
 - ⚔️ **Six classes**, from Common to Mythic. Each multiplies a boss’s health, damage, experience, armor, and toughness, and decides which abilities it gets and when.
-- 📈 **Levels that grow with your players.** A boss takes the level of the nearest player, now and then a little lower, so weaker bosses keep turning up.
+- 📈 **Levels that grow with your players.** A boss takes the average level of the players near it, now and then a little lower. Weak bosses count for little, so farming them levels nobody up.
 - 🧮 **Scaling by curves:** stats climb fast at first and level off toward a ceiling, so a level 100 boss is hard without being absurd.
-- ✨ **Nine abilities:** lightning, minions, regeneration, a ring of fire, a ring of cobwebs, a teleport behind you, a meteor shower, an arc of arrows, and arrow rain, each unlocked by class and level.
+- ✨ **Thirteen abilities:** lightning, minions, regeneration, a ring of fire, a ring of cobwebs, a teleport behind you, a meteor shower, an arc of arrows, arrow rain, a shockwave, a frost nova, a grapple against pillar archers, and enrage, each unlocked by class and level.
 - 🗡️ **Gear by level**, from a wooden sword to enchanted netherite.
 - 🎁 **Loot tables by level and class:** over 500 entries, 199 with their own names and lore. Each player who dealt enough damage gets their own drop.
 - 💪 **Rewards:** potion effects and absorption hearts after a kill.
 - 📊 **Boss bars** for the players who hit the boss.
-- 🌍 **Every player reads their own language:** English, Russian, Spanish, Portuguese, and German come bundled, picked by IP or game language.
+- 🌍 **Every player reads their own language,** even the names over bosses’ heads: English, Russian, Spanish, Portuguese, and German come bundled, picked by IP or game language.
 - 🛡️ **GriefPrevention and WorldGuard:** no bosses or block-changing abilities in claims and protected regions.
 - 🔎 **CoreProtect:** whatever bosses do to blocks is logged under `#mobosses`, ready to roll back.
 - 🧩 **PlaceholderAPI:** `%mobosses_level%`, `%mobosses_xp%`, `%mobosses_kills%`, and `<papi:…>` tags in messages.
 - 💾 **SQLite, MySQL, MariaDB, or PostgreSQL** for players’ levels.
-- ⚙️ **`/mobosses reload`** applies changes without a restart, and bosses stay bosses across restarts.
+- 🧯 **No piles of bosses:** a cooldown per player and a cap on bosses nearby keep mob farms from turning into boss factories.
+- ⚙️ **`/mobosses reload`** applies changes without a restart, and a fight survives restarts and relogs.
 
 ## Install
 
@@ -33,7 +35,7 @@ When a mob of a type in `bosses.yml` spawns near a player, it may become a boss,
 
 ## Languages
 
-The plugin finds each player’s country by IP and picks a language for it; when the country isn’t listed, it takes the language set in the game. Chat messages, ability warnings, announcements, boss bars, and loot names follow each player’s language. The name tag over a boss’s head is the same for everyone, so it comes in the default language. Add a language by copying `lang/en.yml` and listing its countries in `config.yml`.
+The plugin finds each player’s country by IP and picks a language for it; when the country isn’t listed, it takes the language set in the game. Chat messages, ability warnings, announcements, boss bars, loot names, and the names over bosses and minions follow each player’s language. Only death messages, which the game writes the same for everyone, come in the default language. Add a language by copying `lang/en.yml` and listing its countries in `config.yml`.
 
 The country lookup needs no account and sends no address anywhere: the plugin downloads a free country database (4 MB) and refreshes it every month.
 
