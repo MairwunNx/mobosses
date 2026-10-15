@@ -27,11 +27,11 @@
 - 🧯 **Без завалов из боссов:** перезарядка на игрока и предел боссов рядом не дают фермам мобов и комнатам со спавнерами превратиться в фабрики боссов.
 - ⚙️ **`/mobosses reload`** применяет изменения без перезапуска, а бой переживает рестарты и перезаходы: боссы помнят уровень, перезарядки и кто сколько по ним попал.
 
-## Мой сервер
+## Попробовать вживую
 
-Я играю на Moonlands — сервере со сложным выживанием, который держу для друзей. Он остаётся чистой ванилью, так что Mo’Bosses там не встретить, но заходите в гости.
+Mo’Bosses работает на Moonlands — моём сервере со сложным выживанием для друзей. Заходите и познакомьтесь с его боссами.
 
-[![Играйте на Moonlands: чистая ваниль, сложные мобы, ИИ, приваты. ru.minecraft.mairwunnx.com](https://raw.githubusercontent.com/MairwunNx/mobosses/master/media/og-adv-image.ru.png)](https://ru.minecraft.mairwunnx.com)
+[![Играйте на Moonlands: сложные мобы, боссы, ИИ, приваты. ru.minecraft.mairwunnx.com](https://raw.githubusercontent.com/MairwunNx/mobosses/master/media/og-adv-image.ru.png)](https://ru.minecraft.mairwunnx.com)
 
 ## Что нужно
 

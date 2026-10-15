@@ -1,6 +1,6 @@
 # Mo’Bosses: notes for AI agents
 
-A Paper 26.3 plugin that turns ordinary mobs into bosses of six classes, with abilities, minions, boss bars, loot, rewards, and players’ own Mo’Bosses levels, each player reading it in their own language, picked by IP. README.md explains it for players and server owners; README.RU.md is its Russian copy. Moonlands, the owner’s server (MairwunNx/minecraft), doesn’t run it: Moonlands stays vanilla.
+A Paper 26.3 plugin that turns ordinary mobs into bosses of six classes, with abilities, minions, boss bars, loot, rewards, and players’ own Mo’Bosses levels, each player reading it in their own language, picked by IP. README.md explains it for players and server owners; README.RU.md is its Russian copy. Moonlands, the owner’s server (MairwunNx/minecraft), runs it since 2.1.0.
 
 ## Talking to the owner
 
@@ -74,6 +74,10 @@ Where the versions live, for `/update-deps` and `/update-minecraft` (both in `.c
 - The SQLite driver comes from Paper (`compileOnly`, and `testImplementation` for the store test); the MariaDB and PostgreSQL drivers are shaded.
 - Java: `jvmToolchain` in `build.gradle.kts`, the foojay resolver in `settings.gradle.kts`, and CI’s `setup-java`.
 - Gradle in `gradle/wrapper/gradle-wrapper.properties`; Kotlin and the Gradle plugins in the `plugins` block; libraries in `dependencies`.
+
+## Moonlands
+
+To put a release on Moonlands, point the Mo’Bosses line in `minecraft/extras/jars.txt` (MairwunNx/minecraft) at the release jar, push, and deploy as its CLAUDE.md says, which also says when a restart may happen without asking. Moonlands keeps its own `config.yml` in `minecraft/config/plugins/MoBosses/`.
 
 ## Releasing
 

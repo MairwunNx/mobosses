@@ -27,11 +27,11 @@
 - 🧯 **No piles of bosses:** a cooldown per player and a cap on bosses nearby keep mob farms and spawner rooms from turning into boss factories.
 - ⚙️ **`/mobosses reload`** applies changes without a restart, and a fight survives restarts and relogs: bosses keep their level, cooldowns, and who hit them.
 
-## My server
+## Try it live
 
-I play on Moonlands, a hard survival server I run for friends. It stays pure vanilla, so you won’t meet Mo’Bosses there, but you’re welcome to drop by.
+Mo’Bosses runs on Moonlands, my hard survival server with friends. Come in and meet its bosses.
 
-[![Play on Moonlands: pure vanilla, hard mobs, AI, claims. minecraft.mairwunnx.com](https://raw.githubusercontent.com/MairwunNx/mobosses/master/media/og-adv-image.png)](https://minecraft.mairwunnx.com)
+[![Play on Moonlands: hard mobs, bosses, AI, claims. minecraft.mairwunnx.com](https://raw.githubusercontent.com/MairwunNx/mobosses/master/media/og-adv-image.png)](https://minecraft.mairwunnx.com)
 
 ## Requirements
 
