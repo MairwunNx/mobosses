@@ -1,7 +1,23 @@
-# Конфигурация боссов Mo'Bosses
+###############################################################################
+#                          Mo’Bosses bosses                                   #
+###############################################################################
+# Which mobs can become bosses, by entity type (ZOMBIE or minecraft:zombie).
+#
+#   enabled        false keeps this type an ordinary mob
+#   spawn_chance   0 to 1: the chance a mob of this type becomes a boss when it
+#                  spawns near a player, before the multipliers in config.yml
+#   exp_modifier   multiplies the vanilla experience the boss drops
+#   is_powered     creepers only: a charged creeper
+#   equipment      weapons and armor sets by boss level: a boss takes a random
+#                  one within 7 levels of the best it qualifies for; an armor
+#                  set replaces the armor from formula.armor in config.yml
+#   effects        particles around the boss while players are near, its death
+#                  sound, and the sound when it summons minions
+#
+# Boss names live in lang/ under bosses.<type>. A name: key here shows that
+# name to everyone instead, as 1.x did.
 
 ZOMBIE:
-  name: "Гнилой"
   enabled: true
   spawn_chance: 0.09 # 9%
   exp_modifier: 1.0
@@ -129,7 +145,6 @@ ZOMBIE:
       summon: "ENTITY_ZOMBIE_VILLAGER_CURE"
 
 SKELETON:
-  name: "Костян"
   enabled: true
   spawn_chance: 0.09 # 9%
   exp_modifier: 0.7
@@ -206,7 +221,6 @@ SKELETON:
       summon: "ENTITY_STRAY_AMBIENT"
 
 PIGLIN:
-  name: "Свиноголовый"
   enabled: false
   spawn_chance: 0.11 # 11%
   exp_modifier: 0.4
@@ -272,7 +286,6 @@ PIGLIN:
       summon: "ENTITY_PIGLIN_BRUTE_AMBIENT"
 
 PILLAGER:
-  name: "Бандюган"
   enabled: true
   spawn_chance: 0.11 # 11%
   exp_modifier: 0.7
@@ -312,7 +325,7 @@ PILLAGER:
       - { material: "CROSSBOW", min_lvl: 96, enchantments: { multishot: 1, piercing: 4, quick_charge: 3 } }
       - { material: "CROSSBOW", min_lvl: 98, enchantments: { multishot: 1, piercing: 4, quick_charge: 3, unbreaking: 3 } }
       - { material: "CROSSBOW", min_lvl: 99, enchantments: { multishot: 1, piercing: 4, quick_charge: 3, unbreaking: 3, mending: 1 } }
-      - { material: "CROSSBOW", min_lvl: 100, enchantments: { multishot: 1, piercing: 4, quick_charge: 3, unbreaking: 3, mending: 1, curse_of_vanishing: 1 } }
+      - { material: "CROSSBOW", min_lvl: 100, enchantments: { multishot: 1, piercing: 4, quick_charge: 3, unbreaking: 3, mending: 1, vanishing_curse: 1 } }
   effects:
     particles: "ANGRY_VILLAGER"
     sounds:
@@ -321,7 +334,6 @@ PILLAGER:
       summon: "ENTITY_VINDICATOR_AMBIENT"
 
 SPIDER:
-  name: "Паукан"
   enabled: true
   spawn_chance: 0.11 # 11%
   exp_modifier: 0.377
@@ -333,7 +345,6 @@ SPIDER:
       summon: "AMBIENT_CAVE"
 
 ENDERMAN:
-  name: "Шпала"
   enabled: true
   spawn_chance: 0.11 # 11%
   exp_modifier: 0.4
@@ -345,7 +356,6 @@ ENDERMAN:
       summon: "ENTITY_ENDERMAN_TELEPORT"
 
 WITHER_SKELETON:
-  name: "Босс иссушитель"
   enabled: true
   spawn_chance: 0.09 # 9%
   exp_modifier: 0.688
@@ -401,7 +411,6 @@ WITHER_SKELETON:
       summon: "ENTITY_WITHER_SPAWN"
 
 VINDICATOR:
-  name: "Херобрин"
   enabled: true
   spawn_chance: 0.13 # 13%
   exp_modifier: 1.0
@@ -436,7 +445,6 @@ VINDICATOR:
       summon: "ENTITY_EVOKER_FANGS_ATTACK"
 
 STRAY:
-  name: "Отмороженный"
   enabled: true
   spawn_chance: 0.11 # 11%
   exp_modifier: 0.733
@@ -463,10 +471,9 @@ STRAY:
       summon: "BLOCK_SNOW_BREAK"
 
 CREEPER:
-  name: "Рико"
   enabled: true
   spawn_chance: 0.11 # 11%
-  is_powered: true # Будет ли крипер заряженным
+  is_powered: true
   exp_modifier: 0.666
   effects:
     particles: "ELECTRIC_SPARK"
@@ -476,7 +483,6 @@ CREEPER:
       summon: "ENTITY_CREEPER_PRIMED"
 
 HUSK:
-  name: "Пустынник"
   enabled: true
   spawn_chance: 0.11 # 11%
   exp_modifier: 0.9
@@ -515,14 +521,13 @@ HUSK:
       - { min_lvl: 60, helmet: { material: "DIAMOND_HELMET", enchantments: { protection: 2, respiration: 2 } }, boots: { material: "DIAMOND_BOOTS" } }
       - { min_lvl: 80, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 3 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 4 } } }
   effects:
-    particles: "DESERT_FOSSIL"
+    particles: "WHITE_ASH"
     sounds:
       spawn: "ENTITY_HUSK_AMBIENT"
       death: "ENTITY_HUSK_DEATH"
       summon: "ENTITY_HUSK_CONVERTED_TO_ZOMBIE"
 
 WITCH:
-  name: "Жрица"
   enabled: true
   spawn_chance: 0.11 # 11%
   exp_modifier: 0.377
@@ -576,7 +581,6 @@ WITCH:
       summon: "ENTITY_WITCH_DRINK"
 
 DROWNED:
-  name: "Затонувший"
   enabled: true
   spawn_chance: 0.10 # 10%
   exp_modifier: 1.0
@@ -630,7 +634,6 @@ DROWNED:
       summon: "ENTITY_DROWNED_SHOOT"
 
 EVOKER:
-  name: "Джаггернаут"
   enabled: true
   spawn_chance: 0.10 # 10%
   exp_modifier: 0.7
@@ -650,7 +653,6 @@ EVOKER:
       summon: "ENTITY_EVOKER_PREPARE_SUMMON"
 
 PHANTOM:
-  name: "БПЛА"
   enabled: true
   spawn_chance: 0.12 # 12%
   exp_modifier: 0.3
@@ -662,7 +664,6 @@ PHANTOM:
       summon: "ENTITY_PHANTOM_FLAP"
 
 VEX:
-  name: "Дух"
   enabled: true
   spawn_chance: 0.10 # 10%
   exp_modifier: 0.766
@@ -697,7 +698,6 @@ VEX:
       summon: "ENTITY_VEX_CHARGE"
 
 ZOMBIE_VILLAGER:
-  name: "Зомбачелло"
   enabled: true
   spawn_chance: 0.11 # 11%
   exp_modifier: 1.0

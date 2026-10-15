@@ -1,229 +1,226 @@
 ###############################################################################
-#                          ⚙️ ГЛАВНАЯ КОНФИГУРАЦИЯ ⚙️                        #
-#                      Основные настройки плагина Mo'Bosses                  #
-#                      🎯 Сбалансированная система боссов 🎯                  #
+#                          Mo’Bosses configuration                            #
 ###############################################################################
+# Every key here has a default, so you can delete the ones you don't change.
+# A value that doesn't fit (a word where a number goes) costs only itself: the
+# log says which one, and it takes its default. /mobosses reload applies changes
+# without a restart. Messages live in lang/<language>.yml.
 
-# ---------------------------------------------------------------------------
-#  🔌 ОСНОВНЫЕ НАСТРОЙКИ ПЛАГИНА
-# ---------------------------------------------------------------------------
+enabled: true   # false stops new bosses and abilities; bosses already around stay.
+debug: false    # true logs spawns, levels, abilities, and loot.
 
-# 🔋 Включён ли плагин (глобальное отключение всех функций)
-enabled: true
+locales:
+  # Players nothing else matches, the console, and the name tags over bosses get
+  # this language. A name tag is the same for everyone who sees it.
+  default: en
+  # Where a player's language comes from, tried in order:
+  #   ip     — the country of their IP address, through the lists below;
+  #   client — the language set in their game, when a lang/ file matches it.
+  sources: [ ip, client ]
+  # Language → the ISO 3166 country codes that get it. Add a lang/it.yml and an
+  # “it: [ IT, SM, VA ]” line to add Italian.
+  countries:
+    ru: [ RU, BY, KZ, KG, TJ, UZ, AM, AZ, MD, GE, TM ]
+    es: [ ES, MX, AR, CO, CL, PE, VE, EC, GT, CU, BO, DO, HN, PY, SV, NI, CR, PA, UY, PR, GQ ]
+    pt: [ BR, PT, AO, MZ, CV, GW, ST, TL ]
+    de: [ DE, AT, CH, LI, LU ]
 
-# 🐛 Режим отладки (подробные логи в консоль для разработчиков)
-debug: false
-
-# 🌍 Язык плагина (ru, en - влияет на сообщения игрокам)
-language: "ru"
-
-# ---------------------------------------------------------------------------
-#  🌍 СИСТЕМА СПАВНА БОССОВ
-# ---------------------------------------------------------------------------
-
-spawn:
-  # 🔋 Включена ли система спавна боссов
+geoip:
+  # The country database: DB-IP's free “IP to Country Lite”, CC BY 4.0, about 4 MB.
+  # The plugin downloads it into geoip/ and refreshes it once it's older than
+  # refresh_days. Lookups happen on your server; no address leaves it.
   enabled: true
+  url: "https://download.db-ip.com/free/dbip-country-lite-{year}-{month}.mmdb.gz"
+  refresh_days: 30
 
-  # 🏗️ ОБЩИЕ ОГРАНИЧЕНИЯ СПАВНА
-  max_bosses_per_world: 10000000          # Максимум боссов в одном мире
-  spawn_radius: 100                       # Радиус спавна боссов вокруг игроков
-
-  # 🌎 МНОЖИТЕЛИ ДЛЯ РАЗНЫХ МИРОВ
-  world_multipliers:
-    world: 1.0                            # Обычный мир (базовый множитель)
-    world_nether: 1.1                     # Нижний мир (+10% к спавну)
-    world_the_end: 1.3                    # Край (+30% к спавну)
-
-  # 🌅 МНОЖИТЕЛИ ПО ВРЕМЕНИ СУТОК
+# ---------------------------------------------------------------------------
+#  Spawning
+# ---------------------------------------------------------------------------
+# A mob of a type in bosses.yml becomes a boss with that type's spawn_chance,
+# times the multipliers below, when a player is within spawn_radius. The nearest
+# player's Mo’Bosses level sets the boss's level.
+spawn:
+  enabled: true
+  max_bosses_per_world: 10000000   # Loaded bosses per world.
+  spawn_radius: 100
+  world_multipliers:               # By world name; worlds not listed use 1.0.
+    world: 1.0
+    world_nether: 1.1
+    world_the_end: 1.3
   time_multipliers:
-    day: 0.7                              # День (-30% к спавну)
-    night: 1.0                            # Ночь (базовый спавн)
-
-  # 🌦️ МНОЖИТЕЛИ ПО ПОГОДЕ
+    day: 0.7
+    night: 1.0
   weather_multipliers:
-    clear: 1.0                            # Ясная погода (базовый спавн)
-    rain: 1.1                             # Дождь (+10% к спавну)
-    thunder: 1.3                          # Гроза (+30% к спавну)
-
-  # 🏔️ ПРОВЕРКА ВЕРТИКАЛЬНЫХ ЗОН (поверхность vs пещеры)
-  check_vertical_zone: false              # Включить проверку высоты спавна
-  vertical_zone_threshold: 14             # Сколько блоков от поверхности = "пещера"
-
-  # 📋 РАЗРЕШЁННЫЕ ПРИЧИНЫ СПАВНА
-  # Полный список: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/event/entity/CreatureSpawnEvent.SpawnReason.html
+    clear: 1.0
+    rain: 1.1
+    thunder: 1.3
+  # Experimental: no boss when the mob and the player are in different zones,
+  # one on the surface and the other in a cave, by this many blocks below the top.
+  check_vertical_zone: false
+  vertical_zone_threshold: 14
+  # Spawn reasons that can make a boss. CUSTOM covers minions bosses summon.
+  # https://jd.papermc.io/paper/org/bukkit/event/entity/CreatureSpawnEvent.SpawnReason.html
   allowed_spawn_reasons: [ NATURAL, JOCKEY, SPAWNER, TRIAL_SPAWNER, EGG, SPAWNER_EGG, VILLAGE_INVASION, NETHER_PORTAL, DROWNED, RAID, PATROL, COMMAND, CUSTOM ]
 
 # ---------------------------------------------------------------------------
-#  📈 СИСТЕМА ПРОГРЕССИИ ИГРОКА
+#  Player levels
 # ---------------------------------------------------------------------------
-
 progression:
-  # 📊 КРИВАЯ УРОВНЯ ИГРОКА
+  # A player's level, from the Mo’Bosses experience and kills they've gathered.
   level_curve:
-    max_level: 100                        # Максимальный уровень игрока (естественный потолок)
-    exp_scale: 30.0                       # Делитель опыта (√XP) (больше = медленнее рост) (↑ значение → медленнее рост при том же количестве накопленного XP)
-    kill_scale: 20.0                      # Делитель убийств (меньше = киллы важнее) (↓ значение → киллы сильнее влияют на уровень)
-    power: 1.3                            # Крутизна кривой роста (экспоненциальность) (p - ↑ число → резче разгон во второй половине пути к max_level)
-    offset: 20.0                          # Смещение точки перегиба (медленный старт) (K - ↑ число → дольше остаёмся на низких уровнях)
+    max_level: 100
+    exp_scale: 30.0    # Higher: experience counts for less.
+    kill_scale: 20.0   # Lower: kills count for more.
+    power: 1.3         # Higher: a steeper climb in the second half.
+    offset: 20.0       # Higher: longer at low levels.
 
-  # 📊 КРИВАЯ УРОВНЯ МИНИ-БОССА
+  # A minion that rolls into a boss is this many levels below its summoner.
   mini_bosses_level_curve:
-    min_delta: 1                # минимум вычесть
-    max_delta: 18               # максимум вычесть на очень больших уровнях
-    power: 1.15                 # крутизна роста
-    offset: 90                  # смещение точки перегиба
-    percent_cap: 0.28           # не больше 28% от уровня родителя
-    jitter: 1                   # случайное ±1 к дельте, можно 0 чтобы убрать
+    min_delta: 1
+    max_delta: 18
+    power: 1.15
+    offset: 90
+    percent_cap: 0.28  # Never more than 28% of the summoner's level.
+    jitter: 1          # A random ±1; 0 turns it off.
 
-  # 💎 ПОЛУЧЕНИЕ ОПЫТА ЗА УБИЙСТВО БОССА
+  # Mo’Bosses experience for a kill, split by each player's share of the damage.
   exp_gain:
-    health_factor: 0.01                   # Опыт за каждое HP босса
-    level_factor: 0.005                   # Базовый опыт за уровень босса
-    level_power: 2.0                      # Степень влияния уровня босса
-    rarity_mul: true                      # Умножать на класс босса (rare, epic, etc.) (true → результат дополнительно умножается на classes.<…>.experience.max_scale)
+    health_factor: 0.01   # Per point of the boss's max health.
+    level_factor: 0.005   # Times the level to the power below.
+    level_power: 2.0
+    rarity_mul: true      # Times the class's experience multiplier.
 
-  # 🎲 ВАРИАЦИЯ УРОВНЯ СПАВНЯЩИХСЯ БОССОВ
+  # Now and then a boss comes weaker than the player, more often at high levels.
   variance:
-    base_chance: 0.15                     # Базовый шанс спавна слабого босса (15%)
-    extra_chance: 0.45                    # Доп. шанс на 100 уровне (+45%)
-    min_reduction: 5                      # Минимальное снижение уровня босса
-    max_reduction: 80                     # Максимальное снижение уровня босса
-    power: 1.2                            # Кривая расширения диапазона уровней (↑ число → разброс растёт медленнее в начале и быстрее к хай‑лвлам)
+    base_chance: 0.15
+    extra_chance: 0.45    # Added at level 100.
+    min_reduction: 5
+    max_reduction: 80
+    power: 1.2
 
 # ---------------------------------------------------------------------------
-#  🧮 ФОРМУЛЫ РАСЧЁТА ХАРАКТЕРИСТИК БОССОВ
+#  Boss stats
 # ---------------------------------------------------------------------------
-
+# Each stat is the mob's vanilla value × the class multiplier × a curve by level
+# that starts at 1 and approaches max_scale. offset delays the climb, power makes
+# it steeper, and flatten (0 to 1) shrinks the class difference at high levels.
 formula:
-  # ❤️ ЗДОРОВЬЕ БОССОВ
   health:
-    max_scale: 20.0                       # Максимальный множитель здоровья (Smax - асимптота множителя здоровья. ↑ число → больше здоровье на высоких уровнях)
-    power: 1.8                            # Крутизна роста здоровья (p - ↑ число → резче рост здоровья)
-    offset: 400.0                         # Смещение кривой (медленный рост вначале) (K - ↑ число → дольше остаёмся на низких уровнях)
-    flatten: 0.35                         # Сглаживание классовых различий (0-1) (↑ число → меньше различий между классами)
-
-  # ⚔️ УРОН БОССОВ
+    max_scale: 20.0
+    power: 1.8
+    offset: 400.0
+    flatten: 0.35
   damage:
-    max_scale: 6.0                        # Максимальный множитель урона
-    power: 1.2                            # Крутизна роста урона
-    offset: 600.0                         # Смещение кривой урона
-    flatten: 0.40                         # Сглаживание классовых различий
-
-  # ✨ MINECRAFT ОПЫТ (XP) ОТ БОССОВ
+    max_scale: 6.0
+    power: 1.2
+    offset: 600.0
+    flatten: 0.40
+  # The vanilla experience a boss drops.
   experience:
-    max_scale: 270.0                      # Максимальный множитель опыта (Smax - асимптота множителя опыта. ↑ число → больше опыта на высоких уровнях)
-    power: 2.0                            # Крутизна роста опыта (p - ↑ число → резче рост опыта)
-    offset: 1000.0                        # Смещение кривой (долгий разгон) (K - ↑ число → дольше остаёмся на низких уровнях)
-
-  # 🛡️ БРОНЯ БОССОВ
+    max_scale: 270.0
+    power: 2.0
+    offset: 1000.0
+  # Armor and toughness apply to bosses without an armor set from bosses.yml.
   armor:
-    max_scale: 2.0                        # Максимальный множитель брони
-    power: 1.2                            # Крутизна роста брони
-    offset: 180.0                         # Смещение кривой брони
-    flatten: 0.35                         # Сглаживание классовых различий
-    cap_points: 28                        # Максимум очков брони
-
-  # 💪 ПОГЛОЩЕНИЕ УРОНА (Toughness)
+    max_scale: 2.0
+    power: 1.2
+    offset: 180.0
+    flatten: 0.35
+    cap_points: 28
   toughness:
-    max_scale: 2.2                        # Максимальный множитель поглощения
-    power: 1.1                            # Крутизна роста поглощения
-    offset: 200.0                         # Смещение кривой поглощения
-    flatten: 0.30                         # Сглаживание классовых различий
-    cap_points: 12                        # Максимум очков поглощения
-
-  # 👥 СПАВН МИНЬОНОВ БОССАМИ
+    max_scale: 2.2
+    power: 1.1
+    offset: 200.0
+    flatten: 0.30
+    cap_points: 12
+  # How many minions a summon brings.
   minions:
-    base_count: 2                         # Минимальное количество миньонов (↑ число → больше миньонов на высоких уровнях)
-    max_count: 12                         # Максимальное количество миньонов (↑ число → больше миньонов на высоких уровнях)
-    power: 1.2                            # Скорость роста количества миньонов (↑ число → быстрее рост количества миньонов)
-    offset: 80.0                          # Смещение кривой роста (↑ число → дольше остаёмся на низких уровнях)
-    variance: 0.15                        # Случайная вариация (±15%)
+    base_count: 2
+    max_count: 12
+    power: 1.2
+    offset: 80.0
+    variance: 0.15   # ±15%.
 
 # ---------------------------------------------------------------------------
-#  ✨ ВИЗУАЛЬНЫЕ ЭФФЕКТЫ
+#  Looks
 # ---------------------------------------------------------------------------
-
 effects:
-  # 🎆 ЧАСТИЦЫ
   particles:
-    enabled: true                         # Включить систему частиц
-    update_interval: 20                   # Интервал обновления частиц (тики)
-
-  # ✨ СВЕЧЕНИЕ БОССОВ
+    enabled: true
+    update_interval: 20   # Ticks between puffs of the boss's particles.
   glow:
-    enabled: true                         # Включить эффект свечения
-    # 🎨 Классы боссов со свечением (пустой список = все классы)
-    classes: [ uncommon, rare, epic, legendary, mythic ]
-
-  # 👁️ РАДИУС ВИДИМОСТИ ЭФФЕКТОВ
-  visibility_radius: 32                   # Дистанция отображения эффектов (блоки)
-
-# ---------------------------------------------------------------------------
-#  📊 БОССБАР (ПОЛОСКА ЗДОРОВЬЯ БОССА)
-# ---------------------------------------------------------------------------
+    enabled: true
+    classes: [ uncommon, rare, epic, legendary, mythic ]   # An empty list means all.
+  visibility_radius: 32   # Glow and particles show only with a player this close.
 
 boss_bar:
-  # 🔋 Включить отображение боссбара
   enabled: true
-
-  # 🎨 Стиль боссбара (SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12, SEGMENTED_20)
-  style: "SEGMENTED_20"
+  # PROGRESS, NOTCHED_6, NOTCHED_10, NOTCHED_12, or NOTCHED_20.
+  style: NOTCHED_20
+  hide_distance: 64   # A player farther than this stops seeing the bar.
 
 # ---------------------------------------------------------------------------
-#  🎁 СИСТЕМА ЛУТА
+#  Loot and messages
 # ---------------------------------------------------------------------------
-
 loot:
-  # 🔧 СЛУЧАЙНЫЙ ИЗНОС ПРЕДМЕТОВ
+  # Tools and armor from loottable.yml with random_durability come partly worn.
   random_durability:
-    enabled: true                         # Включить случайный износ лута
-    min_durability: 0.1                   # Минимальная прочность (10%)
-    max_durability: 0.9                   # Максимальная прочность (90%)
+    enabled: true
+    min_durability: 0.1   # At least 10% of their durability left,
+    max_durability: 0.9   # at most 90%; better classes lean toward the top.
+  min_damage_share: 0.27777777   # The share of the boss's health a player must deal for loot.
+
+broadcast:
+  kills: true       # “kill” to everyone when players kill a boss.
+  rare_loot: true   # “loot.*” to everyone for rare, epic, legendary, and mythic loot.
+  abilities: true   # “abilities.*” to the player whose hit set an ability off.
+
+kill_sound:
+  enabled: true
+  key: "minecraft:ui.toast.challenge_complete"
 
 # ---------------------------------------------------------------------------
-#  💾 НАСТРОЙКИ БАЗЫ ДАННЫХ
+#  Database
 # ---------------------------------------------------------------------------
-
+# Where players' levels live: sqlite (a file here), mysql (MySQL or MariaDB),
+# or postgres. A change applies on /mobosses reload.
 database:
-  # 🗃️ Тип базы данных (sqlite, mysql, postgres)
-  type: "sqlite"
-
-  # 📁 НАСТРОЙКИ SQLITE (локальная база данных)
+  type: sqlite
   sqlite:
-    file: "bosses.db"                     # Имя файла базы данных
-
-  # 🌐 НАСТРОЙКИ MYSQL (удалённая база данных)
+    file: bosses.db
   mysql:
-    host: "localhost"                     # Адрес сервера MySQL
-    port: 3306                            # Порт сервера MySQL
-    database: "mobosses"                  # Имя базы данных
-    username: "root"                      # Имя пользователя
-    password: "password"                  # Пароль пользователя
-
-  # 🐘 НАСТРОЙКИ POSTGRESQL (удалённая база данных)
+    host: localhost
+    port: 3306
+    database: mobosses
+    username: root
+    password: password
+    ssl: false
   postgres:
-    host: "localhost"                     # Адрес сервера PostgreSQL
-    port: 5432                            # Порт сервера PostgreSQL
-    database: "mobosses"                  # Имя базы данных
-    username: "mobosses"                  # Имя пользователя
-    password: "secret"                    # Пароль пользователя
-    ssl: false                            # Использовать SSL соединение
+    host: localhost
+    port: 5432
+    database: mobosses
+    username: mobosses
+    password: secret
+    ssl: false
 
-###############################################################################
-#                            📝 СПРАВКА ПО НАСТРОЙКАМ                        #
-# ---------------------------------------------------------------------------  #
-# 🎯 ФОРМУЛЫ РАСЧЁТА:                                                        #
-#   • max_scale - максимальный множитель на высоких уровнях                 #
-#   • power - крутизна кривой роста (больше = резче рост)                   #
-#   • offset - смещение точки перегиба (больше = медленнее старт)           #
-#   • flatten - сглаживание классовых различий (0=без сглаживания, 1=полное)#
-#                                                                            #
-# 🎲 КЛАССЫ БОССОВ:                                                          #
-#   Common → Uncommon → Rare → Epic → Legendary → Mythic                    #
-#                                                                            #
-# ⚡ ПРОИЗВОДИТЕЛЬНОСТЬ:                                                     #
-#   • Большие значения visibility_radius могут влиять на TPS                #
-#   • Частое обновление частиц (малый update_interval) нагружает сервер     #
-#   • MySQL/PostgreSQL быстрее SQLite для больших серверов                  #
-###############################################################################
+# ---------------------------------------------------------------------------
+#  Protected areas
+# ---------------------------------------------------------------------------
+# Each part works only when its plugin runs on the server.
+protection:
+  griefprevention:
+    enabled: true
+    no_bosses_in_claims: true            # No boss spawns naturally in a claim.
+    no_block_abilities_in_claims: true   # No ability breaks, places, or ignites blocks in a claim.
+  worldguard:
+    enabled: true
+    spawn_flags: true     # Natural spawns follow mobosses-spawn and mob-spawning.
+    ability_flags: true   # Block-changing abilities follow mobosses-abilities and build.
+    damage_flags: true    # Ability damage to players follows mob-damage.
+  admin_spawn_bypass: true   # /mobosses spawn works anywhere; false makes it ask too.
+
+# Block changes by bosses, their abilities, and their minions go to CoreProtect
+# under this user, so /co rollback u:#mobosses t:1h r:50 undoes them.
+coreprotect:
+  enabled: true
+  user: "#mobosses"

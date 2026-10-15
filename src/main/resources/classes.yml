@@ -1,13 +1,16 @@
 ###############################################################################
-#                        ⚔️ КЛАССЫ БОССОВ Mo'Bosses ⚔️                       #
-#                  Конфигурация множителей и пороговых уровней                 #
-#                   ✨ Индивидуальные способности для каждого! ✨               #
+#                          Mo’Bosses classes                                  #
 ###############################################################################
+# Six classes from Common to Mythic. A new boss picks one by `chance`, a weight.
+# Each class multiplies the boss's health, damage, experience, armor (defense),
+# and toughness; formula in config.yml shrinks the difference at high levels.
+# color: a color name (WHITE, YELLOW, AQUA, DARK_PURPLE, GOLD, RED, …) or #RRGGBB,
+# for the name, the glow, and the boss bar. ability_thresholds: the boss level
+# each ability starts at. Class names live in lang/ under classes.<class>.
+# Loot follows this order: a boss drops loot of its class and the ones below.
 
-# ---------------------------------------------------------------------------
-#  🏆 КЛАСС "COMMON" - ОБЫЧНЫЕ БОССЫ
-# ---------------------------------------------------------------------------
-common: 
+
+common:
   key: common
   health: 1.0
   damage: 1.0
@@ -16,22 +19,18 @@ common:
   toughness: 1.05
   color: "WHITE"
   chance: 63.0
-  display_name: "Common"
   ability_thresholds:
-    lightning: 28        # ⚡ Молния доступна с уровня 28
-    summoning: 34        # 👥 Призыв миньонов с уровня 34
-    regeneration: 45     # ❤️ Регенерация с уровня 45
-    fire_ring: 35        # 🔥 Огненное кольцо с уровня 35
-    web_ring: 38         # 🕸️ Паутинное кольцо с уровня 38
-    teleport_strike: 70  # 🌟 Телепорт-удар с уровня 70
-    meteor_shower: 67    # ☄️ Метеоритный дождь с уровня 67
-    arrow_arc: 30        # 🏹 Кольцо стрел с уровня 30
-    arrow_rain: 75       # 🌧️ Дождь стрел с уровня 75
+    lightning: 28
+    summoning: 34
+    regeneration: 45
+    fire_ring: 35
+    web_ring: 38
+    teleport_strike: 70
+    meteor_shower: 67
+    arrow_arc: 30
+    arrow_rain: 75
 
-# ---------------------------------------------------------------------------
-#  🏆 КЛАСС "UNCOMMON" - НЕОБЫЧНЫЕ БОССЫ
-# ---------------------------------------------------------------------------
-uncommon: 
+uncommon:
   key: uncommon
   health: 1.3
   damage: 1.1
@@ -40,22 +39,18 @@ uncommon:
   toughness: 1.13
   color: "YELLOW"
   chance: 28.0
-  display_name: "Uncommon"
   ability_thresholds:
-    lightning: 20        # ⚡ Молния доступна с уровня 20
-    summoning: 30        # 👥 Призыв миньонов с уровня 30
-    regeneration: 40     # ❤️ Регенерация с уровня 40
-    fire_ring: 25        # 🔥 Огненное кольцо с уровня 25
-    web_ring: 32         # 🕸️ Паутинное кольцо с уровня 32
-    teleport_strike: 60  # 🌟 Телепорт-удар с уровня 60
-    meteor_shower: 50    # ☄️ Метеоритный дождь с уровня 50
-    arrow_arc: 28        # 🏹 Кольцо стрел с уровня 28
-    arrow_rain: 65       # 🌧️ Дождь стрел с уровня 65
+    lightning: 20
+    summoning: 30
+    regeneration: 40
+    fire_ring: 25
+    web_ring: 32
+    teleport_strike: 60
+    meteor_shower: 50
+    arrow_arc: 28
+    arrow_rain: 65
 
-# ---------------------------------------------------------------------------
-#  🏆 КЛАСС "RARE" - РЕДКИЕ БОССЫ
-# ---------------------------------------------------------------------------
-rare: 
+rare:
   key: rare
   health: 1.6
   damage: 1.3
@@ -64,22 +59,18 @@ rare:
   toughness: 1.23
   color: "AQUA"
   chance: 9.0
-  display_name: "Rare"
   ability_thresholds:
-    lightning: 18        # ⚡ Молния доступна с уровня 18
-    summoning: 28        # 👥 Призыв миньонов с уровня 28
-    regeneration: 35     # ❤️ Регенерация с уровня 35
-    fire_ring: 22        # 🔥 Огненное кольцо с уровня 22
-    web_ring: 28         # 🕸️ Паутинное кольцо с уровня 28
-    teleport_strike: 55  # 🌟 Телепорт-удар с уровня 55
-    meteor_shower: 45    # ☄️ Метеоритный дождь с уровня 45
-    arrow_arc: 25        # 🏹 Кольцо стрел с уровня 25
-    arrow_rain: 60       # 🌧️ Дождь стрел с уровня 60
+    lightning: 18
+    summoning: 28
+    regeneration: 35
+    fire_ring: 22
+    web_ring: 28
+    teleport_strike: 55
+    meteor_shower: 45
+    arrow_arc: 25
+    arrow_rain: 60
 
-# ---------------------------------------------------------------------------
-#  🏆 КЛАСС "EPIC" - ЭПИЧЕСКИЕ БОССЫ
-# ---------------------------------------------------------------------------
-epic: 
+epic:
   key: epic
   health: 2.2
   damage: 1.7
@@ -88,22 +79,18 @@ epic:
   toughness: 1.42
   color: "DARK_PURPLE"
   chance: 3.0
-  display_name: "Epic"
   ability_thresholds:
-    lightning: 12        # ⚡ Молния доступна с уровня 12
-    summoning: 22        # 👥 Призыв миньонов с уровня 22
-    regeneration: 30     # ❤️ Регенерация с уровня 30
-    fire_ring: 18        # 🔥 Огненное кольцо с уровня 18
-    web_ring: 26         # 🕸️ Паутинное кольцо с уровня 26
-    teleport_strike: 45  # 🌟 Телепорт-удар с уровня 45
-    meteor_shower: 40    # ☄️ Метеоритный дождь с уровня 40
-    arrow_arc: 20        # 🏹 Кольцо стрел с уровня 20
-    arrow_rain: 50       # 🌧️ Дождь стрел с уровня 50
+    lightning: 12
+    summoning: 22
+    regeneration: 30
+    fire_ring: 18
+    web_ring: 26
+    teleport_strike: 45
+    meteor_shower: 40
+    arrow_arc: 20
+    arrow_rain: 50
 
-# ---------------------------------------------------------------------------
-#  🏆 КЛАСС "LEGENDARY" - ЛЕГЕНДАРНЫЕ БОССЫ
-# ---------------------------------------------------------------------------
-legendary: 
+legendary:
   key: legendary
   health: 3.0
   damage: 2.2
@@ -112,22 +99,18 @@ legendary:
   toughness: 1.67
   color: "GOLD"
   chance: 2.0
-  display_name: "Legendary"
   ability_thresholds:
-    lightning: 8         # ⚡ Молния доступна с уровня 8
-    summoning: 18        # 👥 Призыв миньонов с уровня 18
-    regeneration: 25     # ❤️ Регенерация с уровня 25
-    fire_ring: 14        # 🔥 Огненное кольцо с уровня 14
-    web_ring: 18         # 🕸️ Паутинное кольцо с уровня 18
-    teleport_strike: 35  # 🌟 Телепорт-удар с уровня 35
-    meteor_shower: 28    # ☄️ Метеоритный дождь с уровня 28
-    arrow_arc: 14        # 🏹 Кольцо стрел с уровня 14
-    arrow_rain: 40       # 🌧️ Дождь стрел с уровня 40
+    lightning: 8
+    summoning: 18
+    regeneration: 25
+    fire_ring: 14
+    web_ring: 18
+    teleport_strike: 35
+    meteor_shower: 28
+    arrow_arc: 14
+    arrow_rain: 40
 
-# ---------------------------------------------------------------------------
-#  🏆 КЛАСС "MYTHIC" - МИФИЧЕСКИЕ БОССЫ
-# ---------------------------------------------------------------------------
-mythic: 
+mythic:
   key: mythic
   health: 4.0
   damage: 2.8
@@ -136,23 +119,13 @@ mythic:
   toughness: 1.97
   color: "RED"
   chance: 1.0
-  display_name: "Mythic"
   ability_thresholds:
-    lightning: 5         # ⚡ Молния доступна с уровня 5
-    summoning: 12        # 👥 Призыв миньонов с уровня 12
-    regeneration: 18     # ❤️ Регенерация с уровня 18
-    fire_ring: 10         # 🔥 Огненное кольцо с уровня 10
-    web_ring: 14         # 🕸️ Паутинное кольцо с уровня 14
-    teleport_strike: 30  # 🌟 Телепорт-удар с уровня 30
-    meteor_shower: 25    # ☄️ Метеоритный дождь с уровня 25
-    arrow_arc: 10        # 🏹 Кольцо стрел с уровня 10
-    arrow_rain: 30       # 🌧️ Дождь стрел с уровня 30
-
-###############################################################################
-#                            📋 ПРИМЕЧАНИЯ                                   #
-# ---------------------------------------------------------------------------  #
-# 🎯 Чем выше класс, тем раньше открываются способности                      #
-# 🔄 Пороги можно настроить индивидуально для каждого класса                #
-# ⚖️ Система обеспечивает баланс между редкостью и силой                    #
-# 🎮 Mythic боссы получают все способности очень рано для драматизма        #
-###############################################################################
+    lightning: 5
+    summoning: 12
+    regeneration: 18
+    fire_ring: 10
+    web_ring: 14
+    teleport_strike: 30
+    meteor_shower: 25
+    arrow_arc: 10
+    arrow_rain: 30

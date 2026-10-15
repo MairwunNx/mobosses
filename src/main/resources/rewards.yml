@@ -1,161 +1,60 @@
 ###############################################################################
-#                            🎁 СИСТЕМА НАГРАД 🎁                            #
-#                   Конфигурация наград за убийство боссов                   #
-#                    💪 Сбалансированная система бонусов 💪                   #
+#                          Mo’Bosses rewards                                  #
 ###############################################################################
+# Potion effects for each player who deals enough of a boss's health: a few
+# picked from the pool of the boss's class, plus absorption hearts. Durations
+# and strength grow with the boss's level. Effect ids like SPEED or
+# minecraft:speed; amplifier 0 is level I.
 
-# ---------------------------------------------------------------------------
-#  ⚙️ ОСНОВНЫЕ НАСТРОЙКИ
-# ---------------------------------------------------------------------------
-
-# 🔋 Включена ли система наград (true/false)
 enabled: true
+extinguish_player: true    # Puts out a burning player.
+cleanse_negatives: true    # Clears poison, wither, slowness, and the like first.
+min_damage_share: 0.27777777   # The share of the boss's health a player must deal.
 
-# 🔥 Тушить игрока после получения награды (убирает огонь/лаву)
-extinguish_player: true
+base_duration_seconds: 8
+duration_per_level: 0.60
+max_duration_seconds: 60
 
-# 🧹 Очищать негативные эффекты перед выдачей наград
-cleanse_negatives: true
+amplifier_base: 0
+amplifier_per_level: 0.035
+amplifier_max: 3
 
-# ---------------------------------------------------------------------------
-#  ⏱️ НАСТРОЙКИ ДЛИТЕЛЬНОСТИ ЭФФЕКТОВ
-# ---------------------------------------------------------------------------
+# After rewards, a player waits this long before the next ones: the duration
+# times the multiplier, kept between the two limits, in seconds.
+cooldown_multiplier: 2.0
+cooldown_min_seconds: 8
+cooldown_max_seconds: 180
 
-# 🕐 Базовая длительность эффектов в секундах
-base_duration_seconds: 8              # Начальная длительность для всех уровней
-
-# 📈 Прирост длительности за каждый уровень босса
-duration_per_level: 0.60              # Секунд за уровень (было 0.06 - увеличено)
-
-# ⏰ Максимальная длительность эффектов в секундах
-max_duration_seconds: 60              # Потолок длительности для баланса
-
-# ---------------------------------------------------------------------------
-#  💊 НАСТРОЙКИ СИЛЫ ЭФФЕКТОВ
-# ---------------------------------------------------------------------------
-
-# 🎯 Базовая сила эффектов (0=I, 1=II, 2=III, 3=IV, 4=V)
-amplifier_base: 0                     # Начальная сила эффектов
-
-# 📊 Прирост силы эффекта за каждый уровень босса
-amplifier_per_level: 0.035            # Множитель силы за уровень
-
-# 🔝 Максимальная сила эффектов
-amplifier_max: 3                      # Максимум IV уровень эффектов
-
-# ---------------------------------------------------------------------------
-#  ⏳ СИСТЕМА КУЛДАУНОВ
-# ---------------------------------------------------------------------------
-
-# 🔄 Множитель кулдауна относительно длительности эффекта
-cooldown_multiplier: 2.0              # Кулдаун = длительность × этот множитель
-
-# ⏱️ Минимальное время кулдауна в секундах
-cooldown_min_seconds: 8               # Нижний предел кулдауна
-
-# ⌛ Максимальное время кулдауна в секундах  
-cooldown_max_seconds: 180             # Верхний предел кулдауна (3 минуты)
-
-# ---------------------------------------------------------------------------
-#  🏆 НАБОРЫ НАГРАД ПО КЛАССАМ БОССОВ
-# ---------------------------------------------------------------------------
-# 🎲 Классы: common → uncommon → rare → epic → legendary → mythic
-# 💎 Каждый класс имеет свой набор эффектов и их количество
-
+# By class: how many effects (between effects_min and effects_max), extra
+# absorption hearts (each 2 is a level of Absorption), and the pool to pick from.
 tiers:
-  # 🟢 ОБЫЧНЫЙ БОСС - базовые награды для новичков
   common:
-    effects_min: 1                    # Минимум эффектов
-    effects_max: 1                    # Максимум эффектов
-    extra_absorption_hearts: 0        # Дополнительные сердца поглощения
-    effect_pool:                      # Доступные эффекты для этого класса
-      - SPEED                         # 💨 Скорость
-      - HASTE                         # ⛏️ Спешка
-      - REGENERATION                  # ❤️ Регенерация
-
-  # 🟡 НЕОБЫЧНЫЙ БОСС - больше разнообразия
+    effects_min: 1
+    effects_max: 1
+    extra_absorption_hearts: 0
+    effect_pool: [ SPEED, HASTE, REGENERATION ]
   uncommon:
-    effects_min: 1                    # Минимум эффектов
-    effects_max: 2                    # Максимум эффектов
-    extra_absorption_hearts: 0        # Дополнительные сердца поглощения
-    effect_pool:                      # Расширенный набор эффектов
-      - REGENERATION                  # ❤️ Регенерация
-      - HASTE                         # ⛏️ Спешка  
-      - WATER_BREATHING               # 🫧 Подводное дыхание
-      - NIGHT_VISION                  # 👁️ Ночное зрение
-      - JUMP_BOOST                    # 🦘 Прыгучесть
-
-  # 🔵 РЕДКИЙ БОСС - серьёзные награды
+    effects_min: 1
+    effects_max: 2
+    extra_absorption_hearts: 0
+    effect_pool: [ REGENERATION, HASTE, WATER_BREATHING, NIGHT_VISION, JUMP_BOOST ]
   rare:
-    effects_min: 2                    # Минимум эффектов
-    effects_max: 2                    # Максимум эффектов
-    extra_absorption_hearts: 2        # +1 уровень поглощения (2 сердца)
-    effect_pool:                      # Полезные боевые эффекты
-      - SPEED                         # 💨 Скорость
-      - HASTE                         # ⛏️ Спешка
-      - REGENERATION                  # ❤️ Регенерация
-      - RESISTANCE                    # 🛡️ Сопротивление урону
-      - FIRE_RESISTANCE               # 🔥 Огнестойкость
-      - LUCK                          # 🍀 Удача
-
-  # 🟣 ЭПИЧЕСКИЙ БОСС - мощные бонусы
+    effects_min: 2
+    effects_max: 2
+    extra_absorption_hearts: 2
+    effect_pool: [ SPEED, HASTE, REGENERATION, RESISTANCE, FIRE_RESISTANCE, LUCK ]
   epic:
-    effects_min: 2                    # Минимум эффектов
-    effects_max: 3                    # Максимум эффектов
-    extra_absorption_hearts: 4        # +2 уровня поглощения (4 сердца)
-    effect_pool:                      # Продвинутые эффекты
-      - SPEED                         # 💨 Скорость
-      - HASTE                         # ⛏️ Спешка
-      - REGENERATION                  # ❤️ Регенерация
-      - RESISTANCE                    # 🛡️ Сопротивление урону
-      - FIRE_RESISTANCE               # 🔥 Огнестойкость
-      - DOLPHINS_GRACE                # 🐬 Грация дельфина
-      - CONDUIT_POWER                 # ⚡ Сила проводника
-
-  # 🟠 ЛЕГЕНДАРНЫЙ БОСС - премиум награды
+    effects_min: 2
+    effects_max: 3
+    extra_absorption_hearts: 4
+    effect_pool: [ SPEED, HASTE, REGENERATION, RESISTANCE, FIRE_RESISTANCE, DOLPHINS_GRACE, CONDUIT_POWER ]
   legendary:
-    effects_min: 3                    # Минимум эффектов
-    effects_max: 3                    # Максимум эффектов
-    extra_absorption_hearts: 6        # +3 уровня поглощения (6 сердец)
-    effect_pool:                      # Мощные эффекты
-      - SPEED                         # 💨 Скорость
-      - HASTE                         # ⛏️ Спешка
-      - REGENERATION                  # ❤️ Регенерация
-      - RESISTANCE                    # 🛡️ Сопротивление урону
-      - FIRE_RESISTANCE               # 🔥 Огнестойкость
-      - DOLPHINS_GRACE                # 🐬 Грация дельфина
-      - CONDUIT_POWER                 # ⚡ Сила проводника
-
-  # 🔴 МИФИЧЕСКИЙ БОСС - максимальные награды
+    effects_min: 3
+    effects_max: 3
+    extra_absorption_hearts: 6
+    effect_pool: [ SPEED, HASTE, REGENERATION, RESISTANCE, FIRE_RESISTANCE, DOLPHINS_GRACE, CONDUIT_POWER ]
   mythic:
-    effects_min: 3                    # Минимум эффектов
-    effects_max: 4                    # Максимум эффектов (самый высокий)
-    extra_absorption_hearts: 8        # +4 уровня поглощения (8 сердец)
-    effect_pool:                      # Все доступные эффекты
-      - SPEED                         # 💨 Скорость
-      - HASTE                         # ⛏️ Спешка
-      - REGENERATION                  # ❤️ Регенерация
-      - RESISTANCE                    # 🛡️ Сопротивление урону
-      - FIRE_RESISTANCE               # 🔥 Огнестойкость
-      - STRENGTH                      # 💪 Сила
-      - DOLPHINS_GRACE                # 🐬 Грация дельфина
-      - CONDUIT_POWER                 # ⚡ Сила проводника
-      - SATURATION                    # 🍖 Насыщение
-
-###############################################################################
-#                           📝 СПРАВКА ПО ЭФФЕКТАМ                           #
-# ---------------------------------------------------------------------------  #
-# 💨 SPEED - увеличивает скорость передвижения                               #
-# ⛏️ HASTE - увеличивает скорость добычи и атаки                            #
-# ❤️ REGENERATION - восстанавливает здоровье со временем                    #
-# 🛡️ RESISTANCE - уменьшает получаемый урон                                #
-# 🔥 FIRE_RESISTANCE - защита от огня и лавы                               #
-# 💪 STRENGTH - увеличивает урон в ближнем бою                              #
-# 🐬 DOLPHINS_GRACE - увеличивает скорость плавания                         #
-# ⚡ CONDUIT_POWER - подводные бонусы (зрение, дыхание, добыча)            #
-# 🍖 SATURATION - замедляет потерю голода                                   #
-# 🍀 LUCK - увеличивает шанс хорошего лута                                  #
-# 👁️ NIGHT_VISION - позволяет видеть в темноте                             #
-# 🫧 WATER_BREATHING - позволяет дышать под водой                           #
-# 🦘 JUMP_BOOST - увеличивает высоту прыжка                                #
-###############################################################################
+    effects_min: 3
+    effects_max: 4
+    extra_absorption_hearts: 8
+    effect_pool: [ SPEED, HASTE, REGENERATION, RESISTANCE, FIRE_RESISTANCE, STRENGTH, DOLPHINS_GRACE, CONDUIT_POWER, SATURATION ]

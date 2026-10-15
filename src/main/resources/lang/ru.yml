@@ -1,0 +1,975 @@
+# Русский. Формат MiniMessage: https://docs.advntr.dev/minimessage/format
+# Пустой текст отключает сообщение. Ключи, которых здесь нет, берутся из языка
+# по умолчанию, затем из английского.
+#
+# Теги цветов: <pri>, <ok>, <warn>, <err>, <boss>, <num>, <hp>, <xp>, <item>.
+# Подстановки босса: <boss_name>, <class> (в его цвете), <class_color> (включает
+# цвет класса), <level>. <papi:name> показывает %name% из PlaceholderAPI для
+# игрока, который читает сообщение.
+
+reloaded: "<pri>[Mo’Bosses]</pri> <ok>Перезагружено.</ok>"
+reload_failed: "<pri>[Mo’Bosses]</pri> <warn>Перезагружено с ошибками.</warn> <gray>Подробности в логе сервера.</gray>"
+no_permission: "<err>Вам недоступна эта команда.</err>"
+usage: '<gray>Команды:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray> и</gray> <white>/mobosses killall</white>'
+# <entities>, <classes>: из чего можно выбрать.
+spawn_usage: '<gray>Команда:</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray>. Существа:</gray> <white><entities></white><gray>. Классы:</gray> <white><classes></white>'
+spawned: "<pri>[Mo’Bosses]</pri> <ok>Призван</ok> <class_color>[Ур. <level>] [<class>]</class_color> <boss_name>"
+# <reason>: почему не вышло, например защищённая зона.
+spawn_failed: "<err>Не удалось призвать босса:</err> <gray><reason></gray>"
+spawn_where: "<err>Из консоли укажите координаты:</err> <white>/mobosses spawn zombie 10 rare 0 64 0 world</white>"
+unknown_entity: "<err>Босса типа <entity> нет.</err> <gray>Типы:</gray> <white><entities></white>"
+unknown_class: "<err>Класса <class> нет.</err> <gray>Классы:</gray> <white><classes></white>"
+bad_level: "<err>Уровень — число от 1 до <max>, а не <level>.</err>"
+# <count>: сколько.
+killed_all: "<pri>[Mo’Bosses]</pri> <ok>Убрано боссов: <num><count></num>.</ok>"
+killed_none: "<pri>[Mo’Bosses]</pri> <warn>Боссов нет, убирать некого.</warn>"
+
+# Над головой босса, на языке по умолчанию для всех.
+boss_tag: "<class_color>[Ур. <level>] [<class>] <boss_name>"
+boss_bar: "<boss_name> <class_color>[Ур. <level>]"
+
+# Всем, когда игроки убивают босса. <player>: все, кто его бил; <experience>: обычный опыт, который из него выпал.
+kill: "<pri>[Mo’Bosses]</pri> <ok><player></ok> побеждает <boss><boss_name></boss> <num>Ур. <level></num>/<class> и получает <xp><experience></xp> опыта!"
+
+# Всем, когда игрок получает добычу этих классов. <player>, <itemstack>: предмет, его описание всплывает при наведении.
+loot:
+  rare: "<pri>[Mo’Bosses]</pri> <ok><player></ok> получает <item>редкую</item> добычу: <item><itemstack></item>!"
+  epic: "<pri>[Mo’Bosses]</pri> <ok><player></ok> получает <bold><light_purple>эпическую</light_purple></bold> добычу: <item><itemstack></item>!"
+  legendary: "<pri>[Mo’Bosses]</pri> <ok><player></ok> получает <bold><gold>легендарную</gold></bold> добычу: <item><itemstack></item>!"
+  mythic: "<pri>[Mo’Bosses]</pri> <ok><player></ok> получает <bold><gradient:#ff0080:#8000ff>мифическую</gradient></bold> добычу: <item><itemstack></item>!"
+
+# Игроку, чей удар вызвал способность.
+abilities:
+  lightning: "<boss><boss_name></boss> призывает <item>молнию</item>!"
+  summoning: "<boss><boss_name></boss> призывает миньонов!"
+  regeneration: "<boss><boss_name></boss> начинает <hp>восстанавливаться</hp>!"
+  fire_ring: "<boss><boss_name></boss> разжигает кольцо огня!"
+  web_ring: "<boss><boss_name></boss> плетёт кольцо паутины!"
+  teleport_strike: "<boss><boss_name></boss> применяет <item>приёмы ниндзя</item>!"
+  meteor_shower: "<boss><boss_name></boss> вызывает <item>метеоритный дождь</item>!"
+  arrow_arc: "<boss><boss_name></boss> выпускает <item>веер стрел</item>!"
+  arrow_rain: "<boss><boss_name></boss> обрушивает <item>дождь стрел</item>!"
+
+classes:
+  common: "Обычный"
+  uncommon: "Необычный"
+  rare: "Редкий"
+  epic: "Эпический"
+  legendary: "Легендарный"
+  mythic: "Мифический"
+
+# По типу существа, как в bosses.yml.
+bosses:
+  zombie: "Гнилой"
+  skeleton: "Костян"
+  piglin: "Свиноголовый"
+  pillager: "Бандюган"
+  spider: "Паукан"
+  enderman: "Шпала"
+  wither_skeleton: "Иссушитель"
+  vindicator: "Херобрин"
+  stray: "Отмороженный"
+  creeper: "Рико"
+  husk: "Пустынник"
+  witch: "Жрица"
+  drowned: "Затонувший"
+  evoker: "Джаггернаут"
+  phantom: "БПЛА"
+  vex: "Дух"
+  zombie_villager: "Зомбачелло"
+
+# По боссу, который их призывает, как в minions.yml.
+minions:
+  zombie: "Гниль"
+  spider: "Пауканчик"
+  skeleton: "Скелетончик"
+  enderman: "Эндерчервь"
+  wither_skeleton: "Скелетик"
+  pillager: "Разбойник"
+  evoker: "Патологоанатом"
+  witch: "Прислужник жрицы"
+  vindicator: "Дух"
+  stray: "Замороженный"
+  husk: "Запесоченный"
+  drowned: "Затонувший"
+  phantom: "Дрон"
+  vex: "Дух"
+  zombie_villager: "Зомбик"
+
+# Названия и описания лута по id из loottable.yml.
+items:
+  apprentice_stone_blade:
+    name: "<blue>Каменный клинок ученика"
+    lore:
+      - "<gray>Простой, но надёжный клинок."
+      - "<dark_gray>Первый шаг охотника на боссов."
+  recruit_chainmail_helmet:
+    name: "<blue>Кольчужный шлем новобранца"
+    lore:
+      - "<gray>Бережёт голову от глупых ошибок."
+      - "<dark_gray>Не лучший, но лучше, чем ничего."
+  tracker_leather_vest:
+    name: "<blue>Кожаный жилет следопыта"
+    lore:
+      - "<gray>Лёгкая защита и свобода движения."
+      - "<dark_gray>Подходит для разведки и охоты."
+  seeker_leather_leggings:
+    name: "<blue>Кожаные поножи искателя"
+    lore:
+      - "<gray>Немного защиты для дальних дорог."
+      - "<dark_gray>Стерпят грязь и дождь."
+  tracker_fishing_rod:
+    name: "<blue>Удочка следопыта"
+    lore:
+      - "<gray>Еда и трофеи — терпеливым."
+      - "<dark_gray>Иногда вылавливает не только рыбу."
+  veteran_iron_blade:
+    name: "<dark_purple>Железный клинок ветерана"
+    lore:
+      - "<gray>Баланс остроты и веса."
+      - "<dark_gray>Надёжен в любой схватке."
+  guardian_iron_helmet:
+    name: "<dark_purple>Железный шлем стража"
+    lore:
+      - "<gray>Твёрдая защита лба и висков."
+      - "<dark_gray>Кузнечная работа без компромиссов."
+  marksman_bow:
+    name: "<dark_purple>Лук меткого стрелка"
+    lore:
+      - "<gray>Дальность — твой союзник."
+      - "<dark_gray>Стрела найдёт слабое место."
+  chainmail_boots:
+    name: "<dark_purple>Кольчужные сапоги"
+    lore:
+      - "<gray>Шумят меньше, чем кажется."
+      - "<dark_gray>Ступай смелее."
+  golden_apple:
+    name: "<dark_purple>Золотое яблоко"
+    lore:
+      - "<gray>Сладкий вкус второго шанса."
+  book_of_forgotten_crafts:
+    name: "<gold>Книга забытых ремёсел"
+    lore:
+      - "<yellow>Страницы пахнут кузней и боем."
+      - "<gray>Острота — в каждом слове."
+  hero_chestplate:
+    name: "<gold>Нагрудник героя"
+    lore:
+      - "<yellow>Защита, проверенная славой."
+      - "<gray>Носили лишь достойные."
+  master_pickaxe:
+    name: "<gold>Кирка мастера"
+    lore:
+      - "<yellow>Искры летят — руда сдаётся."
+      - "<gray>Сталь поёт в руках умельца."
+  champion_chainmail:
+    name: "<gold>Кольчуга чемпиона"
+    lore:
+      - "<yellow>Гремит как фанфары победы."
+      - "<gray>Каждое кольцо — урок битвы."
+  forerunner_diamond_helmet:
+    name: "<light_purple>Алмазный шлем предтеч"
+    lore:
+      - "<dark_purple>Холод камня — и покой в бою."
+      - "<gray>Снимает страх перед ударом."
+  tome_of_primal_warding:
+    name: "<light_purple>Том первородной защиты"
+    lore:
+      - "<dark_purple>Ткань чар плотнее стали."
+      - "<gray>Оберег для бесстрашных."
+  sentinel_helmet:
+    name: "<blue>Шлем дозорного"
+    lore:
+      - "<gray>Смотрит в лицо бурям."
+      - "<dark_gray>Не трескается от первого удара."
+  carpenter_stone_axe:
+    name: "<blue>Каменный топор плотника"
+    lore:
+      - "<gray>Тяжёлый, но надёжный."
+      - "<dark_gray>Дерево — его стихия."
+  tracker_iron_boots:
+    name: "<blue>Железные сапоги следопыта"
+    lore:
+      - "<gray>Следы остаются, ноги — нет."
+      - "<dark_gray>Проверены грязью и камнями."
+  hunter_fishing_rod:
+    name: "<blue>Удочка охотника"
+    lore:
+      - "<gray>Трофеи терпеливым."
+      - "<dark_gray>Иногда клюёт удача."
+  sentinel_chainmail:
+    name: "<blue>Кольчуга дозорного"
+    lore:
+      - "<gray>Кольца звенят — враги бегут."
+      - "<dark_gray>Лучше шипов, легче плиты."
+  veteran_cuirass:
+    name: "<dark_purple>Кираса ветерана"
+    lore:
+      - "<gray>Держит удар и строй."
+      - "<dark_gray>Служит дольше клятв."
+  tract_of_protection_1:
+    name: "<dark_purple>Тракт защиты I"
+    lore:
+      - "<gray>Коротко и по делу."
+      - "<dark_gray>Броня полюбит эти строки."
+  steel_blade:
+    name: "<dark_purple>Стальной клинок"
+    lore:
+      - "<gray>Сбалансирован и предсказуем."
+      - "<dark_gray>В бою — без сюрпризов, кроме побед."
+  keeper_leggings:
+    name: "<dark_purple>Набедренники хранителя"
+    lore:
+      - "<gray>Там, где падают другие — ты стоишь."
+      - "<dark_gray>Вес — цена стойкости."
+  steppe_wind_bow:
+    name: "<dark_purple>Лук степного ветра"
+    lore:
+      - "<gray>Стрела укажет путь."
+      - "<dark_gray>Тише — дальше летит."
+  golden_apple_salvation:
+    name: "<dark_purple>Золотое яблоко"
+    lore:
+      - "<gray>Сладость спасения."
+  tract_of_sharpness_1_2:
+    name: "<dark_purple>Тракт остроты I–II"
+    lore:
+      - "<gray>Лезвие станет честнее."
+      - "<dark_gray>И враги — короче."
+  blade_of_field_strife:
+    name: "<gold>Клинок полевой смуты"
+    lore:
+      - "<gray>Видел больше битв, чем костров."
+      - "<dark_gray>Остро и справедливо."
+  sentinel_diamond_crown:
+    name: "<gold>Алмазный венец дозорного"
+    lore:
+      - "<gray>Тяжёл — потому надёжен."
+      - "<dark_gray>Снимает сомнения и стрелы."
+  underground_king_pickaxe:
+    name: "<gold>Кирка подземного царя"
+    lore:
+      - "<gray>Руда сдаётся без суда."
+      - "<dark_gray>Сталь ведёт, руки догоняют."
+  codex_of_unbreaking_1:
+    name: "<gold>Свод крепости I"
+    lore:
+      - "<gray>Вещам — жить дольше."
+      - "<dark_gray>Треск — не приговор."
+  blade_of_the_twilight_edge:
+    name: "<light_purple>Клинок сумеречной кромки"
+    lore:
+      - "<dark_purple>Там, где свет и тьма спорят,"
+      - "<gray>этот клинок решает."
+  eternal_marshal_carapace:
+    name: "<light_purple>Панцирь вечного маршала"
+    lore:
+      - "<dark_purple>Шаг твёрже камня."
+      - "<gray>Стрелы вспоминают полёт."
+  journeyman_iron_blade:
+    name: "<blue>Железный клинок подмастерья"
+    lore:
+      - "<gray>Сбалансирован и упрям."
+      - "<dark_gray>Служит дольше споров."
+  miners_guild_pickaxe:
+    name: "<blue>Кирка шахтёрской артели"
+    lore:
+      - "<gray>Глубже — значит ближе."
+      - "<dark_gray>Искры — как звёзды подземелья."
+  watchman_bow:
+    name: "<blue>Лук дозорного"
+    lore:
+      - "<gray>Тише ветра, метче слова."
+      - "<dark_gray>Стрелы помнят цель."
+  guard_chestplate:
+    name: "<blue>Нагрудник стража"
+    lore:
+      - "<gray>Щит для сердца."
+      - "<dark_gray>Ржавчине — отказ."
+  gilded_blade:
+    name: "<blue>Позолоченный клинок"
+    lore:
+      - "<gray>Блестит ярче пользы."
+      - "<dark_gray>Но иногда блеск — всё."
+  tempered_leggings:
+    name: "<dark_purple>Набедренники закалённого"
+    lore:
+      - "<gray>Ноги — как колонны."
+      - "<dark_gray>Падать — далеко."
+  tract_of_efficiency_1_2:
+    name: "<dark_purple>Тракт усердия I–II"
+    lore:
+      - "<gray>Рука — быстрее, металл — мягче."
+      - "<dark_gray>Работе — радость."
+  tracker_diamond_helmet:
+    name: "<dark_purple>Алмазный шлем следопыта"
+    lore:
+      - "<gray>Следит и молчит."
+      - "<dark_gray>Мысли — как камень."
+  golden_apple_rescue:
+    name: "<dark_purple>Золотое яблоко"
+    lore:
+      - "<gray>Сладость спасения."
+  codex_of_unbreaking_1_2:
+    name: "<dark_purple>Свод крепости I–II"
+    lore:
+      - "<gray>Сломать — сложнее."
+      - "<dark_gray>Служить — дольше."
+  diamond_blade_of_field_strife:
+    name: "<gold>Клинок полевой смуты"
+    lore:
+      - "<gray>Сталь, что решает споры."
+      - "<dark_gray>Рубит — не спорит."
+  codex_of_guardianship_1_2:
+    name: "<gold>Кодекс опеки I–II"
+    lore:
+      - "<gray>Плечам — отдых."
+      - "<dark_gray>Щитам — уважение."
+  sentinel_carapace:
+    name: "<gold>Панцирь дозорного"
+    lore:
+      - "<gray>Не подведёт ни днём, ни ночью."
+      - "<dark_gray>Грохот ударов — как дождь."
+  tunneler:
+    name: "<gold>Штоленник"
+    lore:
+      - "<gray>Каменоломни слушают её шаг."
+      - "<dark_gray>Руда сдаётся без крика."
+  tract_of_fortune_1_2:
+    name: "<gold>Тракт удачи I–II"
+    lore:
+      - "<gray>Шанс — не случайность."
+      - "<dark_gray>Случай — не помеха."
+  twilight_edge_blade_ii:
+    name: "<light_purple>Клинок сумеречной кромки"
+    lore:
+      - "<dark_purple>Где свет спорит с тьмой,"
+      - "<gray>этот клинок решает."
+  eternal_marshal_carapace_ii:
+    name: "<light_purple>Панцирь вечного маршала"
+    lore:
+      - "<dark_purple>Шаг твёрже камня."
+      - "<gray>Стрелы вспоминают полёт."
+  heart_of_the_sea:
+    name: "<light_purple>Сердце моря"
+    lore:
+      - "<dark_purple>Бьётся тихо, но верно."
+      - "<gray>Глубины отвечают эхом."
+  night_watch_helmet:
+    name: "<blue>Шлем дежурного караула"
+    lore:
+      - "<gray>Держит удар, как слово."
+      - "<dark_gray>Вмятины — память о вахте."
+  sentry_bow:
+    name: "<blue>Лук караульного"
+    lore:
+      - "<gray>Звук тетивы — знак тревоги."
+      - "<dark_gray>Стреляет там, где нужно."
+  field_blade:
+    name: "<blue>Полевой клинок"
+    lore:
+      - "<gray>Без украшений, но честен."
+      - "<dark_gray>Сталь для дела, не для позы."
+  overseer_pickaxe:
+    name: "<blue>Рудокоп-надсмотрщик"
+    lore:
+      - "<gray>Гудит, когда камень сдаётся."
+      - "<dark_gray>Рукоять знает мозоли."
+  patrol_crossbow:
+    name: "<blue>Арбалет патруля"
+    lore:
+      - "<gray>Коротко, метко, строго."
+      - "<dark_gray>Болты любят порядок."
+  watchman_leggings:
+    name: "<blue>Поножи дозорного"
+    lore:
+      - "<gray>Шаги звенят уверенностью."
+      - "<dark_gray>Грязь не пристаёт к долгу."
+  golden_apple_timely:
+    name: "<blue>Золотое яблоко"
+    lore:
+      - "<gray>Вкус своевременной помощи."
+  gatekeeper_cuirass:
+    name: "<dark_purple>Кираса привратника"
+    lore:
+      - "<gray>Ключи звенят над металлом."
+      - "<dark_gray>Впускает только стойких."
+  pages_of_zeal_1_2:
+    name: "<dark_purple>Страницы рвения I–II"
+    lore:
+      - "<gray>Клинок слушает буквы."
+      - "<dark_gray>Слова — тоже сталь."
+  mountain_pass_boots:
+    name: "<dark_purple>Сапоги горного хода"
+    lore:
+      - "<gray>Следы тяжелее дождя."
+      - "<dark_gray>Камень запоминает имя."
+  trident_of_the_tide:
+    name: "<dark_purple>Трезубец прилива"
+    lore:
+      - "<gray>Шум волн — команда к броску."
+      - "<dark_gray>Соль лечит раны победы."
+  codex_of_fortune_1_2:
+    name: "<dark_purple>Свод удачи I–II"
+    lore:
+      - "<gray>Шанс подчиняется терпеливым."
+  shield_of_the_faithful:
+    name: "<dark_purple>Щит верного"
+    lore:
+      - "<gray>Стоит там, где нужно."
+      - "<dark_gray>Пропускает только ветер."
+  pathfinder_helm:
+    name: "<gold>Каска первопроходца"
+    lore:
+      - "<yellow>Первым видит опасность."
+      - "<gray>Последним её вспоминает."
+  codex_of_endurance_1_2:
+    name: "<gold>Кодекс стойкости I–II"
+    lore:
+      - "<yellow>Дольше — значит дальше."
+      - "<gray>Износ боится этого переплёта."
+  point_of_reckoning:
+    name: "<gold>Остриё расправы"
+    lore:
+      - "<yellow>Вопросы задаёт коротко."
+      - "<gray>Ответы — на лезвии."
+  herald_chestplate:
+    name: "<gold>Нагрудник геральда"
+    lore:
+      - "<yellow>Видят издалека — и уступают."
+      - "<gray>Грудь держит знамя."
+  book_of_plunder_1_2:
+    name: "<gold>Книга наживы I–II"
+    lore:
+      - "<yellow>Добыча любит настойчивых."
+  token_of_favor:
+    name: "<light_purple>Знак благоволения"
+    lore:
+      - "<dark_purple>Сладок тем, кто выжил."
+      - "<gray>Ещё один шанс."
+  blade_of_the_burning_verdict:
+    name: "<light_purple>Клинок жаркого приговора"
+    lore:
+      - "<dark_purple>Пепел — тоже ответ."
+      - "<gray>Искры — подпись судьбы."
+  eternal_watch_chestplate:
+    name: "<light_purple>Нагрудник вечного караула"
+    lore:
+      - "<dark_purple>Броня, что не забывает службу."
+  wayfarer_leggings:
+    name: "<blue>Поножи походника"
+    lore:
+      - "<gray>Дороги знают эти шаги."
+      - "<dark_gray>Пыль — часть службы."
+  manual_of_draw_1_2:
+    name: "<blue>Руководство по натягу I–II"
+    lore:
+      - "<gray>Тетива поёт громче."
+      - "<dark_gray>Цель — ближе."
+  blade_of_certainty:
+    name: "<blue>Клинок уверенности"
+    lore:
+      - "<gray>Рубит сомнения первым ударом."
+  rocksong:
+    name: "<blue>Скальная песнь"
+    lore:
+      - "<gray>Камень отвечает эхом."
+      - "<dark_gray>Жила идёт сама."
+  roadfire_bow:
+    name: "<blue>Лук дорожного огня"
+    lore:
+      - "<gray>Стрелы несут жар."
+      - "<dark_gray>Ночь становится короче."
+  coral_judge:
+    name: "<blue>Коралловый судья"
+    lore:
+      - "<gray>Вода всегда на стороне закона."
+  stonewhisper_steps:
+    name: "<dark_purple>Шаги каменного шёпота"
+    lore:
+      - "<gray>Слышат только нужные стены."
+  prospector_handbook_1:
+    name: "<dark_purple>Справочник старателя I"
+    lore:
+      - "<gray>Счастье любит подготовленных."
+  stonewatch_helmet:
+    name: "<dark_purple>Шлем каменного дозора"
+    lore:
+      - "<gray>Ни одна трещина не ускользнёт."
+  tract_of_care_1:
+    name: "<dark_purple>Тракт бережности I"
+    lore:
+      - "<gray>Мир — аккуратнее в руках."
+  marching_bastion_chestplate:
+    name: "<gold>Нагрудник марш-бастиона"
+    lore:
+      - "<yellow>Шаг держит строй."
+      - "<gray>Удар — лишь отметка."
+  codex_of_sharpness_2_3:
+    name: "<gold>Кодекс остроты II–III"
+    lore:
+      - "<yellow>Лезвие читает вслух."
+      - "<gray>Смысл — в разрезах."
+  dealmaker_netherite_mask:
+    name: "<gold>Незеритовая маска дельца"
+    lore:
+      - "<yellow>Сделки заключают выжившие."
+      - "<gray>Шлем помогает."
+  blade_without_caveats:
+    name: "<gold>Клинок без оговорок"
+    lore:
+      - "<yellow>Пишет приговоры чёрными чернилами."
+  fortress_steps:
+    name: "<gold>Ступени крепости"
+    lore:
+      - "<yellow>Каждый шаг — как стена."
+      - "<gray>Каждая стена — как шаг."
+  chronicle_of_loot_2_3:
+    name: "<gold>Летопись добычи II–III"
+    lore:
+      - "<yellow>Кто ищет — тот найдёт больше."
+  oath_of_the_tide_1_2:
+    name: "<gold>Клятва прилива I–II"
+    lore:
+      - "<yellow>Брошен — но вернётся."
+      - "<gray>Всегда."
+  book_of_craft_1:
+    name: "<gold>Книга ремесла I"
+    lore:
+      - "<yellow>Вещи служат верным."
+  uncompromising_cuirass:
+    name: "<light_purple>Кираса без компромиссов"
+    lore:
+      - "<dark_purple>Тяжесть — это надёжность."
+      - "<gray>Надёжность — это вы."
+  blade_archive_4_5:
+    name: "<light_purple>Архив клинка IV–V"
+    lore:
+      - "<dark_purple>Страницы режут взгляд."
+      - "<gray>И затупляют время."
+  watch_cuirass:
+    name: "<blue>Кираса дозора"
+    lore:
+      - "<gray>Стальная вера в порядок."
+      - "<dark_gray>Звенит уставом."
+  bow_of_endurance:
+    name: "<blue>Лук выдержки"
+    lore:
+      - "<gray>Тетива не знает усталости."
+  snowdrift_cutter:
+    name: "<blue>Сугробный резец"
+    lore:
+      - "<gray>Холоден к чужим шансам."
+  drill_of_persistence:
+    name: "<blue>Сверло упорства"
+    lore:
+      - "<gray>Глубже — значит ближе к цели."
+  stone_court_carapace:
+    name: "<blue>Панцирь каменного двора"
+    lore:
+      - "<gray>Держит удар как слово."
+  voice_of_the_tide:
+    name: "<blue>Глас прилива"
+    lore:
+      - "<gray>Бросил — услышал ответ."
+  instruction_of_fortune_1_2:
+    name: "<blue>Наставление удачи I–II"
+    lore:
+      - "<gray>Везение любит дисциплину."
+  stonewill_helmet:
+    name: "<dark_purple>Шлем каменной воли"
+    lore:
+      - "<gray>Труднее — значит вернее."
+  master_manual_2_3:
+    name: "<dark_purple>Руководство мастера II–III"
+    lore:
+      - "<gray>Работай — и камень поддастся."
+  strategist_cuirass:
+    name: "<dark_purple>Кираса стратега"
+    lore:
+      - "<gray>План держит удар лучше брони."
+  enchanted_apple:
+    name: "<dark_purple>Зачарованное яблоко"
+    lore:
+      - "<gray>Вкус спасения."
+  charter_of_endurance_2_3:
+    name: "<dark_purple>Хартия стойкости II–III"
+    lore:
+      - "<gray>Выносливость — тоже навык."
+  bastion_steps:
+    name: "<gold>Шаги бастиона"
+    lore:
+      - "<yellow>Шаг — кирпич крепости."
+  oath_of_the_deep:
+    name: "<gold>Клятва глубин"
+    lore:
+      - "<yellow>Вода — надёжный союзник."
+  chronicle_of_plunder_1_2:
+    name: "<gold>Летопись наживы I–II"
+    lore:
+      - "<yellow>Добыча идёт к терпеливым."
+  ashguard_hood:
+    name: "<gold>Капюшон пепельной стражи"
+    lore:
+      - "<yellow>Пепел — лучший камуфляж."
+  blade_of_allegiance:
+    name: "<gold>Лезвие присяги"
+    lore:
+      - "<yellow>Режет кратко, служит долго."
+  pickaxe_of_the_endless_shift:
+    name: "<gold>Кирка вечной смены"
+    lore:
+      - "<yellow>Рабочая смена — до звёзд."
+  carapace_of_inevitability:
+    name: "<gold>Панцирь неизбежности"
+    lore:
+      - "<yellow>Если пришёл — то дошёл."
+  codex_of_craft_1:
+    name: "<gold>Свод ремесла I"
+    lore:
+      - "<yellow>Чинить — тоже искусство."
+  blade_absolute_5:
+    name: "<light_purple>Абсолют клинка V"
+    lore:
+      - "<dark_purple>Глава о последнем слове."
+      - "<gray>И о том, кто его говорит."
+  dominant_strike:
+    name: "<blue>Господство удара"
+    lore:
+      - "<gray>Решает спор первым взмахом."
+  hum_of_the_mine:
+    name: "<blue>Гул шахты"
+    lore:
+      - "<gray>Эхо зовёт к рудам."
+  course_of_fortune_1_2:
+    name: "<blue>Курс удачи I–II"
+    lore:
+      - "<gray>Чем глубже — тем богаче."
+  long_march_cuirass:
+    name: "<blue>Кираса дальнего похода"
+    lore:
+      - "<gray>Буря — часть маршрута."
+  guard_steps:
+    name: "<blue>Шаги гвардии"
+    lore:
+      - "<gray>Шаги равняют тревогу."
+  flame_watch:
+    name: "<blue>Пламенный дозор"
+    lore:
+      - "<gray>Стрелы — как маяки."
+  ash_visor:
+    name: "<blue>Пепельный козырёк"
+    lore:
+      - "<gray>Гарью пахнет победа."
+  field_headquarters_chestplate:
+    name: "<dark_purple>Нагрудник походного штаба"
+    lore:
+      - "<gray>План на груди — план в голове."
+  statute_of_endurance_2_3:
+    name: "<dark_purple>Устав стойкости II–III"
+    lore:
+      - "<gray>Износ подписывает капитуляцию."
+  marching_boots:
+    name: "<dark_purple>Сапоги марша"
+    lore:
+      - "<gray>Дорога короче для упорных."
+  guard_netherite_leggings:
+    name: "<dark_purple>Незеритовые поножи караула"
+    lore:
+      - "<gray>Не трутся, когда не отступают."
+  enchanted_apple_pause:
+    name: "<dark_purple>Зачарованное яблоко"
+    lore:
+      - "<gray>Пауза между поражениями."
+  register_of_plunder_2_3:
+    name: "<dark_purple>Регистр наживы II–III"
+    lore:
+      - "<gray>Пустые сундуки — это навык."
+  citadel_trousers:
+    name: "<gold>Штаны цитадели"
+    lore:
+      - "<yellow>Шаги звучат приказом."
+  fleet_oath_1_2:
+    name: "<gold>Флотская присяга I–II"
+    lore:
+      - "<yellow>Вернётся даже через шторм."
+  light_hand_1:
+    name: "<gold>Лёгкая рука I"
+    lore:
+      - "<yellow>Мир останется целым."
+  statute_of_the_final_blow:
+    name: "<gold>Устав последнего удара"
+    lore:
+      - "<yellow>Бой заканчивают правильно."
+  digger_lance:
+    name: "<gold>Копьё землекопа"
+    lore:
+      - "<yellow>Земля сдаётся с честью."
+  bastion_breast:
+    name: "<gold>Грудь бастиона"
+    lore:
+      - "<yellow>На ней опирается строй."
+  craft_of_longevity_1:
+    name: "<gold>Ремесло долговечности I"
+    lore:
+      - "<yellow>Вещи служат дисциплине."
+  quintessence_of_the_hunt_5:
+    name: "<light_purple>Квинтэссенция охоты V"
+    lore:
+      - "<dark_purple>Искусство брать своё."
+  sunset_blade:
+    name: "<blue>Клинок заката"
+    lore:
+      - "<gray>Добивает с последним лучом."
+  legend_of_the_mines:
+    name: "<blue>Легенда шахт"
+    lore:
+      - "<gray>Каждый слой — глава добычи."
+  smoldering_string:
+    name: "<blue>Тлеющая тетива"
+    lore:
+      - "<gray>Стрелы — искры на ветру."
+  bane_of_bastions:
+    name: "<blue>Гроза бастионов"
+    lore:
+      - "<gray>Заряжается быстрее, чем страх."
+  storm_rod:
+    name: "<blue>Штормовой жезл"
+    lore:
+      - "<gray>Слышит зов грозы."
+  edge_of_the_abyss:
+    name: "<blue>Кромка бездны"
+    lore:
+      - "<gray>Горячее ядро в холодной стали."
+  veinseeker:
+    name: "<blue>Жилоискатель"
+    lore:
+      - "<gray>Чует руду сквозь породу."
+  stoker_carapace:
+    name: "<blue>Панцирь кочегара"
+    lore:
+      - "<gray>Коптит, но спасает."
+  march_of_the_forge:
+    name: "<blue>Марш горнила"
+    lore:
+      - "<gray>Шаг — как удар молота."
+  cuirass_of_conviction:
+    name: "<dark_purple>Кираса убеждения"
+    lore:
+      - "<gray>Кто прав — того не пробить."
+  unyielding_leggings:
+    name: "<dark_purple>Поножи неуступчивости"
+    lore:
+      - "<gray>Ответ держат колени."
+  far_line_shield:
+    name: "<dark_purple>Щит дальнего строя"
+    lore:
+      - "<gray>Стена начинается здесь."
+  oath_of_fire:
+    name: "<dark_purple>Клятва огня"
+    lore:
+      - "<gray>Жжёт к делу."
+  unrelieved_vest:
+    name: "<dark_purple>Жилет бессменного"
+    lore:
+      - "<gray>Смена — бесконечна."
+  forced_march_mode:
+    name: "<dark_purple>Режим марш-броска"
+    lore:
+      - "<gray>Ни мозолей, ни пощады."
+  forager_codex_3:
+    name: "<dark_purple>Кодекс добытчика III"
+    lore:
+      - "<gray>Смерть ресурсам — не выход."
+  garrison_blade:
+    name: "<gold>Лезвие гарнизона"
+    lore:
+      - "<yellow>Режим караула: постоянно."
+  sentinel_dome:
+    name: "<gold>Купол дозорного"
+    lore:
+      - "<yellow>Осмотр — круговой."
+  course_of_fortune_3:
+    name: "<gold>Курс удачи III"
+    lore:
+      - "<yellow>Сверяйся с картой жил."
+  seal_of_the_blade:
+    name: "<gold>Печать клинка"
+    lore:
+      - "<yellow>Подписывает приговор огнём."
+  armor_of_the_irreconcilable:
+    name: "<gold>Доспех непримиримых"
+    lore:
+      - "<yellow>Снятию не подлежит."
+  war_hound_stride:
+    name: "<gold>Шаг гончих войны"
+    lore:
+      - "<yellow>Быстрее — только ветер."
+  hunter_canon_5:
+    name: "<light_purple>Канон охотника V"
+    lore:
+      - "<dark_purple>Берёт своё — бережёт своё."
+  armor_of_exception:
+    name: "<blue>Броня исключения"
+    lore:
+      - "<gray>Исключает ошибки противника."
+  regulation_leggings:
+    name: "<blue>Поножи регламента"
+    lore:
+      - "<gray>Статут марш-броска."
+  watch_thunderer:
+    name: "<blue>Громовержец дозора"
+    lore:
+      - "<gray>Буря — по расписанию."
+  labor_guide_4_5:
+    name: "<blue>Методичка труда IV–V"
+    lore:
+      - "<gray>Порода сдаётся методично."
+  blade_protocol_5:
+    name: "<blue>Протокол клинка V"
+    lore:
+      - "<gray>Подписывает в кровь."
+  core_shift:
+    name: "<blue>Смена у ядра"
+    lore:
+      - "<gray>Глубже всех — дольше всех."
+  head_guard_helmet:
+    name: "<blue>Шлем главного караула"
+    lore:
+      - "<gray>Смотрит дальше горизонта."
+  fire_statute_4:
+    name: "<dark_purple>Огневой устав IV"
+    lore:
+      - "<gray>Горячие аргументы."
+  mineforce_5:
+    name: "<dark_purple>Шахтафорс V"
+    lore:
+      - "<gray>Скорость — тоже ресурс."
+  treatise_on_the_blade_4_5:
+    name: "<dark_purple>Трактат о клинке IV–V"
+    lore:
+      - "<gray>Сечения и доказательства."
+  survival_protocol:
+    name: "<dark_purple>Протокол живучести"
+    lore:
+      - "<gray>Служит, пока служишь."
+  movement_statute:
+    name: "<dark_purple>Устав движения"
+    lore:
+      - "<gray>Дистанция — дисциплина."
+  hunter_set_5:
+    name: "<dark_purple>Комплекс охотника V"
+    lore:
+      - "<gray>Бей, бери, береги."
+  watch_trail:
+    name: "<gold>След дозора"
+    lore:
+      - "<yellow>Мягкий шаг — твёрдое решение."
+  miracle_emulator:
+    name: "<gold>Эмулятор чуда"
+    lore:
+      - "<yellow>На случай, когда чудо нужно."
+  tactics_of_care:
+    name: "<gold>Тактика бережливости"
+    lore:
+      - "<yellow>Копай — не ломай."
+  deep_voyage_helmet:
+    name: "<gold>Шлем дальнего плавания"
+    lore:
+      - "<yellow>Глубина — не повод молчать."
+  codex_of_the_final_blow_5:
+    name: "<gold>Кодекс последнего удара V"
+    lore:
+      - "<yellow>Победа — подпись клинком."
+  universal_miner_5:
+    name: "<gold>Универсал добычи V"
+    lore:
+      - "<yellow>Любая руда — профильная."
+  hunter_quintetude_5:
+    name: "<light_purple>Квинтэтюд охотника V"
+    lore:
+      - "<dark_purple>Сила, добыча, удача, стойкость, память."
+  signed_in_fire_5:
+    name: "<blue>Роспись огнём V"
+    lore:
+      - "<gray>Приговор — в двух строках."
+  main_excavation:
+    name: "<blue>Главная выемка"
+    lore:
+      - "<gray>Руда сдаётся с подписью."
+  frame_of_inevitability:
+    name: "<blue>Каркас неизбежности"
+    lore:
+      - "<gray>Удар — только повод встать."
+  deepwatch_helmet:
+    name: "<blue>Шлем глубинного дозора"
+    lore:
+      - "<gray>Где темно — там видно."
+  statute_of_the_step:
+    name: "<blue>Статут шага"
+    lore:
+      - "<gray>Марш — до последней черты."
+  trail_of_endless_service:
+    name: "<blue>След бессрочной службы"
+    lore:
+      - "<gray>Падения — не выговор."
+  codex_of_synergy_5:
+    name: "<blue>Кодекс синергии V"
+    lore:
+      - "<gray>Собери весь набор преимуществ."
+  unbending_leggings:
+    name: "<dark_purple>Поножи непреклонных"
+    lore:
+      - "<gray>Шаг, что не знает отката."
+  hunter_duet_5:
+    name: "<dark_purple>Дуэт охотника V"
+    lore:
+      - "<gray>Бей сильнее. Забирай больше."
+  garrison_seal:
+    name: "<dark_purple>Печать гарнизона"
+    lore:
+      - "<gray>Клинок с полномочиями."
+  mining_regulation_5:
+    name: "<dark_purple>Горный регламент V"
+    lore:
+      - "<gray>Чисто, быстро, бережно."
+  statute_of_indestructibility:
+    name: "<dark_purple>Устав несокрушимости"
+    lore:
+      - "<gray>Инициатива: отражать."
+  elite_compendium_5:
+    name: "<dark_purple>Свод элиты V"
+    lore:
+      - "<gray>Лучшие практики в одном томе."
+  extension_guarantee:
+    name: "<gold>Гарант продления"
+    lore:
+      - "<yellow>Жизнь по подписке."
+  textbook_of_longevity:
+    name: "<gold>Учебник долговечности"
+    lore:
+      - "<yellow>Чини, не меняй."
+  blade_manifesto:
+    name: "<gold>Манифест клинка"
+    lore:
+      - "<yellow>Порядок наведён."
+  benchmark_of_mining_5:
+    name: "<gold>Эталон добычи V"
+    lore:
+      - "<yellow>Ресурсы — под роспись."
+  status_shield:
+    name: "<gold>Щит статуса"
+    lore:
+      - "<yellow>Выше — только легенды."
+  dominance_compendium:
+    name: "<gold>Сборник доминирования"
+    lore:
+      - "<yellow>Полная комплектация силы."
+  trophy_codex_5:
+    name: "<light_purple>Кодекс трофея V"
+    lore:
+      - "<dark_purple>Взять всё и не сломать."
+  absolute_compendium_5:
+    name: "<light_purple>Абсолютный свод V"
+    lore:
+      - "<dark_purple>Сила, труд, удача, пламя, вечность."

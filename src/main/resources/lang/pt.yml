@@ -1,0 +1,975 @@
+# Português. Formato MiniMessage: https://docs.advntr.dev/minimessage/format
+# Um texto vazio desativa a mensagem. As chaves que faltam aqui vêm do idioma
+# padrão e, depois, do inglês.
+#
+# Tags de cor: <pri>, <ok>, <warn>, <err>, <boss>, <num>, <hp>, <xp>, <item>.
+# Placeholders do chefe: <boss_name>, <class> (na cor dela), <class_color> (abre
+# a cor da classe), <level>. <papi:name> mostra o %name% do PlaceholderAPI para
+# o jogador que lê a mensagem.
+
+reloaded: "<pri>[Mo’Bosses]</pri> <ok>Recarregado.</ok>"
+reload_failed: "<pri>[Mo’Bosses]</pri> <warn>Recarregado com erros.</warn> <gray>Veja o log do servidor.</gray>"
+no_permission: "<err>Você não pode usar este comando.</err>"
+usage: '<gray>Use</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray> ou</gray> <white>/mobosses killall</white>'
+# <entities>, <classes>: as opções disponíveis.
+spawn_usage: '<gray>Use</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray>. Entidades:</gray> <white><entities></white><gray>. Classes:</gray> <white><classes></white>'
+spawned: "<pri>[Mo’Bosses]</pri> <ok>Invocado:</ok> <class_color>[Nv. <level>] [<class>]</class_color> <boss_name>"
+# <reason>: o motivo, como a área protegida que impediu a invocação.
+spawn_failed: "<err>Não foi possível invocar o chefe:</err> <gray><reason></gray>"
+spawn_where: "<err>No console, informe as coordenadas:</err> <white>/mobosses spawn zombie 10 rare 0 64 0 world</white>"
+unknown_entity: "<err>Não existe chefe do tipo <entity>.</err> <gray>Tipos:</gray> <white><entities></white>"
+unknown_class: "<err>Não existe a classe <class>.</err> <gray>Classes:</gray> <white><classes></white>"
+bad_level: "<err>O nível deve ser um número de 1 a <max>, não <level>.</err>"
+# <count>: quantos.
+killed_all: "<pri>[Mo’Bosses]</pri> <ok>Chefes removidos: <num><count></num>.</ok>"
+killed_none: "<pri>[Mo’Bosses]</pri> <warn>Não há chefes para remover.</warn>"
+
+# Acima da cabeça do chefe, no idioma padrão para todos.
+boss_tag: "<class_color>[Nv. <level>] [<class>] <boss_name>"
+boss_bar: "<boss_name> <class_color>[Nv. <level>]"
+
+# Para todos quando jogadores matam um chefe. <player>: todos que o atingiram; <experience>: a experiência vanilla que ele deixou cair.
+kill: "<pri>[Mo’Bosses]</pri> <ok><player></ok> derrotou <boss><boss_name></boss> <num>Nv. <level></num>/<class> e ganhou <xp><experience></xp> de experiência!"
+
+# Para todos quando um jogador recebe saque destas classes. <player>, <itemstack>: o item, com a descrição ao passar o mouse.
+loot:
+  rare: "<pri>[Mo’Bosses]</pri> <ok><player></ok> conseguiu um saque <item>raro</item>: <item><itemstack></item>!"
+  epic: "<pri>[Mo’Bosses]</pri> <ok><player></ok> conseguiu um saque <bold><light_purple>épico</light_purple></bold>: <item><itemstack></item>!"
+  legendary: "<pri>[Mo’Bosses]</pri> <ok><player></ok> conseguiu um saque <bold><gold>lendário</gold></bold>: <item><itemstack></item>!"
+  mythic: "<pri>[Mo’Bosses]</pri> <ok><player></ok> conseguiu um saque <bold><gradient:#ff0080:#8000ff>mítico</gradient></bold>: <item><itemstack></item>!"
+
+# Para o jogador cujo golpe ativou a habilidade.
+abilities:
+  lightning: "<boss><boss_name></boss> invoca um <item>raio</item>!"
+  summoning: "<boss><boss_name></boss> invoca lacaios!"
+  regeneration: "<boss><boss_name></boss> entra em <hp>regeneração</hp>!"
+  fire_ring: "<boss><boss_name></boss> ergue um anel de fogo!"
+  web_ring: "<boss><boss_name></boss> tece um anel de teias!"
+  teleport_strike: "<boss><boss_name></boss> usa <item>golpes ninja</item>!"
+  meteor_shower: "<boss><boss_name></boss> invoca uma <item>chuva de meteoros</item>!"
+  arrow_arc: "<boss><boss_name></boss> dispara um <item>arco de flechas</item>!"
+  arrow_rain: "<boss><boss_name></boss> faz cair uma <item>chuva de flechas</item>!"
+
+classes:
+  common: "Comum"
+  uncommon: "Incomum"
+  rare: "Raro"
+  epic: "Épico"
+  legendary: "Lendário"
+  mythic: "Mítico"
+
+# Por tipo de entidade, como em bosses.yml.
+bosses:
+  zombie: "Cara Podre"
+  skeleton: "Zé dos Ossos"
+  piglin: "Cabeça de Porco"
+  pillager: "O Brutamontes"
+  spider: "A Pernuda"
+  enderman: "Varapau"
+  wither_skeleton: "Senhor Wither"
+  vindicator: "Herobrine"
+  stray: "Enregelado"
+  creeper: "Rico"
+  husk: "Andarilho das Dunas"
+  witch: "A Sacerdotisa"
+  drowned: "O Afogado"
+  evoker: "Juggernaut"
+  phantom: "O Drone"
+  vex: "O Espectro"
+  zombie_villager: "Zumbachello"
+
+# Pelo chefe que os invoca, como em minions.yml.
+minions:
+  zombie: "Podrinho"
+  spider: "Aranhinha"
+  skeleton: "Ossinho"
+  enderman: "Enderverme"
+  wither_skeleton: "Witherzinho"
+  pillager: "Saqueador"
+  evoker: "Legista"
+  witch: "Lacaio da Sacerdotisa"
+  vindicator: "Espírito"
+  stray: "Congelado"
+  husk: "Arenoso"
+  drowned: "Encharcado"
+  phantom: "Drone"
+  vex: "Espírito"
+  zombie_villager: "Zumbizinho"
+
+# Nomes e descrições do saque, pelo id em loottable.yml.
+items:
+  apprentice_stone_blade:
+    name: "<blue>Lâmina de Pedra do Aprendiz"
+    lore:
+      - "<gray>Simples, mas mantém o fio."
+      - "<dark_gray>O primeiro passo do caçador de chefes."
+  recruit_chainmail_helmet:
+    name: "<blue>Elmo de Malha do Recruta"
+    lore:
+      - "<gray>Protege a cabeça de erros tolos."
+      - "<dark_gray>Não é o melhor, mas é melhor que nada."
+  tracker_leather_vest:
+    name: "<blue>Colete de Couro do Rastreador"
+    lore:
+      - "<gray>Armadura leve, movimento livre."
+      - "<dark_gray>Feito para batedores e caçadas."
+  seeker_leather_leggings:
+    name: "<blue>Calças de Couro do Explorador"
+    lore:
+      - "<gray>Um pouco de proteção para longas estradas."
+      - "<dark_gray>Aguenta lama e chuva."
+  tracker_fishing_rod:
+    name: "<blue>Vara de Pescar do Rastreador"
+    lore:
+      - "<gray>Comida e saque vêm a quem espera."
+      - "<dark_gray>Às vezes fisga mais que peixe."
+  veteran_iron_blade:
+    name: "<dark_purple>Lâmina de Ferro do Veterano"
+    lore:
+      - "<gray>Fio e peso em equilíbrio."
+      - "<dark_gray>Firme em qualquer luta."
+  guardian_iron_helmet:
+    name: "<dark_purple>Elmo de Ferro do Guardião"
+    lore:
+      - "<gray>Proteção sólida para testa e têmporas."
+      - "<dark_gray>Forja sem atalhos."
+  marksman_bow:
+    name: "<dark_purple>Arco do Atirador"
+    lore:
+      - "<gray>A distância é sua aliada."
+      - "<dark_gray>A flecha encontra o ponto fraco."
+  chainmail_boots:
+    name: "<dark_purple>Botas de Malha"
+    lore:
+      - "<gray>Mais silenciosas do que parecem."
+      - "<dark_gray>Pise com mais coragem."
+  golden_apple:
+    name: "<dark_purple>Maçã Dourada"
+    lore:
+      - "<gray>O doce sabor de uma segunda chance."
+  book_of_forgotten_crafts:
+    name: "<gold>Livro dos Ofícios Esquecidos"
+    lore:
+      - "<yellow>As páginas cheiram a forja e batalha."
+      - "<gray>Cada palavra corta."
+  hero_chestplate:
+    name: "<gold>Peitoral do Herói"
+    lore:
+      - "<yellow>Proteção provada pela glória."
+      - "<gray>Só os dignos o vestiram."
+  master_pickaxe:
+    name: "<gold>Picareta do Mestre"
+    lore:
+      - "<yellow>Voam faíscas, o minério cede."
+      - "<gray>O aço canta em mãos hábeis."
+  champion_chainmail:
+    name: "<gold>Cota de Malha do Campeão"
+    lore:
+      - "<yellow>Tine como fanfarra de vitória."
+      - "<gray>Cada elo, uma lição de batalha."
+  forerunner_diamond_helmet:
+    name: "<light_purple>Elmo de Diamante do Precursor"
+    lore:
+      - "<dark_purple>Frio como pedra, calmo na batalha."
+      - "<gray>Tira o medo do golpe."
+  tome_of_primal_warding:
+    name: "<light_purple>Tomo da Proteção Primordial"
+    lore:
+      - "<dark_purple>Sua trama de feitiços é mais densa que aço."
+      - "<gray>Um amuleto para os destemidos."
+  sentinel_helmet:
+    name: "<blue>Elmo da Sentinela"
+    lore:
+      - "<gray>Encara as tempestades de frente."
+      - "<dark_gray>Não racha ao primeiro golpe."
+  carpenter_stone_axe:
+    name: "<blue>Machado de Pedra do Carpinteiro"
+    lore:
+      - "<gray>Pesado, mas confiável."
+      - "<dark_gray>A madeira é o seu elemento."
+  tracker_iron_boots:
+    name: "<blue>Botas de Ferro do Rastreador"
+    lore:
+      - "<gray>Ficam as pegadas, os pés seguem firmes."
+      - "<dark_gray>Provadas na lama e na pedra."
+  hunter_fishing_rod:
+    name: "<blue>Vara de Pescar do Caçador"
+    lore:
+      - "<gray>Saque para os pacientes."
+      - "<dark_gray>Às vezes a sorte morde a isca."
+  sentinel_chainmail:
+    name: "<blue>Cota de Malha da Sentinela"
+    lore:
+      - "<gray>Os elos tilintam, os inimigos fogem."
+      - "<dark_gray>Melhor que espinhos, mais leve que placas."
+  veteran_cuirass:
+    name: "<dark_purple>Couraça do Veterano"
+    lore:
+      - "<gray>Aguenta o golpe e a formação."
+      - "<dark_gray>Dura mais que qualquer juramento."
+  tract_of_protection_1:
+    name: "<dark_purple>Tratado de Proteção I"
+    lore:
+      - "<gray>Curto e direto."
+      - "<dark_gray>A armadura vai amar estas linhas."
+  steel_blade:
+    name: "<dark_purple>Lâmina de Aço"
+    lore:
+      - "<gray>Equilibrada e previsível."
+      - "<dark_gray>Sem surpresas na batalha, exceto a vitória."
+  keeper_leggings:
+    name: "<dark_purple>Calças do Protetor"
+    lore:
+      - "<gray>Onde outros caem, você fica de pé."
+      - "<dark_gray>O peso é o preço da firmeza."
+  steppe_wind_bow:
+    name: "<dark_purple>Arco do Vento da Estepe"
+    lore:
+      - "<gray>A flecha mostra o caminho."
+      - "<dark_gray>Puxe mais leve, voe mais longe."
+  golden_apple_salvation:
+    name: "<dark_purple>Maçã Dourada"
+    lore:
+      - "<gray>A doçura da salvação."
+  tract_of_sharpness_1_2:
+    name: "<dark_purple>Tratado de Afiação I–II"
+    lore:
+      - "<gray>O fio fica mais honesto."
+      - "<dark_gray>E os inimigos, mais curtos."
+  blade_of_field_strife:
+    name: "<gold>Lâmina da Contenda Campal"
+    lore:
+      - "<gray>Viu mais batalhas que fogueiras."
+      - "<dark_gray>Afiada e justa."
+  sentinel_diamond_crown:
+    name: "<gold>Coroa de Diamante da Sentinela"
+    lore:
+      - "<gray>Pesada e, por isso, confiável."
+      - "<dark_gray>Afasta dúvidas e flechas."
+  underground_king_pickaxe:
+    name: "<gold>Picareta do Rei Subterrâneo"
+    lore:
+      - "<gray>O minério cede sem julgamento."
+      - "<dark_gray>O aço guia, as mãos seguem."
+  codex_of_unbreaking_1:
+    name: "<gold>Códice do Inquebrável I"
+    lore:
+      - "<gray>O equipamento vive mais."
+      - "<dark_gray>Uma rachadura não é sentença."
+  blade_of_the_twilight_edge:
+    name: "<light_purple>Lâmina do Fio Crepuscular"
+    lore:
+      - "<dark_purple>Onde luz e trevas discutem,"
+      - "<gray>esta lâmina decide."
+  eternal_marshal_carapace:
+    name: "<light_purple>Carapaça do Marechal Eterno"
+    lore:
+      - "<dark_purple>Um passo mais firme que a pedra."
+      - "<gray>As flechas lembram como voar."
+  journeyman_iron_blade:
+    name: "<blue>Lâmina de Ferro do Artífice"
+    lore:
+      - "<gray>Equilibrada e teimosa."
+      - "<dark_gray>Dura mais que qualquer briga."
+  miners_guild_pickaxe:
+    name: "<blue>Picareta da Guilda dos Mineiros"
+    lore:
+      - "<gray>Mais fundo é mais perto."
+      - "<dark_gray>Faíscas como estrelas das profundezas."
+  watchman_bow:
+    name: "<blue>Arco do Vigia"
+    lore:
+      - "<gray>Mais quieto que o vento, mais fiel que a voz."
+      - "<dark_gray>Suas flechas lembram o alvo."
+  guard_chestplate:
+    name: "<blue>Peitoral do Guarda"
+    lore:
+      - "<gray>Um escudo para o coração."
+      - "<dark_gray>Ferrugem não é bem-vinda."
+  gilded_blade:
+    name: "<blue>Lâmina Dourada"
+    lore:
+      - "<gray>Mais brilho que serventia."
+      - "<dark_gray>Mas às vezes o brilho é tudo."
+  tempered_leggings:
+    name: "<dark_purple>Calças do Temperado"
+    lore:
+      - "<gray>Pernas como pilares."
+      - "<dark_gray>Uma longa queda até o chão."
+  tract_of_efficiency_1_2:
+    name: "<dark_purple>Tratado de Eficiência I–II"
+    lore:
+      - "<gray>Mãos mais rápidas, metal mais macio."
+      - "<dark_gray>O trabalho vira alegria."
+  tracker_diamond_helmet:
+    name: "<dark_purple>Elmo de Diamante do Rastreador"
+    lore:
+      - "<gray>Observa e fica calado."
+      - "<dark_gray>Pensamentos duros como pedra."
+  golden_apple_rescue:
+    name: "<dark_purple>Maçã Dourada"
+    lore:
+      - "<gray>A doçura do resgate."
+  codex_of_unbreaking_1_2:
+    name: "<dark_purple>Códice do Inquebrável I–II"
+    lore:
+      - "<gray>Mais difícil de quebrar."
+      - "<dark_gray>Mais tempo de serviço."
+  diamond_blade_of_field_strife:
+    name: "<gold>Lâmina da Contenda Campal"
+    lore:
+      - "<gray>Aço que encerra discussões."
+      - "<dark_gray>Corta, não discute."
+  codex_of_guardianship_1_2:
+    name: "<gold>Códice da Tutela I–II"
+    lore:
+      - "<gray>Descanso para os ombros."
+      - "<dark_gray>Respeito para os escudos."
+  sentinel_carapace:
+    name: "<gold>Carapaça da Sentinela"
+    lore:
+      - "<gray>Não falha nem de dia, nem de noite."
+      - "<dark_gray>Os golpes batucam nela como chuva."
+  tunneler:
+    name: "<gold>A Escavadora"
+    lore:
+      - "<gray>As pedreiras escutam seus passos."
+      - "<dark_gray>O minério cede sem um som."
+  tract_of_fortune_1_2:
+    name: "<gold>Tratado da Fortuna I–II"
+    lore:
+      - "<gray>A sorte não é acaso."
+      - "<dark_gray>O acaso não é obstáculo."
+  twilight_edge_blade_ii:
+    name: "<light_purple>Lâmina do Fio Crepuscular"
+    lore:
+      - "<dark_purple>Onde a luz discute com as trevas,"
+      - "<gray>esta lâmina decide."
+  eternal_marshal_carapace_ii:
+    name: "<light_purple>Carapaça do Marechal Eterno"
+    lore:
+      - "<dark_purple>Um passo mais firme que a pedra."
+      - "<gray>As flechas lembram como voar."
+  heart_of_the_sea:
+    name: "<light_purple>Coração do Mar"
+    lore:
+      - "<dark_purple>Bate baixinho, mas firme."
+      - "<gray>As profundezas respondem com eco."
+  night_watch_helmet:
+    name: "<blue>Elmo da Ronda Noturna"
+    lore:
+      - "<gray>Aguenta o golpe como cumpre a palavra."
+      - "<dark_gray>Cada amassado lembra uma vigília."
+  sentry_bow:
+    name: "<blue>Arco da Guarita"
+    lore:
+      - "<gray>O zunido da corda soa o alarme."
+      - "<dark_gray>Atira bem onde é preciso."
+  field_blade:
+    name: "<blue>Lâmina de Campanha"
+    lore:
+      - "<gray>Sem enfeites, mas honesta."
+      - "<dark_gray>Aço para o trabalho, não para pose."
+  overseer_pickaxe:
+    name: "<blue>O Capataz"
+    lore:
+      - "<gray>Zumbe quando a pedra cede."
+      - "<dark_gray>Seu cabo conhece cada calo."
+  patrol_crossbow:
+    name: "<blue>Besta da Patrulha"
+    lore:
+      - "<gray>Curta, certeira e rigorosa."
+      - "<dark_gray>Seus virotes gostam de ordem."
+  watchman_leggings:
+    name: "<blue>Calças do Vigia"
+    lore:
+      - "<gray>Cada passo soa confiante."
+      - "<dark_gray>Lama não gruda no dever."
+  golden_apple_timely:
+    name: "<blue>Maçã Dourada"
+    lore:
+      - "<gray>O sabor da ajuda que chegou a tempo."
+  gatekeeper_cuirass:
+    name: "<dark_purple>Couraça do Porteiro"
+    lore:
+      - "<gray>Chaves tilintam sobre o metal."
+      - "<dark_gray>Só deixa entrar os firmes."
+  pages_of_zeal_1_2:
+    name: "<dark_purple>Páginas do Fervor I–II"
+    lore:
+      - "<gray>A lâmina escuta as letras."
+      - "<dark_gray>Palavras também são aço."
+  mountain_pass_boots:
+    name: "<dark_purple>Botas do Desfiladeiro"
+    lore:
+      - "<gray>Pegadas mais pesadas que a chuva."
+      - "<dark_gray>A pedra lembra o seu nome."
+  trident_of_the_tide:
+    name: "<dark_purple>Tridente da Maré"
+    lore:
+      - "<gray>O rugido das ondas chama o arremesso."
+      - "<dark_gray>O sal cura as feridas da vitória."
+  codex_of_fortune_1_2:
+    name: "<dark_purple>Códice da Fortuna I–II"
+    lore:
+      - "<gray>O acaso obedece aos pacientes."
+  shield_of_the_faithful:
+    name: "<dark_purple>Escudo do Fiel"
+    lore:
+      - "<gray>Fica onde precisa ficar."
+      - "<dark_gray>Só deixa passar o vento."
+  pathfinder_helm:
+    name: "<gold>Elmo do Desbravador"
+    lore:
+      - "<yellow>O primeiro a ver o perigo."
+      - "<gray>O último a lembrar dele."
+  codex_of_endurance_1_2:
+    name: "<gold>Códice da Resistência I–II"
+    lore:
+      - "<yellow>Dura mais, vai mais longe."
+      - "<gray>O desgaste teme esta encadernação."
+  point_of_reckoning:
+    name: "<gold>Ponta do Acerto de Contas"
+    lore:
+      - "<yellow>Faz perguntas curtas."
+      - "<gray>As respostas estão na lâmina."
+  herald_chestplate:
+    name: "<gold>Peitoral do Arauto"
+    lore:
+      - "<yellow>Visto de longe, todos abrem caminho."
+      - "<gray>Este peito carrega o estandarte."
+  book_of_plunder_1_2:
+    name: "<gold>Livro do Saque I–II"
+    lore:
+      - "<yellow>O saque favorece os persistentes."
+  token_of_favor:
+    name: "<light_purple>Sinal de Favor"
+    lore:
+      - "<dark_purple>Doce para quem sobreviveu."
+      - "<gray>Mais uma chance."
+  blade_of_the_burning_verdict:
+    name: "<light_purple>Lâmina do Veredito Ardente"
+    lore:
+      - "<dark_purple>Cinza também é resposta."
+      - "<gray>Faíscas são a assinatura do destino."
+  eternal_watch_chestplate:
+    name: "<light_purple>Peitoral da Vigília Eterna"
+    lore:
+      - "<dark_purple>Armadura que nunca esquece o dever."
+  wayfarer_leggings:
+    name: "<blue>Calças do Viajante"
+    lore:
+      - "<gray>As estradas conhecem estes passos."
+      - "<dark_gray>A poeira faz parte do trabalho."
+  manual_of_draw_1_2:
+    name: "<blue>Manual da Tensão I–II"
+    lore:
+      - "<gray>A corda canta mais alto."
+      - "<dark_gray>O alvo fica mais perto."
+  blade_of_certainty:
+    name: "<blue>Lâmina da Certeza"
+    lore:
+      - "<gray>Corta a dúvida no primeiro golpe."
+  rocksong:
+    name: "<blue>Canto da Rocha"
+    lore:
+      - "<gray>A pedra responde com eco."
+      - "<dark_gray>O veio vem até você."
+  roadfire_bow:
+    name: "<blue>Arco do Fogo da Estrada"
+    lore:
+      - "<gray>Suas flechas levam calor."
+      - "<dark_gray>A noite fica mais curta."
+  coral_judge:
+    name: "<blue>Juiz de Coral"
+    lore:
+      - "<gray>A água sempre fica do lado da lei."
+  stonewhisper_steps:
+    name: "<dark_purple>Passos do Sussurro de Pedra"
+    lore:
+      - "<gray>Só as paredes certas os ouvem."
+  prospector_handbook_1:
+    name: "<dark_purple>Guia do Garimpeiro I"
+    lore:
+      - "<gray>A sorte favorece os preparados."
+  stonewatch_helmet:
+    name: "<dark_purple>Elmo da Guarda de Pedra"
+    lore:
+      - "<gray>Nenhuma rachadura passa despercebida."
+  tract_of_care_1:
+    name: "<dark_purple>Tratado do Cuidado I"
+    lore:
+      - "<gray>O mundo fica mais arrumado em suas mãos."
+  marching_bastion_chestplate:
+    name: "<gold>Peitoral do Bastião em Marcha"
+    lore:
+      - "<yellow>Seu passo mantém a formação."
+      - "<gray>Um golpe é só uma marca."
+  codex_of_sharpness_2_3:
+    name: "<gold>Códice da Afiação II–III"
+    lore:
+      - "<yellow>A lâmina lê em voz alta."
+      - "<gray>O sentido está nos cortes."
+  dealmaker_netherite_mask:
+    name: "<gold>Máscara de Netherite do Negociante"
+    lore:
+      - "<yellow>Só sobreviventes fecham negócios."
+      - "<gray>O elmo ajuda."
+  blade_without_caveats:
+    name: "<gold>Lâmina Sem Ressalvas"
+    lore:
+      - "<yellow>Escreve sentenças em tinta preta."
+  fortress_steps:
+    name: "<gold>Degraus da Fortaleza"
+    lore:
+      - "<yellow>Cada passo é uma muralha."
+      - "<gray>Cada muralha é um passo."
+  chronicle_of_loot_2_3:
+    name: "<gold>Crônica do Butim II–III"
+    lore:
+      - "<yellow>Quem procura acha mais."
+  oath_of_the_tide_1_2:
+    name: "<gold>Juramento da Maré I–II"
+    lore:
+      - "<yellow>Arremessado, mas volta."
+      - "<gray>Sempre."
+  book_of_craft_1:
+    name: "<gold>Livro do Ofício I"
+    lore:
+      - "<yellow>O equipamento serve aos fiéis."
+  uncompromising_cuirass:
+    name: "<light_purple>Couraça Intransigente"
+    lore:
+      - "<dark_purple>Peso significa confiança."
+      - "<gray>Confiança significa você."
+  blade_archive_4_5:
+    name: "<light_purple>Arquivo da Lâmina IV–V"
+    lore:
+      - "<dark_purple>As páginas cortam o olhar."
+      - "<gray>E cegam o fio do tempo."
+  watch_cuirass:
+    name: "<blue>Couraça da Vigília"
+    lore:
+      - "<gray>Uma fé de aço na ordem."
+      - "<dark_gray>Ressoa com regulamentos."
+  bow_of_endurance:
+    name: "<blue>Arco Incansável"
+    lore:
+      - "<gray>Sua corda nunca se cansa."
+  snowdrift_cutter:
+    name: "<blue>Talhador de Neve"
+    lore:
+      - "<gray>Frio para as chances alheias."
+  drill_of_persistence:
+    name: "<blue>Broca da Persistência"
+    lore:
+      - "<gray>Mais fundo é mais perto do objetivo."
+  stone_court_carapace:
+    name: "<blue>Carapaça da Corte de Pedra"
+    lore:
+      - "<gray>Aguenta o golpe como cumpre a palavra."
+  voice_of_the_tide:
+    name: "<blue>Voz da Maré"
+    lore:
+      - "<gray>Arremesse e ouça a resposta."
+  instruction_of_fortune_1_2:
+    name: "<blue>Instrução da Fortuna I–II"
+    lore:
+      - "<gray>A sorte ama a disciplina."
+  stonewill_helmet:
+    name: "<dark_purple>Elmo da Vontade de Pedra"
+    lore:
+      - "<gray>Mais duro é mais certo."
+  master_manual_2_3:
+    name: "<dark_purple>Manual do Mestre II–III"
+    lore:
+      - "<gray>Continue trabalhando e a pedra cede."
+  strategist_cuirass:
+    name: "<dark_purple>Couraça do Estrategista"
+    lore:
+      - "<gray>Um plano aguenta golpes melhor que armadura."
+  enchanted_apple:
+    name: "<dark_purple>Maçã Encantada"
+    lore:
+      - "<gray>O sabor da salvação."
+  charter_of_endurance_2_3:
+    name: "<dark_purple>Carta da Resistência II–III"
+    lore:
+      - "<gray>Fôlego também é habilidade."
+  bastion_steps:
+    name: "<gold>Passos do Bastião"
+    lore:
+      - "<yellow>Cada passo, um tijolo da fortaleza."
+  oath_of_the_deep:
+    name: "<gold>Juramento das Profundezas"
+    lore:
+      - "<yellow>A água é uma aliada fiel."
+  chronicle_of_plunder_1_2:
+    name: "<gold>Crônica da Pilhagem I–II"
+    lore:
+      - "<yellow>O saque vem aos pacientes."
+  ashguard_hood:
+    name: "<gold>Capuz da Guarda das Cinzas"
+    lore:
+      - "<yellow>Cinza é a melhor camuflagem."
+  blade_of_allegiance:
+    name: "<gold>Lâmina da Lealdade"
+    lore:
+      - "<yellow>Corta rápido, serve por muito tempo."
+  pickaxe_of_the_endless_shift:
+    name: "<gold>Picareta do Turno Sem Fim"
+    lore:
+      - "<yellow>O turno vai até as estrelas."
+  carapace_of_inevitability:
+    name: "<gold>Carapaça da Inevitabilidade"
+    lore:
+      - "<yellow>Se partiu, já chegou."
+  codex_of_craft_1:
+    name: "<gold>Códice do Ofício I"
+    lore:
+      - "<yellow>Consertar também é arte."
+  blade_absolute_5:
+    name: "<light_purple>Lâmina Absoluta V"
+    lore:
+      - "<dark_purple>Um capítulo sobre a última palavra."
+      - "<gray>E sobre quem a diz."
+  dominant_strike:
+    name: "<blue>Golpe Dominante"
+    lore:
+      - "<gray>Encerra a discussão no primeiro golpe."
+  hum_of_the_mine:
+    name: "<blue>Zumbido da Mina"
+    lore:
+      - "<gray>O eco chama você ao minério."
+  course_of_fortune_1_2:
+    name: "<blue>Curso da Fortuna I–II"
+    lore:
+      - "<gray>Quanto mais fundo, mais rico."
+  long_march_cuirass:
+    name: "<blue>Couraça da Longa Marcha"
+    lore:
+      - "<gray>A tempestade faz parte da rota."
+  guard_steps:
+    name: "<blue>Passos da Guarda"
+    lore:
+      - "<gray>Passos firmes acalmam o alarme."
+  flame_watch:
+    name: "<blue>Vigília em Chamas"
+    lore:
+      - "<gray>Suas flechas ardem como fogueiras de sinal."
+  ash_visor:
+    name: "<blue>Viseira de Cinzas"
+    lore:
+      - "<gray>A vitória cheira a fumaça."
+  field_headquarters_chestplate:
+    name: "<dark_purple>Peitoral do Quartel de Campanha"
+    lore:
+      - "<gray>Um plano no peito, um plano na cabeça."
+  statute_of_endurance_2_3:
+    name: "<dark_purple>Estatuto da Resistência II–III"
+    lore:
+      - "<gray>O desgaste assina a rendição."
+  marching_boots:
+    name: "<dark_purple>Botas de Marcha"
+    lore:
+      - "<gray>A estrada é mais curta para os teimosos."
+  guard_netherite_leggings:
+    name: "<dark_purple>Calças de Netherite da Guarda"
+    lore:
+      - "<gray>Não esfolam quando você não recua."
+  enchanted_apple_pause:
+    name: "<dark_purple>Maçã Encantada"
+    lore:
+      - "<gray>Uma pausa entre derrotas."
+  register_of_plunder_2_3:
+    name: "<dark_purple>Registro da Pilhagem II–III"
+    lore:
+      - "<gray>Esvaziar baús é uma habilidade."
+  citadel_trousers:
+    name: "<gold>Calças da Cidadela"
+    lore:
+      - "<yellow>Cada passo soa como uma ordem."
+  fleet_oath_1_2:
+    name: "<gold>Juramento da Frota I–II"
+    lore:
+      - "<yellow>Volta até no meio da tempestade."
+  light_hand_1:
+    name: "<gold>Mão Leve I"
+    lore:
+      - "<yellow>O mundo fica inteiro."
+  statute_of_the_final_blow:
+    name: "<gold>Estatuto do Golpe Final"
+    lore:
+      - "<yellow>Toda luta deve terminar do jeito certo."
+  digger_lance:
+    name: "<gold>Lança do Escavador"
+    lore:
+      - "<yellow>A terra se rende com honra."
+  bastion_breast:
+    name: "<gold>Peito do Bastião"
+    lore:
+      - "<yellow>Toda a formação se apoia nele."
+  craft_of_longevity_1:
+    name: "<gold>Ofício da Longevidade I"
+    lore:
+      - "<yellow>O equipamento serve à disciplina."
+  quintessence_of_the_hunt_5:
+    name: "<light_purple>Quintessência da Caça V"
+    lore:
+      - "<dark_purple>A arte de pegar o que é seu."
+  sunset_blade:
+    name: "<blue>Lâmina do Poente"
+    lore:
+      - "<gray>Acaba com eles no último raio."
+  legend_of_the_mines:
+    name: "<blue>Lenda das Minas"
+    lore:
+      - "<gray>Cada camada é um capítulo de saque."
+  smoldering_string:
+    name: "<blue>Corda Fumegante"
+    lore:
+      - "<gray>Flechas como faíscas ao vento."
+  bane_of_bastions:
+    name: "<blue>Flagelo dos Bastiões"
+    lore:
+      - "<gray>Carrega mais rápido que o medo."
+  storm_rod:
+    name: "<blue>Cetro da Tempestade"
+    lore:
+      - "<gray>Ouve o chamado do trovão."
+  edge_of_the_abyss:
+    name: "<blue>Fio do Abismo"
+    lore:
+      - "<gray>Um núcleo quente em aço frio."
+  veinseeker:
+    name: "<blue>Caça-Veios"
+    lore:
+      - "<gray>Fareja minério através da rocha."
+  stoker_carapace:
+    name: "<blue>Carapaça do Foguista"
+    lore:
+      - "<gray>Cheia de fuligem, mas salva você."
+  march_of_the_forge:
+    name: "<blue>Marcha da Forja"
+    lore:
+      - "<gray>Cada passo, um golpe de martelo."
+  cuirass_of_conviction:
+    name: "<dark_purple>Couraça da Convicção"
+    lore:
+      - "<gray>Quem tem razão não se deixa perfurar."
+  unyielding_leggings:
+    name: "<dark_purple>Calças do Inflexível"
+    lore:
+      - "<gray>A resposta está nos joelhos."
+  far_line_shield:
+    name: "<dark_purple>Escudo da Linha Distante"
+    lore:
+      - "<gray>A muralha começa aqui."
+  oath_of_fire:
+    name: "<dark_purple>Juramento de Fogo"
+    lore:
+      - "<gray>Arde com propósito."
+  unrelieved_vest:
+    name: "<dark_purple>Colete do Plantão Eterno"
+    lore:
+      - "<gray>O turno nunca acaba."
+  forced_march_mode:
+    name: "<dark_purple>Modo Marcha Forçada"
+    lore:
+      - "<gray>Sem bolhas, sem piedade."
+  forager_codex_3:
+    name: "<dark_purple>Códice do Coletor III"
+    lore:
+      - "<gray>Desperdiçar recursos não é saída."
+  garrison_blade:
+    name: "<gold>Lâmina da Guarnição"
+    lore:
+      - "<yellow>Modo guarda: sempre ligado."
+  sentinel_dome:
+    name: "<gold>Cúpula da Sentinela"
+    lore:
+      - "<yellow>Inspeção em 360 graus."
+  course_of_fortune_3:
+    name: "<gold>Curso da Fortuna III"
+    lore:
+      - "<yellow>Consulte o mapa dos veios."
+  seal_of_the_blade:
+    name: "<gold>Selo da Lâmina"
+    lore:
+      - "<yellow>Assina a sentença com fogo."
+  armor_of_the_irreconcilable:
+    name: "<gold>Armadura dos Irreconciliáveis"
+    lore:
+      - "<yellow>Não deve ser removida."
+  war_hound_stride:
+    name: "<gold>Passada dos Cães de Guerra"
+    lore:
+      - "<yellow>Só o vento é mais rápido."
+  hunter_canon_5:
+    name: "<light_purple>Cânone do Caçador V"
+    lore:
+      - "<dark_purple>Pega o que é seu, guarda o que é seu."
+  armor_of_exception:
+    name: "<blue>Armadura da Exceção"
+    lore:
+      - "<gray>Exclui os erros do inimigo."
+  regulation_leggings:
+    name: "<blue>Calças do Regulamento"
+    lore:
+      - "<gray>O estatuto da marcha forçada."
+  watch_thunderer:
+    name: "<blue>Trovejador da Vigília"
+    lore:
+      - "<gray>Tempestades com hora marcada."
+  labor_guide_4_5:
+    name: "<blue>Guia do Trabalho IV–V"
+    lore:
+      - "<gray>A rocha cede com método."
+  blade_protocol_5:
+    name: "<blue>Protocolo da Lâmina V"
+    lore:
+      - "<gray>Assina com sangue."
+  core_shift:
+    name: "<blue>Turno no Núcleo"
+    lore:
+      - "<gray>Mais fundo que todos, por mais tempo."
+  head_guard_helmet:
+    name: "<blue>Elmo do Chefe da Guarda"
+    lore:
+      - "<gray>Enxerga além do horizonte."
+  fire_statute_4:
+    name: "<dark_purple>Estatuto do Fogo IV"
+    lore:
+      - "<gray>Argumentos acalorados."
+  mineforce_5:
+    name: "<dark_purple>Força Mineira V"
+    lore:
+      - "<gray>Velocidade também é recurso."
+  treatise_on_the_blade_4_5:
+    name: "<dark_purple>Tratado da Lâmina IV–V"
+    lore:
+      - "<gray>Seções e demonstrações."
+  survival_protocol:
+    name: "<dark_purple>Protocolo de Sobrevivência"
+    lore:
+      - "<gray>Serve enquanto você servir."
+  movement_statute:
+    name: "<dark_purple>Estatuto do Movimento"
+    lore:
+      - "<gray>Distância é disciplina."
+  hunter_set_5:
+    name: "<dark_purple>Kit do Caçador V"
+    lore:
+      - "<gray>Golpeie, pegue, guarde."
+  watch_trail:
+    name: "<gold>Trilha da Vigília"
+    lore:
+      - "<yellow>Passo macio, decisão firme."
+  miracle_emulator:
+    name: "<gold>Emulador de Milagres"
+    lore:
+      - "<yellow>Para quando você precisa de um milagre."
+  tactics_of_care:
+    name: "<gold>Tática do Cuidado"
+    lore:
+      - "<yellow>Cave, não quebre."
+  deep_voyage_helmet:
+    name: "<gold>Elmo de Longo Curso"
+    lore:
+      - "<yellow>Profundidade não é motivo para calar."
+  codex_of_the_final_blow_5:
+    name: "<gold>Códice do Golpe Final V"
+    lore:
+      - "<yellow>Vitória, assinada com a lâmina."
+  universal_miner_5:
+    name: "<gold>Minerador Universal V"
+    lore:
+      - "<yellow>Todo minério é sua especialidade."
+  hunter_quintetude_5:
+    name: "<light_purple>Quinteto do Caçador V"
+    lore:
+      - "<dark_purple>Força, saque, sorte, garra, memória."
+  signed_in_fire_5:
+    name: "<blue>Assinado a Fogo V"
+    lore:
+      - "<gray>O veredito cabe em duas linhas."
+  main_excavation:
+    name: "<blue>Escavação Principal"
+    lore:
+      - "<gray>O minério se rende com assinatura."
+  frame_of_inevitability:
+    name: "<blue>Estrutura da Inevitabilidade"
+    lore:
+      - "<gray>Um golpe é só um motivo para levantar."
+  deepwatch_helmet:
+    name: "<blue>Elmo da Vigília Profunda"
+    lore:
+      - "<gray>Onde está escuro, você enxerga."
+  statute_of_the_step:
+    name: "<blue>Estatuto do Passo"
+    lore:
+      - "<gray>Marche até a última linha."
+  trail_of_endless_service:
+    name: "<blue>Trilha do Serviço Sem Fim"
+    lore:
+      - "<gray>Uma queda não é repreensão."
+  codex_of_synergy_5:
+    name: "<blue>Códice da Sinergia V"
+    lore:
+      - "<gray>Junte o conjunto completo de vantagens."
+  unbending_leggings:
+    name: "<dark_purple>Calças dos Inabaláveis"
+    lore:
+      - "<gray>Um passo que não conhece recuo."
+  hunter_duet_5:
+    name: "<dark_purple>Dueto do Caçador V"
+    lore:
+      - "<gray>Bata mais forte. Leve mais."
+  garrison_seal:
+    name: "<dark_purple>Selo da Guarnição"
+    lore:
+      - "<gray>Uma lâmina com autoridade."
+  mining_regulation_5:
+    name: "<dark_purple>Regulamento de Mineração V"
+    lore:
+      - "<gray>Limpo, rápido, cuidadoso."
+  statute_of_indestructibility:
+    name: "<dark_purple>Estatuto da Indestrutibilidade"
+    lore:
+      - "<gray>Iniciativa: desviar."
+  elite_compendium_5:
+    name: "<dark_purple>Compêndio de Elite V"
+    lore:
+      - "<gray>As melhores práticas num só volume."
+  extension_guarantee:
+    name: "<gold>Garantia de Prorrogação"
+    lore:
+      - "<yellow>Vida por assinatura."
+  textbook_of_longevity:
+    name: "<gold>Manual da Longevidade"
+    lore:
+      - "<yellow>Conserte, não troque."
+  blade_manifesto:
+    name: "<gold>Manifesto da Lâmina"
+    lore:
+      - "<yellow>A ordem foi restaurada."
+  benchmark_of_mining_5:
+    name: "<gold>Padrão de Mineração V"
+    lore:
+      - "<yellow>Recursos entregues mediante assinatura."
+  status_shield:
+    name: "<gold>Escudo de Status"
+    lore:
+      - "<yellow>Acima, só as lendas."
+  dominance_compendium:
+    name: "<gold>Compêndio do Domínio"
+    lore:
+      - "<yellow>Poder em versão completa."
+  trophy_codex_5:
+    name: "<light_purple>Códice do Troféu V"
+    lore:
+      - "<dark_purple>Leve tudo e não quebre nada."
+  absolute_compendium_5:
+    name: "<light_purple>Compêndio Absoluto V"
+    lore:
+      - "<dark_purple>Poder, trabalho, sorte, chama, eternidade."

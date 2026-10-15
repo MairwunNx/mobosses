@@ -1,0 +1,43 @@
+name: MoBosses
+version: '${version}'
+main: ru.mairwunnx.mobosses.MoBossesPlugin
+api-version: '26.3'
+load: POSTWORLD
+authors: [ MairwunNx ]
+description: "Ordinary mobs spawn as bosses of six classes, with abilities, minions, health bars, loot, and player levels, each player reading it in their own language."
+website: "https://github.com/MairwunNx/mobosses"
+permissions:
+  mobosses.admin:
+    description: Use every /mobosses command
+    default: op
+    children:
+      mobosses.reload: true
+      mobosses.spawn: true
+      mobosses.killall: true
+  mobosses.reload:
+    description: Use /mobosses reload
+    default: op
+  mobosses.spawn:
+    description: Use /mobosses spawn
+    default: op
+  mobosses.killall:
+    description: Use /mobosses killall
+    default: op
+dependencies:
+  server:
+    PlaceholderAPI:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    GriefPrevention:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    WorldGuard:
+      load: BEFORE
+      required: false
+      join-classpath: true
+    CoreProtect:
+      load: BEFORE
+      required: false
+      join-classpath: true

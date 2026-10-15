@@ -1,18 +1,27 @@
-# Настройки призыва миньонов по типам мобов, Mo'Bosses.
+###############################################################################
+#                          Mo’Bosses minions                                  #
+###############################################################################
+# What each boss type summons with its summoning ability: summoner is the boss's
+# entity type, entity the minion's. Zombies, husks, drowned, piglins, and zombie
+# villagers come as babies. A minion may roll into a weaker boss, as a natural
+# spawn does (mini_bosses_level_curve in config.yml).
+#
+# Minion names live in lang/ under minions.<summoner>. A name: key here shows
+# that name to everyone instead, as 1.x did.
 
 minions:
-  - { summoner: "ZOMBIE", entity: "ZOMBIE", name: "Гниль" }
-  - { summoner: "SPIDER", entity: "CAVE_SPIDER", name: "Пауканчик" }
-  - { summoner: "SKELETON", entity: "SKELETON", name: "Скелетончик" }
-  - { summoner: "ENDERMAN", entity: "ENDERMITE", name: "Эндерчервь" }
-  - { summoner: "WITHER_SKELETON", entity: "WITHER_SKELETON", name: "Скелетик" }
-  - { summoner: "PILLAGER", entity: "PILLAGER", name: "Разбойник" }
-  - { summoner: "EVOKER", entity: "VINDICATOR", name: "Патологоанатом" }
-  - { summoner: "WITCH", entity: "ZOMBIE", name: "Поддувало жрицы" }
-  - { summoner: "VINDICATOR", entity: "VEX", name: "Дух" }
-  - { summoner: "STRAY", entity: "STRAY", name: "Замороженный" }
-  - { summoner: "HUSK", entity: "HUSK", name: "Запесоченный" }
-  - { summoner: "DROWNED", entity: "DROWNED", name: "Затонувший" }
-  - { summoner: "PHANTOM", entity: "PHANTOM", name: "Шахед-136" }
-  - { summoner: "VEX", entity: "VEX", name: "Дух" }
-  - { summoner: "ZOMBIE_VILLAGER", entity: "ZOMBIE_VILLAGER", name: "Зомбик" }
+  - { summoner: ZOMBIE, entity: ZOMBIE }
+  - { summoner: SPIDER, entity: CAVE_SPIDER }
+  - { summoner: SKELETON, entity: SKELETON }
+  - { summoner: ENDERMAN, entity: ENDERMITE }
+  - { summoner: WITHER_SKELETON, entity: WITHER_SKELETON }
+  - { summoner: PILLAGER, entity: PILLAGER }
+  - { summoner: EVOKER, entity: VINDICATOR }
+  - { summoner: WITCH, entity: ZOMBIE }
+  - { summoner: VINDICATOR, entity: VEX }
+  - { summoner: STRAY, entity: STRAY }
+  - { summoner: HUSK, entity: HUSK }
+  - { summoner: DROWNED, entity: DROWNED }
+  - { summoner: PHANTOM, entity: PHANTOM }
+  - { summoner: VEX, entity: VEX }
+  - { summoner: ZOMBIE_VILLAGER, entity: ZOMBIE_VILLAGER }
