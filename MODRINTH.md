@@ -6,6 +6,7 @@
 
 - 🐲 **25 kinds of bosses**, from zombies and skeletons to blazes, breezes, ravagers, and guardians.
 - ⚔️ **Six classes**, from Common to Mythic. Each multiplies a boss’s health, damage, experience, armor, and toughness, and decides which abilities it gets and when.
+- ⏳ **A survival bonus, as in Sacred:** the longer a player plays without dying, the more bosses find them, up to double. Death takes it all; idle minutes don’t count.
 - 📈 **Levels that grow with your players.** A boss takes the average level of the players near it, now and then a little lower. Weak bosses count for little, so farming them levels nobody up.
 - 🧮 **Scaling by curves:** stats climb fast at first and level off toward a ceiling. Top bosses have more health than the Ender Dragon and the Warden, and hit nearly as hard as the Warden at level 100.
 - 🎯 **A signature ability for every boss type:** witches throw potions, endermen swap places with you, evokers send fangs through the ground, ravagers stampede, and 14 more.

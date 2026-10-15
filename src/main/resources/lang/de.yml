@@ -26,13 +26,15 @@ killed_none: "<pri>[Mo’Bosses]</pri> <warn>Es gibt keine Bosse, die du entfern
 player_not_found: "<err>Ein Spieler namens <player> hat hier noch nie gespielt.</err>"
 no_database: "<warn>Die Statistik braucht die Datenbank, und die ist gerade nicht offen.</warn>"
 
-# /mobosses info. <player>, <level>, <max>, <rank> (auf der Bestenliste), <experience>, <kills>, <cooldown> (bis in der Nähe des Spielers ein Boss erscheinen kann).
+# /mobosses info. <player>, <level>, <max>, <rank> (auf der Bestenliste), <experience>, <kills>, <cooldown> (bis in der Nähe des Spielers ein Boss erscheinen kann), <bonus>, <hours>, <minutes> (der Überlebensbonus).
 info: |-
   <pri>Mo’Bosses</pri> <dark_gray>·</dark_gray> <white><player></white>
   <gray>Stufe</gray> <num><level></num><dark_gray>/<max></dark_gray> <dark_gray>·</dark_gray> <gray>Rang</gray> <num>#<rank></num>
   <gray>Erfahrung</gray> <xp><experience></xp> <dark_gray>·</dark_gray> <gray>Besiegte Bosse</gray> <num><kills></num>
   <gray>Nächster Boss bei dir</gray> <white><cooldown></white>
+  <gray>Überlebensbonus</gray> <num>+<bonus> %</num> <dark_gray>· <hours> h <minutes> min ohne Tod</dark_gray>
 info_ready: "jeden Moment"
+survival_lost: "<pri>[Mo’Bosses]</pri> <warn>Dein Überlebensbonus ist weg: +<bonus> % auf Bosse nach <hours> h <minutes> min ohne Tod.</warn>"
 
 # /mobosses reset. <player>: wessen Fortschritt ein Admin gelöscht hat.
 reset:

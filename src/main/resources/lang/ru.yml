@@ -26,13 +26,15 @@ killed_none: "<pri>[Mo’Bosses]</pri> <warn>Боссов нет, убирать
 player_not_found: "<err>Игрок <player> здесь ещё не играл.</err>"
 no_database: "<warn>Статистике нужна база данных, а она сейчас недоступна.</warn>"
 
-# /mobosses info. <player>, <level>, <max>, <rank> (место в таблице), <experience>, <kills>, <cooldown> (сколько ждать босса рядом с игроком).
+# /mobosses info. <player>, <level>, <max>, <rank> (место в таблице), <experience>, <kills>, <cooldown> (сколько ждать босса рядом с игроком), <bonus>, <hours>, <minutes> (бонус выживания).
 info: |-
   <pri>Mo’Bosses</pri> <dark_gray>·</dark_gray> <white><player></white>
   <gray>Уровень</gray> <num><level></num><dark_gray>/<max></dark_gray> <dark_gray>·</dark_gray> <gray>Место</gray> <num>#<rank></num>
   <gray>Опыт</gray> <xp><experience></xp> <dark_gray>·</dark_gray> <gray>Убито боссов</gray> <num><kills></num>
   <gray>Следующий босс рядом</gray> <white><cooldown></white>
+  <gray>Бонус выживания</gray> <num>+<bonus>%</num> <dark_gray>· <hours> ч <minutes> мин без смертей</dark_gray>
 info_ready: "в любой момент"
+survival_lost: "<pri>[Mo’Bosses]</pri> <warn>Бонус выживания сгорел: +<bonus>% к боссам за <hours> ч <minutes> мин без смертей.</warn>"
 
 # /mobosses reset. <player>: чей прогресс сбросил админ.
 reset:

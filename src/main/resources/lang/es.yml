@@ -26,13 +26,15 @@ killed_none: "<pri>[Mo’Bosses]</pri> <warn>No hay jefes que eliminar.</warn>"
 player_not_found: "<err>Ningún jugador llamado <player> ha jugado aquí.</err>"
 no_database: "<warn>Las estadísticas necesitan la base de datos, y ahora no está abierta.</warn>"
 
-# /mobosses info. <player>, <level>, <max>, <rank> (en la tabla), <experience>, <kills>, <cooldown> (hasta que pueda aparecer un jefe cerca del jugador).
+# /mobosses info. <player>, <level>, <max>, <rank> (en la tabla), <experience>, <kills>, <cooldown> (hasta que pueda aparecer un jefe cerca del jugador), <bonus>, <hours>, <minutes> (el bono de supervivencia).
 info: |-
   <pri>Mo’Bosses</pri> <dark_gray>·</dark_gray> <white><player></white>
   <gray>Nivel</gray> <num><level></num><dark_gray>/<max></dark_gray> <dark_gray>·</dark_gray> <gray>Puesto</gray> <num>#<rank></num>
   <gray>Experiencia</gray> <xp><experience></xp> <dark_gray>·</dark_gray> <gray>Jefes derrotados</gray> <num><kills></num>
   <gray>Próximo jefe cerca de ti</gray> <white><cooldown></white>
+  <gray>Bono de supervivencia</gray> <num>+<bonus>%</num> <dark_gray>· <hours> h <minutes> min sin morir</dark_gray>
 info_ready: "en cualquier momento"
+survival_lost: "<pri>[Mo’Bosses]</pri> <warn>Perdiste tu bono de supervivencia: +<bonus>% de jefes tras <hours> h <minutes> min sin morir.</warn>"
 
 # /mobosses reset. <player>: de quién borró el progreso un administrador.
 reset:

@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture
 
 /** What `/mobosses info`, `/mobosses top`, and the menu show, gathered off the server thread from the database. */
 class Stats(private val plugin: MoBossesPlugin) {
-  class Card(val name: String, val progress: Progress, val level: Int, val rank: Int?, val nextBossInSeconds: Long)
+  class Card(val name: String, val progress: Progress, val level: Int, val rank: Int?, val nextBossInSeconds: Long, val survivalMinutes: Int)
 
   /** A player's card: the cache for players online, the database for anyone else. */
   fun card(player: OfflinePlayer): CompletableFuture<Card> {
@@ -26,9 +26,10 @@ class Stats(private val plugin: MoBossesPlugin) {
     val progress = if (known != null) CompletableFuture.completedFuture(known) else plugin.progression.load(id)
     // Read on the server thread, where the player's data lives.
     val until = player.player?.persistentDataContainer?.get(plugin.keys.nextBoss, PersistentDataType.LONG) ?: 0L
+    val survival = player.player?.let(plugin.survival::minutes) ?: 0
     return progress.thenCombine(plugin.progression.rank(id)) { p, rank ->
       val level = Leveling.playerLevel(plugin.catalog.settings.progression.levelCurve, p.experience, p.kills)
-      Card(player.name ?: id.toString().take(8), p, level, rank, ((until - System.currentTimeMillis()) / 1000).coerceAtLeast(0))
+      Card(player.name ?: id.toString().take(8), p, level, rank, ((until - System.currentTimeMillis()) / 1000).coerceAtLeast(0), survival)
     }
   }
 
@@ -41,7 +42,7 @@ class Stats(private val plugin: MoBossesPlugin) {
 
   fun level(progress: Progress) = Leveling.playerLevel(plugin.catalog.settings.progression.levelCurve, progress.experience, progress.kills)
 
-  /** `<player>`, `<level>`, `<max>`, `<rank>`, `<experience>`, `<kills>`, and `<cooldown>` for a card. */
+  /** `<player>`, `<level>`, `<max>`, `<rank>`, `<experience>`, `<kills>`, `<cooldown>`, and `<bonus>`, `<hours>`, `<minutes>` of the survival bonus for a card. */
   fun resolvers(code: String, card: Card): Array<TagResolver> = arrayOf(
     Placeholder.unparsed("player", card.name),
     Placeholder.unparsed("level", card.level.toString()),
@@ -49,6 +50,8 @@ class Stats(private val plugin: MoBossesPlugin) {
     Placeholder.unparsed("rank", card.rank?.toString() ?: "—"),
     Placeholder.unparsed("experience", card.progress.experience.toString()),
     Placeholder.unparsed("kills", card.progress.kills.toString()),
+    Placeholder.unparsed("bonus", plugin.survival.percent(plugin.catalog.settings.survivalBonus, card.survivalMinutes).toString()),
+    *plugin.survival.time(card.survivalMinutes),
     Placeholder.component("cooldown", if (card.nextBossInSeconds <= 0) plugin.languages.render(code, Message.INFO_READY) ?: Component.empty() else Component.text("${card.nextBossInSeconds / 60}:${"%02d".format(card.nextBossInSeconds % 60)}")),
   )
 }

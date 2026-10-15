@@ -6,6 +6,7 @@ import ru.mairwunnx.mobosses.algebra.Stats
 import ru.mairwunnx.mobosses.boss.Codec
 import ru.mairwunnx.mobosses.combat.Shares
 import ru.mairwunnx.mobosses.config.Settings
+import ru.mairwunnx.mobosses.spawn.SurvivalBonus
 import java.util.UUID
 import kotlin.random.Random
 import kotlin.test.Test
@@ -101,6 +102,15 @@ class ProgressionTest {
     assertTrue(Stats.health(health, 20.0, 2.2, 40) >= 500, "a level 40 Epic zombie")
     assertTrue(Stats.health(health, 20.0, 4.0, 20) >= 500, "a level 20 Mythic zombie")
     assertEquals(Stats.health(health, 20.0, 1.0, 50), Stats.health(health, 8.0, 1.0, 50), "a silverfish starts from a zombie's health")
+  }
+
+  @Test fun `the survival bonus grows fast, then slower, toward its top`() {
+    val cfg = settings.survivalBonus
+    assertEquals(0.0, SurvivalBonus.bonus(cfg, 0))
+    assertEquals(0.25, SurvivalBonus.bonus(cfg, 60))
+    assertEquals(0.5, SurvivalBonus.bonus(cfg, 180))
+    assertEquals(0.75, SurvivalBonus.bonus(cfg, 540))
+    assertTrue(SurvivalBonus.bonus(cfg, 100_000) < 1.0)
   }
 
   @Test fun `a creeper's blast grows past a charged creeper's`() {

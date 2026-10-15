@@ -72,6 +72,16 @@ spawn:
   max_nearby: 3
   nearby_radius: 48
 
+# As in Sacred: each minute a player plays without dying raises the chance of
+# bosses near them, by half of max_bonus after half_at_minutes, nearing all of
+# it later: +25% after an hour, +50% after three, +75% after nine. Death takes it
+# all. A minute idle for idle_minutes or more doesn't count, so AFK earns nothing.
+survival_bonus:
+  enabled: true
+  max_bonus: 1.0
+  half_at_minutes: 180
+  idle_minutes: 3
+
 # A boss with no player within radius for after_minutes leaves, without loot,
 # as vanilla mobs do, so bosses don't pile up in caves for good. One found again
 # long after its chunk unloaded leaves as the chunk loads.

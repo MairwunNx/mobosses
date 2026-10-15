@@ -26,13 +26,15 @@ killed_none: "<pri>[Mo’Bosses]</pri> <warn>There are no bosses to remove.</war
 player_not_found: "<err>No player named <player> has played here.</err>"
 no_database: "<warn>Statistics need the database, and it isn’t open right now.</warn>"
 
-# /mobosses info. <player>, <level>, <max>, <rank> (on the board), <experience>, <kills>, <cooldown> (until a boss may spawn near them).
+# /mobosses info. <player>, <level>, <max>, <rank> (on the board), <experience>, <kills>, <cooldown> (until a boss may spawn near them), <bonus>, <hours>, <minutes> (the survival bonus).
 info: |-
   <pri>Mo’Bosses</pri> <dark_gray>·</dark_gray> <white><player></white>
   <gray>Level</gray> <num><level></num><dark_gray>/<max></dark_gray> <dark_gray>·</dark_gray> <gray>Rank</gray> <num>#<rank></num>
   <gray>Experience</gray> <xp><experience></xp> <dark_gray>·</dark_gray> <gray>Bosses killed</gray> <num><kills></num>
   <gray>Next boss near you</gray> <white><cooldown></white>
+  <gray>Survival bonus</gray> <num>+<bonus>%</num> <dark_gray>· <hours> h <minutes> min without dying</dark_gray>
 info_ready: "any moment"
+survival_lost: "<pri>[Mo’Bosses]</pri> <warn>Your survival bonus is gone: +<bonus>% to bosses after <hours> h <minutes> min without dying.</warn>"
 
 # /mobosses reset. <player>: whose progress an admin wiped.
 reset:

@@ -40,6 +40,7 @@ import ru.mairwunnx.mobosses.protect.Guards
 import ru.mairwunnx.mobosses.protect.TemporaryBlockListener
 import ru.mairwunnx.mobosses.protect.WorldGuardFlags
 import ru.mairwunnx.mobosses.spawn.SpawnListener
+import ru.mairwunnx.mobosses.spawn.SurvivalBonus
 import java.io.File
 
 class MoBossesPlugin : JavaPlugin() {
@@ -65,6 +66,7 @@ class MoBossesPlugin : JavaPlugin() {
   val rewards = Rewards(this)
   val spawns = SpawnListener(this)
   val despawns = Despawns(this)
+  val survival = SurvivalBonus(this)
   val blockChanges = BlockChanges(this)
   val menuStats = Stats(this)
 
@@ -80,12 +82,13 @@ class MoBossesPlugin : JavaPlugin() {
 
   override fun onEnable() {
     if (!reload()) log.warn("Started with errors in the config files; fix them and run /mobosses reload")
-    listOf(playerLanguages, progression, spawns, DamageListener(this), DeathListener(this), MeteorListener(this), ArrowListener(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener(this))
+    listOf(playerLanguages, progression, spawns, survival, DamageListener(this), DeathListener(this), MeteorListener(this), ArrowListener(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener(this))
       .forEach { server.pluginManager.registerEvents(it, this) }
     registerCommand("mobosses", "Your Mo’Bosses level and the best hunters; for admins, reload, spawn, or remove bosses", listOf("mb", "moboss"), MoBossesCommand(this))
     tasks += server.scheduler.runTaskTimer(this, Runnable { visuals.tick(); bars.tick(); PlanData.bossesAlive = bosses.all.size }, 20L, 20L)
     tasks += server.scheduler.runTaskTimer(this, Runnable { nameTags.tick() }, 10L, 10L)
     tasks += server.scheduler.runTaskTimer(this, Runnable { despawns.tick() }, 100L, 100L)
+    tasks += server.scheduler.runTaskTimer(this, Runnable { survival.tick() }, 1200L, 1200L)
 
     // What the last run left: cobwebs after a crash, and bosses and minions in chunks already loaded.
     blockChanges.temporary.recover()

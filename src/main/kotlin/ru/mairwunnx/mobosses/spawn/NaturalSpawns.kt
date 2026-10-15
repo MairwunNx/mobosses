@@ -15,7 +15,8 @@ import kotlin.random.Random
 
 /**
  * Whether a spawning mob becomes a boss, and at what level. A mob of a type in `bosses.yml` rolls
- * its chance, times the world, time, and weather multipliers, when players are near; the players
+ * its chance, times the world, time, and weather multipliers and the nearest player's survival
+ * bonus, when players are near; the players
  * within `group_radius` set its level together, and a minion's summoner sets a minion's.
  */
 class NaturalSpawns(private val plugin: MoBossesPlugin) {
@@ -31,7 +32,7 @@ class NaturalSpawns(private val plugin: MoBossesPlugin) {
 
     val nearest = players(at, spawn.spawnRadius.toDouble()).minByOrNull { it.location.distanceSquared(at) } ?: return
     if (spawn.checkVerticalZone && onSurface(nearest.location, spawn) != onSurface(at, spawn)) return
-    if (Random.nextDouble() >= chance(type.spec.spawnChance, spawn, at)) return
+    if (Random.nextDouble() >= chance(type.spec.spawnChance, spawn, at) * plugin.survival.multiplier(nearest)) return
 
     val group = players(at, spawn.groupRadius.toDouble()).ifEmpty { listOf(nearest) }
     if (!limiter.allows(at, group)) return plugin.log.debug { "No ${type.key} boss at ${at.blockX} ${at.blockY} ${at.blockZ}: too many bosses near, or its players' cooldown" }

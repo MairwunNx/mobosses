@@ -51,6 +51,8 @@ Mo’Bosses runs on Moonlands, my hard survival server with friends. Come in and
 
 When a mob spawns, Mo’Bosses looks up its type in `bosses.yml`. If a player is within `spawn.spawn_radius`, the mob becomes a boss with the type’s `spawn_chance`, times the multipliers for the world, the time of day, and the weather. The boss picks a class by weight, takes the average level of the players within `spawn.group_radius`, and gets its health, damage, gear, and name.
 
+The longer you play without dying, the more bosses find you, as with Sacred’s survival bonus: +25% to the chance after an hour, +50% after three, +75% after nine, toward double. Death takes it all, and minutes standing idle don’t count (`survival_bonus`). `/mobosses info` shows yours.
+
 After a boss spawns for a group, its players wait about a minute for the next one, and no boss spawns while three are already close. Both live in `spawn` in `config.yml`. A boss nobody comes within 64 blocks of for 10 minutes leaves without loot, as vanilla mobs do (`despawn`); bosses from `/mobosses spawn` stay.
 
 Top bosses outlast the game's own: a zombie boss has more health than the Ender Dragon (200) from level 30 as a Common and from 20 as a Rare, and more than the Warden (500) from level 40 as an Epic, 20 as a Mythic, and 100 as a Common. Their hits grow with them, toward the Warden's at the top, and their arrows, fireballs, and tridents grow too. A creeper boss's blast widens with its level; one that blows itself up gives nobody anything.

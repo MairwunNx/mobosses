@@ -18,6 +18,7 @@ data class Settings(
   val geoip: GeoIpSettings = GeoIpSettings(),
   val spawn: Spawn = Spawn(),
   val despawn: Despawn = Despawn(),
+  @SerialName("survival_bonus") val survivalBonus: SurvivalBonus = SurvivalBonus(),
   val progression: Progression = Progression(),
   val formula: Formulas = Formulas(),
   val effects: Effects = Effects(),
@@ -52,6 +53,19 @@ data class Settings(
     /** A MaxMind-format country database, plain or gzipped. `{year}` and `{month}` fill in the current month. */
     val url: String = "https://download.db-ip.com/free/dbip-country-lite-{year}-{month}.mmdb.gz",
     @SerialName("refresh_days") val refreshDays: Int = 30,
+  )
+
+  /**
+   * Time in the game without dying raises the chance of bosses near a player, as Sacred's survival
+   * bonus did: half of [maxBonus] after [halfAtMinutes], nearing all of it later. Minutes idle for
+   * [idleMinutes] or more don't count, so standing AFK earns nothing.
+   */
+  @Serializable
+  data class SurvivalBonus(
+    val enabled: Boolean = true,
+    @SerialName("max_bonus") val maxBonus: Double = 1.0,
+    @SerialName("half_at_minutes") val halfAtMinutes: Int = 180,
+    @SerialName("idle_minutes") val idleMinutes: Int = 3,
   )
 
   /** Bosses nobody comes near for a while leave the world, as vanilla mobs do, instead of piling up in caves for good. */

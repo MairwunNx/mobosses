@@ -26,13 +26,15 @@ killed_none: "<pri>[Mo’Bosses]</pri> <warn>Não há chefes para remover.</warn
 player_not_found: "<err>Nenhum jogador chamado <player> jogou aqui.</err>"
 no_database: "<warn>As estatísticas precisam do banco de dados, e ele não está aberto agora.</warn>"
 
-# /mobosses info. <player>, <level>, <max>, <rank> (no placar), <experience>, <kills>, <cooldown> (até um chefe poder surgir perto do jogador).
+# /mobosses info. <player>, <level>, <max>, <rank> (no placar), <experience>, <kills>, <cooldown> (até um chefe poder surgir perto do jogador), <bonus>, <hours>, <minutes> (o bônus de sobrevivência).
 info: |-
   <pri>Mo’Bosses</pri> <dark_gray>·</dark_gray> <white><player></white>
   <gray>Nível</gray> <num><level></num><dark_gray>/<max></dark_gray> <dark_gray>·</dark_gray> <gray>Posição</gray> <num>#<rank></num>
   <gray>Experiência</gray> <xp><experience></xp> <dark_gray>·</dark_gray> <gray>Chefes derrotados</gray> <num><kills></num>
   <gray>Próximo chefe perto de você</gray> <white><cooldown></white>
+  <gray>Bônus de sobrevivência</gray> <num>+<bonus>%</num> <dark_gray>· <hours> h <minutes> min sem morrer</dark_gray>
 info_ready: "a qualquer momento"
+survival_lost: "<pri>[Mo’Bosses]</pri> <warn>Seu bônus de sobrevivência acabou: +<bonus>% de chefes depois de <hours> h <minutes> min sem morrer.</warn>"
 
 # /mobosses reset. <player>: de quem um admin apagou o progresso.
 reset:

@@ -34,6 +34,8 @@ class Keys(plugin: Plugin) {
   val label = NamespacedKey(plugin, "label")
   /** On players: when they may get rewards again, in epoch milliseconds. */
   val rewardsUntil = NamespacedKey(plugin, "rewards_until")
+  /** On players: minutes played since their last death, for the survival bonus. */
+  val survival = NamespacedKey(plugin, "survival_minutes")
   /** On players: when a boss may spawn for them again, in epoch milliseconds. */
   val nextBoss = NamespacedKey(plugin, "next_boss")
 }

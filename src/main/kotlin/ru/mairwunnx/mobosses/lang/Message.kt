@@ -30,6 +30,7 @@ enum class Message(val key: String) {
   NOTE_PETS("kill_notes.pets"),
   INFO("info"),
   INFO_READY("info_ready"),
+  SURVIVAL_LOST("survival_lost"),
   TOP_HEADER("top.header"),
   TOP_LINE("top.line"),
   TOP_EMPTY("top.empty"),
