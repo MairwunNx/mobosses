@@ -68,6 +68,12 @@ class Progression(private val plugin: MoBossesPlugin) : Listener {
   /** Bosses by type and class; empty without a database. */
   fun counts(): CompletableFuture<List<BossCount>> = store?.counts() ?: CompletableFuture.completedFuture(emptyList())
 
+  /** Notes a player's kill for their bestiary; the future has the whole bestiary after it, empty without a database. */
+  fun bestiaryKill(player: UUID, type: String, clazz: String, level: Int): CompletableFuture<List<BestiaryEntry>> =
+    store?.bestiaryKill(player, type, clazz, level) ?: CompletableFuture.completedFuture(emptyList())
+
+  fun bestiary(player: UUID): CompletableFuture<List<BestiaryEntry>> = store?.bestiary(player) ?: CompletableFuture.completedFuture(emptyList())
+
   /** Counts a boss that spawned, or that players killed, for the statistics. */
   fun count(type: String, clazz: String, killed: Boolean) {
     store?.count(type, clazz, killed)

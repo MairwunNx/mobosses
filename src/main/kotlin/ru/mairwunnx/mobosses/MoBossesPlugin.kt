@@ -12,6 +12,7 @@ import ru.mairwunnx.mobosses.boss.BossBars
 import ru.mairwunnx.mobosses.boss.Bosses
 import ru.mairwunnx.mobosses.boss.Catalog
 import ru.mairwunnx.mobosses.boss.Decoys
+import ru.mairwunnx.mobosses.achievement.Achievements
 import ru.mairwunnx.mobosses.boss.Despawns
 import ru.mairwunnx.mobosses.boss.Keys
 import ru.mairwunnx.mobosses.boss.Minions
@@ -75,6 +76,7 @@ class MoBossesPlugin : JavaPlugin() {
   val spawns = SpawnListener(this)
   val despawns = Despawns(this)
   val decoys = Decoys(this)
+  val achievements = Achievements(this)
   val survival = SurvivalBonus(this)
   val fullMoon = FullMoon(this)
   val groupHealth = GroupHealth(this)
@@ -94,7 +96,7 @@ class MoBossesPlugin : JavaPlugin() {
 
   override fun onEnable() {
     if (!reload()) log.warn("Started with errors in the config files; fix them and run /mobosses reload")
-    listOf(playerLanguages, progression, spawns, survival, DeathPenalty(this), DamageListener(this), DeathListener(this), MeteorListener(this), ArrowListener(this), AbilityEntities(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener(this))
+    listOf(playerLanguages, progression, spawns, survival, DeathPenalty(this), achievements, DamageListener(this), DeathListener(this), MeteorListener(this), ArrowListener(this), AbilityEntities(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener())
       .forEach { server.pluginManager.registerEvents(it, this) }
     registerCommand("mobosses", "Your Mo’Bosses level and the best hunters; for admins, reload, spawn, or remove bosses", listOf("mb", "moboss"), MoBossesCommand(this))
     tasks += server.scheduler.runTaskTimer(this, Runnable { visuals.tick(); bars.tick(); PlanData.bossesAlive = bosses.all.size }, 20L, 20L)
@@ -154,6 +156,8 @@ class MoBossesPlugin : JavaPlugin() {
     bars.clear()
     nameTags.clearAll()
     bosses.all.forEach(bosses::vanillaName)
+    // Loads any the server doesn't have yet, as when they were just switched on.
+    achievements.load()
     return ok
   }
 

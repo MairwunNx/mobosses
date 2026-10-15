@@ -2,6 +2,14 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.4.0
+
+### New
+
+- 🏆 **Achievements in a tab of their own** (press L): the hunt’s path by level (10 to 100) and by kills (10 to 1,000), the ladder of classes from Uncommon to Mythic, the bestiary and the Mythic collection, and feats: break an obelisk, break a chain, find the real one among doubles, win in the second phase, win alone at level 50 and up, win untouched at level 30 and up, hunt under a full moon, and avenge a death within 10 minutes. They toast and show in the chat as the game’s own do; levels and kills from before count at the next login. One language for all, as the game shows them (`achievements`).
+- 📖 **A bestiary in the menu:** every boss type, with your kills and best level in each class, and “???” for the ones you haven’t beaten; it counts from this version on, in a new `player_boss_kills` table.
+- 🔭 **The bosses in the world, for admins** (`mobosses.bosses`): a menu page of the bosses in loaded chunks, nearest first, 45 to a page. A click shows a boss’s details, Shift and a click takes you to it, and a right click, twice, removes it.
+
 ## 2.3.0
 
 ### New

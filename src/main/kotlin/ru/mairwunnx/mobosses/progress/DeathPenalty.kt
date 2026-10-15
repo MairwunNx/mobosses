@@ -19,11 +19,12 @@ import ru.mairwunnx.mobosses.lang.Message
 class DeathPenalty(private val plugin: MoBossesPlugin) : Listener {
   @EventHandler(priority = EventPriority.MONITOR)
   fun onDeath(event: PlayerDeathEvent) {
-    if (!plugin.catalog.settings.progression.deathPenalty) return
     val player = event.player
     val by = (player.lastDamageCause as? EntityDamageByEntityEvent)?.damager ?: return
     val source: Entity? = (by as? Projectile)?.shooter as? Entity ?: (by as? EvokerFangs)?.owner ?: by
     val boss = source?.let(plugin.bosses::get) ?: return
+    plugin.achievements.diedTo(player, boss)
+    if (!plugin.catalog.settings.progression.deathPenalty) return
     plugin.progression.penalize(player) { lost ->
       if (!player.isOnline) return@penalize
       plugin.texts.send(player, Message.DEATH_PENALTY, Placeholder.unparsed("lost", lost.toString()),

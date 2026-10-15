@@ -69,6 +69,54 @@ menu:
   reload: "<green>Recargar Mo’Bosses</green>"
   killall: "<red>Eliminar todos los jefes</red>"
   close: "<gray>Cerrar</gray>"
+  bestiary: |-
+    <gold>Bestiario</gold>
+    <gray>Los jefes que has derrotado, por tipo y clase.</gray>
+  boss_list: |-
+    <aqua>Jefes en el mundo</aqua>
+    <gray>Los más cercanos primero: detalles, teletransporte o eliminar.</gray>
+  back: "<gray>Atrás</gray>"
+  previous: "<gray>Página anterior</gray>"
+  next: "<gray>Página siguiente</gray>"
+
+# La página del bestiario. <class>, <kills>, <level> (el mejor); <opened> y <total> casillas tipo × clase.
+bestiary:
+  title: "Bestiario"
+  unknown: |-
+    <dark_gray>???</dark_gray>
+    <gray>Aún sin derrotar.</gray>
+  missing: "<class><dark_gray>: —</dark_gray>"
+  line: "<class><gray>: derrotados</gray> <num><kills></num><gray>, mejor nivel</gray> <num><level></num>"
+  progress: |-
+    <gold><opened> de <total> descubiertos</gold>
+    <gray>Cada tipo cuenta una vez en cada clase.</gray>
+
+# La lista de jefes para administradores. Las etiquetas del jefe, <health>, <max>, <world>, <x>, <y>, <z>,
+# <distance> (bloques, — en otro mundo), <fighters>, <phase> (segunda fase), <spawner>.
+boss_list:
+  title: "Jefes: <count> · pág. <page>/<pages>"
+  lore: |-
+    <gray>Vida</gray> <num><health></num><dark_gray>/<max></dark_gray>
+    <gray><world> <x> <y> <z> · a <distance> bloques</gray>
+    <gray>Luchadores</gray> <num><fighters></num> <dark_gray>·</dark_gray> <gray>segunda fase:</gray> <phase>
+    <dark_gray>Clic: detalles · Mayús+clic: teletransporte · Clic derecho: eliminar</dark_gray>
+  info: |-
+    <pri>[Mo’Bosses]</pri> <class_color>[Nv. <level>] [<class>]</class_color> <boss_name>
+    <gray>Vida</gray> <num><health></num><dark_gray>/<max></dark_gray> <dark_gray>·</dark_gray> <gray><world> <x> <y> <z>, a <distance> bloques</gray>
+    <gray>Luchadores</gray> <num><fighters></num> <dark_gray>·</dark_gray> <gray>segunda fase:</gray> <phase> <dark_gray>·</dark_gray> <gray>de un generador:</gray> <spawner>
+  confirm: |-
+    <red><b>Otro clic derecho para eliminar</b></red>
+    <gray>Sin botín ni experiencia.</gray>
+  gone: "<warn>Ese jefe ya no está.</warn>"
+  removed: "<pri>[Mo’Bosses]</pri> <ok>Eliminado:</ok> <class_color>[Nv. <level>] [<class>]</class_color> <boss_name>"
+  teleported: "<pri>[Mo’Bosses]</pri> <gray>Estás junto a</gray> <class_color>[Nv. <level>] [<class>]</class_color> <boss_name>"
+  empty: |-
+    <gray>No hay jefes en chunks cargados</gray>
+    <dark_gray>Los de chunks sin cargar aparecen cuando cargan.</dark_gray>
+
+words:
+  yes: "<green>sí</green>"
+  no: "<gray>no</gray>"
 
 # Sobre la cabeza del jefe, cada jugador lo lee en su idioma.
 boss_tag: "<class_color>[Nv. <level>] [<class>] <boss_name>"
@@ -1102,3 +1150,85 @@ items:
     lore:
       - "<dark_purple>Arrancadas a quien voló demasiado alto."
       - "<gray>Cuidado con el aterrizaje."
+
+# Logros en su propia pestaña (config.yml: achievements). El juego muestra a todos el mismo
+# texto, así que sale de un idioma: achievements.language o locales.default.
+achievements:
+  hunt_begins:
+    title: "Empieza la caza"
+    description: "Golpea a un jefe"
+  first_blood:
+    title: "Primera sangre"
+    description: "Derrota a tu primer jefe"
+  level_10:
+    title: "Aprendiz de cazador"
+    description: "Alcanza el nivel 10 de Mo’Bosses"
+  level_25:
+    title: "Cazador curtido"
+    description: "Alcanza el nivel 25 de Mo’Bosses"
+  level_50:
+    title: "Veterano"
+    description: "Alcanza el nivel 50 de Mo’Bosses"
+  level_75:
+    title: "Maestro de la caza"
+    description: "Alcanza el nivel 75 de Mo’Bosses"
+  level_100:
+    title: "Leyenda de la caza"
+    description: "Alcanza el nivel 100 de Mo’Bosses"
+  kills_10:
+    title: "Diez caídos"
+    description: "Derrota a 10 jefes"
+  kills_100:
+    title: "Cien trofeos"
+    description: "Derrota a 100 jefes"
+  kills_500:
+    title: "Azote de jefes"
+    description: "Derrota a 500 jefes"
+  kills_1000:
+    title: "Mil cacerías"
+    description: "Derrota a 1000 jefes"
+  class_uncommon:
+    title: "Algo inusual"
+    description: "Derrota a un jefe poco común"
+  class_rare:
+    title: "Presa rara"
+    description: "Derrota a un jefe raro"
+  class_epic:
+    title: "Combate épico"
+    description: "Derrota a un jefe épico"
+  class_legendary:
+    title: "Material de leyenda"
+    description: "Derrota a un jefe legendario"
+  class_mythic:
+    title: "Matamitos"
+    description: "Derrota a un jefe mítico"
+  bestiary:
+    title: "Naturalista"
+    description: "Derrota a un jefe de cada clase"
+  mythic_collector:
+    title: "Colección mítica"
+    description: "Derrota a un jefe mítico de cada clase"
+  obelisk_breaker:
+    title: "Iconoclasta"
+    description: "Rompe el obelisco de un jefe"
+  chain_breaker:
+    title: "Sin cadenas"
+    description: "Rompe la cadena de un jefe"
+  find_the_real:
+    title: "Encuentra al verdadero"
+    description: "Derrota a un jefe mientras sus dobles siguen en pie"
+  second_life:
+    title: "Segundo aliento"
+    description: "Derrota a un jefe en su segunda fase"
+  lone_wolf:
+    title: "Lobo solitario"
+    description: "Derrota a solas a un jefe de nivel 50 o más"
+  untouched:
+    title: "Intocable"
+    description: "Derrota a un jefe de nivel 30 o más sin recibir ni un golpe suyo"
+  full_moon_hunter:
+    title: "Caza a la luz de la luna"
+    description: "Derrota a un jefe con luna llena"
+  avenger:
+    title: "Vengador"
+    description: "En los 10 minutos tras morir ante un jefe, derrota a uno de su clase"

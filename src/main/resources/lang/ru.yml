@@ -69,6 +69,54 @@ menu:
   reload: "<green>Перезагрузить Mo’Bosses</green>"
   killall: "<red>Убрать всех боссов</red>"
   close: "<gray>Закрыть</gray>"
+  bestiary: |-
+    <gold>Бестиарий</gold>
+    <gray>Побеждённые вами боссы, по видам и классам.</gray>
+  boss_list: |-
+    <aqua>Боссы в мире</aqua>
+    <gray>Сначала ближайшие: подробности, телепорт или удаление.</gray>
+  back: "<gray>Назад</gray>"
+  previous: "<gray>Предыдущая страница</gray>"
+  next: "<gray>Следующая страница</gray>"
+
+# Страница бестиария. <class>, <kills>, <level> (лучший); <opened> и <total> — клетки «вид × класс».
+bestiary:
+  title: "Бестиарий"
+  unknown: |-
+    <dark_gray>???</dark_gray>
+    <gray>Ещё не побеждён.</gray>
+  missing: "<class><dark_gray>: —</dark_gray>"
+  line: "<class><gray>: побеждено</gray> <num><kills></num><gray>, лучший уровень</gray> <num><level></num>"
+  progress: |-
+    <gold>Открыто <opened> из <total></gold>
+    <gray>Каждый вид в каждом классе считается один раз.</gray>
+
+# Список боссов для админов. Теги босса, <health>, <max>, <world>, <x>, <y>, <z>,
+# <distance> (в блоках, «—» в другом мире), <fighters>, <phase> (вторая фаза), <spawner>.
+boss_list:
+  title: "Боссы: <count> · стр. <page>/<pages>"
+  lore: |-
+    <gray>Здоровье</gray> <num><health></num><dark_gray>/<max></dark_gray>
+    <gray><world> <x> <y> <z> · в <distance> блоках</gray>
+    <gray>Бойцов</gray> <num><fighters></num> <dark_gray>·</dark_gray> <gray>вторая фаза:</gray> <phase>
+    <dark_gray>ЛКМ — подробности · Shift+ЛКМ — телепорт · ПКМ — убрать</dark_gray>
+  info: |-
+    <pri>[Mo’Bosses]</pri> <class_color>[Ур. <level>] [<class>]</class_color> <boss_name>
+    <gray>Здоровье</gray> <num><health></num><dark_gray>/<max></dark_gray> <dark_gray>·</dark_gray> <gray><world> <x> <y> <z>, в <distance> блоках</gray>
+    <gray>Бойцов</gray> <num><fighters></num> <dark_gray>·</dark_gray> <gray>вторая фаза:</gray> <phase> <dark_gray>·</dark_gray> <gray>из спавнера:</gray> <spawner>
+  confirm: |-
+    <red><b>ПКМ ещё раз — убрать</b></red>
+    <gray>Без добычи и опыта.</gray>
+  gone: "<warn>Этого босса уже нет.</warn>"
+  removed: "<pri>[Mo’Bosses]</pri> <ok>Убран</ok> <class_color>[Ур. <level>] [<class>]</class_color> <boss_name>"
+  teleported: "<pri>[Mo’Bosses]</pri> <gray>Вы рядом с</gray> <class_color>[Ур. <level>] [<class>]</class_color> <boss_name>"
+  empty: |-
+    <gray>В загруженных чанках боссов нет</gray>
+    <dark_gray>Боссы в выгруженных появятся, когда те загрузятся.</dark_gray>
+
+words:
+  yes: "<green>да</green>"
+  no: "<gray>нет</gray>"
 
 # Над головой босса, каждому игроку на его языке.
 boss_tag: "<class_color>[Ур. <level>] [<class>] <boss_name>"
@@ -1102,3 +1150,85 @@ items:
     lore:
       - "<dark_purple>Сняты с того, кто взлетел слишком высоко."
       - "<gray>Осторожнее с приземлением."
+
+# Достижения в своей вкладке (config.yml: achievements). Игра показывает всем один и тот же
+# текст, поэтому он берётся из одного языка: achievements.language или locales.default.
+achievements:
+  hunt_begins:
+    title: "Охота началась"
+    description: "Ударьте босса"
+  first_blood:
+    title: "Первая кровь"
+    description: "Победите первого босса"
+  level_10:
+    title: "Подмастерье охоты"
+    description: "Достигните 10-го уровня Mo’Bosses"
+  level_25:
+    title: "Опытный охотник"
+    description: "Достигните 25-го уровня Mo’Bosses"
+  level_50:
+    title: "Ветеран"
+    description: "Достигните 50-го уровня Mo’Bosses"
+  level_75:
+    title: "Мастер охоты"
+    description: "Достигните 75-го уровня Mo’Bosses"
+  level_100:
+    title: "Легенда охоты"
+    description: "Достигните 100-го уровня Mo’Bosses"
+  kills_10:
+    title: "Десяток"
+    description: "Победите 10 боссов"
+  kills_100:
+    title: "Сотня трофеев"
+    description: "Победите 100 боссов"
+  kills_500:
+    title: "Гроза боссов"
+    description: "Победите 500 боссов"
+  kills_1000:
+    title: "Тысяча охот"
+    description: "Победите 1000 боссов"
+  class_uncommon:
+    title: "Что-то необычное"
+    description: "Победите необычного босса"
+  class_rare:
+    title: "Редкая добыча"
+    description: "Победите редкого босса"
+  class_epic:
+    title: "Эпическая схватка"
+    description: "Победите эпического босса"
+  class_legendary:
+    title: "Легендарная охота"
+    description: "Победите легендарного босса"
+  class_mythic:
+    title: "Убийца мифов"
+    description: "Победите мифического босса"
+  bestiary:
+    title: "Натуралист"
+    description: "Победите босса каждого вида"
+  mythic_collector:
+    title: "Мифическая коллекция"
+    description: "Победите мифического босса каждого вида"
+  obelisk_breaker:
+    title: "Разрушитель"
+    description: "Разбейте обелиск босса"
+  chain_breaker:
+    title: "Цепь не держит"
+    description: "Разорвите цепь босса"
+  find_the_real:
+    title: "Найди настоящего"
+    description: "Победите босса, пока живы его двойники"
+  second_life:
+    title: "Вторая жизнь"
+    description: "Победите босса во второй фазе"
+  lone_wolf:
+    title: "Один в поле воин"
+    description: "Победите в одиночку босса 50-го уровня или выше"
+  untouched:
+    title: "Без царапины"
+    description: "Победите босса 30-го уровня или выше, не получив от него ни одного удара"
+  full_moon_hunter:
+    title: "Охотник полнолуния"
+    description: "Победите босса в полнолуние"
+  avenger:
+    title: "Мститель"
+    description: "Не позже чем через 10 минут после смерти от босса победите босса того же вида"

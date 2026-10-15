@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.persistence.PersistentDataType
 import ru.mairwunnx.mobosses.MoBossesPlugin
 import ru.mairwunnx.mobosses.ability.Targets
+import ru.mairwunnx.mobosses.achievement.Achievement
 import ru.mairwunnx.mobosses.ability.kinds.Chain
 import ru.mairwunnx.mobosses.algebra.Stats
 
@@ -46,7 +47,10 @@ class DamageListener(private val plugin: MoBossesPlugin) : Listener {
       if (pet == null && source !is Golem) return
       Targets.markAggressor(source, boss.uuid, plugin.keys.aggressor)
     }
-    player?.takeIf { it.isOnline && it.world == boss.entity.world }?.let { plugin.bars.show(it, boss) }
+    player?.takeIf { it.isOnline && it.world == boss.entity.world }?.let {
+      plugin.bars.show(it, boss)
+      plugin.achievements.grant(it, Achievement.HUNT_BEGINS)
+    }
     // A blow in melee loosens the chain on whoever strikes.
     if (by is Player) Chain.struck(plugin, boss, by)
     plugin.abilities.onHit(boss, player?.takeIf { it.isOnline })

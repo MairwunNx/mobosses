@@ -69,6 +69,54 @@ menu:
   reload: "<green>Recarregar Mo’Bosses</green>"
   killall: "<red>Remover todos os chefes</red>"
   close: "<gray>Fechar</gray>"
+  bestiary: |-
+    <gold>Bestiário</gold>
+    <gray>Os chefes que você derrotou, por tipo e classe.</gray>
+  boss_list: |-
+    <aqua>Chefes no mundo</aqua>
+    <gray>Os mais próximos primeiro: detalhes, teleporte ou remover.</gray>
+  back: "<gray>Voltar</gray>"
+  previous: "<gray>Página anterior</gray>"
+  next: "<gray>Próxima página</gray>"
+
+# A página do bestiário. <class>, <kills>, <level> (o melhor); <opened> e <total> casas tipo × classe.
+bestiary:
+  title: "Bestiário"
+  unknown: |-
+    <dark_gray>???</dark_gray>
+    <gray>Ainda não derrotado.</gray>
+  missing: "<class><dark_gray>: —</dark_gray>"
+  line: "<class><gray>: derrotados</gray> <num><kills></num><gray>, melhor nível</gray> <num><level></num>"
+  progress: |-
+    <gold><opened> de <total> descobertos</gold>
+    <gray>Cada tipo conta uma vez em cada classe.</gray>
+
+# A lista de chefes para admins. As tags do chefe, <health>, <max>, <world>, <x>, <y>, <z>,
+# <distance> (blocos, — em outro mundo), <fighters>, <phase> (segunda fase), <spawner>.
+boss_list:
+  title: "Chefes: <count> · pág. <page>/<pages>"
+  lore: |-
+    <gray>Vida</gray> <num><health></num><dark_gray>/<max></dark_gray>
+    <gray><world> <x> <y> <z> · a <distance> blocos</gray>
+    <gray>Lutadores</gray> <num><fighters></num> <dark_gray>·</dark_gray> <gray>segunda fase:</gray> <phase>
+    <dark_gray>Clique: detalhes · Shift+clique: teleporte · Clique direito: remover</dark_gray>
+  info: |-
+    <pri>[Mo’Bosses]</pri> <class_color>[Nv. <level>] [<class>]</class_color> <boss_name>
+    <gray>Vida</gray> <num><health></num><dark_gray>/<max></dark_gray> <dark_gray>·</dark_gray> <gray><world> <x> <y> <z>, a <distance> blocos</gray>
+    <gray>Lutadores</gray> <num><fighters></num> <dark_gray>·</dark_gray> <gray>segunda fase:</gray> <phase> <dark_gray>·</dark_gray> <gray>de um spawner:</gray> <spawner>
+  confirm: |-
+    <red><b>Outro clique direito para remover</b></red>
+    <gray>Sem saque nem experiência.</gray>
+  gone: "<warn>Esse chefe já não está mais lá.</warn>"
+  removed: "<pri>[Mo’Bosses]</pri> <ok>Removido:</ok> <class_color>[Nv. <level>] [<class>]</class_color> <boss_name>"
+  teleported: "<pri>[Mo’Bosses]</pri> <gray>Você está ao lado de</gray> <class_color>[Nv. <level>] [<class>]</class_color> <boss_name>"
+  empty: |-
+    <gray>Nenhum chefe em chunks carregados</gray>
+    <dark_gray>Os de chunks não carregados aparecem quando eles carregam.</dark_gray>
+
+words:
+  yes: "<green>sim</green>"
+  no: "<gray>não</gray>"
 
 # Acima da cabeça do chefe, cada jogador lê no próprio idioma.
 boss_tag: "<class_color>[Nv. <level>] [<class>] <boss_name>"
@@ -1102,3 +1150,85 @@ items:
     lore:
       - "<dark_purple>Tiradas de quem voou alto demais."
       - "<gray>Cuidado com o pouso."
+
+# Conquistas em uma aba própria (config.yml: achievements). O jogo mostra o mesmo texto a
+# todos, então ele vem de um idioma: achievements.language ou locales.default.
+achievements:
+  hunt_begins:
+    title: "A caçada começa"
+    description: "Acerte um chefe"
+  first_blood:
+    title: "Primeiro sangue"
+    description: "Derrote seu primeiro chefe"
+  level_10:
+    title: "Aprendiz de caçador"
+    description: "Alcance o nível 10 do Mo’Bosses"
+  level_25:
+    title: "Caçador experiente"
+    description: "Alcance o nível 25 do Mo’Bosses"
+  level_50:
+    title: "Veterano"
+    description: "Alcance o nível 50 do Mo’Bosses"
+  level_75:
+    title: "Mestre da caçada"
+    description: "Alcance o nível 75 do Mo’Bosses"
+  level_100:
+    title: "Lenda da caçada"
+    description: "Alcance o nível 100 do Mo’Bosses"
+  kills_10:
+    title: "Dez abatidos"
+    description: "Derrote 10 chefes"
+  kills_100:
+    title: "Cem troféus"
+    description: "Derrote 100 chefes"
+  kills_500:
+    title: "Flagelo dos chefes"
+    description: "Derrote 500 chefes"
+  kills_1000:
+    title: "Mil caçadas"
+    description: "Derrote 1000 chefes"
+  class_uncommon:
+    title: "Algo incomum"
+    description: "Derrote um chefe incomum"
+  class_rare:
+    title: "Presa rara"
+    description: "Derrote um chefe raro"
+  class_epic:
+    title: "Luta épica"
+    description: "Derrote um chefe épico"
+  class_legendary:
+    title: "Coisa de lenda"
+    description: "Derrote um chefe lendário"
+  class_mythic:
+    title: "Matador de mitos"
+    description: "Derrote um chefe mítico"
+  bestiary:
+    title: "Naturalista"
+    description: "Derrote um chefe de cada tipo"
+  mythic_collector:
+    title: "Coleção mítica"
+    description: "Derrote um chefe mítico de cada tipo"
+  obelisk_breaker:
+    title: "Iconoclasta"
+    description: "Quebre o obelisco de um chefe"
+  chain_breaker:
+    title: "Sem correntes"
+    description: "Quebre a corrente de um chefe"
+  find_the_real:
+    title: "Encontre o verdadeiro"
+    description: "Derrote um chefe enquanto seus sósias ainda estão de pé"
+  second_life:
+    title: "Segundo fôlego"
+    description: "Derrote um chefe na segunda fase"
+  lone_wolf:
+    title: "Lobo solitário"
+    description: "Derrote sozinho um chefe de nível 50 ou mais"
+  untouched:
+    title: "Intocável"
+    description: "Derrote um chefe de nível 30 ou mais sem levar nenhum golpe dele"
+  full_moon_hunter:
+    title: "Caçada ao luar"
+    description: "Derrote um chefe na lua cheia"
+  avenger:
+    title: "Vingador"
+    description: "Até 10 minutos depois de morrer para um chefe, derrote um do mesmo tipo"

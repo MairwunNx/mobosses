@@ -12,6 +12,7 @@ import ru.mairwunnx.mobosses.MoBossesPlugin
 import ru.mairwunnx.mobosses.ability.Ability
 import ru.mairwunnx.mobosses.ability.Cast
 import ru.mairwunnx.mobosses.ability.Targets
+import ru.mairwunnx.mobosses.achievement.Achievement
 import ru.mairwunnx.mobosses.algebra.Rolls
 import ru.mairwunnx.mobosses.boss.Boss
 import ru.mairwunnx.mobosses.config.AbilitySettings
@@ -98,6 +99,7 @@ object Obelisk : Ability {
     crystal.world.playSound(crystal.location, Sound.BLOCK_GLASS_BREAK, 1.2f, 0.7f)
     crystal.world.playSound(crystal.location, Sound.ENTITY_ENDER_DRAGON_HURT, 0.8f, 1.4f)
     crystal.remove()
+    plugin.achievements.grant(player, Achievement.OBELISK_BREAKER)
     if (boss != null) {
       standing.remove(boss.uuid, crystal)
       val near = (boss.damage.keys.mapNotNull(org.bukkit.Bukkit::getPlayer) + player).distinct().filter { it.world == crystal.world }

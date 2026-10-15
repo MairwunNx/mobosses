@@ -9,6 +9,7 @@ import org.bukkit.entity.Player
 import ru.mairwunnx.mobosses.MoBossesPlugin
 import ru.mairwunnx.mobosses.ability.Ability
 import ru.mairwunnx.mobosses.ability.Cast
+import ru.mairwunnx.mobosses.achievement.Achievement
 import ru.mairwunnx.mobosses.algebra.Rolls
 import ru.mairwunnx.mobosses.boss.Boss
 import ru.mairwunnx.mobosses.config.AbilitySettings
@@ -85,6 +86,7 @@ object Chain : Ability {
     val link = links[player.uniqueId]?.takeIf { it.boss == boss.uuid } ?: return
     if (--link.hitsLeft > 0) return player.world.playSound(player.location, Sound.BLOCK_CHAIN_HIT, 1f, 1.2f)
     links.remove(player.uniqueId)
+    plugin.achievements.grant(player, Achievement.CHAIN_BREAKER)
     player.world.playSound(player.location, Sound.BLOCK_CHAIN_BREAK, 1.2f, 1.4f)
     player.world.spawnParticle(Particle.CRIT, player.location.add(0.0, 1.0, 0.0), 20, 0.4, 0.5, 0.4, 0.2)
     plugin.texts.send(player, Message.CHAIN_BROKEN, Placeholder.unparsed("player", player.name), *plugin.texts.boss(plugin.texts.languageOf(player), boss))

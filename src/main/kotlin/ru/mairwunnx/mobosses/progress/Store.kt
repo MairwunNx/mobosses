@@ -116,6 +116,25 @@ class Store(private val settings: Settings.Database, folder: File) : AutoCloseab
   private fun order(score: (Progress) -> Double) =
     compareByDescending<Hunter> { score(it.progress) }.thenByDescending { it.progress.experience }
 
+  /** Notes a player's kill of a boss for the bestiary, and returns their whole bestiary after it. */
+  fun bestiaryKill(player: UUID, type: String, clazz: String, level: Int): CompletableFuture<List<BestiaryEntry>> = query {
+    val key = (PlayerBossKillsTable.uuid eq player.toString()) and (PlayerBossKillsTable.type eq type) and (PlayerBossKillsTable.clazz eq clazz)
+    val row = PlayerBossKillsTable.selectAll().where { key }.forUpdate().singleOrNull()
+    PlayerBossKillsTable.upsert {
+      it[uuid] = player.toString()
+      it[this.type] = type
+      it[this.clazz] = clazz
+      it[kills] = (row?.get(kills) ?: 0L) + 1
+      it[bestLevel] = maxOf(row?.get(bestLevel) ?: 0, level)
+    }
+    entries(player)
+  }
+
+  fun bestiary(player: UUID): CompletableFuture<List<BestiaryEntry>> = query { entries(player) }
+
+  private fun entries(player: UUID) = PlayerBossKillsTable.selectAll().where { PlayerBossKillsTable.uuid eq player.toString() }
+    .map { BestiaryEntry(it[PlayerBossKillsTable.type], it[PlayerBossKillsTable.clazz], it[PlayerBossKillsTable.kills], it[PlayerBossKillsTable.bestLevel]) }
+
   /** Counts a boss that spawned, or one players killed. */
   fun count(type: String, clazz: String, killed: Boolean) {
     query {
@@ -140,7 +159,7 @@ class Store(private val settings: Settings.Database, folder: File) : AutoCloseab
 
   /** Creates the tables a new database lacks, and the columns an older one lacks, like 1.x's file without `name`. */
   private fun JdbcTransaction.createSchema() {
-    val tables = arrayOf(PlayerProgressTable, BossStatsTable)
+    val tables = arrayOf(PlayerProgressTable, BossStatsTable, PlayerBossKillsTable)
     SchemaUtils.create(*tables)
     currentDialectMetadata.resetCaches()
     val columns = currentDialectMetadata.tableColumns(*tables)

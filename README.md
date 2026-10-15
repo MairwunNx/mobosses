@@ -19,6 +19,7 @@
 - 🎁 **Loot tables by level and class:** over 500 entries, 199 with their own names and lore, and random durability that favors better classes. Each player who dealt enough damage gets their own drop, which only they can pick up.
 - 💪 **Rewards:** a few potion effects and absorption hearts after a kill, stronger for rarer classes.
 - 📊 **Boss bars** with the boss’s health, shown to the players who hit it.
+- 🏆 **Achievements** in a tab of their own: levels, kills, classes, the bestiary, and feats from the fights. **A bestiary** in the menu keeps every boss you’ve beaten, by kind and class.
 - 📖 **A menu and stats for players:** `/mobosses` shows your level, rank, and kills, the best hunters, and the bosses by class; `/mobosses info` and `/mobosses top` do it in the chat.
 - 🌍 **Every player reads their own language,** even the names over bosses’ heads: English, Russian, Spanish, Portuguese, and German come bundled, picked by the player’s IP or game language.
 - 🛡️ **Protected areas stay protected:** GriefPrevention claims and WorldGuard regions keep bosses and their abilities out.
@@ -100,7 +101,7 @@ Every file lives in `plugins/MoBosses/`, and every key has a default, so you can
 
 | Command | Permission | What it does |
 |---|---|---|
-| `/mobosses` | `mobosses.use` | Opens the menu: your card, the best hunters, the bosses by class, a button to start over, and, for admins, reload and remove-all buttons |
+| `/mobosses` | `mobosses.use` | Opens the menu: your card, the best hunters, the bosses by class, your bestiary, a button to start over, and, for admins, the bosses in the world (`mobosses.bosses`) and reload and remove-all buttons |
 | `/mobosses info [player]` | `mobosses.use` | Your level, rank, experience, kills, and how long until a boss may spawn near you; another player’s needs `mobosses.info.others` |
 | `/mobosses top` | `mobosses.use` | The best hunters |
 | `/mobosses reset [confirm \| player]` | `mobosses.reset` | Starts you over: wipes your level, experience, and kills, after `confirm`. Spawn and reward cooldowns stay. Another player’s, at once, needs `mobosses.reset.others` |

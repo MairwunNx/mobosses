@@ -69,6 +69,54 @@ menu:
   reload: "<green>Reload Mo’Bosses</green>"
   killall: "<red>Remove every boss</red>"
   close: "<gray>Close</gray>"
+  bestiary: |-
+    <gold>Bestiary</gold>
+    <gray>The bosses you’ve beaten, by kind and class.</gray>
+  boss_list: |-
+    <aqua>Bosses in the world</aqua>
+    <gray>Nearest first: details, teleport, or remove.</gray>
+  back: "<gray>Back</gray>"
+  previous: "<gray>Previous page</gray>"
+  next: "<gray>Next page</gray>"
+
+# The bestiary page. <class>, <kills>, <level> (the best one); <opened> and <total> cells of kind × class.
+bestiary:
+  title: "Bestiary"
+  unknown: |-
+    <dark_gray>???</dark_gray>
+    <gray>Not beaten yet.</gray>
+  missing: "<class><dark_gray>: —</dark_gray>"
+  line: "<class><gray>: beaten</gray> <num><kills></num><gray>, best level</gray> <num><level></num>"
+  progress: |-
+    <gold>Opened <opened> of <total></gold>
+    <gray>Each kind in each class counts once.</gray>
+
+# The admins’ list of bosses. The boss’s own tags, <health>, <max>, <world>, <x>, <y>, <z>,
+# <distance> (blocks, — in another world), <fighters>, <phase> (second phase), <spawner>.
+boss_list:
+  title: "Bosses: <count> · page <page>/<pages>"
+  lore: |-
+    <gray>Health</gray> <num><health></num><dark_gray>/<max></dark_gray>
+    <gray><world> <x> <y> <z> · <distance> blocks away</gray>
+    <gray>Fighters</gray> <num><fighters></num> <dark_gray>·</dark_gray> <gray>second phase</gray> <phase>
+    <dark_gray>Click: details · Shift-click: teleport · Right-click: remove</dark_gray>
+  info: |-
+    <pri>[Mo’Bosses]</pri> <class_color>[Lv. <level>] [<class>]</class_color> <boss_name>
+    <gray>Health</gray> <num><health></num><dark_gray>/<max></dark_gray> <dark_gray>·</dark_gray> <gray><world> <x> <y> <z>, <distance> blocks away</gray>
+    <gray>Fighters</gray> <num><fighters></num> <dark_gray>·</dark_gray> <gray>second phase</gray> <phase> <dark_gray>·</dark_gray> <gray>from a spawner</gray> <spawner>
+  confirm: |-
+    <red><b>Right-click again to remove</b></red>
+    <gray>No loot, no experience.</gray>
+  gone: "<warn>That boss is gone already.</warn>"
+  removed: "<pri>[Mo’Bosses]</pri> <ok>Removed</ok> <class_color>[Lv. <level>] [<class>]</class_color> <boss_name>"
+  teleported: "<pri>[Mo’Bosses]</pri> <gray>You’re next to</gray> <class_color>[Lv. <level>] [<class>]</class_color> <boss_name>"
+  empty: |-
+    <gray>No bosses in loaded chunks</gray>
+    <dark_gray>Bosses in unloaded ones show once they load.</dark_gray>
+
+words:
+  yes: "<green>yes</green>"
+  no: "<gray>no</gray>"
 
 # Over the boss's head, each player reads it in their own language.
 boss_tag: "<class_color>[Lv. <level>] [<class>] <boss_name>"
@@ -1102,3 +1150,85 @@ items:
     lore:
       - "<dark_purple>Taken from someone who flew too high."
       - "<gray>Mind the landing."
+
+# Advancements in their own tab (config.yml: achievements). The game shows everyone the same
+# text, so these come from one language: achievements.language, or locales.default.
+achievements:
+  hunt_begins:
+    title: "The Hunt Begins"
+    description: "Strike a boss"
+  first_blood:
+    title: "First Blood"
+    description: "Defeat your first boss"
+  level_10:
+    title: "Apprentice Hunter"
+    description: "Reach Mo’Bosses level 10"
+  level_25:
+    title: "Seasoned Hunter"
+    description: "Reach Mo’Bosses level 25"
+  level_50:
+    title: "Veteran"
+    description: "Reach Mo’Bosses level 50"
+  level_75:
+    title: "Master of the Hunt"
+    description: "Reach Mo’Bosses level 75"
+  level_100:
+    title: "Legend of the Hunt"
+    description: "Reach Mo’Bosses level 100"
+  kills_10:
+    title: "Ten Down"
+    description: "Defeat 10 bosses"
+  kills_100:
+    title: "A Hundred Trophies"
+    description: "Defeat 100 bosses"
+  kills_500:
+    title: "Scourge of Bosses"
+    description: "Defeat 500 bosses"
+  kills_1000:
+    title: "A Thousand Hunts"
+    description: "Defeat 1,000 bosses"
+  class_uncommon:
+    title: "Something Unusual"
+    description: "Defeat an Uncommon boss"
+  class_rare:
+    title: "Rare Prey"
+    description: "Defeat a Rare boss"
+  class_epic:
+    title: "Epic Fight"
+    description: "Defeat an Epic boss"
+  class_legendary:
+    title: "Stuff of Legends"
+    description: "Defeat a Legendary boss"
+  class_mythic:
+    title: "Myth Slayer"
+    description: "Defeat a Mythic boss"
+  bestiary:
+    title: "Naturalist"
+    description: "Defeat a boss of every kind"
+  mythic_collector:
+    title: "Mythic Collection"
+    description: "Defeat a Mythic boss of every kind"
+  obelisk_breaker:
+    title: "Iconoclast"
+    description: "Break a boss’s obelisk"
+  chain_breaker:
+    title: "Unchained"
+    description: "Break a boss’s chain"
+  find_the_real:
+    title: "Find the Real One"
+    description: "Defeat a boss while its doubles still stand"
+  second_life:
+    title: "Second Wind"
+    description: "Defeat a boss in its second phase"
+  lone_wolf:
+    title: "Lone Wolf"
+    description: "Defeat a boss of level 50 or higher alone"
+  untouched:
+    title: "Untouched"
+    description: "Defeat a boss of level 30 or higher without taking a hit from it"
+  full_moon_hunter:
+    title: "Moonlit Hunt"
+    description: "Defeat a boss under a full moon"
+  avenger:
+    title: "Avenger"
+    description: "Within 10 minutes of dying to a boss, defeat one of its kind"

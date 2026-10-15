@@ -1,13 +1,12 @@
 package ru.mairwunnx.mobosses.menu
 
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
-import org.bukkit.inventory.InventoryHolder
+import org.bukkit.event.inventory.ClickType
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
 import ru.mairwunnx.mobosses.MoBossesPlugin
@@ -16,12 +15,12 @@ import ru.mairwunnx.mobosses.progress.BossCount
 import ru.mairwunnx.mobosses.progress.Hunter
 
 /**
- * The `/mobosses` menu: your card, the best hunters, the bosses by class, a button to start over, and,
- * for admins, reload and remove-all buttons. It opens once the database has answered, in the player's
- * language.
+ * The `/mobosses` menu: your card, the best hunters, the bosses by class, the bestiary, a button to
+ * start over, and, for admins, the bosses in the world and reload and remove-all buttons. It opens once
+ * the database has answered, in the player's language.
  */
-class Menu private constructor(val actions: Map<Int, Action>, private val confirmReset: ItemStack?) : InventoryHolder {
-  enum class Action { RESET, RELOAD, KILLALL, CLOSE }
+class Menu private constructor(private val plugin: MoBossesPlugin, val actions: Map<Int, Action>, private val confirmReset: ItemStack?) : Page {
+  enum class Action { RESET, BESTIARY, BOSS_LIST, RELOAD, KILLALL, CLOSE }
 
   private lateinit var inventory: Inventory
 
@@ -35,13 +34,36 @@ class Menu private constructor(val actions: Map<Int, Action>, private val confir
     inventory.setItem(RESET, confirmReset)
   }
 
+  override fun click(player: Player, slot: Int, click: ClickType) {
+    when (actions[slot]) {
+      Action.RESET -> if (!resetArmed) armReset() else {
+        player.closeInventory()
+        player.performCommand("mobosses reset confirm")
+      }
+      Action.BESTIARY -> Bestiary.open(plugin, player)
+      Action.BOSS_LIST -> BossList.open(plugin, player, 0)
+      Action.RELOAD -> {
+        player.closeInventory()
+        player.performCommand("mobosses reload")
+      }
+      Action.KILLALL -> {
+        player.closeInventory()
+        player.performCommand("mobosses killall")
+      }
+      Action.CLOSE -> player.closeInventory()
+      null -> {}
+    }
+  }
+
   companion object {
     private const val RESET = 18
     private const val YOU = 11
     private const val TOP = 13
     private const val BOSSES = 15
-    private const val RELOAD = 21
-    private const val KILLALL = 23
+    private const val BESTIARY = 20
+    private const val BOSS_LIST = 22
+    private const val RELOAD = 24
+    private const val KILLALL = 25
     private const val CLOSE = 26
 
     fun open(plugin: MoBossesPlugin, player: Player) {
@@ -64,11 +86,13 @@ class Menu private constructor(val actions: Map<Int, Action>, private val confir
       val canReset = player.hasPermission("mobosses.reset")
       val actions = buildMap {
         if (canReset) put(RESET, Action.RESET)
+        put(BESTIARY, Action.BESTIARY)
+        if (player.hasPermission(BossList.PERMISSION)) put(BOSS_LIST, Action.BOSS_LIST)
         if (player.hasPermission("mobosses.reload")) put(RELOAD, Action.RELOAD)
         if (player.hasPermission("mobosses.killall")) put(KILLALL, Action.KILLALL)
         put(CLOSE, Action.CLOSE)
       }
-      val menu = Menu(actions, if (canReset) item(Material.TNT, languages.lines(code, Message.MENU_RESET_CONFIRM)) else null)
+      val menu = Menu(plugin, actions, if (canReset) item(Material.TNT, languages.lines(code, Message.MENU_RESET_CONFIRM)) else null)
       val inventory = Bukkit.createInventory(menu, 27, languages.render(code, Message.MENU_TITLE) ?: Component.text("Mo’Bosses"))
       menu.inventory = inventory
 
@@ -93,6 +117,8 @@ class Menu private constructor(val actions: Map<Int, Action>, private val confir
         name(this, languages.render(code, Message.MENU_BOSSES, Placeholder.unparsed("alive", plugin.bosses.all.size.toString())), lines)
       })
       if (canReset) inventory.setItem(RESET, item(Material.RECOVERY_COMPASS, languages.lines(code, Message.MENU_RESET)))
+      inventory.setItem(BESTIARY, item(Material.WRITABLE_BOOK, languages.lines(code, Message.MENU_BESTIARY)))
+      if (Action.BOSS_LIST in actions.values) inventory.setItem(BOSS_LIST, item(Material.SPYGLASS, languages.lines(code, Message.MENU_BOSS_LIST)))
       if (admin) {
         if (Action.RELOAD in actions.values) inventory.setItem(RELOAD, ItemStack(Material.REPEATER).apply { name(this, languages.render(code, Message.MENU_RELOAD), emptyList()) })
         if (Action.KILLALL in actions.values) inventory.setItem(KILLALL, ItemStack(Material.BARRIER).apply { name(this, languages.render(code, Message.MENU_KILLALL), emptyList()) })
@@ -101,13 +127,8 @@ class Menu private constructor(val actions: Map<Int, Action>, private val confir
       player.openInventory(inventory)
     }
 
-    /** An item named by the first line of a text, with the rest for its lore. */
-    private fun item(material: Material, lines: List<Component>) = ItemStack(material).apply { name(this, lines.firstOrNull(), lines.drop(1)) }
+    private fun item(material: Material, lines: List<Component>) = Page.item(material, lines)
 
-    private fun name(item: ItemStack, name: Component?, lore: List<Component>) = item.editMeta { meta ->
-      fun plain(text: Component) = text.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)
-      name?.let { meta.displayName(plain(it)) }
-      if (lore.isNotEmpty()) meta.lore(lore.map(::plain))
-    }
+    private fun name(item: ItemStack, name: Component?, lore: List<Component>) = Page.name(item, name, lore)
   }
 }

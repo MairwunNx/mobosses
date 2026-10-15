@@ -82,6 +82,14 @@ survival_bonus:
   half_at_minutes: 180
   idle_minutes: 3
 
+# Advancements in a tab of their own (press L): the hunt's path by level and
+# kills, the ladder of classes, the bestiary, and feats from the fights. The game
+# shows every player the same text, so it comes in one language: empty takes
+# locales.default. A change of language applies after a restart.
+achievements:
+  enabled: true
+  language: ""
+
 # Nights of the hunt: on a full-moon night in a world with a sky, the spawn
 # chance grows by chance, and the rarest class's weight by rarer_classes, the
 # ones between by their share, Common's not at all. Other phases change nothing.

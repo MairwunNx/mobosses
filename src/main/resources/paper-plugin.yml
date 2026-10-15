@@ -27,9 +27,13 @@ permissions:
       mobosses.info.others: true
       mobosses.reset: true
       mobosses.reset.others: true
+      mobosses.bosses: true
       mobosses.reload: true
       mobosses.spawn: true
       mobosses.killall: true
+  mobosses.bosses:
+    description: See the bosses in the world in the menu, and go to or remove them
+    default: op
   mobosses.reload:
     description: Use /mobosses reload
     default: op

@@ -11,6 +11,7 @@ import ru.mairwunnx.mobosses.config.Settings
 import ru.mairwunnx.mobosses.config.Yamls
 import ru.mairwunnx.mobosses.lang.Languages
 import ru.mairwunnx.mobosses.lang.Message
+import ru.mairwunnx.mobosses.achievement.Achievement
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -45,7 +46,7 @@ class ResourcesTest {
     val minions = MinionSettings.parse(resource("minions.yml")).minions.map { "minions.${it.summoner.lowercase()}" }
     val classes = Classes.KEYS.map { "classes.$it" }
     val items = LootTable.parse(resource("loottable.yml")).items.mapNotNull { it.id }.distinct().map { "items.$it.name" }
-    val keys = Message.entries.map { it.key } + bosses + minions + classes + items
+    val keys = Message.entries.map { it.key } + bosses + minions + classes + items + Achievement.TEXT_KEYS
     Languages.BUNDLED.forEach { code ->
       val texts = Yamls.flatten(Yamls.parse(resource("lang/$code.yml")))
       assertEquals(emptyList(), keys.filter { it !in texts }, "lang/$code.yml misses keys")

@@ -20,6 +20,7 @@ data class Settings(
   val despawn: Despawn = Despawn(),
   @SerialName("survival_bonus") val survivalBonus: SurvivalBonus = SurvivalBonus(),
   @SerialName("full_moon") val fullMoon: FullMoon = FullMoon(),
+  val achievements: Achievements = Achievements(),
   @SerialName("group_health") val groupHealth: GroupHealth = GroupHealth(),
   @SerialName("spawner_fatigue") val spawnerFatigue: SpawnerFatigue = SpawnerFatigue(),
   val progression: Progression = Progression(),
@@ -69,6 +70,16 @@ data class Settings(
     @SerialName("max_bonus") val maxBonus: Double = 1.0,
     @SerialName("half_at_minutes") val halfAtMinutes: Int = 180,
     @SerialName("idle_minutes") val idleMinutes: Int = 3,
+  )
+
+  /**
+   * The game's advancements, in a tab of their own. The game shows every player the same advancement
+   * text, so it comes in one [language]; empty means `locales.default`.
+   */
+  @Serializable
+  data class Achievements(
+    val enabled: Boolean = true,
+    val language: String = "",
   )
 
   /** Nights of the hunt: under a full moon, more bosses, and rarer classes more often. Other phases change nothing. */

@@ -17,6 +17,7 @@
 - 🎁 **Loot tables by level and class:** over 500 entries, 199 with their own names and lore. Each player who dealt enough damage gets their own drop.
 - 💪 **Rewards:** potion effects and absorption hearts after a kill.
 - 📊 **Boss bars** for the players who hit the boss.
+- 🏆 **Achievements** in a tab of their own, a **bestiary** in the menu, and for admins **a list of the bosses in the world** to inspect, visit, or remove.
 - 📖 **A menu and stats:** `/mobosses` shows each player their level, rank, and kills, the best hunters, and the bosses by class.
 - 🌍 **Every player reads their own language,** even the names over bosses’ heads: English, Russian, Spanish, Portuguese, and German come bundled, picked by IP or game language.
 - 🛡️ **GriefPrevention and WorldGuard:** no bosses or block-changing abilities in claims and protected regions.

@@ -69,6 +69,54 @@ menu:
   reload: "<green>Mo’Bosses neu laden</green>"
   killall: "<red>Alle Bosse entfernen</red>"
   close: "<gray>Schließen</gray>"
+  bestiary: |-
+    <gold>Bestiarium</gold>
+    <gray>Die Bosse, die du besiegt hast, nach Art und Klasse.</gray>
+  boss_list: |-
+    <aqua>Bosse in der Welt</aqua>
+    <gray>Die nächsten zuerst: Details, Teleport oder entfernen.</gray>
+  back: "<gray>Zurück</gray>"
+  previous: "<gray>Vorige Seite</gray>"
+  next: "<gray>Nächste Seite</gray>"
+
+# Die Seite des Bestiariums. <class>, <kills>, <level> (die beste); <opened> und <total> Felder Art × Klasse.
+bestiary:
+  title: "Bestiarium"
+  unknown: |-
+    <dark_gray>???</dark_gray>
+    <gray>Noch nicht besiegt.</gray>
+  missing: "<class><dark_gray>: —</dark_gray>"
+  line: "<class><gray>: besiegt</gray> <num><kills></num><gray>, beste Stufe</gray> <num><level></num>"
+  progress: |-
+    <gold><opened> von <total> entdeckt</gold>
+    <gray>Jede Art zählt in jeder Klasse einmal.</gray>
+
+# Die Liste der Bosse für Admins. Die Tags des Bosses, <health>, <max>, <world>, <x>, <y>, <z>,
+# <distance> (Blöcke, — in einer anderen Welt), <fighters>, <phase> (zweite Phase), <spawner>.
+boss_list:
+  title: "Bosse: <count> · Seite <page>/<pages>"
+  lore: |-
+    <gray>Leben</gray> <num><health></num><dark_gray>/<max></dark_gray>
+    <gray><world> <x> <y> <z> · <distance> Blöcke entfernt</gray>
+    <gray>Kämpfer</gray> <num><fighters></num> <dark_gray>·</dark_gray> <gray>zweite Phase:</gray> <phase>
+    <dark_gray>Klick: Details · Shift-Klick: Teleport · Rechtsklick: entfernen</dark_gray>
+  info: |-
+    <pri>[Mo’Bosses]</pri> <class_color>[Lvl. <level>] [<class>]</class_color> <boss_name>
+    <gray>Leben</gray> <num><health></num><dark_gray>/<max></dark_gray> <dark_gray>·</dark_gray> <gray><world> <x> <y> <z>, <distance> Blöcke entfernt</gray>
+    <gray>Kämpfer</gray> <num><fighters></num> <dark_gray>·</dark_gray> <gray>zweite Phase:</gray> <phase> <dark_gray>·</dark_gray> <gray>aus einem Spawner:</gray> <spawner>
+  confirm: |-
+    <red><b>Noch ein Rechtsklick entfernt ihn</b></red>
+    <gray>Ohne Beute und Erfahrung.</gray>
+  gone: "<warn>Dieser Boss ist schon weg.</warn>"
+  removed: "<pri>[Mo’Bosses]</pri> <ok>Entfernt:</ok> <class_color>[Lvl. <level>] [<class>]</class_color> <boss_name>"
+  teleported: "<pri>[Mo’Bosses]</pri> <gray>Du stehst bei</gray> <class_color>[Lvl. <level>] [<class>]</class_color> <boss_name>"
+  empty: |-
+    <gray>Keine Bosse in geladenen Chunks</gray>
+    <dark_gray>Bosse in ungeladenen erscheinen, sobald diese laden.</dark_gray>
+
+words:
+  yes: "<green>ja</green>"
+  no: "<gray>nein</gray>"
 
 # Über dem Kopf des Bosses, jeder liest ihn in seiner Sprache.
 boss_tag: "<class_color>[Lvl. <level>] [<class>] <boss_name>"
@@ -1102,3 +1150,85 @@ items:
     lore:
       - "<dark_purple>Genommen von einem, der zu hoch flog."
       - "<gray>Achte auf die Landung."
+
+# Fortschritte in einem eigenen Reiter (config.yml: achievements). Das Spiel zeigt allen denselben
+# Text, daher kommt er aus einer Sprache: achievements.language oder locales.default.
+achievements:
+  hunt_begins:
+    title: "Die Jagd beginnt"
+    description: "Triff einen Boss"
+  first_blood:
+    title: "Erstes Blut"
+    description: "Besiege deinen ersten Boss"
+  level_10:
+    title: "Jagdlehrling"
+    description: "Erreiche Mo’Bosses-Stufe 10"
+  level_25:
+    title: "Erfahrener Jäger"
+    description: "Erreiche Mo’Bosses-Stufe 25"
+  level_50:
+    title: "Veteran"
+    description: "Erreiche Mo’Bosses-Stufe 50"
+  level_75:
+    title: "Meister der Jagd"
+    description: "Erreiche Mo’Bosses-Stufe 75"
+  level_100:
+    title: "Legende der Jagd"
+    description: "Erreiche Mo’Bosses-Stufe 100"
+  kills_10:
+    title: "Zehn erledigt"
+    description: "Besiege 10 Bosse"
+  kills_100:
+    title: "Hundert Trophäen"
+    description: "Besiege 100 Bosse"
+  kills_500:
+    title: "Geißel der Bosse"
+    description: "Besiege 500 Bosse"
+  kills_1000:
+    title: "Tausend Jagden"
+    description: "Besiege 1000 Bosse"
+  class_uncommon:
+    title: "Etwas Ungewöhnliches"
+    description: "Besiege einen ungewöhnlichen Boss"
+  class_rare:
+    title: "Seltene Beute"
+    description: "Besiege einen seltenen Boss"
+  class_epic:
+    title: "Epischer Kampf"
+    description: "Besiege einen epischen Boss"
+  class_legendary:
+    title: "Stoff für Legenden"
+    description: "Besiege einen legendären Boss"
+  class_mythic:
+    title: "Mythentöter"
+    description: "Besiege einen mythischen Boss"
+  bestiary:
+    title: "Naturkundler"
+    description: "Besiege einen Boss jeder Art"
+  mythic_collector:
+    title: "Mythische Sammlung"
+    description: "Besiege einen mythischen Boss jeder Art"
+  obelisk_breaker:
+    title: "Bilderstürmer"
+    description: "Zerschlag den Obelisken eines Bosses"
+  chain_breaker:
+    title: "Entfesselt"
+    description: "Spreng die Kette eines Bosses"
+  find_the_real:
+    title: "Finde den Echten"
+    description: "Besiege einen Boss, solange seine Doppelgänger stehen"
+  second_life:
+    title: "Zweiter Atem"
+    description: "Besiege einen Boss in seiner zweiten Phase"
+  lone_wolf:
+    title: "Einsamer Wolf"
+    description: "Besiege allein einen Boss ab Stufe 50"
+  untouched:
+    title: "Unberührt"
+    description: "Besiege einen Boss ab Stufe 30, ohne einen Treffer von ihm einzustecken"
+  full_moon_hunter:
+    title: "Jagd im Mondlicht"
+    description: "Besiege einen Boss bei Vollmond"
+  avenger:
+    title: "Rächer"
+    description: "Besiege binnen 10 Minuten nach deinem Tod durch einen Boss einen seiner Art"

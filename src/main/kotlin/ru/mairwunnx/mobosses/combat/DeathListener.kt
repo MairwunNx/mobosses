@@ -70,6 +70,13 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
     // Four players who split a boss evenly each deal 25%; the thresholds come down to meet them.
     val lootShare = Leveling.threshold(settings.loot.minDamageShare, progression.groupShare, group)
     if (share >= lootShare && Random.nextDouble() < fatigue) plugin.loot.drop(boss, player)
+
+    // Achievements and the bestiary take anyone whose share made the kill theirs, whatever the levels.
+    val took = share >= Leveling.threshold(progression.minShare, progression.groupShare, group)
+    plugin.achievements.killed(player, boss, took, counts, alone = group == 1)
+    if (took) plugin.progression.bestiaryKill(player.uniqueId, boss.type.key, boss.clazz.key, boss.level).thenAccept { entries ->
+      Bukkit.getScheduler().runTask(plugin, Runnable { if (player.isOnline) plugin.achievements.bestiary(player, entries) })
+    }
     val rewardsShare = Leveling.threshold(plugin.catalog.rewards.minDamageShare, progression.groupShare, group)
     val rewardsIn = if (share >= rewardsShare) plugin.rewards.give(player, boss) else null
     val volume = (0.2f + 0.15f * plugin.catalog.classes.rank(boss.clazz.key).coerceAtLeast(0)).coerceAtMost(1f)
