@@ -59,6 +59,13 @@ tasks.test {
   useJUnitPlatform()
 }
 
+// `./gradlew balance` prints the stat curves; `--args=plugins/MoBosses` reads a server's files instead.
+tasks.register<JavaExec>("balance") {
+  description = "Prints boss stats, experience, and player levels for the bundled config"
+  classpath = sourceSets.test.get().runtimeClasspath
+  mainClass = "ru.mairwunnx.mobosses.BalanceReportKt"
+}
+
 tasks.processResources {
   val version = project.version.toString()
   inputs.property("version", version)
