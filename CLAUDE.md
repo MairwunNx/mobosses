@@ -79,11 +79,11 @@ Where the versions live, for `/update-deps` and `/update-minecraft` (both in `.c
 
 ## Modrinth
 
-The project is `mobosses`, MIT. The “Release” workflow has a `modrinth` switch, off by default: on, it runs `./gradlew modrinth`, which uploads the jar as a version and syncs MODRINTH.md as the description. MODRINTH.md is for server owners: no build, stack, AI, or related projects, and no Moonlands banner. A change to what the plugin does goes in README.md, README.RU.md, and MODRINTH.md. It uses the `MODRINTH_TOKEN` secret; locally the same token is in `~/.secrets/cloud.env`. The icon is `media/icon.png`. Never put the token in the repo.
+The project is `mobosses` (id `bRPqbgIV`), MIT, created 2026-10-15 and submitted for review with 2.0.0. The “Release” workflow has a `modrinth` switch, off by default: on, it runs `./gradlew modrinth`, which uploads the jar as a version and syncs MODRINTH.md as the description. MODRINTH.md is for server owners: no build, stack, AI, or related projects, and no Moonlands banner. A change to what the plugin does goes in README.md, README.RU.md, and MODRINTH.md. It uses the `MODRINTH_TOKEN` secret; locally the same token is in `~/.secrets/cloud.env`. The icon is `media/icon.png`. Never put the token in the repo.
 
 ## Hangar
 
-The workflow also has a `hangar` switch for `MairwunNx/MoBosses` on hangar.papermc.io, through `./gradlew publishPluginPublicationToHangar` and the `HANGAR_TOKEN` secret. A new Hangar project takes its first version only through the website (the API answers 404 until then); later versions go through the workflow. Hangar doesn’t sync its page from MODRINTH.md, so edit it on the site after a big change.
+The project is `MairwunNx/MoBosses` on hangar.papermc.io, MIT, created 2026-10-15 through the API without a version or an icon yet. The workflow has a `hangar` switch for it, through `./gradlew publishPluginPublicationToHangar` and the `HANGAR_TOKEN` secret. A new Hangar project takes its first version only through the website (the API answers 404 until then); later versions go through the workflow. Hangar doesn’t sync its page from MODRINTH.md, so edit it on the site after a big change.
 
 ## Commits
 
