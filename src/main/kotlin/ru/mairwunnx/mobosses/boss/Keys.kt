@@ -41,6 +41,8 @@ class Keys(plugin: Plugin) {
   val baseHealth = NamespacedKey(plugin, "base_health")
   val addedHealth = NamespacedKey(plugin, "added_health")
   val fighters = NamespacedKey(plugin, "fighters")
+  /** On mobs that haven't rolled yet: the reason they spawned, until a player sees them. */
+  val pending = NamespacedKey(plugin, "pending")
   /** On bosses from spawners, for spawner fatigue. */
   val fromSpawner = NamespacedKey(plugin, "from_spawner")
   /** On players: loot drops since their last rare or better item, and the count that brings one. */

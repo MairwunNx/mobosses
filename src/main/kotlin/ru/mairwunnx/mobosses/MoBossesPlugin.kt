@@ -102,7 +102,7 @@ class MoBossesPlugin : JavaPlugin() {
       .forEach { server.pluginManager.registerEvents(it, this) }
     registerCommand("mobosses", "Your Mo’Bosses level and the best hunters; for admins, reload, spawn, or remove bosses", listOf("mb", "moboss"), MoBossesCommand(this))
     tasks += server.scheduler.runTaskTimer(this, Runnable { visuals.tick(); bars.tick(); PlanData.bossesAlive = bosses.all.size }, 20L, 20L)
-    tasks += server.scheduler.runTaskTimer(this, Runnable { nameTags.tick() }, 10L, 10L)
+    tasks += server.scheduler.runTaskTimer(this, Runnable { nameTags.tick(); spawns.natural.tick() }, 10L, 10L)
     tasks += server.scheduler.runTaskTimer(this, Runnable { despawns.tick() }, 100L, 100L)
     tasks += server.scheduler.runTaskTimer(this, Runnable { survival.tick(); fullMoon.tick() }, 1200L, 1200L)
 

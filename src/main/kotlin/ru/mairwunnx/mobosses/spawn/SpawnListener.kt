@@ -15,7 +15,7 @@ import ru.mairwunnx.mobosses.MoBossesPlugin
  * add and remove events only read: the game forbids changing an entity while it's added.
  */
 class SpawnListener(private val plugin: MoBossesPlugin) : Listener {
-  private val natural = NaturalSpawns(plugin)
+  val natural = NaturalSpawns(plugin)
 
   /** While `/mobosses spawn` makes a boss, its mob mustn't roll into another one. */
   var spawningByCommand = false
@@ -24,7 +24,7 @@ class SpawnListener(private val plugin: MoBossesPlugin) : Listener {
   fun onSpawn(event: CreatureSpawnEvent) {
     val entity = event.entity as? Mob ?: return
     if (spawningByCommand || event.spawnReason !in plugin.catalog.spawnReasons || plugin.decoys.isDecoy(entity)) return
-    natural.roll(entity, plugin.minions.summonerOf(entity), event.spawnReason)
+    natural.spawned(entity, plugin.minions.summonerOf(entity), event.spawnReason)
   }
 
   @EventHandler

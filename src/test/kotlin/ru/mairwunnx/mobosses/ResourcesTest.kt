@@ -68,11 +68,12 @@ class ResourcesTest {
     // Every one of 1.x's loot entries reads; 2.2 ships more.
     assertEquals(577, configs.loot.items.size)
     assertTrue(configs.loot.items.first { it.material == "STONE_SWORD" && it.title != null }.lore.isNotEmpty())
-    // Everything else equals what ships now, but for the defaults 2.1 and 2.3 changed, which a 1.x file keeps.
+    // Everything else equals what ships now, but for the defaults 2.1, 2.3, and 2.5 changed, which a 1.x file keeps.
     val v1 = Settings()
     assertEquals(
       v1.copy(
         language = "ru",
+        spawn = v1.spawn.copy(worldMultipliers = mapOf("world" to 1.0, "world_nether" to 1.1, "world_the_end" to 1.3)),
         bossBar = Settings.BossBar(style = "SEGMENTED_20"),
         progression = v1.progression.copy(levelCurve = Settings.LevelCurve(power = 1.3, offset = 20.0), variance = Settings.Variance(extraChance = 0.45)),
         formula = v1.formula.copy(

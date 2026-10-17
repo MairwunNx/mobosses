@@ -37,17 +37,26 @@ geoip:
 #  Spawning
 # ---------------------------------------------------------------------------
 # A mob of a type in bosses.yml becomes a boss with that type's spawn_chance,
-# times the multipliers below, when a player is within spawn_radius. The players
-# within group_radius set the boss's level together, by their average, so one
-# veteran doesn't drag newcomers into level 90 fights.
+# times the multipliers below, once in its life. The players within group_radius
+# set the boss's level together, by their average, so one veteran doesn't drag
+# newcomers into level 90 fights.
 spawn:
   enabled: true
   max_bosses_per_world: 10000000   # Loaded bosses per world.
+  # Most mobs spawn in caves no player walks into. With on_sight, a mob waits to
+  # roll until a player within radius could see it, with a puff of smoke if it
+  # comes out a boss; walking off and coming back never rolls it again. Mobs with
+  # a name, an owner, or a leash by then never roll. Off, a mob rolls as it
+  # spawns, with a player within spawn_radius. Minions always roll at once.
+  on_sight:
+    enabled: true
+    radius: 32
+    line_of_sight: true   # false: within radius is enough, through walls too.
   spawn_radius: 100
   world_multipliers:               # By world name; worlds not listed use 1.0.
-    world: 1.0
-    world_nether: 1.1
-    world_the_end: 1.3
+    world: 1.25
+    world_nether: 1.4
+    world_the_end: 1.6
   time_multipliers:
     day: 0.7
     night: 1.0

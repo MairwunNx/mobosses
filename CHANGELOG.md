@@ -2,6 +2,13 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.5.0
+
+### Changed
+
+- 👀 **Bosses come where players are.** A mob no longer rolls as it spawns, mostly in caves nobody walks into, where it used to take the players’ cooldown with it. It waits until a player within 32 blocks could see it and rolls then, with a puff of smoke if it comes out a boss. Each mob rolls once in its life: walking off and coming back never rolls it again, and mobs that got a name, an owner, or a leash by then never roll. Minions still roll as they’re summoned (`spawn.on_sight`; off brings back the old way).
+- 🎲 **Bosses come a quarter more often:** the world multipliers are 1.25 in the overworld, 1.4 in the Nether, and 1.6 in the End, up from 1.0, 1.1, and 1.3 (`spawn.world_multipliers`).
+
 ## 2.4.0
 
 ### New

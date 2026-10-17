@@ -139,7 +139,9 @@ data class Settings(
     @SerialName("max_bosses_per_world") val maxBossesPerWorld: Int = 10_000_000,
     /** How far from a mob the nearest player may be for the mob to become a boss. Their level sets the boss's. */
     @SerialName("spawn_radius") val spawnRadius: Int = 100,
-    @SerialName("world_multipliers") val worldMultipliers: Map<String, Double> = mapOf("world" to 1.0, "world_nether" to 1.1, "world_the_end" to 1.3),
+    /** Mobs roll when a player first sees them, not as they spawn. */
+    @SerialName("on_sight") val onSight: OnSight = OnSight(),
+    @SerialName("world_multipliers") val worldMultipliers: Map<String, Double> = mapOf("world" to 1.25, "world_nether" to 1.4, "world_the_end" to 1.6),
     @SerialName("time_multipliers") val timeMultipliers: TimeMultipliers = TimeMultipliers(),
     @SerialName("weather_multipliers") val weatherMultipliers: WeatherMultipliers = WeatherMultipliers(),
     @SerialName("check_vertical_zone") val checkVerticalZone: Boolean = false,
@@ -156,6 +158,18 @@ data class Settings(
     /** No new boss while this many are already within nearby_radius. */
     @SerialName("max_nearby") val maxNearby: Int = 3,
     @SerialName("nearby_radius") val nearbyRadius: Int = 48,
+  )
+
+  /**
+   * A mob waits to roll until a player within [radius] could see it, once in its life, so bosses
+   * come where players are, not in caves nobody walks into. Minions roll as they're summoned.
+   */
+  @Serializable
+  data class OnSight(
+    val enabled: Boolean = true,
+    val radius: Int = 32,
+    /** Off: being within [radius] is enough, through walls too. */
+    @SerialName("line_of_sight") val lineOfSight: Boolean = true,
   )
 
   @Serializable
