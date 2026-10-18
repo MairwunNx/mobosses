@@ -10,17 +10,18 @@ import org.bukkit.event.inventory.ClickType
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
 import ru.mairwunnx.mobosses.MoBossesPlugin
+import ru.mairwunnx.mobosses.lang.LanguageChoices
 import ru.mairwunnx.mobosses.lang.Message
 import ru.mairwunnx.mobosses.progress.BossCount
 import ru.mairwunnx.mobosses.progress.Hunter
 
 /**
- * The `/mobosses` menu: your card, the best hunters, the bosses by class, the bestiary, a button to
- * start over, and, for admins, the bosses in the world and reload and remove-all buttons. It opens once
- * the database has answered, in the player's language.
+ * The `/mobosses` menu: your card, the best hunters, the bosses by class, the bestiary, your language,
+ * a button to start over, and, for admins, the bosses in the world and reload and remove-all buttons.
+ * It opens once the database has answered, in the player's language.
  */
 class Menu private constructor(private val plugin: MoBossesPlugin, val actions: Map<Int, Action>, private val confirmReset: ItemStack?) : Page {
-  enum class Action { RESET, BESTIARY, BOSS_LIST, RELOAD, KILLALL, CLOSE }
+  enum class Action { RESET, BESTIARY, LANGUAGE, BOSS_LIST, RELOAD, KILLALL, CLOSE }
 
   private lateinit var inventory: Inventory
 
@@ -41,6 +42,7 @@ class Menu private constructor(private val plugin: MoBossesPlugin, val actions: 
         player.performCommand("mobosses reset confirm")
       }
       Action.BESTIARY -> Bestiary.open(plugin, player)
+      Action.LANGUAGE -> LanguagePage.open(plugin, player)
       Action.BOSS_LIST -> BossList.open(plugin, player, 0)
       Action.RELOAD -> {
         player.closeInventory()
@@ -61,6 +63,7 @@ class Menu private constructor(private val plugin: MoBossesPlugin, val actions: 
     private const val TOP = 13
     private const val BOSSES = 15
     private const val BESTIARY = 20
+    private const val LANGUAGE = 21
     private const val BOSS_LIST = 22
     private const val RELOAD = 24
     private const val KILLALL = 25
@@ -87,6 +90,7 @@ class Menu private constructor(private val plugin: MoBossesPlugin, val actions: 
       val actions = buildMap {
         if (canReset) put(RESET, Action.RESET)
         put(BESTIARY, Action.BESTIARY)
+        put(LANGUAGE, Action.LANGUAGE)
         if (player.hasPermission(BossList.PERMISSION)) put(BOSS_LIST, Action.BOSS_LIST)
         if (player.hasPermission("mobosses.reload")) put(RELOAD, Action.RELOAD)
         if (player.hasPermission("mobosses.killall")) put(KILLALL, Action.KILLALL)
@@ -118,6 +122,7 @@ class Menu private constructor(private val plugin: MoBossesPlugin, val actions: 
       })
       if (canReset) inventory.setItem(RESET, item(Material.RECOVERY_COMPASS, languages.lines(code, Message.MENU_RESET)))
       inventory.setItem(BESTIARY, item(Material.WRITABLE_BOOK, languages.lines(code, Message.MENU_BESTIARY)))
+      inventory.setItem(LANGUAGE, item(Material.GLOBE_BANNER_PATTERN, languages.lines(code, Message.MENU_LANGUAGE, Placeholder.unparsed("language", LanguageChoices.nativeName(code)))))
       if (Action.BOSS_LIST in actions.values) inventory.setItem(BOSS_LIST, item(Material.SPYGLASS, languages.lines(code, Message.MENU_BOSS_LIST)))
       if (admin) {
         if (Action.RELOAD in actions.values) inventory.setItem(RELOAD, ItemStack(Material.REPEATER).apply { name(this, languages.render(code, Message.MENU_RELOAD), emptyList()) })

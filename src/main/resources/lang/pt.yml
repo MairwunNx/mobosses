@@ -10,7 +10,7 @@
 reloaded: "<pri>[Mo’Bosses]</pri> <ok>Recarregado.</ok>"
 reload_failed: "<pri>[Mo’Bosses]</pri> <warn>Recarregado com erros.</warn> <gray>Veja o log do servidor.</gray>"
 no_permission: "<err>Você não pode usar este comando.</err>"
-usage: '<gray>Use</gray> <white>/mobosses</white> <gray>para o menu,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>,</gray> <white>/mobosses reset</white><gray>; admins:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray> ou</gray> <white>/mobosses killall</white>'
+usage: '<gray>Use</gray> <white>/mobosses</white> <gray>para o menu,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>,</gray> <white>/mobosses reset</white><gray>,</gray> <white>/mobosses language [code|auto]</white><gray>; admins:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray> ou</gray> <white>/mobosses killall</white>'
 # <entities>, <classes>: as opções disponíveis.
 spawn_usage: '<gray>Use</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray>. Entidades:</gray> <white><entities></white><gray>. Classes:</gray> <white><classes></white>'
 spawned: "<pri>[Mo’Bosses]</pri> <ok>Invocado:</ok> <class_color>[Nv. <level>] [<class>]</class_color> <boss_name>"
@@ -78,6 +78,22 @@ menu:
   back: "<gray>Voltar</gray>"
   previous: "<gray>Página anterior</gray>"
   next: "<gray>Próxima página</gray>"
+  language: |-
+    <aqua>Idioma</aqua>
+    <gray>Agora:</gray> <white><language></white>
+    <dark_gray>Escolha em que idioma o Mo’Bosses fala com você.</dark_gray>
+
+# /mobosses language e sua página. <language>: o nome de um idioma nele mesmo; <languages>: os que existem.
+language:
+  set: "<pri>[Mo’Bosses]</pri> <ok>Agora o Mo’Bosses fala com você em <language>.</ok>"
+  auto: "<pri>[Mo’Bosses]</pri> <ok>O Mo’Bosses volta a escolher seu idioma: por enquanto, <language>.</ok> <gray>Ele se guia pelo seu país e pelo idioma do seu jogo.</gray>"
+  unknown: "<err>Não existe o idioma <language>.</err> <gray>Idiomas:</gray> <white><languages></white><gray> ou</gray> <white>auto</white>"
+  title: "Idioma"
+  automatic: |-
+    <yellow>Automático</yellow>
+    <gray>Pelo seu país e pelo idioma do seu jogo.</gray>
+  current: "<green>Seu idioma agora</green>"
+  pick: "<gray>Clique para escolher</gray>"
 
 # A página do bestiário. <class>, <kills>, <level> (o melhor); <opened> e <total> casas tipo × classe.
 bestiary:

@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.6.0
+
+### New
+
+- 🌍 **Players pick their own language:** `/mobosses language <code>` sets the language Mo’Bosses speaks to you, like `ru` or `pt`, and `/mobosses language auto` hands it back to the country and game-language rules. Alone, or through the new Language button in the menu, it opens a picker with each language under its own name and Automatic; the current one glints, and a pick takes you back to the menu in the new language. The choice beats every automatic rule, from chat and ability warnings to boss bars, names over mobs, and loot, and survives restarts in `player-languages.yml`. It needs only `mobosses.use`, which everyone has.
+
 ## 2.5.0
 
 ### Changed

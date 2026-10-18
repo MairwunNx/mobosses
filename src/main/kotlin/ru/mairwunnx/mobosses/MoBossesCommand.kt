@@ -10,13 +10,15 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
 import ru.mairwunnx.mobosses.hooks.PlanData
+import ru.mairwunnx.mobosses.lang.LanguageChoices
 import ru.mairwunnx.mobosses.lang.Message
+import ru.mairwunnx.mobosses.menu.LanguagePage
 import ru.mairwunnx.mobosses.menu.Menu
 
 /**
- * `/mobosses` (the menu), `info`, `top`, and `reset` for players; `reload`, `spawn <entity> <level>
- * <class> [x y z [world]]`, and `killall` for admins, each under its own permission, all of them
- * under `mobosses.admin`. A player spawns a boss two blocks ahead of them; the console gives coordinates.
+ * `/mobosses` (the menu), `info`, `top`, `reset`, and `language [code|auto]` for players; `reload`,
+ * `spawn <entity> <level> <class> [x y z [world]]`, and `killall` for admins, each under its own
+ * permission, all of them under `mobosses.admin`. A player spawns a boss two blocks ahead of them; the console gives coordinates.
  */
 class MoBossesCommand(private val plugin: MoBossesPlugin) : BasicCommand {
   override fun canUse(sender: CommandSender) = SUBCOMMANDS.values.any(sender::hasPermission)
@@ -32,6 +34,7 @@ class MoBossesCommand(private val plugin: MoBossesPlugin) : BasicCommand {
       "info" -> info(sender, args.getOrNull(1))
       "top" -> top(sender)
       "reset" -> reset(sender, args.getOrNull(1))
+      "language" -> language(sender, args.getOrNull(1))
       "reload" -> plugin.texts.send(sender, if (plugin.reload()) Message.RELOADED else Message.RELOAD_FAILED)
       "spawn" -> spawn(sender, args.drop(1))
       "killall" -> {
@@ -106,6 +109,19 @@ class MoBossesCommand(private val plugin: MoBossesPlugin) : BasicCommand {
     }
   }
 
+  /** A language for a player to read the plugin in, `auto` to leave it to the plugin, or with nothing, the picker. */
+  private fun language(sender: CommandSender, arg: String?) {
+    val player = sender as? Player ?: return plugin.texts.send(sender, Message.USAGE)
+    if (arg == null) return LanguagePage.open(plugin, player)
+    if (arg.equals(LanguageChoices.AUTO, ignoreCase = true)) return plugin.playerLanguages.choose(player, null)
+    val codes = plugin.playerLanguages.codes()
+    val code = LanguageChoices.match(arg, codes) ?: return plugin.texts.send(
+      sender, Message.LANGUAGE_UNKNOWN, Placeholder.unparsed("language", arg),
+      Placeholder.unparsed("languages", codes.joinToString(", ") { "$it (${LanguageChoices.nativeName(it)})" }),
+    )
+    plugin.playerLanguages.choose(player, code)
+  }
+
   private fun spawn(sender: CommandSender, args: List<String>) {
     val catalog = plugin.catalog
     if (args.size !in setOf(3, 6, 7)) return usage(sender)
@@ -158,6 +174,7 @@ class MoBossesCommand(private val plugin: MoBossesPlugin) : BasicCommand {
     val options = when {
       args.size <= 1 -> SUBCOMMANDS.filterValues(sender::hasPermission).keys.toList()
       args.size == 2 && args[0].equals("info", ignoreCase = true) && sender.hasPermission(INFO_OTHERS) -> Bukkit.getOnlinePlayers().map { it.name }
+      args.size == 2 && args[0].equals("language", ignoreCase = true) && sender is Player -> plugin.playerLanguages.codes() + LanguageChoices.AUTO
       args.size == 2 && args[0].equals("reset", ignoreCase = true) ->
         listOf(CONFIRM) + if (sender.hasPermission(RESET_OTHERS)) Bukkit.getOnlinePlayers().map { it.name } else emptyList()
       !args[0].equals("spawn", ignoreCase = true) || !sender.hasPermission(SUBCOMMANDS.getValue("spawn")) -> emptyList()
@@ -176,6 +193,6 @@ class MoBossesCommand(private val plugin: MoBossesPlugin) : BasicCommand {
     const val INFO_OTHERS = "mobosses.info.others"
     const val RESET_OTHERS = "mobosses.reset.others"
     const val CONFIRM = "confirm"
-    val SUBCOMMANDS = linkedMapOf("info" to USE, "top" to USE, "reset" to "mobosses.reset", "reload" to "mobosses.reload", "spawn" to "mobosses.spawn", "killall" to "mobosses.killall")
+    val SUBCOMMANDS = linkedMapOf("info" to USE, "top" to USE, "reset" to "mobosses.reset", "language" to USE, "reload" to "mobosses.reload", "spawn" to "mobosses.spawn", "killall" to "mobosses.killall")
   }
 }

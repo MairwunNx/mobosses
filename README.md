@@ -21,7 +21,7 @@
 - 📊 **Boss bars** with the boss’s health, shown to the players who hit it.
 - 🏆 **Achievements** in a tab of their own: levels, kills, classes, the bestiary, and feats from the fights. **A bestiary** in the menu keeps every boss you’ve beaten, by kind and class.
 - 📖 **A menu and stats for players:** `/mobosses` shows your level, rank, and kills, the best hunters, and the bosses by class; `/mobosses info` and `/mobosses top` do it in the chat.
-- 🌍 **Every player reads their own language,** even the names over bosses’ heads: English, Russian, Spanish, Portuguese, and German come bundled, picked by the player’s IP or game language.
+- 🌍 **Every player reads their own language,** even the names over bosses’ heads: English, Russian, Spanish, Portuguese, and German come bundled, picked by the player’s IP or game language, or by the player with `/mobosses language`.
 - 🛡️ **Protected areas stay protected:** GriefPrevention claims and WorldGuard regions keep bosses and their abilities out.
 - 🔎 **CoreProtect logging:** whatever bosses do to blocks shows up under `#mobosses`, ready to roll back.
 - 🧩 **PlaceholderAPI**, if you have it: `%mobosses_level%`, `%mobosses_xp%`, and `%mobosses_kills%` for scoreboards and chat, and `<papi:…>` tags in messages.
@@ -72,7 +72,7 @@ Bosses keep their type, class, level, cooldowns, and who hit them how hard on th
 
 ## Languages
 
-The plugin tries the sources in `locales.sources`, in order:
+A player who picked a language with `/mobosses language` or the menu reads that one, while its file is there; the choice lives in `plugins/MoBosses/player-languages.yml` and survives restarts. For everyone else, the plugin tries the sources in `locales.sources`, in order:
 
 1. **`ip`:** the country of the player’s IP address. `locales.countries` maps languages to country codes: Russia, Belarus, and Kazakhstan get Russian; Spain and Latin America get Spanish; Brazil and Portugal get Portuguese; Germany, Austria, and Switzerland get German.
 2. **`client`:** the language set in the player’s game, when a file in `lang/` matches it.
@@ -102,10 +102,11 @@ Every file lives in `plugins/MoBosses/`, and every key has a default, so you can
 
 | Command | Permission | What it does |
 |---|---|---|
-| `/mobosses` | `mobosses.use` | Opens the menu: your card, the best hunters, the bosses by class, your bestiary, a button to start over, and, for admins, the bosses in the world (`mobosses.bosses`) and reload and remove-all buttons |
+| `/mobosses` | `mobosses.use` | Opens the menu: your card, the best hunters, the bosses by class, your bestiary, your language, a button to start over, and, for admins, the bosses in the world (`mobosses.bosses`) and reload and remove-all buttons |
 | `/mobosses info [player]` | `mobosses.use` | Your level, rank, experience, kills, and how long until a boss may spawn near you; another player’s needs `mobosses.info.others` |
 | `/mobosses top` | `mobosses.use` | The best hunters |
 | `/mobosses reset [confirm \| player]` | `mobosses.reset` | Starts you over: wipes your level, experience, and kills, after `confirm`. Spawn and reward cooldowns stay. Another player’s, at once, needs `mobosses.reset.others` |
+| `/mobosses language [code \| auto]` | `mobosses.use` | Sets the language Mo’Bosses speaks to you, like `ru` or `pt`; `auto` hands the choice back to the plugin. Without an argument, opens the language picker |
 | `/mobosses reload` | `mobosses.reload` | Reloads every config and language file; bosses keep going |
 | `/mobosses spawn <entity> <level> <class> [x y z [world]]` | `mobosses.spawn` | Spawns a boss two blocks ahead of you, or at the coordinates, which the console must give |
 | `/mobosses killall` | `mobosses.killall` | Removes every boss in loaded chunks, without loot or experience |

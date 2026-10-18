@@ -19,7 +19,7 @@
 - 📊 **Boss bars** for the players who hit the boss.
 - 🏆 **Achievements** in a tab of their own, a **bestiary** in the menu, and for admins **a list of the bosses in the world** to inspect, visit, or remove.
 - 📖 **A menu and stats:** `/mobosses` shows each player their level, rank, and kills, the best hunters, and the bosses by class.
-- 🌍 **Every player reads their own language,** even the names over bosses’ heads: English, Russian, Spanish, Portuguese, and German come bundled, picked by IP or game language.
+- 🌍 **Every player reads their own language,** even the names over bosses’ heads: English, Russian, Spanish, Portuguese, and German come bundled, picked by IP or game language, or by the player with `/mobosses language`.
 - 🛡️ **GriefPrevention and WorldGuard:** no bosses or block-changing abilities in claims and protected regions.
 - 🔎 **CoreProtect:** whatever bosses do to blocks is logged under `#mobosses`, ready to roll back.
 - 🧩 **PlaceholderAPI:** `%mobosses_level%`, `%mobosses_xp%`, `%mobosses_kills%`, and `<papi:…>` tags in messages.
@@ -45,7 +45,7 @@ When a player first sees a mob of a type in `bosses.yml`, it may become a boss, 
 
 ## Languages
 
-The plugin finds each player’s country by IP and picks a language for it; when the country isn’t listed, it takes the language set in the game. Chat messages, ability warnings, announcements, boss bars, loot names, and the names over bosses and minions follow each player’s language. Only death messages, which the game writes the same for everyone, come in the default language. Add a language by copying `lang/en.yml` and listing its countries in `config.yml`.
+The plugin finds each player’s country by IP and picks a language for it; when the country isn’t listed, it takes the language set in the game. A player can pick their own with `/mobosses language` or in the menu, and the choice survives restarts. Chat messages, ability warnings, announcements, boss bars, loot names, and the names over bosses and minions follow each player’s language. Only death messages, which the game writes the same for everyone, come in the default language. Add a language by copying `lang/en.yml` and listing its countries in `config.yml`.
 
 The country lookup needs no account and sends no address anywhere: the plugin downloads a free country database (4 MB) and refreshes it every month.
 
@@ -63,10 +63,11 @@ Each rule has its own switch in `config.yml`, on by default. `/mobosses spawn` i
 
 | Command | What it does |
 |---|---|
-| `/mobosses` | The menu: your card, the best hunters, the bosses by class, a button to start over |
+| `/mobosses` | The menu: your card, the best hunters, the bosses by class, your language, a button to start over |
 | `/mobosses info [player]` | A player’s level, rank, experience, and kills |
 | `/mobosses top` | The best hunters |
 | `/mobosses reset [confirm \| player]` | Wipes your level, experience, and kills, or another player’s |
+| `/mobosses language [code \| auto]` | Picks the language Mo’Bosses speaks to you, or hands it back to the plugin; alone, opens the picker |
 | `/mobosses reload` | Reloads every config and language file |
 | `/mobosses spawn <entity> <level> <class> [x y z [world]]` | Spawns a boss ahead of you, or at the coordinates |
 | `/mobosses killall` | Removes every boss in loaded chunks, without loot |

@@ -14,16 +14,16 @@ A Paper 26.3 plugin that turns ordinary mobs into bosses of six classes, with ab
 | Where | What it does |
 |---|---|
 | `MoBossesPlugin.kt` | Startup, `reload()`, and shutdown. Reload reads every file again and keeps the plugin, its command, and its bosses running |
-| `MoBossesCommand.kt` | `/mobosses reload`, `spawn`, `killall`, with suggestions |
+| `MoBossesCommand.kt` | `/mobosses reload`, `spawn`, `killall`, `language`, with suggestions |
 | `config/` | One model per file (`Settings`, `AbilitySettings`, `Classes`, `BossSpec`, `MinionSettings`, `RewardSettings`, `LootTable`), read by `Configs` through kaml, not strict. `Yamls.decode` drops a value that doesn’t fit, with a warning, so it takes its default; `Ids` resolves game ids against the registries, 1.x enum names included |
 | `algebra/` | The math, pure: `Curves` (the shared growth curve), `Stats` (health, damage, armor, vanilla experience), `Leveling` (player levels, boss levels, relevance), `Rolls` (minions, cooldowns, weighted picks) |
 | `boss/` | `Catalog` (configs with ids resolved), `Bosses` (live bosses: make, adopt, forget), `BossFactory` and `Equipment` (stats and gear), `Boss` (the fight state, kept on the entity through `Keys` and `Codec`), `Minions`, `NameTags` (names per language), `BossBars`, `Visuals` |
 | `spawn/` | `SpawnListener` (events), `NaturalSpawns` (the roll and the level), `SpawnLimiter` (cooldowns per player, the cap on bosses nearby) |
 | `combat/` | `DamageListener` (shares, bars, abilities on hit), `DeathListener` (experience, kills, loot, rewards, the kill message), `Shares`, `Loot`, `Rewards` |
-| `menu/` | `Stats` (cards, the board, boss counts, from the database off the server thread), `Menu` (the `/mobosses` inventory), `MenuListener` |
+| `menu/` | `Stats` (cards, the board, boss counts, from the database off the server thread), `Menu` (the `/mobosses` inventory), `LanguagePage` (the language picker), `MenuListener` |
 | `ability/` | `Ability` and its context `Cast`; `Abilities` picks one on a hit; `kinds/` holds one object per shared ability and `signature/` one per boss type's own (`Signature` reads `signature` in abilities.yml); `Targets` decides who may be hit and where the ground is; `Arrows` shoots for the arrow abilities |
 | `progress/` | Players’ levels and boss statistics: `Progression` (a cache filled at login) and `Store` (Exposed over SQLite, MySQL/MariaDB, or PostgreSQL) on a thread of its own; `Tables` holds `player_progress` (1.x’s, plus `name`) and `boss_stats` |
-| `lang/` | `Message`, `Languages`, `LanguageFiles`, `LocaleResolver`, `GeoIp`, `PlayerLanguages` (who reads what), `Texts` (rendering, boss names, classes, minions) |
+| `lang/` | `Message`, `Languages`, `LanguageFiles`, `LocaleResolver`, `GeoIp`, `PlayerLanguages` (who reads what: a player’s own choice first), `LanguageChoices` (those choices, in `player-languages.yml`), `Texts` (rendering, boss names, classes, minions) |
 | `protect/` | `Guard` and `Guards`, the GriefPrevention and WorldGuard adapters and flags, `BlockLog` and `CoreProtectLog`, `BlockLogListener`, and `BlockChanges` with `TemporaryBlocks`, the only way abilities touch blocks |
 | `hooks/` | PlaceholderAPI (the `<papi:…>` tag and `%mobosses_…%`), MiniPlaceholders (`MiniPlaceholderTags`), and Plan (`PlanData`). Plan and MiniPlaceholders ask from other threads, so they read only the progress cache and counts the server thread keeps |
 

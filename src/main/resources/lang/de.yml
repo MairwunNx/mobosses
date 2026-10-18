@@ -10,7 +10,7 @@
 reloaded: "<pri>[Mo’Bosses]</pri> <ok>Neu geladen.</ok>"
 reload_failed: "<pri>[Mo’Bosses]</pri> <warn>Mit Fehlern neu geladen.</warn> <gray>Sieh ins Serverlog.</gray>"
 no_permission: "<err>Diesen Befehl darfst du nicht nutzen.</err>"
-usage: '<gray>Nutze</gray> <white>/mobosses</white> <gray>für das Menü,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>,</gray> <white>/mobosses reset</white><gray>; als Admin:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray> oder</gray> <white>/mobosses killall</white>'
+usage: '<gray>Nutze</gray> <white>/mobosses</white> <gray>für das Menü,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>,</gray> <white>/mobosses reset</white><gray>,</gray> <white>/mobosses language [code|auto]</white><gray>; als Admin:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray> oder</gray> <white>/mobosses killall</white>'
 # <entities>, <classes>: was zur Auswahl steht.
 spawn_usage: '<gray>Nutze</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray>. Wesen:</gray> <white><entities></white><gray>. Klassen:</gray> <white><classes></white>'
 spawned: "<pri>[Mo’Bosses]</pri> <ok>Gespawnt:</ok> <class_color>[Lvl. <level>] [<class>]</class_color> <boss_name>"
@@ -78,6 +78,22 @@ menu:
   back: "<gray>Zurück</gray>"
   previous: "<gray>Vorige Seite</gray>"
   next: "<gray>Nächste Seite</gray>"
+  language: |-
+    <aqua>Sprache</aqua>
+    <gray>Gerade:</gray> <white><language></white>
+    <dark_gray>Wähl, in welcher Sprache Mo’Bosses mit dir spricht.</dark_gray>
+
+# /mobosses language und seine Seite. <language>: der Name einer Sprache in ihr selbst; <languages>: die vorhandenen.
+language:
+  set: "<pri>[Mo’Bosses]</pri> <ok>Mo’Bosses spricht jetzt <language> mit dir.</ok>"
+  auto: "<pri>[Mo’Bosses]</pri> <ok>Mo’Bosses wählt deine Sprache wieder selbst, gerade <language>.</ok> <gray>Es richtet sich nach deinem Land und der Sprache deines Spiels.</gray>"
+  unknown: "<err>Die Sprache <language> gibt es nicht.</err> <gray>Verfügbar:</gray> <white><languages></white><gray> oder</gray> <white>auto</white>"
+  title: "Sprache"
+  automatic: |-
+    <yellow>Automatisch</yellow>
+    <gray>Nach deinem Land und der Sprache deines Spiels.</gray>
+  current: "<green>Deine Sprache gerade</green>"
+  pick: "<gray>Klick zum Auswählen</gray>"
 
 # Die Seite des Bestiariums. <class>, <kills>, <level> (die beste); <opened> und <total> Felder Art × Klasse.
 bestiary:

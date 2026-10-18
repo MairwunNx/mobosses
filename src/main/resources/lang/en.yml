@@ -10,7 +10,7 @@
 reloaded: "<pri>[Mo’Bosses]</pri> <ok>Reloaded.</ok>"
 reload_failed: "<pri>[Mo’Bosses]</pri> <warn>Reloaded with errors.</warn> <gray>Check the server log.</gray>"
 no_permission: "<err>You can’t use this command.</err>"
-usage: '<gray>Use</gray> <white>/mobosses</white> <gray>for the menu,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>,</gray> <white>/mobosses reset</white><gray>; admins:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray>,</gray> <white>/mobosses killall</white>'
+usage: '<gray>Use</gray> <white>/mobosses</white> <gray>for the menu,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>,</gray> <white>/mobosses reset</white><gray>,</gray> <white>/mobosses language [code|auto]</white><gray>; admins:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray>,</gray> <white>/mobosses killall</white>'
 # <entities>, <classes>: what there is to pick from.
 spawn_usage: '<gray>Use</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray>. Entities:</gray> <white><entities></white><gray>. Classes:</gray> <white><classes></white>'
 spawned: "<pri>[Mo’Bosses]</pri> <ok>Spawned</ok> <class_color>[Lv. <level>] [<class>]</class_color> <boss_name>"
@@ -78,6 +78,22 @@ menu:
   back: "<gray>Back</gray>"
   previous: "<gray>Previous page</gray>"
   next: "<gray>Next page</gray>"
+  language: |-
+    <aqua>Language</aqua>
+    <gray>Now:</gray> <white><language></white>
+    <dark_gray>Pick the language Mo’Bosses speaks to you.</dark_gray>
+
+# /mobosses language and its page. <language>: a language’s own name; <languages>: the ones there are.
+language:
+  set: "<pri>[Mo’Bosses]</pri> <ok>Mo’Bosses now speaks <language> to you.</ok>"
+  auto: "<pri>[Mo’Bosses]</pri> <ok>Mo’Bosses picks your language again: <language> for now.</ok> <gray>It goes by your country and your game’s language.</gray>"
+  unknown: "<err>There’s no language <language>.</err> <gray>Languages:</gray> <white><languages></white><gray>, or</gray> <white>auto</white>"
+  title: "Language"
+  automatic: |-
+    <yellow>Automatic</yellow>
+    <gray>By your country and your game’s language.</gray>
+  current: "<green>Your language now</green>"
+  pick: "<gray>Click to pick</gray>"
 
 # The bestiary page. <class>, <kills>, <level> (the best one); <opened> and <total> cells of kind × class.
 bestiary:
