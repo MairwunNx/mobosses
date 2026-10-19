@@ -38,6 +38,13 @@ class Boss(
     if (byPet) add(keys.petDamage, player, amount)
   }
 
+  /** Who set it alight, and whether through a pet: the fire's damage counts as theirs; null when no player did. */
+  var igniter: Pair<UUID, Boolean>?
+    get() = entity.persistentDataContainer.get(keys.igniter, PersistentDataType.STRING)?.split('|')
+      ?.let { parts -> runCatching { UUID.fromString(parts[0]) }.getOrNull()?.let { it to (parts.getOrNull(1) == "pet") } }
+    set(value) = if (value == null) entity.persistentDataContainer.remove(keys.igniter)
+      else entity.persistentDataContainer.set(keys.igniter, PersistentDataType.STRING, value.first.toString() + if (value.second) "|pet" else "")
+
   /** When a player was last near, in epoch milliseconds; null for bosses from before 2.3. */
   var seen: Long?
     get() = entity.persistentDataContainer.get(keys.seen, PersistentDataType.LONG)

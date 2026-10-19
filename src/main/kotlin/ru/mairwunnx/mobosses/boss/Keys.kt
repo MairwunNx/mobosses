@@ -32,6 +32,8 @@ class Keys(plugin: Plugin) {
   val meteor = NamespacedKey(plugin, "meteor")
   /** On bosses past their second phase. */
   val phaseTwo = NamespacedKey(plugin, "phase_two")
+  /** On burning bosses: who set them alight, `uuid` or `uuid|pet`, so the fire's damage is theirs. */
+  val igniter = NamespacedKey(plugin, "igniter")
   /** On obelisks: the boss they heal; and the hits they have left. */
   val obelisk = NamespacedKey(plugin, "obelisk")
   val obeliskHits = NamespacedKey(plugin, "obelisk_hits")

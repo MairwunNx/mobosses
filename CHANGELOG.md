@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.6.2
+
+### Fixed
+
+- 🔥 **Fire counts for whoever lit it:** a boss set alight by a Flame bow, a Fire Aspect blade, or a pet burned in nobody's name, so its burning took part of the kill from the player. A Flame bow alone left about a third of a weak boss to nobody: less experience, and sometimes no loot or kill. Now the fire's damage goes to whoever lit it, and fire from lava or the sun still goes to nobody.
+
 ## 2.6.1
 
 ### Changed
