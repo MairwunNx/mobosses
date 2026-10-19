@@ -22,7 +22,7 @@ repositories {
   maven("https://jitpack.io/") { content { includeGroup("com.github.GriefPrevention") } }
 }
 
-val exposedVersion = "1.5.1"
+val exposedVersion = "1.6.0"
 
 dependencies {
   compileOnly("io.papermc.paper:paper-api:26.3.build.205-stable")
@@ -33,7 +33,7 @@ dependencies {
   compileOnly("com.djrapitops:plan-api:5.9-R1.3")
   compileOnly("io.github.miniplaceholders:miniplaceholders-api:3.2.0")
   compileOnly("com.github.GriefPrevention:GriefPrevention:16.18.7") { isTransitive = false }
-  compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.19")
+  compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.20")
   compileOnly("net.coreprotect:coreprotect:24.1") { isTransitive = false }
 
   implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.11.0")

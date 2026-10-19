@@ -6,7 +6,7 @@ The “Release” workflow takes the notes for a version from its section here, 
 
 ### Changed
 
-- 📦 **Built against newer libraries:** Paper API 26.3 build 205. Nothing changes in the files or the commands.
+- 📦 **Built against newer libraries:** Paper API 26.3 build 205, Exposed 1.6.0, and WorldGuard 7.0.20. Nothing changes in the files or the commands.
 
 ## 2.6.0
 
