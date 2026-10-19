@@ -10,271 +10,50 @@
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/MairwunNx/mobosses"></a>
 </p>
 
-🏆 **Mo’Bosses** turns ordinary mobs on Paper servers into bosses. A zombie that spawns near you may come out as a level 40 Epic boss: more health, harder hits, armor, a glow in its class color, a health bar, and abilities like lightning, meteor showers, and minions. Beat it, and you get experience, a piece of loot, and a few potion effects. Every kill raises your own Mo’Bosses level, and the bosses that find you grow with it.
+🏆 **Mo’Bosses** turns ordinary mobs on Paper servers into bosses. A zombie that spawns near you may come out as a level 40 Epic boss with more health, harder hits, a glow in its class color, a health bar, and abilities like lightning, meteor showers, and minions. Every kill raises your own Mo’Bosses level, and the bosses that find you grow with it.
 
 [Русская версия](https://github.com/MairwunNx/mobosses/blob/master/README.RU.md)
-
-## What you get
-
-- 🐲 **25 kinds of bosses**, from zombies and skeletons to blazes, breezes, ravagers, and guardians.
-- ⚔️ **Six classes**, from Common to Mythic. Each multiplies a boss’s health, damage, experience, armor, and toughness, and decides which abilities it gets and when. Rarer classes come less often.
-- 📈 **Levels that grow with you.** Each player has a Mo’Bosses level, from the experience and kills they’ve gathered. A boss takes the average level of the players near it, now and then a little lower, so weaker bosses keep turning up. Bosses far below your level count for little, so farming them levels nobody up.
-- 💪 **Never weaker than vanilla:** a level 1 boss has at least its mob’s health, damage, and armor, and its gear only gets better.
-- 🧮 **Scaling by curves.** Health, damage, and armor climb fast at first and level off toward a ceiling, so a level 100 boss is hard without being absurd. Class differences shrink at high levels.
-- 🎯 **A signature ability for every boss type:** witches throw potions, endermen swap places with you, evokers send fangs through the ground, ravagers stampede, and 14 more.
-- ✨ **Sixteen shared abilities:** lightning, minions, regeneration, a ring of fire, a ring of cobwebs, a teleport behind you, a meteor shower, an arc of arrows, arrow rain, a shockwave, a frost nova, a grapple that pulls archers off their pillars, an obelisk that heals the boss until you break it, a chain that holds an archer close, doubles to find the real boss among, and enrage at low health. Each class unlocks them at its own levels, with cooldowns.
-- 🔥 **A second phase:** at half health a boss of level 40 or higher turns, throws everyone back, and casts faster to the end.
-- 🧟 **Minions** that a boss summons, up to a dozen at a time, and that may turn into weaker bosses themselves.
-- 🗡️ **Gear by level:** a level 5 zombie swings a wooden sword; a level 60 one may carry enchanted netherite.
-- 🎁 **Loot tables by level and class:** over 500 entries, 199 with their own names and lore, and random durability that favors better classes. Each player who dealt enough damage gets their own drop, which only they can pick up.
-- 💪 **Rewards:** a few potion effects and absorption hearts after a kill, stronger for rarer classes.
-- 📊 **Boss bars** with the boss’s health, shown to the players who hit it.
-- 🏆 **Achievements** in a tab of their own: levels, kills, classes, the bestiary, and feats from the fights. **A bestiary** in the menu keeps every boss you’ve beaten, by kind and class.
-- 📖 **A menu and stats for players:** `/mobosses` shows your level, rank, and kills, the best hunters, and the bosses by class; `/mobosses info` and `/mobosses top` do it in the chat.
-- 🌍 **Every player reads their own language,** even the names over bosses’ heads: English, Russian, Spanish, Portuguese, and German come bundled, picked by the player’s IP or game language, or by the player with `/mobosses language`.
-- 🛡️ **Protected areas stay protected:** GriefPrevention claims and WorldGuard regions keep bosses and their abilities out.
-- 🔎 **CoreProtect logging:** whatever bosses do to blocks shows up under `#mobosses`, ready to roll back.
-- 🧩 **PlaceholderAPI**, if you have it: `%mobosses_level%`, `%mobosses_xp%`, and `%mobosses_kills%` for scoreboards and chat, and `<papi:…>` tags in messages.
-- 🧩 **MiniPlaceholders**, if you have it: its tags work in messages, and `<mobosses_level>`, `<mobosses_xp>`, `<mobosses_kills>` work in TAB and elsewhere.
-- 🔌 **[WorldAPI](https://modrinth.com/plugin/worldapi)**, if you have it: the best hunters, players’ cards and bestiaries, boss counts, and live events for kills, levels, and achievements, for a site or a bot, under `/extensions/mobosses`.
-- 📊 **Plan**, if you have it: each player’s level, experience, and kills on their page, and the bosses alive on the server’s.
-- 💾 **SQLite, MySQL, MariaDB, or PostgreSQL** for players’ levels.
-- 🧯 **No piles of bosses:** a cooldown per player and a cap on bosses nearby keep mob farms and spawner rooms from turning into boss factories.
-- ⚙️ **`/mobosses reload`** applies changes without a restart, and a fight survives restarts and relogs: bosses keep their level, cooldowns, and who hit them.
-
-## Try it live
 
 Mo’Bosses runs on Moonlands, my hard survival server with friends. Come in and meet its bosses.
 
 [![Play on Moonlands: hard mobs, bosses, AI, claims. minecraft.mairwunnx.com](https://raw.githubusercontent.com/MairwunNx/mobosses/master/media/og-adv-image.png)](https://minecraft.mairwunnx.com)
 
-## Install
+## What you get
 
-Mo’Bosses needs Paper 26.3 or a fork of it, like Purpur, on Java 25. GriefPrevention, WorldGuard, CoreProtect, PlaceholderAPI, MiniPlaceholders, WorldAPI, and Plan are optional.
+- 🐲 **25 kinds of bosses in six classes**, from Common to Mythic, from zombies and skeletons to blazes, breezes, ravagers, and guardians.
+- 📈 **Levels that grow with your players.** A boss takes the level of the players near it, and weak bosses count for little, so farming them levels nobody up.
+- ✨ **Thirty-four abilities:** sixteen shared ones, from lightning and meteor showers to a healing obelisk and doubles, eighteen that belong to particular boss types, and a second phase at half health.
+- 🎁 **Loot worth the fight:** over 600 entries by level and class, a private drop for each player who fought, potion rewards, and a pity count for rare items.
+- 🏆 **Something to chase:** achievements in a tab of their own, a bestiary, the best hunters, nights of the hunt under a full moon, and a survival bonus that brings more bosses the longer you live.
+- 🌍 **Every player reads their own language,** even the names over bosses’ heads: five languages bundled, picked by IP or game language.
+- 🛡️ **Builds stay safe:** GriefPrevention claims and WorldGuard regions keep bosses out, and CoreProtect logs whatever they break, ready to roll back.
+- 🧩 **Plays well with others:** PlaceholderAPI, MiniPlaceholders, Plan, WorldAPI, and SQLite, MySQL, MariaDB, or PostgreSQL for players’ levels.
 
-### With Docker (recommended)
+## Get started
 
-If your server runs in [itzg/minecraft-server](https://docker-minecraft-server.readthedocs.io), it fetches Mo’Bosses itself. Name it in `MODRINTH_PROJECTS`:
+1. Put the jar from [Modrinth](https://modrinth.com/plugin/mobosses), [Hangar](https://hangar.papermc.io/MairwunNx/MoBosses), or [GitHub](https://github.com/MairwunNx/mobosses/releases/latest/download/mobosses.jar) in `plugins/` on Paper 26.3 with Java 25, or add `mobosses` to `MODRINTH_PROJECTS` in [itzg/minecraft-server](https://docker-minecraft-server.readthedocs.io).
+2. Restart the server, then meet a boss right away: `/mobosses spawn zombie 30 epic`.
+3. Read [First steps](https://github.com/MairwunNx/mobosses/wiki/First-steps) to tune how often bosses come.
 
-```yaml
-services:
-  minecraft:
-    image: itzg/minecraft-server:java25
-    environment:
-      EULA: "TRUE"
-      TYPE: PAPER
-      VERSION: "26.3"
-      MODRINTH_PROJECTS: |
-        mobosses
-    ports: ["25565:25565"]
-    volumes: ["./data:/data"]
-```
+## Documentation
 
-`mobosses:2.6.1` pins a version. The optional plugins go on the same list, one per line: `griefprevention`, `placeholderapi`, `plan`, or `worldguard` together with `worldedit`, which WorldGuard needs. To take Mo’Bosses from GitHub instead, use `PLUGINS: https://github.com/MairwunNx/mobosses/releases/latest/download/mobosses.jar`.
+The [wiki](https://github.com/MairwunNx/mobosses/wiki) has everything else.
 
-### By hand
+**For players and server owners:** [Installation](https://github.com/MairwunNx/mobosses/wiki/Installation) · [First steps](https://github.com/MairwunNx/mobosses/wiki/First-steps) · [Bosses and classes](https://github.com/MairwunNx/mobosses/wiki/Bosses-and-classes) · [Abilities](https://github.com/MairwunNx/mobosses/wiki/Abilities) · [Minions](https://github.com/MairwunNx/mobosses/wiki/Minions) · [Loot and rewards](https://github.com/MairwunNx/mobosses/wiki/Loot-and-rewards) · [Player levels](https://github.com/MairwunNx/mobosses/wiki/Player-levels) · [Claims and protection](https://github.com/MairwunNx/mobosses/wiki/Claims-and-protection) · [Commands and permissions](https://github.com/MairwunNx/mobosses/wiki/Commands-and-permissions) · [Configuration](https://github.com/MairwunNx/mobosses/wiki/Configuration) · [Languages](https://github.com/MairwunNx/mobosses/wiki/Languages) · [Integrations](https://github.com/MairwunNx/mobosses/wiki/Integrations) · [Upgrading from 1.x](https://github.com/MairwunNx/mobosses/wiki/Upgrading-from-1.x) · [FAQ](https://github.com/MairwunNx/mobosses/wiki/FAQ)
 
-1. Download the jar from [Modrinth](https://modrinth.com/plugin/mobosses), [Hangar](https://hangar.papermc.io/MairwunNx/MoBosses), or [GitHub](https://github.com/MairwunNx/mobosses/releases/latest/download/mobosses.jar).
-2. Put it in `plugins/` and restart the server.
-
-### First steps
-
-On its first start Mo’Bosses writes its files to `plugins/MoBosses/` (see “Config files” below), creates `bosses.db` for players’ levels, and downloads the country database. The defaults play well, so you can go hunting right away. To meet a boss without waiting, an operator runs:
-
-```
-/mobosses spawn zombie 30 epic
-[Mo’Bosses] Spawned [Lv. 30] [Epic] Rotface
-```
-
-Beat it, and `/mobosses info` shows what you gained:
-
-```
-Mo’Bosses · Steve
-Level 4/100 · Rank #1
-Experience 1240 · Bosses killed 1
-Next boss near you any moment
-Survival bonus +25% · 1 h 12 min without dying
-```
-
-Bosses too rare or too common? Change `spawn_chance` under the type in `bosses.yml`:
-
-```yaml
-ZOMBIE:
-  spawn_chance: 0.15 # 15% instead of the bundled 9%
-```
-
-Run `/mobosses reload`, and new zombies roll with the new chance.
-
-## How it plays
-
-When a mob spawns, Mo’Bosses looks up its type in `bosses.yml`. The mob waits until a player within 32 blocks could see it, then becomes a boss with the type’s `spawn_chance`, times the multipliers for the world, the time of day, and the weather. It rolls once in its life: walk off and come back, and it stays what it was. So bosses come where you are, not in caves nobody walks into (`spawn.on_sight`); with it off, a mob rolls as it spawns, with a player within `spawn.spawn_radius`. The boss picks a class by weight, takes the average level of the players within `spawn.group_radius`, and gets its health, damage, gear, and name.
-
-Under a full moon bosses come more often, and rarer ones more often still (`full_moon`). A boss grows by 35% for each player past the first who truly fights it (`group_health`). Dying to a boss burns your progress toward the next level, never the level itself. Spawner bosses farmed in one spot give less after the third, and it comes back with time (`spawner_fatigue`). The survival bonus tips loot toward rare items, and a run of drops with nothing rare ends sooner or later in a rare one (`loot.pity`).
-
-The longer you play without dying, the more bosses find you, as with Sacred’s survival bonus: +25% to the chance after an hour, +50% after three, +75% after nine, toward double. Death takes it all, and minutes standing idle don’t count (`survival_bonus`). `/mobosses info` shows yours.
-
-After a boss spawns for a group, its players wait about a minute for the next one, and no boss spawns while three are already close. Both live in `spawn` in `config.yml`. A boss nobody comes within 64 blocks of for 10 minutes leaves without loot, as vanilla mobs do (`despawn`); bosses from `/mobosses spawn` stay.
-
-Top bosses outlast the game's own: a zombie boss has more health than the Ender Dragon (200) from level 30 as a Common and from 20 as a Rare, and more than the Warden (500) from level 40 as an Epic, 20 as a Mythic, and 100 as a Common. Their hits grow with them, toward the Warden's at the top, and their arrows, fireballs, and tridents grow too. A creeper boss's blast widens with its level; one that blows itself up gives nobody anything.
-
-Hitting a boss shows you its health bar. Each hit, yours, your pet's, or a golem's, may set off an ability: a random one the boss has reached the level for, once the cooldowns have passed, among the shared ones and its type’s own. Everyone fighting it sees the warning over the hotbar. A new Epic boss or rarer announces itself to the players near it. Abilities hurt players in survival and adventure, and the pets and golems that hit the boss in the last 15 seconds; its own minions, other pets, and villagers stay out of it.
-
-When the boss dies, each player’s share of its health, their pets' damage included, decides their part of the vanilla experience and the Mo’Bosses experience. The vanilla experience grows with the fight: a level 1 Common zombie gives 8, little more than a zombie; from level 30, when it outlasts the Ender Dragon, more than the dragon's 500; a level 100 Mythic gives 20,000. After a kill, each player reads in the chat what they got and, line by line, why it was less or more. In experience, pets' damage is worth almost all of yours at low levels and 60% at the top.
-
-The kill counts toward your level when you dealt 15% of the boss’s health and it wasn’t far below you: levels compare by ratio, so a level 80 player still counts a level 60 boss, but not a level 40 one. Bosses below your level give you less experience, a little for a few levels and most of it for half your level. Players who dealt more than about a quarter of it (`loot.min_damage_share`) also get a piece of loot and the rewards. In a group the thresholds come down, to 60% over the number of players at most, so four friends who split a boss evenly all get their loot.
-
-Bosses keep their type, class, level, cooldowns, and who hit them how hard on the entity itself. They survive restarts and chunk unloads, and pick up their glow, bar, names, and abilities again when their chunk loads. The rewards and spawn cooldowns live on each player, so a relog doesn’t reset them. Temporary blocks, like cobwebs, go back when they expire, when the server stops, or, after a crash, on the next start.
-
-## Languages
-
-A player who picked a language with `/mobosses language` or the menu reads that one, while its file is there; the choice lives in `plugins/MoBosses/player-languages.yml` and survives restarts. For everyone else, the plugin tries the sources in `locales.sources`, in order:
-
-1. **`ip`:** the country of the player’s IP address. `locales.countries` maps languages to country codes: Russia, Belarus, and Kazakhstan get Russian; Spain and Latin America get Spanish; Brazil and Portugal get Portuguese; Germany, Austria, and Switzerland get German.
-2. **`client`:** the language set in the player’s game, when a file in `lang/` matches it.
-
-When nothing matches, the player gets `locales.default`. The country lookup needs no account and sends no address anywhere: on the first start, the plugin downloads DB-IP’s free country database (4 MB) into `plugins/MoBosses/geoip/` and refreshes it every 30 days. Players who connect through a proxy or a relay show up with its address, so they get the relay’s country.
-
-Each player’s language covers chat messages, ability warnings, kill and loot announcements, boss bars (one bar per language among the boss’s viewers), the names over bosses and minions, and the names and lore of loot, in the language of the player who got it. The game shows one name tag to everyone, so the names are text displays riding the mob, one per language among the players near it, each shown only to its readers. Death messages, which the game writes the same for everyone, use `locales.default`; so does the plain name tag with `name_tags.per_player: false`.
-
-`lang/<language>.yml` holds the messages and the names of classes, bosses, minions, and loot items. A key missing from a file comes from the default language, then from English; an empty text turns a message off. To add a language, copy `lang/en.yml` to, say, `lang/it.yml`, translate it, add `it: [ IT, SM, VA ]` to `locales.countries`, and run `/mobosses reload`.
-
-## Config files
-
-Every file lives in `plugins/MoBosses/`, and every key has a default, so you can delete the ones you don’t change. A value that doesn’t fit, like a word where a number goes, costs only itself: the log names it, and it takes its default. Game ids take the namespaced form (`minecraft:diamond_sword`) or the old enum names (`DIAMOND_SWORD`); a bad one logs a warning and drops out.
-
-| File | What it holds |
-|---|---|
-| `config.yml` | Languages, spawning, player levels, the stat formulas, glow and particles, boss bars, loot durability, announcements, the database, protection, and CoreProtect |
-| `classes.yml` | The six classes: their multipliers, colors, weights, and the level each ability starts at |
-| `bosses.yml` | Which mobs become bosses, their spawn chance, gear by level, particles, and sounds |
-| `abilities.yml` | Each ability’s switch, cooldown, and numbers by level |
-| `minions.yml` | What each boss type summons |
-| `loottable.yml` | Loot by class and level, with amounts, weights, enchantments, and names |
-| `rewards.yml` | Potion effects and absorption hearts by class, and how long a player waits for the next ones |
-| `lang/*.yml` | Messages and names, one file per language |
-
-## Commands and permissions
-
-| Command | Permission | What it does |
-|---|---|---|
-| `/mobosses` | `mobosses.use` | Opens the menu: your card, the best hunters, the bosses by class, your bestiary, your language, a button to start over, and, for admins, the bosses in the world (`mobosses.bosses`) and reload and remove-all buttons |
-| `/mobosses info [player]` | `mobosses.use` | Your level, rank, experience, kills, and how long until a boss may spawn near you; another player’s needs `mobosses.info.others` |
-| `/mobosses top` | `mobosses.use` | The best hunters |
-| `/mobosses reset [confirm \| player]` | `mobosses.reset` | Starts you over: wipes your level, experience, and kills, after `confirm`. Spawn and reward cooldowns stay. Another player’s, at once, needs `mobosses.reset.others` |
-| `/mobosses language [code \| auto]` | `mobosses.use` | Sets the language Mo’Bosses speaks to you, like `ru` or `pt`; `auto` hands the choice back to the plugin. Without an argument, opens the language picker |
-| `/mobosses reload` | `mobosses.reload` | Reloads every config and language file; bosses keep going |
-| `/mobosses spawn <entity> <level> <class> [x y z [world]]` | `mobosses.spawn` | Spawns a boss two blocks ahead of you, or at the coordinates, which the console must give |
-| `/mobosses killall` | `mobosses.killall` | Removes every boss in loaded chunks, without loot or experience |
-
-Everyone has `mobosses.use` and `mobosses.reset`. `mobosses.admin` gives all the rest; operators have it by default. The command also answers to `/mb` and `/moboss`, and suggests every argument.
-
-## Protected areas
-
-Mo’Bosses works with each protection plugin only when that plugin runs; with none, everything is allowed. Each rule has its own switch under `protection` in `config.yml`, and all are on by default.
-
-| Plugin | What it stops |
-|---|---|
-| [GriefPrevention](https://modrinth.com/plugin/griefprevention) | No boss spawns naturally inside a claim, and no ability breaks, places, or ignites blocks there. Bosses may still walk in and fight, as vanilla mobs do. |
-| [WorldGuard](https://modrinth.com/plugin/worldguard) | No boss spawns naturally in a region with owners or members, a player’s plot, unless the `mobosses-spawn` flag allows it there. Elsewhere bosses spawn where `mobosses-spawn` and WorldGuard’s `mob-spawning` allow it, so a fresh setup keeps them everywhere but in plots. Abilities change blocks only where `mobosses-abilities` allows it and `build` lets non-members build. Ability damage to players follows `mob-damage`. |
-
-Set the flags as any other: `/rg flag spawn mobosses-spawn deny`. `/mobosses spawn` ignores protection on purpose, since an admin asked for the boss; set `protection.admin_spawn_bypass: false` to make it ask too.
-
-## CoreProtect
-
-With [CoreProtect](https://modrinth.com/plugin/coreprotect) installed, every block an ability breaks, places, ignites, or changes goes into its log under `#mobosses`, in the same tick, before the change happens. Blocks bosses and minions blow up or pick up go there too. To look up and undo a boss’s damage:
-
-```
-/co lookup u:#mobosses t:1h r:50
-/co rollback u:#mobosses t:1h r:50
-```
-
-CoreProtect’s API takes block changes only, so the loot bosses drop stays out of its log; bosses never open containers. Rename the user with `coreprotect.user`, or turn logging off with `coreprotect.enabled: false`.
-
-## PlaceholderAPI
-
-With [PlaceholderAPI](https://modrinth.com/plugin/placeholderapi) installed:
-
-| Placeholder | What it shows |
-|---|---|
-| `%mobosses_level%` | The player’s Mo’Bosses level |
-| `%mobosses_xp%` | Their Mo’Bosses experience |
-| `%mobosses_kills%` | Bosses they helped kill |
-
-In messages, write `<papi:name>` to show `%name%` for the player who reads it. Mo’Bosses doesn’t look for `%…%` in your text, so a percent sign stays a percent sign.
-
-## MiniPlaceholders
-
-Every message is [MiniMessage](https://docs.advntr.dev/minimessage/format). With [MiniPlaceholders](https://modrinth.com/plugin/miniplaceholders) installed, messages take its tags as they are, for the player who reads them: `<luckperms_prefix>`. Mo’Bosses adds three tags of its own, each about the player they’re shown for:
-
-| Tag | What it shows |
-|---|---|
-| `<mobosses_level>` | The player’s Mo’Bosses level |
-| `<mobosses_xp>` | Their Mo’Bosses experience |
-| `<mobosses_kills>` | Bosses they helped kill |
-
-## Plan
-
-With [Plan](https://modrinth.com/plugin/plan) installed, Mo’Bosses adds its section to Plan’s pages. A player’s “Plugins” tab shows their level, experience, and kills; the level is also a column in the players table. The server’s “Plugins Overview” shows the bosses alive, spawned, and killed, a table of the best hunters, and tables of bosses by class and by type. Plan keeps the last values while a player is away.
-
-## Databases
-
-Players’ levels live in `bosses.db`, an SQLite file, out of the box. Set `database.type` to `mysql` (for MySQL or MariaDB) or `postgres` and fill in its section to share levels between servers; the plugin creates its table on the first start. A database that can’t be reached doesn’t stop the plugin: levels then last until each player leaves. Queries never run on the server thread.
-
-The MariaDB and PostgreSQL drivers come inside the jar, about 2 MB together, so the plugin works on servers without internet access; Paper ships SQLite’s.
-
-## Upgrading from 1.x
-
-Your 1.x files and your database load as they are. What changed:
-
-- `messages.yml` is no longer read. Messages live in `lang/`, one file per language; their switches moved to `broadcast` in `config.yml`, and the kill sound to `kill_sound`.
-- `language: ru` in `config.yml` still sets the default language, until you set `locales.default`.
-- A `name` in `bosses.yml` or `minions.yml`, or a `display_name` in `classes.yml`, shows to everyone as before. Remove it to use the names in `lang/`, each player in their own language. Loot with `title` and `lore` works the same; the bundled loot uses `id` instead.
-- `boss_bar.style` takes `NOTCHED_20` and the like; `SEGMENTED_20` still works.
-- An old `bosses.yml` lacks the bosses 2.1 added, and an old `classes.yml` the levels for its new abilities, which stay off until you add them. Copy them from the bundled files, which the jar holds and `plugins/MoBosses/` gets when a file is missing.
-
-The [changelog](https://github.com/MairwunNx/mobosses/blob/master/CHANGELOG.md) lists what 2.0 fixed.
-
-## Build
-
-You need JDK 25; Gradle downloads it when it’s missing.
-
-```shell
-git clone https://github.com/MairwunNx/mobosses
-cd mobosses
-./gradlew build
-```
-
-The jar lands in `build/libs/`. Releases come from the “Release” workflow on GitHub, which takes the version as input. `./gradlew balance` prints the stat curves, experience, and player levels from the real formulas, for the bundled config or, with `--args=path/to/plugins/MoBosses`, for yours.
-
-## Stack
-
-- Kotlin and Gradle Kotlin DSL
-- Paper API 26.3 and Adventure MiniMessage
-- kotlinx-serialization with kaml for the configs
-- Exposed and HikariCP over SQLite, MySQL, MariaDB, or PostgreSQL
-- MaxMind DB reader for the country database
-
-## AI involvement
-
-AI wrote parts of the documentation and the code: the configuration models and serializers at first, then the 2.0 rewrite with languages by IP, protection plugins, and CoreProtect, and the translations. The formulas, classes, and balance are mine. AI also writes the commit messages from the changes.
+**For developers:** [Building from source](https://github.com/MairwunNx/mobosses/wiki/Building-from-source) · [Architecture](https://github.com/MairwunNx/mobosses/wiki/Architecture) · [Development](https://github.com/MairwunNx/mobosses/wiki/Development) · [Releasing](https://github.com/MairwunNx/mobosses/wiki/Releasing)
 
 ## Related projects
 
-[Allay Server](https://github.com/allay-ai/server)—🛠️⚡ the backend for Allay (formerly MCBuddy), an AI helper for Minecraft, built on OpenRouter.
-
-[Allay](https://github.com/allay-ai/minecraft)—🪽 brings Allay into the game: ask the AI anything with `/ask`, right in the chat. 🎮
-
-## From the same author
-
-[Mo’Joins](https://github.com/MairwunNx/mojoins)—🎉 greets players in their own language: join and quit lines, a welcome for newcomers, sounds, and particles.
-
-[Mo’Afks](https://github.com/MairwunNx/moafks)—🛡️ a safe AFK mode: type `/afk` or stand idle, and nothing hurts you, mobs leave you alone, and you don’t keep the night from passing.
-
-## License
-
-MIT, see [LICENSE](https://github.com/MairwunNx/mobosses/blob/master/LICENSE).
-
-## Credits
+- **[Moonlands](https://minecraft.mairwunnx.com)**—the hard-survival server where all of these run.
+- **[WorldAPI](https://github.com/MairwunNx/minecraft-worldapi)**—REST and WebSocket API to a Paper server's world, players, and stats.
+- **[Minecraft MCP](https://github.com/MairwunNx/minecraft-mcp)**—lets an AI client read and run a server through WorldAPI.
+- **[Allay](https://github.com/allay-ai/minecraft)**—an AI helper in the game: ask with `/ask`, right in the chat.
+- **[Allay Server](https://github.com/allay-ai/server)**—the backend behind Allay.
+- **[Mo’Joins](https://github.com/MairwunNx/mojoins)**—join and quit messages in each player's language.
+- **[Mo’Afks](https://github.com/MairwunNx/moafks)**—a safe AFK mode that doesn't block the night.
+- **[minecraft-exporter](https://github.com/MairwunNx/minecraft-exporter)**—Prometheus metrics from WorldAPI.
+- **[minecraft-grafana](https://github.com/MairwunNx/minecraft-grafana)**—the Grafana dashboard for WorldAPI.
 
 [IP Geolocation by DB-IP](https://db-ip.com), licensed under CC BY 4.0.
 

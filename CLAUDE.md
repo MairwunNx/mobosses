@@ -1,12 +1,12 @@
 # Mo’Bosses: notes for AI agents
 
-A Paper 26.3 plugin that turns ordinary mobs into bosses of six classes, with abilities, minions, boss bars, loot, rewards, and players’ own Mo’Bosses levels, each player reading it in their own language, picked by IP. README.md explains it for players and server owners; README.RU.md is its Russian copy. Moonlands, the owner’s server (MairwunNx/minecraft), runs it since 2.1.0.
+A Paper 26.3 plugin that turns ordinary mobs into bosses of six classes, with abilities, minions, boss bars, loot, rewards, and players’ own Mo’Bosses levels, each player reading it in their own language, picked by IP. README.md shows it off: what it gives, how to start, and links; README.RU.md is its Russian copy. The manual for server owners and developers is the GitHub wiki (`https://github.com/MairwunNx/mobosses.wiki.git`), in English only. Moonlands, the owner’s server (MairwunNx/minecraft), runs it since 2.1.0.
 
 ## Talking to the owner
 
 - Reply in Russian, address the owner as «вы». Quotes «ёлочки», nested „лапки“, an em dash with spaces « — ».
 - Code, comments, commit messages, README.md, MODRINTH.md, the config files, and the English language file are in English: curly quotes, an em dash without spaces or an en dash with spaces, never a hyphen as a dash.
-- README.RU.md and `lang/ru.yml` follow Russian typography; `lang/de.yml` uses „du“. Change both READMEs and MODRINTH.md together.
+- README.RU.md and `lang/ru.yml` follow Russian typography; `lang/de.yml` uses „du“. Change both READMEs and MODRINTH.md together; details (commands, permissions, config keys, formulas) go to the wiki page that owns them, not the READMEs.
 - The game balance (formulas, classes, abilities, loot) is the owner’s. Fix what’s plainly broken; ask before changing anything else.
 
 ## How it fits together
@@ -92,7 +92,7 @@ To put a release on Moonlands, point the Mo’Bosses line in `minecraft/extras/j
 
 ## Modrinth
 
-The project is `mobosses` (id `bRPqbgIV`), MIT, created 2026-10-15 and submitted for review with 2.0.0. The “Release” workflow has a `modrinth` switch, off by default: on, it runs `./gradlew modrinth`, which uploads the jar as a version and syncs MODRINTH.md as the description. MODRINTH.md is for server owners: no build, stack, AI, or related projects, and no Moonlands banner. A change to what the plugin does goes in README.md, README.RU.md, and MODRINTH.md. It uses the `MODRINTH_TOKEN` secret; locally the same token is in `~/.secrets/cloud.env`. The icon is `media/icon.png`. Never put the token in the repo.
+The project is `mobosses` (id `bRPqbgIV`), MIT, created 2026-10-15 and submitted for review with 2.0.0. The “Release” workflow has a `modrinth` switch, off by default: on, it runs `./gradlew modrinth`, which uploads the jar as a version and syncs MODRINTH.md as the description. MODRINTH.md is for server owners and has the README's shape: the pitch, “What you get”, “Get started”, links into the wiki, and “Related projects”; no build, stack, AI, license, or Moonlands banner. A change to what the plugin does goes in the wiki, and in README.md, README.RU.md, and MODRINTH.md when it changes the pitch. It uses the `MODRINTH_TOKEN` secret; locally the same token is in `~/.secrets/cloud.env`. The icon is `media/icon.png`. Never put the token in the repo.
 
 ## Hangar
 
