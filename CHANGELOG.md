@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.6.1
+
+### Changed
+
+- 📦 **Built against newer libraries:** Paper API 26.3 build 205. Nothing changes in the files or the commands.
+
 ## 2.6.0
 
 ### New

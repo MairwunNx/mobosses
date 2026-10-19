@@ -25,7 +25,7 @@ repositories {
 val exposedVersion = "1.5.1"
 
 dependencies {
-  compileOnly("io.papermc.paper:paper-api:26.3.build.193-stable")
+  compileOnly("io.papermc.paper:paper-api:26.3.build.205-stable")
   // Paper ships the SQLite driver, so it stays out of the jar.
   compileOnly("org.xerial:sqlite-jdbc:3.53.4.0")
   // Optional plugins: their classes load only when they're on the server.
@@ -46,7 +46,7 @@ dependencies {
   // MariaDB's driver also talks to MySQL; MySQL's own is GPL.
   implementation("org.mariadb.jdbc:mariadb-java-client:3.5.10")
 
-  testImplementation("io.papermc.paper:paper-api:26.3.build.193-stable")
+  testImplementation("io.papermc.paper:paper-api:26.3.build.205-stable")
   testImplementation("org.xerial:sqlite-jdbc:3.53.4.0")
   testImplementation(kotlin("test"))
   testImplementation(platform("org.junit:junit-bom:6.1.3"))
