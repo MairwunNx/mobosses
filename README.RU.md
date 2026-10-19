@@ -1,5 +1,15 @@
 # Mo’Bosses
 
+<p align="center">
+  <a href="https://modrinth.com/plugin/mobosses"><img alt="Modrinth" src="https://img.shields.io/modrinth/dt/mobosses?logo=modrinth&label=Modrinth&color=00AF5C"></a>
+  <a href="https://hangar.papermc.io/MairwunNx/MoBosses"><img alt="Hangar" src="https://img.shields.io/hangar/dt/MoBosses?label=Hangar&color=1E88E5"></a>
+  <a href="https://github.com/MairwunNx/mobosses/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/MairwunNx/mobosses?label=release"></a>
+  <img alt="Paper 26.3" src="https://img.shields.io/badge/Paper-26.3-F7CF0D">
+  <img alt="Java 25" src="https://img.shields.io/badge/Java-25-E76F00">
+  <a href="https://github.com/MairwunNx/mobosses/actions/workflows/build.yml"><img alt="Build" src="https://img.shields.io/github/actions/workflow/status/MairwunNx/mobosses/build.yml?branch=master&label=build"></a>
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/MairwunNx/mobosses"></a>
+</p>
+
 🏆 **Mo’Bosses** превращает обычных мобов на серверах Paper в боссов. Зомби, который появился рядом с вами, может оказаться эпическим боссом 40-го уровня: больше здоровья, сильнее удары, броня, свечение в цвет класса, полоса здоровья и способности вроде молний, метеоритного дождя и миньонов. Победите его — и получите опыт, добычу и несколько эффектов зелий. Каждое убийство поднимает ваш собственный уровень Mo’Bosses, и боссы, которые вас находят, растут вместе с ним.
 
 [English version](https://github.com/MairwunNx/mobosses/blob/master/README.md)
@@ -38,17 +48,62 @@ Mo’Bosses работает на Moonlands — моём сервере со с�
 
 [![Играйте на Moonlands: сложные мобы, боссы, ИИ, приваты. ru.minecraft.mairwunnx.com](https://raw.githubusercontent.com/MairwunNx/mobosses/master/media/og-adv-image.ru.png)](https://ru.minecraft.mairwunnx.com)
 
-## Что нужно
-
-- Paper 26.3 или его форк, например Purpur
-- Java 25
-
 ## Установка
 
-1. Скачайте jar из [Releases](https://github.com/MairwunNx/mobosses/releases).
-2. Положите его в папку `plugins/` сервера и перезапустите сервер.
-3. Просмотрите файлы в `plugins/MoBosses/`: значения по умолчанию играются хорошо, но шансы появления и классы можно подстроить под себя.
-4. После изменений выполните `/mobosses reload`.
+Mo’Bosses нужен Paper 26.3 или его форк, например Purpur, на Java 25. GriefPrevention, WorldGuard, CoreProtect, PlaceholderAPI, MiniPlaceholders, WorldAPI и Plan — по желанию.
+
+### Через Docker (рекомендуем)
+
+Если сервер работает в [itzg/minecraft-server](https://docker-minecraft-server.readthedocs.io), он сам скачает Mo’Bosses. Достаточно назвать его в `MODRINTH_PROJECTS`:
+
+```yaml
+services:
+  minecraft:
+    image: itzg/minecraft-server:java25
+    environment:
+      EULA: "TRUE"
+      TYPE: PAPER
+      VERSION: "26.3"
+      MODRINTH_PROJECTS: |
+        mobosses
+    ports: ["25565:25565"]
+    volumes: ["./data:/data"]
+```
+
+`mobosses:2.6.1` закрепляет версию. Необязательные плагины добавляются в тот же список, по одному на строку: `griefprevention`, `placeholderapi`, `plan` или `worldguard` вместе с `worldedit`, без которого WorldGuard не работает. Чтобы брать Mo’Bosses с GitHub, укажите `PLUGINS: https://github.com/MairwunNx/mobosses/releases/latest/download/mobosses.jar`.
+
+### Вручную
+
+1. Скачайте jar с [Modrinth](https://modrinth.com/plugin/mobosses), [Hangar](https://hangar.papermc.io/MairwunNx/MoBosses) или [GitHub](https://github.com/MairwunNx/mobosses/releases/latest/download/mobosses.jar).
+2. Положите его в `plugins/` и перезапустите сервер.
+
+### Первые шаги
+
+При первом запуске Mo’Bosses создаёт свои файлы в `plugins/MoBosses/` (см. «Файлы настроек» ниже), базу `bosses.db` для уровней игроков и скачивает базу стран. Значения по умолчанию играются хорошо, так что охотиться можно сразу. Чтобы встретить босса без ожидания, оператор выполняет:
+
+```
+/mobosses spawn zombie 30 epic
+[Mo’Bosses] Призван [Ур. 30] [Эпический] Гнилой
+```
+
+Победите его, и `/mobosses info` покажет, что вы получили:
+
+```
+Mo’Bosses · Steve
+Уровень 4/100 · Место #1
+Опыт 1240 · Убито боссов 1
+Следующий босс рядом в любой момент
+Бонус выживания +25% · 1 ч 12 мин без смертей
+```
+
+Боссы попадаются слишком редко или слишком часто? Поменяйте `spawn_chance` у нужного типа в `bosses.yml`:
+
+```yaml
+ZOMBIE:
+  spawn_chance: 0.15 # 15% вместо 9% по умолчанию
+```
+
+Выполните `/mobosses reload`, и новые зомби будут бросать жребий с новым шансом.
 
 ## Как это играется
 

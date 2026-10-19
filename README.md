@@ -1,5 +1,15 @@
 # Mo’Bosses
 
+<p align="center">
+  <a href="https://modrinth.com/plugin/mobosses"><img alt="Modrinth" src="https://img.shields.io/modrinth/dt/mobosses?logo=modrinth&label=Modrinth&color=00AF5C"></a>
+  <a href="https://hangar.papermc.io/MairwunNx/MoBosses"><img alt="Hangar" src="https://img.shields.io/hangar/dt/MoBosses?label=Hangar&color=1E88E5"></a>
+  <a href="https://github.com/MairwunNx/mobosses/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/MairwunNx/mobosses?label=release"></a>
+  <img alt="Paper 26.3" src="https://img.shields.io/badge/Paper-26.3-F7CF0D">
+  <img alt="Java 25" src="https://img.shields.io/badge/Java-25-E76F00">
+  <a href="https://github.com/MairwunNx/mobosses/actions/workflows/build.yml"><img alt="Build" src="https://img.shields.io/github/actions/workflow/status/MairwunNx/mobosses/build.yml?branch=master&label=build"></a>
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/MairwunNx/mobosses"></a>
+</p>
+
 🏆 **Mo’Bosses** turns ordinary mobs on Paper servers into bosses. A zombie that spawns near you may come out as a level 40 Epic boss: more health, harder hits, armor, a glow in its class color, a health bar, and abilities like lightning, meteor showers, and minions. Beat it, and you get experience, a piece of loot, and a few potion effects. Every kill raises your own Mo’Bosses level, and the bosses that find you grow with it.
 
 [Русская версия](https://github.com/MairwunNx/mobosses/blob/master/README.RU.md)
@@ -38,17 +48,62 @@ Mo’Bosses runs on Moonlands, my hard survival server with friends. Come in and
 
 [![Play on Moonlands: hard mobs, bosses, AI, claims. minecraft.mairwunnx.com](https://raw.githubusercontent.com/MairwunNx/mobosses/master/media/og-adv-image.png)](https://minecraft.mairwunnx.com)
 
-## Requirements
-
-- Paper 26.3 or a fork of it, like Purpur
-- Java 25
-
 ## Install
 
-1. Download the jar from [Releases](https://github.com/MairwunNx/mobosses/releases).
-2. Put it in your server’s `plugins/` folder and restart the server.
-3. Look through the files in `plugins/MoBosses/`: the defaults play well, but spawn chances and classes are yours to tune.
-4. Run `/mobosses reload` after a change.
+Mo’Bosses needs Paper 26.3 or a fork of it, like Purpur, on Java 25. GriefPrevention, WorldGuard, CoreProtect, PlaceholderAPI, MiniPlaceholders, WorldAPI, and Plan are optional.
+
+### With Docker (recommended)
+
+If your server runs in [itzg/minecraft-server](https://docker-minecraft-server.readthedocs.io), it fetches Mo’Bosses itself. Name it in `MODRINTH_PROJECTS`:
+
+```yaml
+services:
+  minecraft:
+    image: itzg/minecraft-server:java25
+    environment:
+      EULA: "TRUE"
+      TYPE: PAPER
+      VERSION: "26.3"
+      MODRINTH_PROJECTS: |
+        mobosses
+    ports: ["25565:25565"]
+    volumes: ["./data:/data"]
+```
+
+`mobosses:2.6.1` pins a version. The optional plugins go on the same list, one per line: `griefprevention`, `placeholderapi`, `plan`, or `worldguard` together with `worldedit`, which WorldGuard needs. To take Mo’Bosses from GitHub instead, use `PLUGINS: https://github.com/MairwunNx/mobosses/releases/latest/download/mobosses.jar`.
+
+### By hand
+
+1. Download the jar from [Modrinth](https://modrinth.com/plugin/mobosses), [Hangar](https://hangar.papermc.io/MairwunNx/MoBosses), or [GitHub](https://github.com/MairwunNx/mobosses/releases/latest/download/mobosses.jar).
+2. Put it in `plugins/` and restart the server.
+
+### First steps
+
+On its first start Mo’Bosses writes its files to `plugins/MoBosses/` (see “Config files” below), creates `bosses.db` for players’ levels, and downloads the country database. The defaults play well, so you can go hunting right away. To meet a boss without waiting, an operator runs:
+
+```
+/mobosses spawn zombie 30 epic
+[Mo’Bosses] Spawned [Lv. 30] [Epic] Rotface
+```
+
+Beat it, and `/mobosses info` shows what you gained:
+
+```
+Mo’Bosses · Steve
+Level 4/100 · Rank #1
+Experience 1240 · Bosses killed 1
+Next boss near you any moment
+Survival bonus +25% · 1 h 12 min without dying
+```
+
+Bosses too rare or too common? Change `spawn_chance` under the type in `bosses.yml`:
+
+```yaml
+ZOMBIE:
+  spawn_chance: 0.15 # 15% instead of the bundled 9%
+```
+
+Run `/mobosses reload`, and new zombies roll with the new chance.
 
 ## How it plays
 

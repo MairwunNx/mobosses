@@ -33,11 +33,21 @@
 
 ## Install
 
-1. Put the jar in your server’s `plugins/` folder and restart the server.
-2. Look through the files in `plugins/MoBosses/`: the defaults play well, but spawn chances and classes are yours to tune.
-3. Run `/mobosses reload` after a change.
+Mo’Bosses needs Paper 26.3 or a fork of it, like Purpur, on Java 25. GriefPrevention, WorldGuard, CoreProtect, PlaceholderAPI, MiniPlaceholders, WorldAPI, and Plan are optional.
 
-Mo’Bosses needs Paper 26.3 or a fork of it, like Purpur, on Java 25. Configs and databases from 1.x load as they are.
+**With Docker (recommended).** In [itzg/minecraft-server](https://docker-minecraft-server.readthedocs.io), name it and the server fetches it:
+
+```yaml
+environment:
+  TYPE: PAPER
+  VERSION: "26.3"
+  MODRINTH_PROJECTS: |
+    mobosses
+```
+
+**By hand.** Put the jar in `plugins/` and restart the server.
+
+On its first start Mo’Bosses writes its files to `plugins/MoBosses/`. The defaults play well; spawn chances and classes are yours to tune, and `/mobosses reload` applies a change. To meet a boss right away, an operator runs `/mobosses spawn zombie 30 epic`. Configs and databases from 1.x load as they are.
 
 ## How it plays
 
