@@ -119,7 +119,7 @@ level_loot:
   - { material: STONE_AXE, mobclass: common, min_level: 5, max_level: 10, amount: "1", weight: 4.0, random_durability: true }
   - { material: COOKED_CHICKEN, mobclass: common, min_level: 5, max_level: 10, amount: "1-3", weight: 3.8 }
   - { material: BREAD, mobclass: common, min_level: 5, max_level: 10, amount: "2-4", weight: 7.5 }
-  - { material: TORCH, mobclass: common, min_level: 5, max_level: 10, amount: "4-8", weight: 6.8 }
+  - { material: SHIELD, mobclass: common, min_level: 5, max_level: 10, amount: "1", weight: 6.8 }
   - { material: BAKED_POTATO, mobclass: common, min_level: 5, max_level: 10, amount: "1-3", weight: 5.8 }
   - { material: LEATHER, mobclass: common, min_level: 5, max_level: 10, amount: "2-4", weight: 5.3 }
   - { material: STRING, mobclass: common, min_level: 5, max_level: 10, amount: "2-4", weight: 4.8 }
@@ -196,7 +196,7 @@ level_loot:
   - { material: COOKED_BEEF, mobclass: common, min_level: 10, max_level: 17, amount: "2-3", weight: 5.0 }
   - { material: PAPER, mobclass: common, min_level: 10, max_level: 17, amount: "2-5", weight: 4.5 }
   - { material: SUGAR, mobclass: common, min_level: 10, max_level: 17, amount: "1-3", weight: 4.0 }
-  - { material: TORCH, mobclass: common, min_level: 10, max_level: 17, amount: "8-16", weight: 7.2 }
+  - { material: CHAINMAIL_HELMET, mobclass: common, min_level: 10, max_level: 17, amount: "1", weight: 7.2, random_durability: true }
   - { material: COOKED_PORKCHOP, mobclass: common, min_level: 10, max_level: 17, amount: "2-4", weight: 6.5 }
   - { material: BREAD, mobclass: common, min_level: 10, max_level: 17, amount: "3-6", weight: 5.8 }
   - { material: GUNPOWDER, mobclass: common, min_level: 10, max_level: 17, amount: "1-3", weight: 5.3 }
@@ -270,7 +270,7 @@ level_loot:
   # Common
   - { material: IRON_INGOT, mobclass: common, min_level: 17, max_level: 24, amount: "2-4", weight: 7.0 }
   - { material: ARROW, mobclass: common, min_level: 17, max_level: 24, amount: "8-16", weight: 6.5 }
-  - { material: TORCH, mobclass: common, min_level: 17, max_level: 24, amount: "12-24", weight: 6.0 }
+  - { material: GOLDEN_CARROT, mobclass: common, min_level: 17, max_level: 24, amount: "3-5", weight: 6.0 }
   - { material: IRON_ORE, mobclass: common, min_level: 17, max_level: 24, amount: "1-3", weight: 5.5 }
   - { material: COOKED_PORKCHOP, mobclass: common, min_level: 17, max_level: 24, amount: "2-4", weight: 5.0 }
   - { material: EXPERIENCE_BOTTLE, mobclass: common, min_level: 17, max_level: 24, amount: "1-2", weight: 4.5 }

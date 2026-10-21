@@ -12,7 +12,7 @@ The “Release” workflow takes the notes for a version from its section here, 
 ### Changed
 
 - 🧹 **`arrow_arc_vertical_spread` is gone** from `abilities.yml`: nothing read it.
-- 🧹 **Less junk, more to fight with:** even the first levels drop stone swords and axes, bows, leather armor, and shields instead of sticks, dirt, and seeds, and from level 6 iron swords, chainmail, and iron ingots join in. From level 10 cobblestone, planks, wool, crafting tables, furnaces, signs, and observers give way to arrows, torches, food, gunpowder, lapis, experience bottles, ender pearls, and shields. At level 17, junk fell from about half of all drops to 2%. The weights stay, so rare and better items come as often as before.
+- 🧹 **Less junk, more to fight with:** even the first levels drop stone swords and axes, bows, leather armor, and shields instead of sticks, dirt, and seeds, and from level 6 iron swords, chainmail, and iron ingots join in. From level 10 cobblestone, planks, wool, crafting tables, furnaces, signs, and observers give way to arrows, shields, chainmail, food, gunpowder, lapis, experience bottles, ender pearls, and shields. At level 17, junk fell from about half of all drops to 2%. The weights stay, so rare and better items come as often as before.
 - 🧱 **Blocks and ingots instead of crumbs:** redstone is gone from the table, nuggets and dust turn into ingots from level 10, and blaze powder into rods. From level 20 a boss sometimes drops a ready block, iron, gold, lapis, copper, and rarely an emerald or, from level 50 on an Epic boss, a diamond block; blocks don’t grow with the level. High levels give more ingots: 6–12 iron from level 30.
 
 
