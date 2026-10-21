@@ -98,6 +98,16 @@ The project is `mobosses` (id `bRPqbgIV`), MIT, created 2026-10-15 and submitted
 
 The project is `MairwunNx/MoBosses` on hangar.papermc.io, MIT, created 2026-10-15 through the API; the owner set its avatar on the site. The “Release” workflow has a `hangar` switch, off by default: on, it runs `./gradlew publishPluginPublicationToHangar` with the `HANGAR_TOKEN` secret. The jar is over Hangar's 15 MB limit (Exposed brings `kotlin-reflect`), so Hangar gets a link to the GitHub release jar, as WorldAPI does; the GitHub release must exist first, which the workflow's order makes sure of. 2.1.0 went up this way from a local run after the workflow hit the limit. Hangar doesn't sync its page from MODRINTH.md, so edit it on the site after a big change.
 
+## Platforms
+
+How the family ships a project to more than one platform. A project that builds only for Paper keeps its jar's present name until it gains a second platform, so links and Moonlands' `jars.txt` keep working.
+
+- **Modules.** One Gradle module per platform, `paper/`, `fabric/`, `neoforge/`, next to a `core/` module with what they share: the rules as plain Kotlin without game imports, data, and assets. Every module builds from one version, and one release ships them all.
+- **Jars.** `<name>-paper-X.Y.Z.jar`, `<name>-fabric-X.Y.Z.jar`, and `<name>-neoforge-X.Y.Z.jar`, each attached again without the version, so `releases/latest/download/<name>-<platform>.jar` always fetches the newest.
+- **Modrinth.** One project for every platform. Each platform is its own version, numbered `X.Y.Z+paper`, `X.Y.Z+fabric`, or `X.Y.Z+neoforge`, with its own loaders and dependencies; a mod's version says it runs on the client and the server.
+- **Hangar.** Paper only, numbered `X.Y.Z`.
+- **Moonlands** runs the Paper jar only.
+
 ## Commits
 
 Short one-line imperative English messages, one logical change per commit: “Keep bosses out of GriefPrevention claims”.
