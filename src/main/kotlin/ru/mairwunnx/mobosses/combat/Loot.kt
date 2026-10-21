@@ -105,8 +105,7 @@ class Loot(private val plugin: MoBossesPlugin) {
 
   private fun stack(loot: Catalog.Loot, level: Int, code: String): ItemStack {
     val spec = loot.spec
-    // A type's own entries span every level, so growing them with it would flood the game with emeralds.
-    val factor = if (loot.types.isNotEmpty()) 1.0 else 1.0 + plugin.catalog.configs.loot.settings.perLevelDropFactor * (level - spec.minLevel).coerceAtLeast(0)
+    val factor = 1.0 + (spec.perLevel ?: plugin.catalog.configs.loot.settings.perLevelDropFactor) * (level - spec.minLevel).coerceAtLeast(0)
     val amount = ceil(spec.amount.random() * factor).toInt().coerceIn(1, loot.material.maxStackSize.coerceAtLeast(1))
     val stack = ItemStack(loot.material, amount)
 

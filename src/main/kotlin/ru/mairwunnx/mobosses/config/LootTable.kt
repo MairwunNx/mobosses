@@ -22,6 +22,8 @@ data class LootTable(
     val amount: IntRange = IntRange(1, 1),
     val weight: Double = 1.0,
     @SerialName("random_durability") val randomDurability: Boolean = false,
+    /** Each level above [minLevel] adds this share to its amount; null for `per_level_drop_factor`. */
+    @SerialName("per_level") val perLevel: Double? = null,
     /** Boss types, like `EVOKER`, that drop it on top of the shared table; empty for every type. */
     val types: List<String> = emptyList(),
     val enchantments: Map<String, IntRange> = emptyMap(),

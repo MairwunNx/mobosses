@@ -121,7 +121,6 @@ arrow_arc_arrows_base: 18
 arrow_arc_arrows_per_level: 0.20
 arrow_arc_arrows_max: 48
 arrow_arc_rings: 3
-arrow_arc_vertical_spread: 0.0
 arrow_arc_staggered: true
 arrow_arc_no_gravity: true
 arrow_arc_speed: 1.6

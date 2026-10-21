@@ -10,8 +10,8 @@
 #   mobclass           the lowest boss class that drops it
 #   min_level/max_level  the boss levels it drops at
 #   amount             a number or a range like "2-6"; each level above
-#                      min_level adds per_level_drop_factor of it, except in
-#                      entries with types, which keep their amount
+#                      min_level adds per_level_drop_factor of it
+#   per_level          this entry's own share per level instead
 #   weight             its odds against the other entries
 #   random_durability  comes partly worn (loot.random_durability in config.yml)
 #   enchantments       id: level or a range, like { sharpness: "1-2" }
@@ -782,72 +782,72 @@ level_loot:
   # Each type's own entries join the shared table for that type only, so a
   # boss drops what its mob is known for more often. bonus_loot_chance in
   # bosses.yml rolls one more item per kill from these, for one of the players
-  # who got loot. Their amounts don't grow with the level, and nothing here is
-  # worth more than the shared table at the same class and level.
+  # who got loot. Supplies grow by 4% of their amount per level, not the
+  # table's 8%, since these span every level; single valuable items don't grow.
   # Evoker: mansions and raids
-  - { material: EMERALD, mobclass: common, min_level: 0, max_level: 100, amount: "2-4", weight: 18.0, types: [ EVOKER ] }
-  - { material: EXPERIENCE_BOTTLE, mobclass: uncommon, min_level: 5, max_level: 100, amount: "2-4", weight: 9.0, types: [ EVOKER ] }
-  - { material: ENCHANTED_BOOK, mobclass: rare, min_level: 15, max_level: 100, amount: "1", weight: 1.5, enchantments: { protection: "2-3" }, itemClass: rare, types: [ EVOKER ] }
-  - { material: ENCHANTED_BOOK, mobclass: epic, min_level: 25, max_level: 100, amount: "1", weight: 0.8, enchantments: { sharpness: "3-4" }, itemClass: epic, types: [ EVOKER ] }
+  - { material: EMERALD, mobclass: common, min_level: 0, max_level: 100, amount: "2-4", per_level: 0.04, weight: 18.0, types: [ EVOKER ] }
+  - { material: EXPERIENCE_BOTTLE, mobclass: uncommon, min_level: 5, max_level: 100, amount: "2-4", per_level: 0.04, weight: 9.0, types: [ EVOKER ] }
+  - { material: ENCHANTED_BOOK, mobclass: rare, min_level: 15, max_level: 100, amount: "1", per_level: 0.0, weight: 1.5, enchantments: { protection: "2-3" }, itemClass: rare, types: [ EVOKER ] }
+  - { material: ENCHANTED_BOOK, mobclass: epic, min_level: 25, max_level: 100, amount: "1", per_level: 0.0, weight: 0.8, enchantments: { sharpness: "3-4" }, itemClass: epic, types: [ EVOKER ] }
   # Vex: an evoker's summons
-  - { material: EXPERIENCE_BOTTLE, mobclass: common, min_level: 0, max_level: 100, amount: "1-2", weight: 15.0, types: [ VEX ] }
-  - { material: EMERALD, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1-2", weight: 7.5, types: [ VEX ] }
-  - { material: IRON_SWORD, mobclass: rare, min_level: 10, max_level: 100, amount: "1", weight: 1.2, random_durability: true, enchantments: { sharpness: "2-3" }, itemClass: rare, types: [ VEX ] }
+  - { material: EXPERIENCE_BOTTLE, mobclass: common, min_level: 0, max_level: 100, amount: "1-2", per_level: 0.04, weight: 15.0, types: [ VEX ] }
+  - { material: EMERALD, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1-2", per_level: 0.04, weight: 7.5, types: [ VEX ] }
+  - { material: IRON_SWORD, mobclass: rare, min_level: 10, max_level: 100, amount: "1", per_level: 0.0, weight: 1.2, random_durability: true, enchantments: { sharpness: "2-3" }, itemClass: rare, types: [ VEX ] }
   # Vindicator: mansions and raids
-  - { material: EMERALD, mobclass: common, min_level: 0, max_level: 100, amount: "1-3", weight: 15.0, types: [ VINDICATOR ] }
-  - { material: IRON_AXE, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", weight: 6.0, random_durability: true, enchantments: { sharpness: "1-2" }, types: [ VINDICATOR ] }
-  - { material: DIAMOND_AXE, mobclass: epic, min_level: 25, max_level: 100, amount: "1", weight: 0.6, random_durability: true, enchantments: { sharpness: "2-4" }, itemClass: epic, types: [ VINDICATOR ] }
+  - { material: EMERALD, mobclass: common, min_level: 0, max_level: 100, amount: "1-3", per_level: 0.04, weight: 15.0, types: [ VINDICATOR ] }
+  - { material: IRON_AXE, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", per_level: 0.0, weight: 6.0, random_durability: true, enchantments: { sharpness: "1-2" }, types: [ VINDICATOR ] }
+  - { material: DIAMOND_AXE, mobclass: epic, min_level: 25, max_level: 100, amount: "1", per_level: 0.0, weight: 0.6, random_durability: true, enchantments: { sharpness: "2-4" }, itemClass: epic, types: [ VINDICATOR ] }
   # Pillager: outposts, patrols, and raids
-  - { material: ARROW, mobclass: common, min_level: 0, max_level: 100, amount: "8-16", weight: 15.0, types: [ PILLAGER ] }
-  - { material: CROSSBOW, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", weight: 6.0, random_durability: true, enchantments: { quick_charge: "1-2" }, types: [ PILLAGER ] }
-  - { material: CROSSBOW, mobclass: rare, min_level: 20, max_level: 100, amount: "1", weight: 0.8, random_durability: true, enchantments: { piercing: "2-4" }, itemClass: rare, types: [ PILLAGER ] }
+  - { material: ARROW, mobclass: common, min_level: 0, max_level: 100, amount: "8-16", per_level: 0.04, weight: 15.0, types: [ PILLAGER ] }
+  - { material: CROSSBOW, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", per_level: 0.0, weight: 6.0, random_durability: true, enchantments: { quick_charge: "1-2" }, types: [ PILLAGER ] }
+  - { material: CROSSBOW, mobclass: rare, min_level: 20, max_level: 100, amount: "1", per_level: 0.0, weight: 0.8, random_durability: true, enchantments: { piercing: "2-4" }, itemClass: rare, types: [ PILLAGER ] }
   # Ravager: raids
-  - { material: SADDLE, mobclass: common, min_level: 0, max_level: 100, amount: "1", weight: 9.0, types: [ RAVAGER ] }
-  - { material: EMERALD, mobclass: common, min_level: 0, max_level: 100, amount: "2-4", weight: 12.0, types: [ RAVAGER ] }
-  - { material: EXPERIENCE_BOTTLE, mobclass: uncommon, min_level: 10, max_level: 100, amount: "3-5", weight: 6.0, types: [ RAVAGER ] }
+  - { material: SADDLE, mobclass: common, min_level: 0, max_level: 100, amount: "1", per_level: 0.0, weight: 9.0, types: [ RAVAGER ] }
+  - { material: EMERALD, mobclass: common, min_level: 0, max_level: 100, amount: "2-4", per_level: 0.04, weight: 12.0, types: [ RAVAGER ] }
+  - { material: EXPERIENCE_BOTTLE, mobclass: uncommon, min_level: 10, max_level: 100, amount: "3-5", per_level: 0.04, weight: 6.0, types: [ RAVAGER ] }
   # Witch
-  - { material: GLOWSTONE_DUST, mobclass: common, min_level: 0, max_level: 100, amount: "2-5", weight: 15.0, types: [ WITCH ] }
-  - { material: NETHER_WART, mobclass: uncommon, min_level: 5, max_level: 100, amount: "2-4", weight: 7.5, types: [ WITCH ] }
-  - { material: BLAZE_POWDER, mobclass: rare, min_level: 10, max_level: 100, amount: "1-2", weight: 1.2, types: [ WITCH ] }
+  - { material: GLOWSTONE_DUST, mobclass: common, min_level: 0, max_level: 100, amount: "2-5", per_level: 0.04, weight: 15.0, types: [ WITCH ] }
+  - { material: NETHER_WART, mobclass: uncommon, min_level: 5, max_level: 100, amount: "2-4", per_level: 0.04, weight: 7.5, types: [ WITCH ] }
+  - { material: BLAZE_POWDER, mobclass: rare, min_level: 10, max_level: 100, amount: "1-2", per_level: 0.04, weight: 1.2, types: [ WITCH ] }
   # Piglin brute: bastions
-  - { material: GOLD_INGOT, mobclass: common, min_level: 0, max_level: 100, amount: "2-4", weight: 15.0, types: [ PIGLIN_BRUTE ] }
-  - { material: GOLDEN_AXE, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", weight: 6.0, random_durability: true, enchantments: { sharpness: "2-3" }, types: [ PIGLIN_BRUTE ] }
-  - { material: NETHERITE_SCRAP, mobclass: epic, min_level: 25, max_level: 100, amount: "1", weight: 0.3, itemClass: epic, types: [ PIGLIN_BRUTE ] }
+  - { material: GOLD_INGOT, mobclass: common, min_level: 0, max_level: 100, amount: "2-4", per_level: 0.04, weight: 15.0, types: [ PIGLIN_BRUTE ] }
+  - { material: GOLDEN_AXE, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", per_level: 0.0, weight: 6.0, random_durability: true, enchantments: { sharpness: "2-3" }, types: [ PIGLIN_BRUTE ] }
+  - { material: NETHERITE_SCRAP, mobclass: epic, min_level: 25, max_level: 100, amount: "1", per_level: 0.0, weight: 0.3, itemClass: epic, types: [ PIGLIN_BRUTE ] }
   # Piglin
-  - { material: GOLD_INGOT, mobclass: common, min_level: 0, max_level: 100, amount: "1-2", weight: 12.0, types: [ PIGLIN ] }
+  - { material: GOLD_INGOT, mobclass: common, min_level: 0, max_level: 100, amount: "1-2", per_level: 0.04, weight: 12.0, types: [ PIGLIN ] }
   # Wither skeleton: fortresses
-  - { material: WITHER_SKELETON_SKULL, mobclass: rare, min_level: 15, max_level: 100, amount: "1", weight: 0.8, itemClass: rare, types: [ WITHER_SKELETON ] }
+  - { material: WITHER_SKELETON_SKULL, mobclass: rare, min_level: 15, max_level: 100, amount: "1", per_level: 0.0, weight: 0.8, itemClass: rare, types: [ WITHER_SKELETON ] }
   # Blaze: fortresses
-  - { material: BLAZE_ROD, mobclass: common, min_level: 0, max_level: 100, amount: "1-2", weight: 15.0, types: [ BLAZE ] }
-  - { material: FIRE_CHARGE, mobclass: uncommon, min_level: 5, max_level: 100, amount: "2-4", weight: 6.0, types: [ BLAZE ] }
+  - { material: BLAZE_ROD, mobclass: common, min_level: 0, max_level: 100, amount: "1-2", per_level: 0.04, weight: 15.0, types: [ BLAZE ] }
+  - { material: FIRE_CHARGE, mobclass: uncommon, min_level: 5, max_level: 100, amount: "2-4", per_level: 0.04, weight: 6.0, types: [ BLAZE ] }
   # Breeze: trial chambers
-  - { material: BREEZE_ROD, mobclass: common, min_level: 0, max_level: 100, amount: "1-2", weight: 15.0, types: [ BREEZE ] }
-  - { material: WIND_CHARGE, mobclass: common, min_level: 0, max_level: 100, amount: "4-8", weight: 12.0, types: [ BREEZE ] }
-  - { material: TRIAL_KEY, mobclass: uncommon, min_level: 10, max_level: 100, amount: "1", weight: 4.5, types: [ BREEZE ] }
+  - { material: BREEZE_ROD, mobclass: common, min_level: 0, max_level: 100, amount: "1-2", per_level: 0.04, weight: 15.0, types: [ BREEZE ] }
+  - { material: WIND_CHARGE, mobclass: common, min_level: 0, max_level: 100, amount: "4-8", per_level: 0.04, weight: 12.0, types: [ BREEZE ] }
+  - { material: TRIAL_KEY, mobclass: uncommon, min_level: 10, max_level: 100, amount: "1", per_level: 0.0, weight: 4.5, types: [ BREEZE ] }
   # Guardian: ocean monuments
-  - { material: PRISMARINE_CRYSTALS, mobclass: common, min_level: 0, max_level: 100, amount: "2-5", weight: 15.0, types: [ GUARDIAN ] }
-  - { material: SPONGE, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", weight: 6.0, types: [ GUARDIAN ] }
-  - { material: TIDE_ARMOR_TRIM_SMITHING_TEMPLATE, mobclass: legendary, min_level: 30, max_level: 100, amount: "1", weight: 0.2, itemClass: legendary, types: [ GUARDIAN ] }
+  - { material: PRISMARINE_CRYSTALS, mobclass: common, min_level: 0, max_level: 100, amount: "2-5", per_level: 0.04, weight: 15.0, types: [ GUARDIAN ] }
+  - { material: SPONGE, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", per_level: 0.0, weight: 6.0, types: [ GUARDIAN ] }
+  - { material: TIDE_ARMOR_TRIM_SMITHING_TEMPLATE, mobclass: legendary, min_level: 30, max_level: 100, amount: "1", per_level: 0.0, weight: 0.2, itemClass: legendary, types: [ GUARDIAN ] }
   # Drowned
-  - { material: NAUTILUS_SHELL, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", weight: 6.0, types: [ DROWNED ] }
-  - { material: TRIDENT, mobclass: rare, min_level: 20, max_level: 100, amount: "1", weight: 0.6, random_durability: true, enchantments: { impaling: "1-3" }, itemClass: rare, types: [ DROWNED ] }
+  - { material: NAUTILUS_SHELL, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", per_level: 0.0, weight: 6.0, types: [ DROWNED ] }
+  - { material: TRIDENT, mobclass: rare, min_level: 20, max_level: 100, amount: "1", per_level: 0.0, weight: 0.6, random_durability: true, enchantments: { impaling: "1-3" }, itemClass: rare, types: [ DROWNED ] }
   # Enderman
-  - { material: ENDER_PEARL, mobclass: common, min_level: 0, max_level: 100, amount: "1-2", weight: 15.0, types: [ ENDERMAN ] }
+  - { material: ENDER_PEARL, mobclass: common, min_level: 0, max_level: 100, amount: "1-2", per_level: 0.04, weight: 15.0, types: [ ENDERMAN ] }
   # Phantom
-  - { material: PHANTOM_MEMBRANE, mobclass: common, min_level: 0, max_level: 100, amount: "1-3", weight: 15.0, types: [ PHANTOM ] }
+  - { material: PHANTOM_MEMBRANE, mobclass: common, min_level: 0, max_level: 100, amount: "1-3", per_level: 0.04, weight: 15.0, types: [ PHANTOM ] }
   # Creeper
-  - { material: GUNPOWDER, mobclass: common, min_level: 0, max_level: 100, amount: "2-5", weight: 15.0, types: [ CREEPER ] }
-  - { material: MUSIC_DISC_13, mobclass: rare, min_level: 10, max_level: 100, amount: "1", weight: 0.5, types: [ CREEPER ] }
+  - { material: GUNPOWDER, mobclass: common, min_level: 0, max_level: 100, amount: "2-5", per_level: 0.04, weight: 15.0, types: [ CREEPER ] }
+  - { material: MUSIC_DISC_13, mobclass: rare, min_level: 10, max_level: 100, amount: "1", per_level: 0.0, weight: 0.5, types: [ CREEPER ] }
   # Skeleton, stray, bogged
-  - { material: ARROW, mobclass: common, min_level: 0, max_level: 100, amount: "6-12", weight: 15.0, types: [ SKELETON, STRAY, BOGGED ] }
-  - { material: BOW, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", weight: 6.0, random_durability: true, enchantments: { power: "1-3" }, types: [ SKELETON, STRAY, BOGGED ] }
+  - { material: ARROW, mobclass: common, min_level: 0, max_level: 100, amount: "6-12", per_level: 0.04, weight: 15.0, types: [ SKELETON, STRAY, BOGGED ] }
+  - { material: BOW, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", per_level: 0.0, weight: 6.0, random_durability: true, enchantments: { power: "1-3" }, types: [ SKELETON, STRAY, BOGGED ] }
   # Spider, cave spider
-  - { material: STRING, mobclass: common, min_level: 0, max_level: 100, amount: "3-6", weight: 15.0, types: [ SPIDER, CAVE_SPIDER ] }
-  - { material: FERMENTED_SPIDER_EYE, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1-2", weight: 6.0, types: [ SPIDER, CAVE_SPIDER ] }
+  - { material: STRING, mobclass: common, min_level: 0, max_level: 100, amount: "3-6", per_level: 0.04, weight: 15.0, types: [ SPIDER, CAVE_SPIDER ] }
+  - { material: FERMENTED_SPIDER_EYE, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1-2", per_level: 0.04, weight: 6.0, types: [ SPIDER, CAVE_SPIDER ] }
   # Hoglin
-  - { material: COOKED_PORKCHOP, mobclass: common, min_level: 0, max_level: 100, amount: "3-6", weight: 15.0, types: [ HOGLIN ] }
+  - { material: COOKED_PORKCHOP, mobclass: common, min_level: 0, max_level: 100, amount: "3-6", per_level: 0.04, weight: 15.0, types: [ HOGLIN ] }
   # Zombie villager
-  - { material: EMERALD, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", weight: 4.5, types: [ ZOMBIE_VILLAGER ] }
+  - { material: EMERALD, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", per_level: 0.04, weight: 4.5, types: [ ZOMBIE_VILLAGER ] }
 
 loot_settings:
   per_level_drop_factor: 0.08

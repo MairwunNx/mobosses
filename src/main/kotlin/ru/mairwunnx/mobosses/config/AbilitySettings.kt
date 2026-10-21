@@ -96,7 +96,6 @@ data class AbilitySettings(
   @SerialName("arrow_arc_arrows_per_level") val arcArrowsPerLevel: Double = 0.2,
   @SerialName("arrow_arc_arrows_max") val arcArrowsMax: Int = 48,
   @SerialName("arrow_arc_rings") val arcRings: Int = 3,
-  @SerialName("arrow_arc_vertical_spread") val arcVerticalSpread: Double = 0.0,
   @SerialName("arrow_arc_staggered") val arcStaggered: Boolean = true,
   @SerialName("arrow_arc_no_gravity") val arcNoGravity: Boolean = true,
   @SerialName("arrow_arc_speed") val arcSpeed: Double = 1.6,
