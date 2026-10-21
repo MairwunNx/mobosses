@@ -19,7 +19,7 @@ import kotlin.math.max
 import kotlin.random.Random
 
 /**
- * Waves of burning meteors over the nearest player in range. They break up on impact: the game would
+ * Waves of burning meteors over the player the boss fights, however far. They break up on impact: the game would
  * turn a falling block into a block, so [MeteorListener] stops that, and they aren't saved, so a
  * restart doesn't drop one later.
  */
@@ -34,8 +34,7 @@ object MeteorShower : Ability {
 
   override fun cast(cast: Cast): Boolean {
     val cfg = cast.settings
-    val radius = Rolls.linear(cfg.meteorRadiusBase, cfg.meteorRadiusPerLevel, cfg.meteorRadiusMax, cast.level)
-    var target = cast.nearest(radius)?.takeIf { Targets.headroom(it.location, cast.settings.meteorHeight) >= MIN_ROOM } ?: return false
+    var target = cast.foes().firstOrNull { Targets.headroom(it.location, cfg.meteorHeight) >= MIN_ROOM } ?: return false
     val waves = Rolls.linear(cfg.meteorWavesBase, cfg.meteorWavesPerLevel, cfg.meteorWavesMax, cast.level)
     val perWave = Rolls.linear(cfg.meteorsPerWaveBase, cfg.meteorsPerWavePerLevel, cfg.meteorsPerWaveMax, cast.level)
     val damage = Rolls.linear(cfg.meteorDamageBase, cfg.meteorDamagePerLevel, cfg.meteorDamageMax, cast.level)
@@ -43,8 +42,8 @@ object MeteorShower : Ability {
 
     repeat(waves) { wave ->
       cast.later(cfg.meteorWaveIntervalTicks * wave) {
-        // The first target while it's still in the fight; then whoever is nearest.
-        if (!cast.canHit(target) || target.world != cast.at.world) target = cast.nearest(radius) ?: return@later
+        // The first target while it's still in the fight; then the next foe.
+        if (!cast.canHit(target) || target.world != cast.at.world) target = cast.foe() ?: return@later
         repeat(perWave) { meteor(cast, target, damage) }
       }
     }

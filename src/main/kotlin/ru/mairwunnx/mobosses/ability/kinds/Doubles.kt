@@ -33,7 +33,7 @@ object Doubles : Ability {
   override fun threshold(thresholds: AbilityThresholds) = thresholds.doubles
   override fun cooldown(settings: AbilitySettings) = settings.doubles.cooldown to settings.doubles.cooldownBias
 
-  override fun usable(cast: Cast) = cast.boss.summoner == null && cast.nearest(24.0) != null
+  override fun usable(cast: Cast) = cast.boss.summoner == null && cast.foe(24.0) != null
 
   override fun cast(cast: Cast): Boolean {
     val cfg = cast.settings.doubles

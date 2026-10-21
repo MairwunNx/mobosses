@@ -14,7 +14,7 @@ import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
 
-/** Cobwebs in a ring around the nearest player, gone after `web_ring_duration` or when the server stops, and slowness for players inside. */
+/** Cobwebs in a ring around the player the boss fights, however far, gone after `web_ring_duration` or when the server stops, and slowness for players inside. */
 object WebRing : Ability {
   override val key = "web_ring"
   override val message = Message.WEB_RING
@@ -26,7 +26,7 @@ object WebRing : Ability {
 
   override fun cast(cast: Cast): Boolean {
     val cfg = cast.settings
-    val target = cast.nearest(20.0) ?: return false
+    val target = cast.foe() ?: return false
     val center = target.location
     val web = Material.COBWEB.createBlockData()
     var placed = 0

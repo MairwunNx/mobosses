@@ -19,10 +19,10 @@ import ru.mairwunnx.mobosses.ability.Cast
 import ru.mairwunnx.mobosses.lang.Message
 import kotlin.random.Random
 
-/** The breeze fires wind charges at players near it: knockback, no broken blocks. */
+/** The breeze fires wind charges at the players it fights near it: knockback, no broken blocks. */
 object WindBurst : Signature("wind_burst", Message.WIND_BURST) {
   override fun cast(cast: Cast): Boolean {
-    val targets = cast.players(cast.at, 20.0).take(3).ifEmpty { return false }
+    val targets = cast.foes(20.0).take(3).ifEmpty { return false }
     targets.forEach { target ->
       cast.boss.entity.launchProjectile(org.bukkit.entity.BreezeWindCharge::class.java, aim(cast, target, 0.03).multiply(1.4)) {
         it.isPersistent = false

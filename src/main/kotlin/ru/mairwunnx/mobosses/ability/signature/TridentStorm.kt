@@ -19,10 +19,10 @@ import ru.mairwunnx.mobosses.ability.Cast
 import ru.mairwunnx.mobosses.lang.Message
 import kotlin.random.Random
 
-/** The drowned hurls tridents at the nearest player, none of which anyone can pick up. */
+/** The drowned hurls tridents at the player it fights, none of which anyone can pick up. */
 object TridentStorm : Signature("trident_storm", Message.TRIDENT_STORM) {
   override fun cast(cast: Cast): Boolean {
-    val target = cast.nearest(28.0) ?: return false
+    val target = cast.foe(28.0) ?: return false
     val count = (2 + cast.level / 30).coerceAtMost(5)
     val damage = scaled(cast, 6.0, 0.06, 12.0)
     repeat(count) { i ->

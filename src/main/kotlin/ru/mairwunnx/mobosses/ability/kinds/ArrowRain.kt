@@ -15,7 +15,7 @@ import ru.mairwunnx.mobosses.config.AbilityThresholds
 import ru.mairwunnx.mobosses.lang.Message
 import kotlin.random.Random
 
-/** Waves of arrows falling on a square around the nearest player; each wave follows them. */
+/** Waves of arrows falling on a square around the player the boss fights, however far; each wave follows them. */
 object ArrowRain : Ability {
   private const val MIN_ROOM = 3.0
 
@@ -27,7 +27,7 @@ object ArrowRain : Ability {
 
   override fun cast(cast: Cast): Boolean {
     val cfg = cast.settings
-    val target = cast.nearest(cfg.rainTargetSearchRadius)?.takeIf { Targets.headroom(it.location, cfg.rainHeight) >= MIN_ROOM } ?: return false
+    val target = cast.foes().firstOrNull { Targets.headroom(it.location, cfg.rainHeight) >= MIN_ROOM } ?: return false
     val arrows = Rolls.linear(cfg.rainArrowsBase, cfg.rainArrowsPerLevel, cfg.rainArrowsMax, cast.level).coerceAtLeast(1)
     val damage = Rolls.linear(cfg.rainDamageBase, cfg.rainDamagePerLevel, cfg.rainDamageMax, cast.level)
     val effects = if (cast.level >= cfg.rainEffectLevelThreshold) cast.plugin.catalog.rainEffects.filter { it != PotionEffectType.GLOWING } else emptyList()

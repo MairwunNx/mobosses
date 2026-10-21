@@ -2,6 +2,13 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.6.4
+
+### Fixed
+
+- 🎯 **Aimed abilities go for the players the boss fights.** They used to pick the nearest player within their own range, so they hit a bystander who never joined the fight and missed a fighter a step farther away. Now they go for the player the boss chases, then the one whose hit set them off, then everyone who hit it, nearest first. This covers the meteor shower, arrow rain, fire and web rings, teleport strike, chain, grapple, and the signature volleys, fangs, fireballs, tridents, potions, wind charges, pounce, stampede, and swap.
+- ☄️ **Meteors, arrow rain, and the fire and web rings reach you anywhere**, as lightning does since 2.6.3. Meteors looked for a target only 6 to 14 blocks from the boss and fell on nobody past that. The fire ring no longer flares up around the boss when it finds no one. `meteor_shower_radius_*` and `arrow_rain_target_search_radius` are gone from `abilities.yml`; old files still load. Projectiles, leaps, and teleports keep their ranges.
+
 ## 2.6.3
 
 ### Fixed

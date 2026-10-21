@@ -24,12 +24,21 @@ class Cast(val plugin: MoBossesPlugin, val boss: Boss, val attacker: Player?) {
   /** Players and the pets and golems that hit the boss lately: whom abilities that hurt everyone near hit. */
   fun victims(center: Location, radius: Double): List<LivingEntity> = players(center, radius) + Targets.aggressors(center, radius, boss.uuid, plugin.keys.aggressor)
 
-  fun nearest(radius: Double) = Targets.nearest(at, radius, plugin.guards)
+  /**
+   * Whom the boss fights, however far in its world: the player it chases, the one who set this off, then
+   * everyone who hit it, nearest first. Aimed abilities pick from these, never a bystander.
+   */
+  fun foes(): List<Player> {
+    val here = at
+    val hitters = boss.damage.keys.mapNotNull(Bukkit::getPlayer).filter { it.world == here.world }.sortedBy { it.location.distanceSquared(here) }
+    return (listOfNotNull((boss.entity as? Mob)?.target as? Player, attacker) + hitters).distinct().filter { it.world == here.world && canHit(it) }
+  }
 
-  /** Whom the boss fights, however far in its world: its target, the player who set this off, and everyone who hit it. */
-  fun foes(): List<Player> =
-    (listOfNotNull((boss.entity as? Mob)?.target as? Player, attacker) + boss.damage.keys.mapNotNull(Bukkit::getPlayer))
-      .distinct().filter { it.world == at.world && canHit(it) }
+  /** [foes] within [radius] of the boss. */
+  fun foes(radius: Double): List<Player> = foes().filter { it.location.distanceSquared(at) <= radius * radius }
+
+  /** The foe an aimed ability goes for: the first of [foes] within [radius]. */
+  fun foe(radius: Double = Double.POSITIVE_INFINITY): Player? = foes(radius).firstOrNull()
 
   fun canHit(player: Player) = Targets.canHit(player, plugin.guards)
 

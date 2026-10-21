@@ -19,10 +19,10 @@ import ru.mairwunnx.mobosses.ability.Cast
 import ru.mairwunnx.mobosses.lang.Message
 import kotlin.random.Random
 
-/** The witch throws splash potions at players near it: poison and slowness, weakness and harming as it grows. */
+/** The witch throws splash potions at the players it fights near it: poison and slowness, weakness and harming as it grows. */
 object PotionVolley : Signature("potion_volley", Message.POTION_VOLLEY) {
   override fun cast(cast: Cast): Boolean {
-    val targets = cast.players(cast.at, 16.0).take(4).ifEmpty { return false }
+    val targets = cast.foes(16.0).take(4).ifEmpty { return false }
     val seconds = ticks(cast, 4.0, 0.06, 10.0)
     targets.forEach { target ->
       val effects = buildList {

@@ -6,7 +6,9 @@
 # shared cooldown and the ability's own cooldown have passed. Cooldowns are in
 # milliseconds; a bias stretches each one by a random factor between 1 and the
 # bias. Abilities hurt players in survival or adventure only, and change blocks
-# only where the protection settings in config.yml allow it.
+# only where the protection settings in config.yml allow it. Aimed abilities
+# go for the players the boss fights: the one it chases, the one who hit it,
+# then everyone who hit it, nearest first; never a bystander.
 
 is_lightning_enabled: true
 is_summoning_enabled: true
@@ -70,7 +72,7 @@ regen_anti_projectiles: true    # Burns arrows in the aura; tridents pass.
 regen_slow_players: true        # Slows players in the aura.
 
 # ---------------------------------------------------------------------------
-#  Fire ring: fire on the ground around the nearest player.
+#  Fire ring: fire on the ground around the player the boss fights.
 # ---------------------------------------------------------------------------
 fire_ring_min_radius: 4.0
 fire_ring_max_radius: 7.0
@@ -78,7 +80,8 @@ fire_ring_density: 0.7   # The share of the ring's 64 points that catch fire.
 fire_ring_seconds: 6      # Seconds before the fire goes out.
 
 # ---------------------------------------------------------------------------
-#  Web ring: cobwebs around the nearest player, and slowness for players inside.
+#  Web ring: cobwebs around the player the boss fights, and slowness for
+#  players inside.
 # ---------------------------------------------------------------------------
 web_ring_radius: 3.0
 web_ring_duration: 8                  # Seconds before the cobwebs go.
@@ -88,7 +91,7 @@ web_ring_potion_max_duration: 10
 web_ring_potion_level_modifier: 0.06  # plus this per boss level.
 
 # ---------------------------------------------------------------------------
-#  Meteor shower: waves of burning blocks over the nearest player in range.
+#  Meteor shower: waves of burning blocks over the player the boss fights.
 # ---------------------------------------------------------------------------
 meteor_shower_cooldown: 16000
 meteor_shower_cooldown_bias: 1.2
@@ -99,9 +102,6 @@ meteor_shower_wave_interval_ticks: 20
 meteor_shower_meteors_per_wave_base: 6
 meteor_shower_meteors_per_wave_per_level: 0.08
 meteor_shower_meteors_per_wave_max: 20
-meteor_shower_radius_base: 6.0
-meteor_shower_radius_per_level: 0.05
-meteor_shower_radius_max: 14.0
 meteor_shower_height: 18.0
 meteor_shower_fall_speed: 1.2
 meteor_shower_meteor_lifetime_seconds: 8
@@ -137,7 +137,8 @@ arrow_arc_effect_amplifier_max: 1
 arrow_arc_negative_effects: [ SLOWNESS, POISON, WEAKNESS, MINING_FATIGUE, BLINDNESS, HUNGER, WITHER, LEVITATION, NAUSEA, DARKNESS, UNLUCK, BAD_OMEN ]
 
 # ---------------------------------------------------------------------------
-#  Arrow rain: waves of arrows falling on a square around the nearest player.
+#  Arrow rain: waves of arrows falling on a square around the player the
+#  boss fights.
 # ---------------------------------------------------------------------------
 arrow_rain_cooldown: 8000
 arrow_rain_cooldown_bias: 1.1
@@ -147,7 +148,6 @@ arrow_rain_arrows_max: 90
 arrow_rain_waves: 2
 arrow_rain_wave_interval_ticks: 20
 arrow_rain_half_size: 8.0              # Half the square's side: 8.0 is 16×16.
-arrow_rain_target_search_radius: 40.0
 arrow_rain_height: 12.0
 arrow_rain_fall_speed: 0.9
 arrow_rain_lifetime_seconds: 6
@@ -293,11 +293,11 @@ phase_two:
 #  their damage and durations; types lists the boss types that have one.
 # ---------------------------------------------------------------------------
 signature:
-  potion_volley: { enabled: true, cooldown: 9000, cooldown_bias: 1.3, strength: 1.0, types: [ WITCH ] }   # splash potions at the players near it
+  potion_volley: { enabled: true, cooldown: 9000, cooldown_bias: 1.3, strength: 1.0, types: [ WITCH ] }   # splash potions at the players it fights near it
   fireball_barrage: { enabled: true, cooldown: 8000, cooldown_bias: 1.3, strength: 1.0, types: [ BLAZE ] }   # small fireballs that burn players, not blocks
-  aimed_volley: { enabled: true, cooldown: 7000, cooldown_bias: 1.3, strength: 1.0, types: [ SKELETON, STRAY, BOGGED, PILLAGER ] }   # a fan of arrows at the nearest player
+  aimed_volley: { enabled: true, cooldown: 7000, cooldown_bias: 1.3, strength: 1.0, types: [ SKELETON, STRAY, BOGGED, PILLAGER ] }   # a fan of arrows at the player it fights
   pounce: { enabled: true, cooldown: 6000, cooldown_bias: 1.3, strength: 1.0, types: [ SPIDER, CAVE_SPIDER ] }   # a leap and a bite: slowness, or poison from a cave spider
-  swap: { enabled: true, cooldown: 14000, cooldown_bias: 1.3, strength: 1.0, types: [ ENDERMAN ] }   # trades places with a player, blinding them
+  swap: { enabled: true, cooldown: 14000, cooldown_bias: 1.3, strength: 1.0, types: [ ENDERMAN ] }   # trades places with the player it fights, blinding them
   trident_storm: { enabled: true, cooldown: 9000, cooldown_bias: 1.3, strength: 1.0, types: [ DROWNED ] }   # tridents nobody can pick up
   fang_line: { enabled: true, cooldown: 8000, cooldown_bias: 1.3, strength: 1.0, types: [ EVOKER ] }   # a line of fangs along the ground
   whirlwind: { enabled: true, cooldown: 8000, cooldown_bias: 1.3, strength: 1.0, types: [ VINDICATOR, PIGLIN_BRUTE ] }   # a spin that hits and throws back players close by

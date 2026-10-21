@@ -15,10 +15,10 @@ import ru.mairwunnx.mobosses.ability.Cast
 import ru.mairwunnx.mobosses.ability.Targets
 import ru.mairwunnx.mobosses.lang.Message
 
-/** The evoker sends a line of fangs along the ground toward the nearest player. */
+/** The evoker sends a line of fangs along the ground toward the player it fights. */
 object FangLine : Signature("fang_line", Message.FANG_LINE) {
   override fun cast(cast: Cast): Boolean {
-    val target = cast.nearest(20.0) ?: return false
+    val target = cast.foe(20.0) ?: return false
     val step = target.location.toVector().subtract(cast.at.toVector()).setY(0)
     if (step.lengthSquared() < 1e-4) return false
     step.normalize().multiply(1.25)

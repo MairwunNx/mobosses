@@ -11,7 +11,7 @@ import ru.mairwunnx.mobosses.lang.Message
 /** The creeper's fuse catches early: it gets fast and hard to stop for a few seconds. */
 object Fuse : Signature("fuse", Message.FUSE) {
   override fun cast(cast: Cast): Boolean {
-    if (cast.nearest(12.0) == null) return false
+    if (cast.foe(12.0) == null) return false
     val duration = ticks(cast, 3.0, 0.03, 6.0)
     cast.boss.entity.addPotionEffect(PotionEffect(PotionEffectType.SPEED, duration, 1))
     cast.boss.entity.addPotionEffect(PotionEffect(PotionEffectType.RESISTANCE, duration, 1))

@@ -13,7 +13,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
 
-/** Fire on the ground in a ring around the nearest player, or around the boss, for a few seconds; never in place of water, next to anything that burns, or where protection forbids it. */
+/** Fire on the ground in a ring around the player the boss fights, however far, for a few seconds; never in place of water, next to anything that burns, or where protection forbids it. */
 object FireRing : Ability {
   override val key = "fire_ring"
   override val message = Message.FIRE_RING
@@ -26,7 +26,7 @@ object FireRing : Ability {
 
   override fun cast(cast: Cast): Boolean {
     val cfg = cast.settings
-    val center = (cast.nearest(32.0) ?: cast.boss.entity).location
+    val center = cast.foe()?.location ?: return false
     val radius = if (cfg.fireRingMaxRadius > cfg.fireRingMinRadius) Random.nextDouble(cfg.fireRingMinRadius, cfg.fireRingMaxRadius) else cfg.fireRingMinRadius
     val density = cfg.fireRingDensity.coerceIn(0.0, 1.0)
     val fire = Material.FIRE.createBlockData()

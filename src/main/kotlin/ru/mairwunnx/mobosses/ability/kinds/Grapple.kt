@@ -11,7 +11,7 @@ import ru.mairwunnx.mobosses.config.AbilityThresholds
 import ru.mairwunnx.mobosses.lang.Message
 
 /**
- * The boss yanks the farthest player it can see toward itself: an answer to shooting it from a
+ * The boss yanks the farthest player it fights and can see toward itself: an answer to shooting it from a
  * pillar or across a ravine, where a boss could never reach back.
  */
 object Grapple : Ability {
@@ -24,7 +24,7 @@ object Grapple : Ability {
   override fun cast(cast: Cast): Boolean {
     val cfg = cast.settings
     val entity = cast.boss.entity
-    val target = cast.players(cast.at, cfg.grappleRange)
+    val target = cast.foes(cfg.grappleRange)
       .filter { it.location.distance(cast.at) in cfg.grappleMinDistance..cfg.grappleRange && entity.hasLineOfSight(it) }
       .maxByOrNull { it.location.distanceSquared(cast.at) } ?: return false
     val pull = cast.at.toVector().subtract(target.location.toVector())

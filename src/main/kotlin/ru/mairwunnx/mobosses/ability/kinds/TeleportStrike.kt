@@ -10,7 +10,7 @@ import ru.mairwunnx.mobosses.config.AbilitySettings
 import ru.mairwunnx.mobosses.config.AbilityThresholds
 import ru.mairwunnx.mobosses.lang.Message
 
-/** The boss steps out of thin air two blocks behind the nearest player, on solid ground it fits on. Spiders don't: they climb instead. */
+/** The boss steps out of thin air two blocks behind the player it fights, within 15 blocks, on solid ground it fits on. Spiders don't: they climb instead. */
 object TeleportStrike : Ability {
   override val key = "teleport_strike"
   override val message = Message.TELEPORT_STRIKE
@@ -34,7 +34,7 @@ object TeleportStrike : Ability {
   }
 
   override fun cast(cast: Cast): Boolean {
-    val target = cast.nearest(15.0) ?: return false
+    val target = cast.foe(15.0) ?: return false
     val facing = target.location.direction.setY(0)
     if (facing.lengthSquared() < 1e-6) return false
     val behind = target.location.clone().subtract(facing.normalize().multiply(2.0))

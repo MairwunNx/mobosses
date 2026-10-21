@@ -15,10 +15,10 @@ import ru.mairwunnx.mobosses.ability.Cast
 import ru.mairwunnx.mobosses.ability.Targets
 import ru.mairwunnx.mobosses.lang.Message
 
-/** The boss charges at the nearest player and tramples whoever stands in its way at the end. */
+/** The boss charges at the player it fights and tramples whoever stands in its way at the end. */
 object Stampede : Signature("stampede", Message.STAMPEDE) {
   override fun cast(cast: Cast): Boolean {
-    val target = cast.nearest(18.0)?.takeIf { it.location.distanceSquared(cast.at) > 16 } ?: return false
+    val target = cast.foes(18.0).firstOrNull { it.location.distanceSquared(cast.at) > 16 } ?: return false
     val dash = target.location.toVector().subtract(cast.at.toVector()).setY(0).normalize()
     cast.boss.entity.velocity = dash.multiply(1.8).setY(0.25)
     cast.sound(Sound.ENTITY_RAVAGER_ROAR, 1f, 1f)

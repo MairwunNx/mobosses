@@ -44,9 +44,6 @@ object Targets {
     entity.persistentDataContainer.set(key, PersistentDataType.STRING, Codec.encode(marks))
   }
 
-  fun nearest(at: Location, radius: Double, guard: Guard): Player? =
-    players(at, radius, guard).minByOrNull { it.location.distanceSquared(at) }
-
   /**
    * The floor near [y]: the highest block with a solid block under it and room above, within
    * [window] blocks up or down. 1.x took the highest block of the column, which put lightning and

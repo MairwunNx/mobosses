@@ -18,7 +18,7 @@ import ru.mairwunnx.mobosses.lang.Message
 import java.util.UUID
 
 /**
- * Against archers: the boss chains the farthest player in sight who keeps away from it. For a few
+ * Against archers: the boss chains the farthest player it fights, in sight, who keeps away from it. For a few
  * seconds that player can't stray past `chain_length`: the chain yanks them back and hurts. A few
  * blows to the boss in melee break it early, so the way out is to close in and fight. A chain lasts
  * seconds, so it lives only in memory; a restart just ends it.
@@ -41,7 +41,7 @@ object Chain : Ability {
 
   private fun target(cast: Cast): Player? {
     val cfg = cast.settings.chain
-    return cast.players(cast.at, cfg.range)
+    return cast.foes(cfg.range)
       .filter { it.uniqueId !in links && it.location.distance(cast.at) in cfg.minDistance..cfg.range && cast.boss.entity.hasLineOfSight(it) }
       .maxByOrNull { it.location.distanceSquared(cast.at) }
   }

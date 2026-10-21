@@ -19,10 +19,10 @@ import ru.mairwunnx.mobosses.ability.Cast
 import ru.mairwunnx.mobosses.lang.Message
 import kotlin.random.Random
 
-/** Archers loose a fan of arrows at the nearest player; the arrows hit players only. */
+/** Archers loose a fan of arrows at the player they fight; the arrows hit players only. */
 object AimedVolley : Signature("aimed_volley", Message.AIMED_VOLLEY) {
   override fun cast(cast: Cast): Boolean {
-    val target = cast.nearest(32.0) ?: return false
+    val target = cast.foe(32.0) ?: return false
     val damage = scaled(cast, 3.0, 0.06, 9.0)
     val count = (5 + cast.level / 20).coerceAtMost(10)
     repeat(count) {

@@ -20,7 +20,7 @@ object WarCry : Signature("war_cry", Message.WAR_CRY) {
   private val KIN = setOf(EntityType.PIGLIN, EntityType.PIGLIN_BRUTE)
 
   override fun cast(cast: Cast): Boolean {
-    if (cast.nearest(16.0) == null) return false
+    if (cast.foe(16.0) == null) return false
     val duration = ticks(cast, 8.0, 0.1, 16.0)
     val allies = cast.at.world.getNearbyLivingEntities(cast.at, 12.0) { it is Mob && it.type in KIN }
     allies.forEach {

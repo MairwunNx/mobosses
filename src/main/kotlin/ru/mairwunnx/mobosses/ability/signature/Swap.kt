@@ -14,10 +14,10 @@ import ru.mairwunnx.mobosses.ability.Cast
 import ru.mairwunnx.mobosses.ability.Targets
 import ru.mairwunnx.mobosses.lang.Message
 
-/** The enderman trades places with the nearest player, blinding them for a moment. */
+/** The enderman trades places with the player it fights, blinding them for a moment. */
 object Swap : Signature("swap", Message.SWAP) {
   override fun cast(cast: Cast): Boolean {
-    val target = cast.nearest(24.0)?.takeIf { it.location.distanceSquared(cast.at) > 16 } ?: return false
+    val target = cast.foes(24.0).firstOrNull { it.location.distanceSquared(cast.at) > 16 } ?: return false
     val bossAt = cast.at
     val playerAt = target.location
     if (!cast.plugin.guards.canSpawnBoss(playerAt) || playerAt.block.isLiquid) return false

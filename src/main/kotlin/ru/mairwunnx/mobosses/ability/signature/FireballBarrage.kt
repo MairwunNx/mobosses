@@ -19,10 +19,10 @@ import ru.mairwunnx.mobosses.ability.Cast
 import ru.mairwunnx.mobosses.lang.Message
 import kotlin.random.Random
 
-/** The blaze fires a burst of small fireballs at the nearest player; they burn players, not blocks. */
+/** The blaze fires a burst of small fireballs at the player it fights; they burn players, not blocks. */
 object FireballBarrage : Signature("fireball_barrage", Message.FIREBALL_BARRAGE) {
   override fun cast(cast: Cast): Boolean {
-    val target = cast.nearest(24.0) ?: return false
+    val target = cast.foe(24.0) ?: return false
     val count = (3 + cast.level / 25).coerceAtMost(7)
     repeat(count) { i ->
       cast.later(i * 4L) {
