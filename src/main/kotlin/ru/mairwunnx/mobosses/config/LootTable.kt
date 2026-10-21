@@ -22,6 +22,8 @@ data class LootTable(
     val amount: IntRange = IntRange(1, 1),
     val weight: Double = 1.0,
     @SerialName("random_durability") val randomDurability: Boolean = false,
+    /** Boss types, like `EVOKER`, that drop it on top of the shared table; empty for every type. */
+    val types: List<String> = emptyList(),
     val enchantments: Map<String, IntRange> = emptyMap(),
     /** rare, epic, legendary, or mythic: announced to everyone, and worn less by random durability. */
     @SerialName("itemClass") val itemClass: String? = null,

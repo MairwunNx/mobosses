@@ -7,6 +7,11 @@
 #   spawn_chance   0 to 1: the chance a mob of this type becomes a boss when it
 #                  spawns near a player, before the multipliers in config.yml
 #   exp_modifier   multiplies the vanilla experience the boss drops
+#   bonus_loot_chance  0 to 1: the chance of one more item per kill, from this
+#                  type's own entries in loottable.yml, for one of the players
+#                  who got loot, picked by their shares; for mobs found only
+#                  in raids, mansions, bastions, fortresses, trial chambers,
+#                  and monuments
 #   is_powered     creepers only: a charged creeper
 #   equipment      weapons and armor sets by boss level: a boss takes a random
 #                  one within 7 levels of the best it qualifies for; an armor
@@ -310,6 +315,7 @@ PILLAGER:
   enabled: true
   spawn_chance: 0.11 # 11%
   exp_modifier: 0.7
+  bonus_loot_chance: 0.15
   equipment:
     weapons:
       - { material: "CROSSBOW", min_lvl: 1 }
@@ -380,6 +386,7 @@ WITHER_SKELETON:
   enabled: true
   spawn_chance: 0.09 # 9%
   exp_modifier: 0.688
+  bonus_loot_chance: 0.2
   equipment:
     weapons:
       - { material: "STONE_SWORD", min_lvl: 1, enchantments: { sharpness: 2 } }
@@ -442,6 +449,7 @@ VINDICATOR:
   enabled: true
   spawn_chance: 0.13 # 13%
   exp_modifier: 1.0
+  bonus_loot_chance: 0.25
   equipment:
     weapons:
       - { material: "IRON_AXE", min_lvl: 1, enchantments: { sharpness: 2 } }
@@ -576,6 +584,7 @@ WITCH:
   enabled: true
   spawn_chance: 0.11 # 11%
   exp_modifier: 0.377
+  bonus_loot_chance: 0.15
   equipment:
     weapons:
       - { material: "STICK", min_lvl: 1 }
@@ -685,6 +694,7 @@ EVOKER:
   enabled: true
   spawn_chance: 0.10 # 10%
   exp_modifier: 0.7
+  bonus_loot_chance: 0.5
   equipment:
     weapons:
       - { material: "STICK", min_lvl: 1 }
@@ -715,6 +725,7 @@ VEX:
   enabled: true
   spawn_chance: 0.10 # 10%
   exp_modifier: 0.766
+  bonus_loot_chance: 0.2
   equipment:
     weapons:
       - { material: "IRON_AXE", min_lvl: 1, enchantments: { sharpness: 2 } }
@@ -965,6 +976,7 @@ BLAZE:
   enabled: true
   spawn_chance: 0.08 # 8%
   exp_modifier: 0.5
+  bonus_loot_chance: 0.1
   effects:
     particles: "minecraft:flame"
     sounds:
@@ -976,6 +988,7 @@ BREEZE:
   enabled: true
   spawn_chance: 0.10 # 10%
   exp_modifier: 0.5
+  bonus_loot_chance: 0.35
   effects:
     particles: "minecraft:small_gust"
     sounds:
@@ -998,6 +1011,7 @@ PIGLIN_BRUTE:
   enabled: true
   spawn_chance: 0.10 # 10%
   exp_modifier: 0.3
+  bonus_loot_chance: 0.35
   equipment:
     weapons:
       - { material: "GOLDEN_SWORD", min_lvl: 1, enchantments: { sharpness: 2 } }
@@ -1080,6 +1094,7 @@ RAVAGER:
   enabled: true
   spawn_chance: 0.15 # 15%
   exp_modifier: 0.25
+  bonus_loot_chance: 0.5
   effects:
     particles: "minecraft:large_smoke"
     sounds:
@@ -1091,6 +1106,7 @@ GUARDIAN:
   enabled: true
   spawn_chance: 0.06 # 6%
   exp_modifier: 0.5
+  bonus_loot_chance: 0.25
   effects:
     particles: "minecraft:bubble_pop"
     sounds:

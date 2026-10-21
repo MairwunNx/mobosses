@@ -39,10 +39,12 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
       val pets = boss.petDamage
       val dealt = boss.damage
       val group = shares.count { it.value > 0.0 }
+      val looted = HashMap<Player, Double>()
       shares.forEach { (id, share) ->
         val worth = Shares.petWorth(dealt[id] ?: 0.0, pets[id] ?: 0.0, Leveling.petWeight(plugin.catalog.settings.progression.petDamage, boss.level))
-        Bukkit.getPlayer(id)?.let { pay(it, boss, share, worth, group, experience) }
+        Bukkit.getPlayer(id)?.let { pay(it, boss, share, worth, group, experience, looted) }
       }
+      plugin.loot.bonus(boss, looted)
       plugin.progression.count(boss.type.key, boss.clazz.key, killed = true)
       announce(boss, shares, experience)
       plugin.worldApi.bossKilled(boss, shares, experience)
@@ -52,8 +54,8 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
     plugin.decoys.removeOf(boss.uuid)
   }
 
-  /** [petWorth] is the share of the player's damage that counts for experience: 1 without pets. */
-  private fun pay(player: Player, boss: Boss, share: Double, petWorth: Double, group: Int, experience: Int) {
+  /** [petWorth] is the share of the player's damage that counts for experience: 1 without pets. Players who get loot go into [looted]. */
+  private fun pay(player: Player, boss: Boss, share: Double, petWorth: Double, group: Int, experience: Int, looted: MutableMap<Player, Double>) {
     val settings = plugin.catalog.settings
     val progression = settings.progression
     // A spawner boss farmed in one spot gives less, and comes back to full with time.
@@ -73,7 +75,10 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
 
     // Four players who split a boss evenly each deal 25%; the thresholds come down to meet them.
     val lootShare = Leveling.threshold(settings.loot.minDamageShare, progression.groupShare, group)
-    if (share >= lootShare && Random.nextDouble() < fatigue) plugin.loot.drop(boss, player)
+    if (share >= lootShare && Random.nextDouble() < fatigue) {
+      plugin.loot.drop(boss, player)
+      looted[player] = share
+    }
 
     // Achievements and the bestiary take anyone whose share made the kill theirs, whatever the levels.
     val took = share >= Leveling.threshold(progression.minShare, progression.groupShare, group)

@@ -2,7 +2,17 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
-## 2.6.5
+## 2.7.0
+
+### New
+
+- 🎁 **Each boss drops what its mob is known for:** entries in `loottable.yml` can name boss `types`, and every type got a few. An evoker drops emeralds, experience bottles, and Protection and Sharpness books; a pillager arrows and crossbows; a breeze breeze rods, wind charges, and trial keys; a guardian sponges and, at legendary, the Tide trim. They join the shared table, so about one drop in ten comes from them, and their amounts don’t grow with the level, so emeralds don’t flood the game.
+- 🎲 **Bonus loot from rare mobs:** a boss from a raid, mansion, bastion, fortress, trial chamber, or monument may drop one more of its own items (`bonus_loot_chance` in `bosses.yml`): an evoker or a ravager half the time, a piglin brute or a breeze about a third. One per fight, however many fought, for one of the players who got loot, picked by their shares.
+
+### Changed
+
+- 🧹 **Less junk from level 5 up:** cobblestone, planks, wool, crafting tables, furnaces, signs, observers, and the like give way to what a fight uses: arrows, torches, food, gunpowder, redstone, lapis, experience bottles, ender pearls, shields. At level 17, junk fell from about half of all drops to 2%. The weights stay, so rare and better items come as often as before, and nothing new is worth more than iron.
+
 
 ### Fixed
 

@@ -44,7 +44,8 @@ class Catalog(val configs: Configs, ids: Ids, log: Log) {
 
   class Minion(val summoner: EntityType, val entity: EntityType, val name: String?)
 
-  class Loot(val spec: LootTable.Item, val material: Material, val enchantments: Map<Enchantment, IntRange>)
+  /** An item from loottable.yml; [types] empty for the shared table, else the boss types it belongs to. */
+  class Loot(val spec: LootTable.Item, val material: Material, val enchantments: Map<Enchantment, IntRange>, val types: Set<EntityType>)
 
   class Tier(val spec: RewardSettings.Tier, val effects: List<PotionEffectType>)
 
@@ -86,7 +87,10 @@ class Catalog(val configs: Configs, ids: Ids, log: Log) {
     val where = "loottable.yml: level_loot[$i]"
     val material = ids.material(item.material, "$where.material") ?: return@mapIndexedNotNull null
     if (classes.rank(item.mobclass) < 0) log.warn("$where.mobclass: \"${item.mobclass}\" isn't a class; no boss drops this")
-    Loot(item, material, enchantments(item.enchantments, where, ids) { it })
+    val types = item.types.mapIndexedNotNull { t, id -> ids.entity(id, "$where.types[$t]") }.toSet()
+    // An entry whose types all failed would otherwise fall to every boss.
+    if (item.types.isNotEmpty() && types.isEmpty()) return@mapIndexedNotNull null
+    Loot(item, material, enchantments(item.enchantments, where, ids) { it }, types)
   }
 
   val tiers: Map<String, Tier> = rewards.tiers.mapValues { (key, tier) ->

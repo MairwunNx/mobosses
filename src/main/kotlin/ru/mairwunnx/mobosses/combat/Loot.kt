@@ -24,7 +24,10 @@ import kotlin.random.Random
  * loot of its class and the classes below, at falling odds the further down, never above. The
  * survival bonus tips the odds toward rare and better items, and a player whose drops from bosses
  * that could give one brought none for a while gets one for sure: after a count rolled anew each time,
- * so it shows no pattern. Names and lore come in the language of the player who gets the item.
+ * so it shows no pattern. Entries with `types` belong to those boss types only. A type with a
+ * `bonus_loot_chance` may drop one more item per kill, from its own entries, for one of the players
+ * who got loot, picked by their shares: one per fight, however many fought, so groups don't multiply
+ * it. Names and lore come in the language of the player who gets the item.
  */
 class Loot(private val plugin: MoBossesPlugin) {
   fun drop(boss: Boss, player: Player) {
@@ -35,6 +38,19 @@ class Loot(private val plugin: MoBossesPlugin) {
     val item = (if (rarePool.isNotEmpty() && pityDue(player)) Rolls.weighted(rarePool, Random) else null) ?: Rolls.weighted(pool, Random)
       ?: return plugin.log.debug { "No loot for ${player.name} from a level ${boss.level} ${boss.clazz.key} boss" }
     if (rarePool.isNotEmpty()) track(player, isRare(item))
+    give(boss, player, item)
+  }
+
+  /** The bonus roll after a kill: [shares] holds the players who got loot, with their shares. */
+  fun bonus(boss: Boss, shares: Map<Player, Double>) {
+    if (shares.isEmpty() || Random.nextDouble() >= boss.type.spec.bonusLootChance) return
+    val item = Rolls.weighted(pool(boss, own = true), Random) ?: return
+    val player = Rolls.weighted(shares.toList(), Random) ?: return
+    plugin.log.debug { "Bonus loot for ${player.name} from a ${boss.type.key}" }
+    give(boss, player, item)
+  }
+
+  private fun give(boss: Boss, player: Player, item: Catalog.Loot) {
     val stack = stack(item, boss.level, plugin.texts.languageOf(player))
     boss.entity.world.dropItemNaturally(boss.entity.location, stack) {
       it.owner = player.uniqueId
@@ -44,13 +60,17 @@ class Loot(private val plugin: MoBossesPlugin) {
     announce(item, stack, player)
   }
 
-  /** The items for the boss's level and class, with their weights, rare ones tipped up by [luck]. */
-  fun pool(boss: Boss, luck: Double = 0.0): List<Pair<Catalog.Loot, Double>> {
+  /**
+   * The items for the boss's level and class, with their weights, rare ones tipped up by [luck]: the
+   * shared table and its type's own entries, or, with [own], only the latter.
+   */
+  fun pool(boss: Boss, luck: Double = 0.0, own: Boolean = false): List<Pair<Catalog.Loot, Double>> {
     val classes = plugin.catalog.classes
     val bossRank = classes.rank(boss.clazz.key)
     return plugin.catalog.loot.mapNotNull { loot ->
       val itemRank = classes.rank(loot.spec.mobclass)
-      if (itemRank < 0 || itemRank > bossRank || boss.level !in loot.spec.minLevel..loot.spec.maxLevel) null
+      val theirs = if (loot.types.isEmpty()) !own else boss.type.entity in loot.types
+      if (!theirs || itemRank < 0 || itemRank > bossRank || boss.level !in loot.spec.minLevel..loot.spec.maxLevel) null
       else loot to loot.spec.weight * crossClass(bossRank - itemRank) * (1.0 + luck.coerceAtLeast(0.0) * (LUCK_TIER[loot.spec.itemClass?.lowercase()] ?: 0.0))
     }
   }
@@ -85,7 +105,8 @@ class Loot(private val plugin: MoBossesPlugin) {
 
   private fun stack(loot: Catalog.Loot, level: Int, code: String): ItemStack {
     val spec = loot.spec
-    val factor = 1.0 + plugin.catalog.configs.loot.settings.perLevelDropFactor * (level - spec.minLevel).coerceAtLeast(0)
+    // A type's own entries span every level, so growing them with it would flood the game with emeralds.
+    val factor = if (loot.types.isNotEmpty()) 1.0 else 1.0 + plugin.catalog.configs.loot.settings.perLevelDropFactor * (level - spec.minLevel).coerceAtLeast(0)
     val amount = ceil(spec.amount.random() * factor).toInt().coerceIn(1, loot.material.maxStackSize.coerceAtLeast(1))
     val stack = ItemStack(loot.material, amount)
 

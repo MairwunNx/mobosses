@@ -10,10 +10,14 @@
 #   mobclass           the lowest boss class that drops it
 #   min_level/max_level  the boss levels it drops at
 #   amount             a number or a range like "2-6"; each level above
-#                      min_level adds per_level_drop_factor of it
+#                      min_level adds per_level_drop_factor of it, except in
+#                      entries with types, which keep their amount
 #   weight             its odds against the other entries
 #   random_durability  comes partly worn (loot.random_durability in config.yml)
 #   enchantments       id: level or a range, like { sharpness: "1-2" }
+#   types              boss types, like [ EVOKER ], that drop it on top of the
+#                      shared table; bonus_loot_chance in bosses.yml rolls one
+#                      more item per kill from these alone
 #   itemClass          rare, epic, legendary, or mythic: announced to everyone
 #   id                 its name and lore in lang/ under items.<id>, so each
 #                      player reads them in their own language
@@ -106,19 +110,19 @@ level_loot:
 
   # =================== LEVELS 5-10 ===================
   # Common
-  - { material: COBBLESTONE, mobclass: common, min_level: 5, max_level: 10, amount: "6-15", weight: 8.0 }
+  - { material: ARROW, mobclass: common, min_level: 5, max_level: 10, amount: "4-8", weight: 8.0 }
   - { material: COAL, mobclass: common, min_level: 5, max_level: 10, amount: "2-5", weight: 7.0 }
   - { material: IRON_NUGGET, mobclass: common, min_level: 5, max_level: 10, amount: "2-4", weight: 6.0 }
   - { material: CLAY_BALL, mobclass: common, min_level: 5, max_level: 10, amount: "2-4", weight: 5.5 }
-  - { material: SAND, mobclass: common, min_level: 5, max_level: 10, amount: "4-8", weight: 5.0 }
-  - { material: GRAVEL, mobclass: common, min_level: 5, max_level: 10, amount: "3-6", weight: 4.5 }
+  - { material: BONE, mobclass: common, min_level: 5, max_level: 10, amount: "2-4", weight: 5.0 }
+  - { material: COOKED_MUTTON, mobclass: common, min_level: 5, max_level: 10, amount: "1-3", weight: 4.5 }
   - { material: WOODEN_AXE, mobclass: common, min_level: 5, max_level: 10, amount: "1", weight: 4.0, random_durability: true }
   - { material: COOKED_CHICKEN, mobclass: common, min_level: 5, max_level: 10, amount: "1-3", weight: 3.8 }
-  - { material: STONE, mobclass: common, min_level: 5, max_level: 10, amount: "6-12", weight: 7.5 }
-  - { material: OAK_PLANKS, mobclass: common, min_level: 5, max_level: 10, amount: "4-8", weight: 6.8 }
+  - { material: BREAD, mobclass: common, min_level: 5, max_level: 10, amount: "2-4", weight: 7.5 }
+  - { material: TORCH, mobclass: common, min_level: 5, max_level: 10, amount: "4-8", weight: 6.8 }
   - { material: BAKED_POTATO, mobclass: common, min_level: 5, max_level: 10, amount: "1-3", weight: 5.8 }
   - { material: LEATHER, mobclass: common, min_level: 5, max_level: 10, amount: "2-4", weight: 5.3 }
-  - { material: WHITE_WOOL, mobclass: common, min_level: 5, max_level: 10, amount: "2-5", weight: 4.8 }
+  - { material: STRING, mobclass: common, min_level: 5, max_level: 10, amount: "2-4", weight: 4.8 }
   - { material: PUMPKIN, mobclass: common, min_level: 5, max_level: 10, amount: "1-2", weight: 4.3 }
   - { material: MELON, mobclass: common, min_level: 5, max_level: 10, amount: "1-2", weight: 3.9 }
   - { material: BRICK, mobclass: common, min_level: 5, max_level: 10, amount: "2-4", weight: 3.6 }
@@ -185,36 +189,36 @@ level_loot:
 
   # =================== LEVELS 10-17 ===================
   # Common
-  - { material: COBBLESTONE, mobclass: common, min_level: 10, max_level: 17, amount: "8-16", weight: 7.5 }
+  - { material: ARROW, mobclass: common, min_level: 10, max_level: 17, amount: "6-12", weight: 7.5 }
   - { material: IRON_NUGGET, mobclass: common, min_level: 10, max_level: 17, amount: "3-6", weight: 6.8 }
   - { material: COAL, mobclass: common, min_level: 10, max_level: 17, amount: "3-6", weight: 6.0 }
-  - { material: STONE_HOE, mobclass: common, min_level: 10, max_level: 17, amount: "1", weight: 5.5, random_durability: true }
-  - { material: LEATHER_LEGGINGS, mobclass: common, min_level: 10, max_level: 17, amount: "1", weight: 5.0, random_durability: true }
+  - { material: BONE, mobclass: common, min_level: 10, max_level: 17, amount: "2-5", weight: 5.5, random_durability: true }
+  - { material: COOKED_BEEF, mobclass: common, min_level: 10, max_level: 17, amount: "2-3", weight: 5.0, random_durability: true }
   - { material: PAPER, mobclass: common, min_level: 10, max_level: 17, amount: "2-5", weight: 4.5 }
   - { material: SUGAR, mobclass: common, min_level: 10, max_level: 17, amount: "1-3", weight: 4.0 }
-  - { material: SMOOTH_STONE, mobclass: common, min_level: 10, max_level: 17, amount: "4-8", weight: 7.2 }
+  - { material: TORCH, mobclass: common, min_level: 10, max_level: 17, amount: "8-16", weight: 7.2 }
   - { material: COOKED_PORKCHOP, mobclass: common, min_level: 10, max_level: 17, amount: "2-4", weight: 6.5 }
-  - { material: CRAFTING_TABLE, mobclass: common, min_level: 10, max_level: 17, amount: "1", weight: 5.8 }
-  - { material: FURNACE, mobclass: common, min_level: 10, max_level: 17, amount: "1", weight: 5.3 }
-  - { material: CHEST, mobclass: common, min_level: 10, max_level: 17, amount: "1", weight: 4.8 }
-  - { material: LADDER, mobclass: common, min_level: 10, max_level: 17, amount: "2-6", weight: 4.3 }
-  - { material: OAK_SIGN, mobclass: common, min_level: 10, max_level: 17, amount: "1-3", weight: 3.8 }
-  - { material: WOODEN_SHOVEL, mobclass: common, min_level: 10, max_level: 17, amount: "1", weight: 3.5, random_durability: true }
+  - { material: BREAD, mobclass: common, min_level: 10, max_level: 17, amount: "3-6", weight: 5.8 }
+  - { material: GUNPOWDER, mobclass: common, min_level: 10, max_level: 17, amount: "1-3", weight: 5.3 }
+  - { material: STRING, mobclass: common, min_level: 10, max_level: 17, amount: "2-5", weight: 4.8 }
+  - { material: REDSTONE, mobclass: common, min_level: 10, max_level: 17, amount: "2-5", weight: 4.3 }
+  - { material: LAPIS_LAZULI, mobclass: common, min_level: 10, max_level: 17, amount: "2-4", weight: 3.8 }
+  - { material: COOKED_SALMON, mobclass: common, min_level: 10, max_level: 17, amount: "2-4", weight: 3.5, random_durability: true }
 
   # Uncommon
   - { material: IRON_INGOT, mobclass: uncommon, min_level: 10, max_level: 17, amount: "2-3", weight: 3.8 }
   - { material: IRON_AXE, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1", weight: 3.5, random_durability: true }
   - { material: CHAINMAIL_CHESTPLATE, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1", weight: 3.0, random_durability: true }
-  - { material: GLASS, mobclass: uncommon, min_level: 10, max_level: 17, amount: "4-8", weight: 2.8 }
+  - { material: EXPERIENCE_BOTTLE, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1-2", weight: 2.8 }
   - { material: BOOK, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1-2", weight: 2.5 }
-  - { material: INK_SAC, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1-3", weight: 2.3 }
+  - { material: ARROW, mobclass: uncommon, min_level: 10, max_level: 17, amount: "8-16", weight: 2.3 }
   - { material: IRON_SHOVEL, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1", weight: 3.6, random_durability: true }
   - { material: CHAINMAIL_LEGGINGS, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1", weight: 3.3, random_durability: true }
   - { material: STONE_SWORD, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1", weight: 3.1, random_durability: true, enchantments: { sharpness: "1" } }
   - { material: CROSSBOW, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1", weight: 2.9, random_durability: true }
   - { material: FLINT_AND_STEEL, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1", weight: 2.7, random_durability: true }
   - { material: ENCHANTING_TABLE, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1", weight: 2.4 }
-  - { material: ITEM_FRAME, mobclass: uncommon, min_level: 10, max_level: 17, amount: "2-4", weight: 2.0 }
+  - { material: SHIELD, mobclass: uncommon, min_level: 10, max_level: 17, amount: "1", weight: 2.0 }
 
   # Rare
   - { material: GOLD_INGOT, mobclass: rare, min_level: 10, max_level: 17, amount: "1-3", weight: 2.0 }
@@ -227,9 +231,9 @@ level_loot:
   - { material: IRON_CHESTPLATE, mobclass: rare, min_level: 10, max_level: 17, amount: "1", weight: 1.6, random_durability: true, itemClass: rare, id: guard_chestplate }
   - { material: GOLDEN_SWORD, mobclass: rare, min_level: 10, max_level: 17, amount: "1", weight: 1.4, random_durability: true, itemClass: rare, id: gilded_blade }
   - { material: BREWING_STAND, mobclass: rare, min_level: 10, max_level: 17, amount: "1", weight: 1.2 }
-  - { material: CAULDRON, mobclass: rare, min_level: 10, max_level: 17, amount: "1", weight: 1.0 }
+  - { material: SHIELD, mobclass: rare, min_level: 10, max_level: 17, amount: "1", weight: 1.0 }
   - { material: GOLDEN_CARROT, mobclass: rare, min_level: 10, max_level: 17, amount: "2-4", weight: 0.9 }
-  - { material: PISTON, mobclass: rare, min_level: 10, max_level: 17, amount: "1-2", weight: 0.8 }
+  - { material: EXPERIENCE_BOTTLE, mobclass: rare, min_level: 10, max_level: 17, amount: "1-2", weight: 0.8 }
 
   # Epic
   - { material: DIAMOND, mobclass: epic, min_level: 10, max_level: 17, amount: "1", weight: 1.0 }
@@ -265,20 +269,20 @@ level_loot:
   # =================== LEVELS 17-24 ===================
   # Common
   - { material: IRON_NUGGET, mobclass: common, min_level: 17, max_level: 24, amount: "4-8", weight: 7.0 }
-  - { material: COBBLESTONE, mobclass: common, min_level: 17, max_level: 24, amount: "10-20", weight: 6.5 }
-  - { material: STONE_PICKAXE, mobclass: common, min_level: 17, max_level: 24, amount: "1", weight: 6.0, random_durability: true, enchantments: { efficiency: "1" } }
+  - { material: ARROW, mobclass: common, min_level: 17, max_level: 24, amount: "8-16", weight: 6.5 }
+  - { material: TORCH, mobclass: common, min_level: 17, max_level: 24, amount: "12-24", weight: 6.0, random_durability: true, enchantments: { efficiency: "1" } }
   - { material: IRON_ORE, mobclass: common, min_level: 17, max_level: 24, amount: "1-3", weight: 5.5 }
   - { material: COOKED_PORKCHOP, mobclass: common, min_level: 17, max_level: 24, amount: "2-4", weight: 5.0 }
-  - { material: BRICK, mobclass: common, min_level: 17, max_level: 24, amount: "2-5", weight: 4.5 }
+  - { material: EXPERIENCE_BOTTLE, mobclass: common, min_level: 17, max_level: 24, amount: "1-2", weight: 4.5 }
   - { material: GLOWSTONE_DUST, mobclass: common, min_level: 17, max_level: 24, amount: "1-3", weight: 4.0 }
   - { material: COAL_BLOCK, mobclass: common, min_level: 17, max_level: 24, amount: "1-2", weight: 6.8 }
   - { material: BAKED_POTATO, mobclass: common, min_level: 17, max_level: 24, amount: "3-6", weight: 6.2 }
   - { material: QUARTZ, mobclass: common, min_level: 17, max_level: 24, amount: "1-3", weight: 5.8 }
-  - { material: NETHER_BRICK, mobclass: common, min_level: 17, max_level: 24, amount: "2-5", weight: 5.3 }
+  - { material: REDSTONE, mobclass: common, min_level: 17, max_level: 24, amount: "4-8", weight: 5.3 }
   - { material: PRISMARINE_SHARD, mobclass: common, min_level: 17, max_level: 24, amount: "1-2", weight: 4.8 }
-  - { material: OBSERVER, mobclass: common, min_level: 17, max_level: 24, amount: "1", weight: 4.3 }
-  - { material: DISPENSER, mobclass: common, min_level: 17, max_level: 24, amount: "1", weight: 3.8 }
-  - { material: DROPPER, mobclass: common, min_level: 17, max_level: 24, amount: "1", weight: 3.5 }
+  - { material: LAPIS_LAZULI, mobclass: common, min_level: 17, max_level: 24, amount: "3-6", weight: 4.3 }
+  - { material: COOKED_SALMON, mobclass: common, min_level: 17, max_level: 24, amount: "3-6", weight: 3.8 }
+  - { material: GUNPOWDER, mobclass: common, min_level: 17, max_level: 24, amount: "2-4", weight: 3.5 }
 
   # Uncommon
   - { material: IRON_INGOT, mobclass: uncommon, min_level: 17, max_level: 24, amount: "2-4", weight: 4.0 }
@@ -291,10 +295,10 @@ level_loot:
   - { material: IRON_SHOVEL, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1", weight: 3.7, random_durability: true }
   - { material: CHAINMAIL_BOOTS, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1", weight: 3.4, random_durability: true }
   - { material: LAVA_BUCKET, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1", weight: 3.1 }
-  - { material: STICKY_PISTON, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1", weight: 2.9 }
-  - { material: REPEATER, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1-2", weight: 2.7 }
-  - { material: COMPARATOR, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1", weight: 2.6 }
-  - { material: IRON_DOOR, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1", weight: 2.5 }
+  - { material: SHIELD, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1", weight: 2.9 }
+  - { material: EXPERIENCE_BOTTLE, mobclass: uncommon, min_level: 17, max_level: 24, amount: "2-3", weight: 2.7 }
+  - { material: ENDER_PEARL, mobclass: uncommon, min_level: 17, max_level: 24, amount: "1", weight: 2.6 }
+  - { material: GOLDEN_CARROT, mobclass: uncommon, min_level: 17, max_level: 24, amount: "2-4", weight: 2.5 }
 
   # Rare
   - { material: GOLD_INGOT, mobclass: rare, min_level: 17, max_level: 24, amount: "2-4", weight: 2.5 }
@@ -307,9 +311,9 @@ level_loot:
   - { material: CROSSBOW, mobclass: rare, min_level: 17, max_level: 24, amount: "1", weight: 1.9, random_durability: true, enchantments: { piercing: "1" }, itemClass: rare, id: patrol_crossbow }
   - { material: IRON_LEGGINGS, mobclass: rare, min_level: 17, max_level: 24, amount: "1", weight: 1.7, random_durability: true, itemClass: rare, id: watchman_leggings }
   - { material: GOLDEN_APPLE, mobclass: rare, min_level: 17, max_level: 24, amount: "1", weight: 1.6, itemClass: rare, id: golden_apple_timely }
-  - { material: JUKEBOX, mobclass: rare, min_level: 17, max_level: 24, amount: "1", weight: 1.4 }
-  - { material: NOTE_BLOCK, mobclass: rare, min_level: 17, max_level: 24, amount: "1-2", weight: 1.3 }
-  - { material: IRON_BARS, mobclass: rare, min_level: 17, max_level: 24, amount: "4-8", weight: 1.2 }
+  - { material: EXPERIENCE_BOTTLE, mobclass: rare, min_level: 17, max_level: 24, amount: "2-4", weight: 1.4 }
+  - { material: ENDER_PEARL, mobclass: rare, min_level: 17, max_level: 24, amount: "1-2", weight: 1.3 }
+  - { material: GOLDEN_CARROT, mobclass: rare, min_level: 17, max_level: 24, amount: "3-6", weight: 1.2 }
 
   # Epic
   - { material: DIAMOND, mobclass: epic, min_level: 17, max_level: 24, amount: "1", weight: 1.2, itemClass: epic }
@@ -347,11 +351,11 @@ level_loot:
   - { material: COAL_BLOCK, mobclass: common, min_level: 24, max_level: 30, amount: "1-2", weight: 6.5 }
   - { material: IRON_PICKAXE, mobclass: common, min_level: 24, max_level: 30, amount: "1", weight: 6.0, random_durability: true }
   - { material: COOKED_BEEF, mobclass: common, min_level: 24, max_level: 30, amount: "3-6", weight: 5.5 }
-  - { material: SANDSTONE, mobclass: common, min_level: 24, max_level: 30, amount: "6-12", weight: 5.0 }
-  - { material: NETHER_BRICK, mobclass: common, min_level: 24, max_level: 30, amount: "2-6", weight: 4.5 }
+  - { material: ARROW, mobclass: common, min_level: 24, max_level: 30, amount: "12-24", weight: 5.0 }
+  - { material: ENDER_PEARL, mobclass: common, min_level: 24, max_level: 30, amount: "1", weight: 4.5 }
   - { material: GOLDEN_CARROT, mobclass: common, min_level: 24, max_level: 30, amount: "2-4", weight: 6.8 }
   - { material: PRISMARINE_CRYSTALS, mobclass: common, min_level: 24, max_level: 30, amount: "1-3", weight: 6.2 }
-  - { material: END_STONE, mobclass: common, min_level: 24, max_level: 30, amount: "4-8", weight: 5.8 }
+  - { material: EXPERIENCE_BOTTLE, mobclass: common, min_level: 24, max_level: 30, amount: "2-3", weight: 5.8 }
   - { material: MAGMA_CREAM, mobclass: common, min_level: 24, max_level: 30, amount: "1-2", weight: 5.3 }
   - { material: BLAZE_ROD, mobclass: common, min_level: 24, max_level: 30, amount: "1", weight: 4.8 }
   - { material: IRON_BLOCK, mobclass: common, min_level: 24, max_level: 30, amount: "1", weight: 4.3 }
@@ -360,7 +364,7 @@ level_loot:
   # Uncommon
   - { material: GOLD_INGOT, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1-3", weight: 4.0 }
   - { material: IRON_BOOTS, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1", weight: 3.8, random_durability: true }
-  - { material: CAULDRON, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1", weight: 3.5 }
+  - { material: EXPERIENCE_BOTTLE, mobclass: uncommon, min_level: 24, max_level: 30, amount: "3-5", weight: 3.5 }
   - { material: QUARTZ, mobclass: uncommon, min_level: 24, max_level: 30, amount: "2-5", weight: 3.2 }
   - { material: CROSSBOW, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1", weight: 3.0, random_durability: true }
   - { material: IRON_SWORD, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1", weight: 4.2, random_durability: true, enchantments: { sharpness: "2" } }
@@ -368,9 +372,9 @@ level_loot:
   - { material: DIAMOND_HELMET, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1", weight: 3.7, random_durability: true }
   - { material: SHIELD, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1", weight: 3.4, random_durability: true }
   - { material: MUSIC_DISC_CAT, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1", weight: 3.1 }
-  - { material: GOLDEN_HELMET, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1", weight: 2.9, random_durability: true }
+  - { material: SPECTRAL_ARROW, mobclass: uncommon, min_level: 24, max_level: 30, amount: "8-16", weight: 2.9, random_durability: true }
   - { material: PHANTOM_MEMBRANE, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1", weight: 2.8 }
-  - { material: TURTLE_EGG, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1-2", weight: 2.7 }
+  - { material: GOLDEN_APPLE, mobclass: uncommon, min_level: 24, max_level: 30, amount: "1", weight: 2.7 }
 
   # Rare
   - { material: DIAMOND, mobclass: rare, min_level: 24, max_level: 30, amount: "1", weight: 2.5, itemClass: rare }
@@ -419,9 +423,9 @@ level_loot:
   # Common
   - { material: IRON_INGOT, mobclass: common, min_level: 30, max_level: 40, amount: "3-6", weight: 6.8 }
   - { material: GOLD_NUGGET, mobclass: common, min_level: 30, max_level: 40, amount: "3-8", weight: 6.5 }
-  - { material: IRON_CHAIN, mobclass: common, min_level: 30, max_level: 40, amount: "1-3", weight: 6.0 }
+  - { material: EXPERIENCE_BOTTLE, mobclass: common, min_level: 30, max_level: 40, amount: "3-6", weight: 6.0 }
   - { material: GOLDEN_CARROT, mobclass: common, min_level: 30, max_level: 40, amount: "2-4", weight: 5.5 }
-  - { material: LEAD, mobclass: common, min_level: 30, max_level: 40, amount: "1", weight: 5.0 }
+  - { material: SPECTRAL_ARROW, mobclass: common, min_level: 30, max_level: 40, amount: "8-16", weight: 5.0 }
   - { material: PRISMARINE_SHARD, mobclass: common, min_level: 30, max_level: 40, amount: "1-3", weight: 4.5 }
   - { material: DIAMOND, mobclass: common, min_level: 30, max_level: 40, amount: "1", weight: 7.2 }
   - { material: EMERALD, mobclass: common, min_level: 30, max_level: 40, amount: "1-2", weight: 6.9 }
@@ -773,6 +777,77 @@ level_loot:
   - { material: HEAVY_CORE, mobclass: mythic, min_level: 70, max_level: 100, amount: "1", weight: 0.06, itemClass: mythic, id: storm_core }
   - { material: MACE, mobclass: mythic, min_level: 80, max_level: 100, amount: "1", weight: 0.04, random_durability: true, enchantments: { density: "3-5", breach: "2-3", unbreaking: "3" }, itemClass: mythic, id: skybreaker }
   - { material: ELYTRA, mobclass: mythic, min_level: 85, max_level: 100, amount: "1", weight: 0.05, random_durability: true, itemClass: mythic, id: fallen_wings }
+
+  # =================== BOSS TYPES ===================
+  # Each type's own entries join the shared table for that type only, so a
+  # boss drops what its mob is known for more often. bonus_loot_chance in
+  # bosses.yml rolls one more item per kill from these, for one of the players
+  # who got loot. Their amounts don't grow with the level, and nothing here is
+  # worth more than the shared table at the same class and level.
+  # Evoker: mansions and raids
+  - { material: EMERALD, mobclass: common, min_level: 0, max_level: 100, amount: "2-4", weight: 18.0, types: [ EVOKER ] }
+  - { material: EXPERIENCE_BOTTLE, mobclass: uncommon, min_level: 5, max_level: 100, amount: "2-4", weight: 9.0, types: [ EVOKER ] }
+  - { material: ENCHANTED_BOOK, mobclass: rare, min_level: 15, max_level: 100, amount: "1", weight: 1.5, enchantments: { protection: "2-3" }, itemClass: rare, types: [ EVOKER ] }
+  - { material: ENCHANTED_BOOK, mobclass: epic, min_level: 25, max_level: 100, amount: "1", weight: 0.8, enchantments: { sharpness: "3-4" }, itemClass: epic, types: [ EVOKER ] }
+  # Vex: an evoker's summons
+  - { material: EXPERIENCE_BOTTLE, mobclass: common, min_level: 0, max_level: 100, amount: "1-2", weight: 15.0, types: [ VEX ] }
+  - { material: EMERALD, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1-2", weight: 7.5, types: [ VEX ] }
+  - { material: IRON_SWORD, mobclass: rare, min_level: 10, max_level: 100, amount: "1", weight: 1.2, random_durability: true, enchantments: { sharpness: "2-3" }, itemClass: rare, types: [ VEX ] }
+  # Vindicator: mansions and raids
+  - { material: EMERALD, mobclass: common, min_level: 0, max_level: 100, amount: "1-3", weight: 15.0, types: [ VINDICATOR ] }
+  - { material: IRON_AXE, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", weight: 6.0, random_durability: true, enchantments: { sharpness: "1-2" }, types: [ VINDICATOR ] }
+  - { material: DIAMOND_AXE, mobclass: epic, min_level: 25, max_level: 100, amount: "1", weight: 0.6, random_durability: true, enchantments: { sharpness: "2-4" }, itemClass: epic, types: [ VINDICATOR ] }
+  # Pillager: outposts, patrols, and raids
+  - { material: ARROW, mobclass: common, min_level: 0, max_level: 100, amount: "8-16", weight: 15.0, types: [ PILLAGER ] }
+  - { material: CROSSBOW, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", weight: 6.0, random_durability: true, enchantments: { quick_charge: "1-2" }, types: [ PILLAGER ] }
+  - { material: CROSSBOW, mobclass: rare, min_level: 20, max_level: 100, amount: "1", weight: 0.8, random_durability: true, enchantments: { piercing: "2-4" }, itemClass: rare, types: [ PILLAGER ] }
+  # Ravager: raids
+  - { material: SADDLE, mobclass: common, min_level: 0, max_level: 100, amount: "1", weight: 9.0, types: [ RAVAGER ] }
+  - { material: EMERALD, mobclass: common, min_level: 0, max_level: 100, amount: "2-4", weight: 12.0, types: [ RAVAGER ] }
+  - { material: EXPERIENCE_BOTTLE, mobclass: uncommon, min_level: 10, max_level: 100, amount: "3-5", weight: 6.0, types: [ RAVAGER ] }
+  # Witch
+  - { material: GLOWSTONE_DUST, mobclass: common, min_level: 0, max_level: 100, amount: "2-5", weight: 15.0, types: [ WITCH ] }
+  - { material: NETHER_WART, mobclass: uncommon, min_level: 5, max_level: 100, amount: "2-4", weight: 7.5, types: [ WITCH ] }
+  - { material: BLAZE_POWDER, mobclass: rare, min_level: 10, max_level: 100, amount: "1-2", weight: 1.2, types: [ WITCH ] }
+  # Piglin brute: bastions
+  - { material: GOLD_INGOT, mobclass: common, min_level: 0, max_level: 100, amount: "2-4", weight: 15.0, types: [ PIGLIN_BRUTE ] }
+  - { material: GOLDEN_AXE, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", weight: 6.0, random_durability: true, enchantments: { sharpness: "2-3" }, types: [ PIGLIN_BRUTE ] }
+  - { material: NETHERITE_SCRAP, mobclass: epic, min_level: 25, max_level: 100, amount: "1", weight: 0.3, itemClass: epic, types: [ PIGLIN_BRUTE ] }
+  # Piglin
+  - { material: GOLD_INGOT, mobclass: common, min_level: 0, max_level: 100, amount: "1-2", weight: 12.0, types: [ PIGLIN ] }
+  # Wither skeleton: fortresses
+  - { material: WITHER_SKELETON_SKULL, mobclass: rare, min_level: 15, max_level: 100, amount: "1", weight: 0.8, itemClass: rare, types: [ WITHER_SKELETON ] }
+  # Blaze: fortresses
+  - { material: BLAZE_ROD, mobclass: common, min_level: 0, max_level: 100, amount: "1-2", weight: 15.0, types: [ BLAZE ] }
+  - { material: FIRE_CHARGE, mobclass: uncommon, min_level: 5, max_level: 100, amount: "2-4", weight: 6.0, types: [ BLAZE ] }
+  # Breeze: trial chambers
+  - { material: BREEZE_ROD, mobclass: common, min_level: 0, max_level: 100, amount: "1-2", weight: 15.0, types: [ BREEZE ] }
+  - { material: WIND_CHARGE, mobclass: common, min_level: 0, max_level: 100, amount: "4-8", weight: 12.0, types: [ BREEZE ] }
+  - { material: TRIAL_KEY, mobclass: uncommon, min_level: 10, max_level: 100, amount: "1", weight: 4.5, types: [ BREEZE ] }
+  # Guardian: ocean monuments
+  - { material: PRISMARINE_CRYSTALS, mobclass: common, min_level: 0, max_level: 100, amount: "2-5", weight: 15.0, types: [ GUARDIAN ] }
+  - { material: SPONGE, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", weight: 6.0, types: [ GUARDIAN ] }
+  - { material: TIDE_ARMOR_TRIM_SMITHING_TEMPLATE, mobclass: legendary, min_level: 30, max_level: 100, amount: "1", weight: 0.2, itemClass: legendary, types: [ GUARDIAN ] }
+  # Drowned
+  - { material: NAUTILUS_SHELL, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", weight: 6.0, types: [ DROWNED ] }
+  - { material: TRIDENT, mobclass: rare, min_level: 20, max_level: 100, amount: "1", weight: 0.6, random_durability: true, enchantments: { impaling: "1-3" }, itemClass: rare, types: [ DROWNED ] }
+  # Enderman
+  - { material: ENDER_PEARL, mobclass: common, min_level: 0, max_level: 100, amount: "1-2", weight: 15.0, types: [ ENDERMAN ] }
+  # Phantom
+  - { material: PHANTOM_MEMBRANE, mobclass: common, min_level: 0, max_level: 100, amount: "1-3", weight: 15.0, types: [ PHANTOM ] }
+  # Creeper
+  - { material: GUNPOWDER, mobclass: common, min_level: 0, max_level: 100, amount: "2-5", weight: 15.0, types: [ CREEPER ] }
+  - { material: MUSIC_DISC_13, mobclass: rare, min_level: 10, max_level: 100, amount: "1", weight: 0.5, types: [ CREEPER ] }
+  # Skeleton, stray, bogged
+  - { material: ARROW, mobclass: common, min_level: 0, max_level: 100, amount: "6-12", weight: 15.0, types: [ SKELETON, STRAY, BOGGED ] }
+  - { material: BOW, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", weight: 6.0, random_durability: true, enchantments: { power: "1-3" }, types: [ SKELETON, STRAY, BOGGED ] }
+  # Spider, cave spider
+  - { material: STRING, mobclass: common, min_level: 0, max_level: 100, amount: "3-6", weight: 15.0, types: [ SPIDER, CAVE_SPIDER ] }
+  - { material: FERMENTED_SPIDER_EYE, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1-2", weight: 6.0, types: [ SPIDER, CAVE_SPIDER ] }
+  # Hoglin
+  - { material: COOKED_PORKCHOP, mobclass: common, min_level: 0, max_level: 100, amount: "3-6", weight: 15.0, types: [ HOGLIN ] }
+  # Zombie villager
+  - { material: EMERALD, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", weight: 4.5, types: [ ZOMBIE_VILLAGER ] }
 
 loot_settings:
   per_level_drop_factor: 0.08
