@@ -36,6 +36,13 @@ class Boss(
   fun addDamage(player: UUID, amount: Double, byPet: Boolean = false) {
     add(keys.damage, player, amount)
     if (byPet) add(keys.petDamage, player, amount)
+    write(keys.hitAt, read(keys.hitAt) + (player.toString() to System.currentTimeMillis().toDouble()))
+  }
+
+  /** The players who hit it, themselves or through a pet, within the last [millis]. */
+  fun hitWithin(millis: Long): Set<UUID> {
+    val since = System.currentTimeMillis() - millis
+    return players(keys.hitAt).filterValues { it >= since }.keys
   }
 
   /** Who set it alight, and whether through a pet: the fire's damage counts as theirs; null when no player did. */

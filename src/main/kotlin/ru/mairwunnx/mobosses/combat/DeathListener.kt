@@ -49,6 +49,7 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
     }
     boss.type.deathSound?.let { boss.entity.world.playSound(boss.entity.location, it, 1f, 1f) }
     plugin.bosses.forget(boss)
+    plugin.decoys.removeOf(boss.uuid)
   }
 
   /** [petWorth] is the share of the player's damage that counts for experience: 1 without pets. */

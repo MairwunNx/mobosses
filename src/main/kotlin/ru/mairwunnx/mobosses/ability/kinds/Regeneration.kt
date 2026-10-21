@@ -65,9 +65,8 @@ object Regeneration : Ability {
       if (tick % 2 == 0) world.spawnParticle(Particle.HAPPY_VILLAGER, base.clone().add(0.0, 1.0, 0.0), 6, 0.6, 0.6, 0.6, 0.0)
       if (tick % 8 == 0) world.spawnParticle(Particle.HEART, base.clone().add(0.0, 1.2, 0.0), 2, 0.2, 0.3, 0.2, 0.0)
       if (tick % 10 == 0) aura(cast, base)
+      // Its effects run out by themselves: removing resistance here would end phase two's too.
       if (++tick >= ticks) {
-        entity.removePotionEffect(PotionEffectType.REGENERATION)
-        entity.removePotionEffect(PotionEffectType.RESISTANCE)
         cast.sound(Sound.BLOCK_BEACON_DEACTIVATE, 0.9f, 1f, entity.location)
         world.spawnParticle(Particle.END_ROD, entity.location, 24, 0.5, 1.0, 0.5, 0.02)
         task.cancel()

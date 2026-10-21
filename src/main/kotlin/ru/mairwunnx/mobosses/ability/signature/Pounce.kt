@@ -20,6 +20,7 @@ object Pounce : Signature("pounce", Message.POUNCE) {
   override fun cast(cast: Cast): Boolean {
     val target = cast.foes(16.0).firstOrNull { it.location.distanceSquared(cast.at) > 9 } ?: return false
     val leap = target.location.toVector().subtract(cast.at.toVector())
+    if (leap.clone().setY(0).lengthSquared() < 1e-4) return false
     cast.boss.entity.velocity = leap.clone().setY(0).normalize().multiply((leap.length() / 8).coerceIn(0.6, 1.6)).setY(0.6)
     cast.sound(Sound.ENTITY_SPIDER_AMBIENT, 1f, 0.6f)
     cast.later(14) {

@@ -38,7 +38,7 @@ object ArrowRain : Ability {
 
     repeat(cfg.rainWaves.coerceAtLeast(1)) { wave ->
       cast.later(cfg.rainWaveIntervalTicks.coerceAtLeast(1) * wave) {
-        if (!target.isOnline || !cast.canHit(target)) return@later
+        if (!target.isOnline || !cast.canHit(target) || target.world != cast.at.world) return@later
         val center = target.location
         // Under a cave roof the arrows start below it, or the wave skips.
         val height = Targets.headroom(center, cfg.rainHeight).takeIf { it >= MIN_ROOM } ?: return@later

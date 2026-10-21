@@ -26,7 +26,7 @@ object FireballBarrage : Signature("fireball_barrage", Message.FIREBALL_BARRAGE)
     val count = (3 + cast.level / 25).coerceAtMost(7)
     repeat(count) { i ->
       cast.later(i * 4L) {
-        if (!cast.canHit(target)) return@later
+        if (!cast.canHit(target) || target.world != cast.at.world) return@later
         cast.boss.entity.launchProjectile(SmallFireball::class.java, aim(cast, target, 0.08)) {
           it.setIsIncendiary(false)
           it.isPersistent = false

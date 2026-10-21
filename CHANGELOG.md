@@ -2,6 +2,20 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.6.5
+
+### Fixed
+
+- 🏠 **A boss forgets whoever left the fight.** Since 2.6.3 lightning, meteors, and arrow rain reach the players a boss fights at any distance, but that took in everyone who had ever hit it: a player who struck once and went home got lightning there. Now a player stays in the fight for 30 seconds after their last hit, or their pet's.
+- 💀 **The killing blow casts nothing:** a dying boss no longer summons minions or splits into doubles with its last breath.
+- 👥 **Doubles leave with their boss.** Copies outlived a boss killed before they faded, with its gear, name, and glow. The real boss now lands only where it fits and outside claims, never in a wall.
+- 🪂 **Grapple doesn't kill with the fall:** slow falling lasts as long as the drop needs, not a flat 3 seconds.
+- 🔥 **The fire ring keeps away from anything that burns** within the fire's reach, a block to each side and four above, not only next to it.
+- 🌀 **Arrow rain, fireballs, and tridents** stop when their target leaves for another world.
+- 🟣 **Swap** needs the enderman to see you and to fit where you stand: no swaps through walls or into a two-block tunnel.
+- 💚 **Regeneration no longer ends phase two’s protection early:** its effects run out by themselves.
+- 🛠️ **Grapple, pounce, and stampede** no longer fail when a player stands right above the boss.
+
 ## 2.6.4
 
 ### Fixed

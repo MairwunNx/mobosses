@@ -22,7 +22,8 @@ object FireRing : Ability {
   override fun cooldown(settings: AbilitySettings) = settings.fireRingCooldown to settings.fireRingCooldownBias
 
   private const val POINTS = 64
-  private val NEIGHBOURS = listOf(Triple(1, 0, 0), Triple(-1, 0, 0), Triple(0, 0, 1), Triple(0, 0, -1), Triple(0, 1, 0), Triple(0, -1, 0))
+  /** Where fire spreads from a block: a block to each side, one below, four above. */
+  private val REACH = (-1..1).flatMap { dx -> (-1..4).flatMap { dy -> (-1..1).map { dz -> Triple(dx, dy, dz) } } }.filter { it != Triple(0, 0, 0) }
 
   override fun cast(cast: Cast): Boolean {
     val cfg = cast.settings
@@ -36,8 +37,8 @@ object FireRing : Ability {
       val ground = Targets.ground(center.world, center.x + radius * cos(angle), center.y, center.z + radius * sin(angle)) ?: return@count false
       val above = ground.getRelative(0, 1, 0)
       !cast.boss.entity.boundingBox.contains(above.x + 0.5, above.y.toDouble(), above.z + 0.5) && Targets.isOpen(above) &&
-        // Nothing next to it may burn: the ring scorches the ground, not a house.
-        NEIGHBOURS.none { (dx, dy, dz) -> above.getRelative(dx, dy, dz).type.isFlammable } &&
+        // Nothing within the fire's reach may burn: the ring scorches the ground, not a house.
+        REACH.none { (dx, dy, dz) -> above.getRelative(dx, dy, dz).type.isFlammable } &&
         // Temporary, since with doFireTick off fire would never burn out.
         cast.plugin.blockChanges.setFor(above, fire, cfg.fireRingSeconds.coerceAtLeast(1) * 20L)
     }

@@ -26,7 +26,7 @@ object TeleportStrike : Ability {
    * water or lava, and no protected area it couldn't spawn in. Not over a ravine, not in a wall,
    * not on the other side of one.
    */
-  private fun fits(cast: Cast, at: Location): Boolean {
+  fun fits(cast: Cast, at: Location): Boolean {
     val entity = cast.boss.entity
     if (!at.block.getRelative(0, -1, 0).type.isSolid || at.block.isLiquid || at.block.getRelative(0, 1, 0).isLiquid) return false
     val box = entity.boundingBox.shift(at.toVector().subtract(entity.location.toVector()))

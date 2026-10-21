@@ -27,7 +27,7 @@ object TridentStorm : Signature("trident_storm", Message.TRIDENT_STORM) {
     val damage = scaled(cast, 6.0, 0.06, 12.0)
     repeat(count) { i ->
       cast.later(i * 5L) {
-        if (!cast.canHit(target)) return@later
+        if (!cast.canHit(target) || target.world != cast.at.world) return@later
         cast.boss.entity.launchProjectile(Trident::class.java, aim(cast, target, 0.06).multiply(2.0)) {
           it.pickupStatus = AbstractArrow.PickupStatus.DISALLOWED
           it.damage = damage

@@ -64,6 +64,8 @@ class DamageListener(private val plugin: MoBossesPlugin) : Listener {
     }
     // A blow in melee loosens the chain on whoever strikes.
     if (by is Player) Chain.struck(plugin, boss, by)
+    // The killing blow casts nothing: no minions or doubles for a boss already dead.
+    if (event.finalDamage >= boss.entity.health) return
     plugin.abilities.onHit(boss, player?.takeIf { it.isOnline })
   }
 

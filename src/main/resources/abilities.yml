@@ -8,7 +8,8 @@
 # bias. Abilities hurt players in survival or adventure only, and change blocks
 # only where the protection settings in config.yml allow it. Aimed abilities
 # go for the players the boss fights: the one it chases, the one who hit it,
-# then everyone who hit it, nearest first; never a bystander.
+# then everyone who hit it in the last 30 seconds, nearest first; never a
+# bystander.
 
 is_lightning_enabled: true
 is_summoning_enabled: true

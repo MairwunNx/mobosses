@@ -39,7 +39,8 @@ object Doubles : Ability {
     val cfg = cast.settings.doubles
     val boss = cast.boss.entity
     val count = Rolls.linear(cfg.countBase, cfg.countPerLevel, cfg.countMax, cast.level).coerceIn(1, cfg.countMax.coerceAtLeast(1))
-    val spots = (spots(cast.at, cfg.radius, count) + cast.at.clone()).shuffled()
+    // The real one may stand in any spot, so each must fit the boss and lie outside claims.
+    val spots = (spots(cast.at, cfg.radius, count).filter { TeleportStrike.fits(cast, it) } + cast.at.clone()).shuffled()
     if (spots.size < 2) return false
     spots.forEach { poof(it) }
     cast.sound(Sound.ENTITY_ILLUSIONER_MIRROR_MOVE, 1.2f, 0.9f)
@@ -48,12 +49,13 @@ object Doubles : Ability {
     val real = spots.first()
     boss.teleport(real.clone().apply { yaw = boss.location.yaw; pitch = boss.location.pitch })
     val copies = spots.drop(1).mapNotNull { copy(cast, it) }
-    cast.later(cfg.seconds.coerceAtLeast(1) * 20L) {
+    // Not cast.later: that skips when the boss is gone, and the copies must go anyway.
+    Bukkit.getScheduler().runTaskLater(cast.plugin, Runnable {
       copies.filter { it.isValid }.forEach {
         poof(it.location)
         cast.plugin.decoys.remove(it)
       }
-    }
+    }, cfg.seconds.coerceAtLeast(1) * 20L)
     return copies.isNotEmpty()
   }
 

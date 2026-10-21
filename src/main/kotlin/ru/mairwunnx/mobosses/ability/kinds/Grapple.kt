@@ -28,12 +28,13 @@ object Grapple : Ability {
       .filter { it.location.distance(cast.at) in cfg.grappleMinDistance..cfg.grappleRange && entity.hasLineOfSight(it) }
       .maxByOrNull { it.location.distanceSquared(cast.at) } ?: return false
     val pull = cast.at.toVector().subtract(target.location.toVector())
+    if (pull.clone().setY(0).lengthSquared() < 1e-4) return false
     val distance = pull.length()
     val above = target.location.y - cast.at.y
-    // Off a pillar the pull drags down, not up; slow falling keeps the drop from killing outright.
+    // Off a pillar the pull drags down, not up; slow falling, long enough for the height, keeps the drop from killing.
     val lift = if (above > 2) 0.1 else 0.4 + distance / 40
     target.velocity = pull.setY(0).normalize().multiply(cfg.grappleStrength * (0.6 + distance / cfg.grappleRange)).setY(lift)
-    if (above > 2) target.addPotionEffect(PotionEffect(PotionEffectType.SLOW_FALLING, 60, 0))
+    if (above > 2) target.addPotionEffect(PotionEffect(PotionEffectType.SLOW_FALLING, (above * 4 + 40).toInt(), 0))
     target.world.spawnParticle(Particle.CRIT, target.location.add(0.0, 1.0, 0.0), 20, 0.3, 0.5, 0.3, 0.1)
     cast.sound(Sound.ENTITY_FISHING_BOBBER_RETRIEVE, 1f, 0.6f, target.location)
     return true

@@ -19,7 +19,7 @@ import ru.mairwunnx.mobosses.lang.Message
 object Stampede : Signature("stampede", Message.STAMPEDE) {
   override fun cast(cast: Cast): Boolean {
     val target = cast.foes(18.0).firstOrNull { it.location.distanceSquared(cast.at) > 16 } ?: return false
-    val dash = target.location.toVector().subtract(cast.at.toVector()).setY(0).normalize()
+    val dash = target.location.toVector().subtract(cast.at.toVector()).setY(0).takeIf { it.lengthSquared() > 1e-4 }?.normalize() ?: return false
     cast.boss.entity.velocity = dash.multiply(1.8).setY(0.25)
     cast.sound(Sound.ENTITY_RAVAGER_ROAR, 1f, 1f)
     cast.later(10) {

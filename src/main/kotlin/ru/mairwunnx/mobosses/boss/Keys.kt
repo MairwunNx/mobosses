@@ -13,6 +13,8 @@ class Keys(plugin: Plugin) {
   val damage = NamespacedKey(plugin, "damage")
   /** The part of [damage] each player's pets dealt: `uuid=damage;…`. */
   val petDamage = NamespacedKey(plugin, "pet_damage")
+  /** When each player, or their pet, last hit the boss: `uuid=millis;…`. */
+  val hitAt = NamespacedKey(plugin, "hit_at")
   /** When a player was last near the boss, in epoch milliseconds, for despawning. */
   val seen = NamespacedKey(plugin, "seen")
   /** On bosses from `/mobosses spawn`, which don't despawn. */

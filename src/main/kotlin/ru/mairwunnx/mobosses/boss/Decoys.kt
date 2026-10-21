@@ -38,6 +38,9 @@ class Decoys(private val plugin: MoBossesPlugin) {
     entity.remove()
   }
 
+  /** The copies of [boss], when it dies. */
+  fun removeOf(boss: UUID) = live.values.filter { it.persistentDataContainer.get(plugin.keys.decoy, PersistentDataType.STRING) == boss.toString() }.forEach(::remove)
+
   /** Every copy, for shutdown. */
   fun removeAll() = live.values.toList().forEach(::remove)
 }

@@ -10,6 +10,7 @@ import org.bukkit.entity.Player
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 import org.bukkit.util.Vector
+import ru.mairwunnx.mobosses.ability.kinds.TeleportStrike
 import ru.mairwunnx.mobosses.ability.Cast
 import ru.mairwunnx.mobosses.ability.Targets
 import ru.mairwunnx.mobosses.lang.Message
@@ -20,7 +21,7 @@ object Swap : Signature("swap", Message.SWAP) {
     val target = cast.foes(24.0).firstOrNull { it.location.distanceSquared(cast.at) > 16 } ?: return false
     val bossAt = cast.at
     val playerAt = target.location
-    if (!cast.plugin.guards.canSpawnBoss(playerAt) || playerAt.block.isLiquid) return false
+    if (!cast.boss.entity.hasLineOfSight(target) || !TeleportStrike.fits(cast, playerAt)) return false
     if (!cast.boss.entity.teleport(playerAt)) return false
     target.teleport(bossAt.clone().setDirection(playerAt.toVector().subtract(bossAt.toVector())))
     target.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 30, 0))

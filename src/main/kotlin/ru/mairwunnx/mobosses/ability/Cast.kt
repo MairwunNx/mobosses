@@ -26,11 +26,12 @@ class Cast(val plugin: MoBossesPlugin, val boss: Boss, val attacker: Player?) {
 
   /**
    * Whom the boss fights, however far in its world: the player it chases, the one who set this off, then
-   * everyone who hit it, nearest first. Aimed abilities pick from these, never a bystander.
+   * everyone who hit it in the last [FIGHTING] milliseconds, nearest first. Aimed abilities pick from these,
+   * never a bystander, nor someone who hit it once and went home.
    */
   fun foes(): List<Player> {
     val here = at
-    val hitters = boss.damage.keys.mapNotNull(Bukkit::getPlayer).filter { it.world == here.world }.sortedBy { it.location.distanceSquared(here) }
+    val hitters = boss.hitWithin(FIGHTING).mapNotNull(Bukkit::getPlayer).filter { it.world == here.world }.sortedBy { it.location.distanceSquared(here) }
     return (listOfNotNull((boss.entity as? Mob)?.target as? Player, attacker) + hitters).distinct().filter { it.world == here.world && canHit(it) }
   }
 
@@ -50,4 +51,9 @@ class Cast(val plugin: MoBossesPlugin, val boss: Boss, val attacker: Player?) {
 
   /** Runs [block] every [period] ticks until it cancels its task. */
   fun every(period: Long, block: (BukkitTask) -> Unit) = Bukkit.getScheduler().runTaskTimer(plugin, block, 0L, period.coerceAtLeast(1))
+
+  private companion object {
+    /** How long a hit keeps a player in the fight. */
+    const val FIGHTING = 30_000L
+  }
 }
