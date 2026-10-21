@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.6.3
+
+### Fixed
+
+- ⚡ **Lightning finds its targets:** it looked for a player only within its own small radius of the boss, 3 to 10 blocks, and struck around the boss itself when you stood a step farther or shot from a bow. Now every player the boss fights gets a bolt, however far: whoever it chases, whoever set the ability off, and everyone who hit it. The other bolts scatter around them. A lightning rod or copper next to a player still draws that player’s bolt.
+
 ## 2.6.2
 
 ### Fixed

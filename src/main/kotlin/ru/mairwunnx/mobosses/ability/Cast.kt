@@ -4,6 +4,7 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.Sound
 import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Mob
 import org.bukkit.entity.Player
 import org.bukkit.scheduler.BukkitTask
 import ru.mairwunnx.mobosses.MoBossesPlugin
@@ -24,6 +25,11 @@ class Cast(val plugin: MoBossesPlugin, val boss: Boss, val attacker: Player?) {
   fun victims(center: Location, radius: Double): List<LivingEntity> = players(center, radius) + Targets.aggressors(center, radius, boss.uuid, plugin.keys.aggressor)
 
   fun nearest(radius: Double) = Targets.nearest(at, radius, plugin.guards)
+
+  /** Whom the boss fights, however far in its world: its target, the player who set this off, and everyone who hit it. */
+  fun foes(): List<Player> =
+    (listOfNotNull((boss.entity as? Mob)?.target as? Player, attacker) + boss.damage.keys.mapNotNull(Bukkit::getPlayer))
+      .distinct().filter { it.world == at.world && canHit(it) }
 
   fun canHit(player: Player) = Targets.canHit(player, plugin.guards)
 

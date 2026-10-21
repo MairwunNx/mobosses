@@ -37,8 +37,10 @@ teleport_strike_cooldown: 11000
 teleport_strike_cooldown_bias: 1.2
 
 # ---------------------------------------------------------------------------
-#  Lightning: bolts around a lightning rod or copper nearby, else around the
-#  nearest player. Each value grows by its modifier per boss level, up to max.
+#  Lightning: a bolt on every player the boss fights, however far, the rest
+#  within the radius around them; a lightning rod or copper next to a player
+#  draws that player's bolt. Each value grows by its modifier per boss level,
+#  up to max.
 # ---------------------------------------------------------------------------
 lightning_damage: 5.0
 lightning_damage_modifier: 0.1

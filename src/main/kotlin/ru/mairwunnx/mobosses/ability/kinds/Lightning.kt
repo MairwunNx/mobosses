@@ -13,7 +13,11 @@ import ru.mairwunnx.mobosses.lang.Message
 import kotlin.math.min
 import kotlin.random.Random
 
-/** Bolts around a lightning rod or copper nearby, else around the nearest player, else around the boss. Only the flash: a real bolt would set fires. */
+/**
+ * A bolt on every player the boss fights, however far, the rest scattered around them; a lightning rod or
+ * copper next to a player draws that player's bolt. With no one to strike, around the boss. Only the flash:
+ * a real bolt would set fires.
+ */
 object Lightning : Ability {
   override val key = "lightning"
   override val message = Message.LIGHTNING
@@ -33,8 +37,9 @@ object Lightning : Ability {
     val radius = min(cfg.lightningRadius + cast.level * cfg.lightningRadiusModifier, cfg.lightningRadiusMax)
     val strikes = Rolls.linear(cfg.lightningStrikes, cfg.lightningStrikesModifier, cfg.lightningStrikesMax, cast.level)
     val damage = Rolls.linear(cfg.lightningDamage, cfg.lightningDamageModifier, cfg.lightningDamageMax, cast.level)
-    val center = attractor(cast.at, min(5.0, radius)) ?: cast.nearest(radius)?.location ?: cast.at
-    val points = listOf(center) + List((strikes - 1).coerceAtLeast(0)) {
+    val centers = cast.foes().map { it.location }.ifEmpty { listOf(cast.at) }.map { attractor(it, min(5.0, radius)) ?: it }
+    val points = centers + List((strikes - centers.size).coerceAtLeast(0)) {
+      val center = centers.random()
       val x = center.x + Random.nextDouble(-radius, radius)
       val z = center.z + Random.nextDouble(-radius, radius)
       Location(center.world, x, Targets.ground(center.world, x, center.y, z)?.let { it.y + 1.0 } ?: center.y, z)
@@ -47,7 +52,7 @@ object Lightning : Ability {
     return true
   }
 
-  /** The block that draws lightning within [radius] around the fight's height: a rod first, then copper, nearest first. */
+  /** The block that draws lightning within [radius] around [at]'s height: a rod first, then copper, nearest first. */
   private fun attractor(at: Location, radius: Double): Location? {
     val r = radius.toInt()
     val blocks = (-r..r).flatMap { dx -> (-r..r).flatMap { dz -> (-3..3).map { dy -> Triple(dx, dy, dz) } } }
