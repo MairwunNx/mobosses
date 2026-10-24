@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.9.0
+
+### Changed
+
+- 🧩 **Mo’Bosses talks to WorldAPI through its new expansion API.** The data at `/extensions/mobosses` and the `ext.mobosses.*` events stay exactly as they were: the same paths, the same JSON, the same public and private parts, so sites, bots, and dashboards notice nothing. Mo’Bosses now needs WorldAPI 3.4.0 or newer for it; with an older one it says so in the log and runs on without sharing its data. WorldAPI drops its older bridge, which Mo’Bosses used until now, in 4.0.0.
+
 ## 2.8.0
 
 ### New

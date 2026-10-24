@@ -25,7 +25,7 @@ A Paper 26.3 plugin that turns ordinary mobs into bosses of six classes, with ab
 | `progress/` | Players’ levels and boss statistics: `Progression` (a cache filled at login) and `Store` (Exposed over SQLite, MySQL/MariaDB, or PostgreSQL) on a thread of its own; `Tables` holds `player_progress` (1.x’s, plus `name`) and `boss_stats` |
 | `lang/` | `Message`, `Languages`, `LanguageFiles`, `LocaleResolver`, `GeoIp`, `PlayerLanguages` (who reads what: a player’s own choice first), `LanguageChoices` (those choices, in `player-languages.yml`), `Texts` (rendering, boss names, classes, minions) |
 | `protect/` | `Guard` and `Guards`, the GriefPrevention and WorldGuard adapters and flags, `BlockLog` and `CoreProtectLog`, `BlockLogListener`, and `BlockChanges` with `TemporaryBlocks`, the only way abilities touch blocks |
-| `hooks/` | PlaceholderAPI (the `<papi:…>` tag and `%mobosses_…%`), MiniPlaceholders (`MiniPlaceholderTags`), and Plan (`PlanData`). Plan and MiniPlaceholders ask from other threads, so they read only the progress cache and counts the server thread keeps |
+| `hooks/` | PlaceholderAPI (the `<papi:…>` tag and `%mobosses_…%`), MiniPlaceholders (`MiniPlaceholderTags`), Plan (`PlanData`), and WorldAPI: `BossesExpansion` speaks WorldAPI's expansion API, and `WorldApiLink`, which holds none of its types, is what the rest of the plugin calls. Plan and MiniPlaceholders ask from other threads, so they read only the progress cache and counts the server thread keeps |
 
 ## Rules that keep it working
 
@@ -37,7 +37,8 @@ A Paper 26.3 plugin that turns ordinary mobs into bosses of six classes, with ab
 - Abilities change blocks only through `BlockChanges.set` or `setFor`: that asks the guards, logs to CoreProtect before the change, in the same tick, and restores temporary blocks on shutdown.
 - Abilities hit players, through `Targets`, which checks the game mode and `Guard.canHurt`, and the pets and golems that hit the boss in the last 15 seconds (`Targets.isAggressor`, marked by `DamageListener`); area abilities reach both through `Cast.victims`. Nothing else: no villagers, other pets, or minions.
 - A boss is never weaker than its vanilla mob: `BossFactory` keeps every stat at least the mob’s own, and `Equipment` puts on only stronger pieces of the same kind. Keep both when changing stats or gear.
-- Optional plugins (PlaceholderAPI, Plan, MiniPlaceholders, GriefPrevention, WorldGuard, CoreProtect) are `compileOnly` and `join-classpath` in `paper-plugin.yml`; their classes are touched only after checking the plugin is enabled. WorldGuard flags register in `onLoad`, the only time WorldGuard takes them.
+- Optional plugins (PlaceholderAPI, Plan, MiniPlaceholders, GriefPrevention, WorldGuard, CoreProtect, WorldAPI) are `compileOnly` and `join-classpath` in `paper-plugin.yml`; their classes are touched only after checking the plugin is enabled. WorldGuard flags register in `onLoad`, the only time WorldGuard takes them.
+- WorldAPI's data keeps its paths, JSON, and privacy: the Moonlands site reads `leaderboards/kills` and `level`, and minecraft-mcp and Grafana read the rest. Add fields; never rename or remove one. Only `bosses` is private, since it carries coordinates; events put a boss's place under `location`, which WorldAPI strips for anonymous clients. `BossesExpansion` is the only class that touches `com.mairwunnx.worldapi.expansion`, and it loads only when WorldAPI is enabled; a WorldAPI before 3.4.0 has no such classes, which `WorldApiLink.connect` catches.
 - Game ids stay strings in the config models and resolve in `Catalog`; a bad one logs a warning and drops out, never failing the file.
 - A new message gets a `Message` entry and a line in every file in `src/main/resources/lang/`; a new boss type, minion, class, or loot `id` needs its name in every language too. `ResourcesTest` fails otherwise.
 - A new key in `config.yml`, `abilities.yml`, `classes.yml`, or `rewards.yml` gets the same default in its model; `ResourcesTest` checks they match. 1.x files must keep loading (`src/test/resources/v1/`).
@@ -77,6 +78,7 @@ Where the versions live, for `/update-deps` and `/update-minecraft` (both in `.c
 - GriefPrevention: `compileOnly("com.github.GriefPrevention:GriefPrevention:…")` from JitPack, the version Moonlands runs.
 - WorldGuard: `compileOnly("com.sk89q.worldguard:worldguard-bukkit:…")` from `maven.enginehub.org`.
 - CoreProtect: `compileOnly("net.coreprotect:coreprotect:…")` from `maven.playpro.com`; the code needs API 10 or newer.
+- WorldAPI: `compileOnly("com.mairwunnx:worldapi-expansion:…")` from Maven Central, the expansion API. Raise it only when Mo’Bosses needs something newer: WorldAPI refuses an expansion built against a newer minor than its own.
 - The SQLite driver comes from Paper (`compileOnly`, and `testImplementation` for the store test); the MariaDB and PostgreSQL drivers are shaded.
 - Java: `jvmToolchain` in `build.gradle.kts`, the foojay resolver in `settings.gradle.kts`, and CI’s `setup-java`.
 - Gradle in `gradle/wrapper/gradle-wrapper.properties`; Kotlin and the Gradle plugins in the `plugins` block; libraries in `dependencies`.
