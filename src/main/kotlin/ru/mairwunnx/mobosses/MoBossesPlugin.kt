@@ -23,6 +23,7 @@ import ru.mairwunnx.mobosses.combat.DamageListener
 import ru.mairwunnx.mobosses.combat.DeathListener
 import ru.mairwunnx.mobosses.combat.Loot
 import ru.mairwunnx.mobosses.combat.Rewards
+import ru.mairwunnx.mobosses.config.BundledFiles
 import ru.mairwunnx.mobosses.config.Configs
 import ru.mairwunnx.mobosses.config.Ids
 import ru.mairwunnx.mobosses.config.Settings
@@ -175,6 +176,17 @@ class MoBossesPlugin : JavaPlugin() {
 
   private fun bundled(path: String): String = getResource(path)!!.use { it.readBytes().toString(Charsets.UTF_8) }
 
-  /** A file in the data folder, copied from the jar first when it isn't there yet. */
-  private fun file(path: String): File = dataFolder.resolve(path).also { if (!it.exists()) saveResource(path, false) }
+  private val shipped by lazy { BundledFiles.parse(bundled(BundledFiles.LIST)) }
+
+  /**
+   * A file in the data folder, copied from the jar first when it isn't there yet, or again when it's
+   * an older version’s copy nobody changed: up to 2.7 the plugin copied files once and left them be.
+   */
+  private fun file(path: String): File = dataFolder.resolve(path).also {
+    if (!it.exists()) saveResource(path, false)
+    else if (BundledFiles.outdated(path, it.readText(), bundled(path), shipped)) {
+      saveResource(path, true)
+      log.info("$path: updated to this version’s, since it had no changes of yours")
+    }
+  }
 }
