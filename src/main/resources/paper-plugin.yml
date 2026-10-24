@@ -69,7 +69,8 @@ dependencies:
       load: BEFORE
       required: false
       join-classpath: true
-    # Reached through its bridge in Bukkit's services, with no classes of its own.
+    # Brings the expansion API's classes, which hooks/BossesExpansion uses.
     WorldAPI:
       load: BEFORE
       required: false
+      join-classpath: true

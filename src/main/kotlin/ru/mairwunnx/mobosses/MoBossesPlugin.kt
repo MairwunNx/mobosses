@@ -99,7 +99,7 @@ class MoBossesPlugin : JavaPlugin() {
 
   override fun onEnable() {
     if (!reload()) log.warn("Started with errors in the config files; fix them and run /mobosses reload")
-    listOf(playerLanguages, progression, spawns, survival, DeathPenalty(this), achievements, worldApi, DamageListener(this), DeathListener(this), MeteorListener(this), ArrowListener(this), AbilityEntities(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener())
+    listOf(playerLanguages, progression, spawns, survival, DeathPenalty(this), achievements, DamageListener(this), DeathListener(this), MeteorListener(this), ArrowListener(this), AbilityEntities(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener())
       .forEach { server.pluginManager.registerEvents(it, this) }
     registerCommand("mobosses", "Your Mo’Bosses level and the best hunters; for admins, reload, spawn, or remove bosses", listOf("mb", "moboss"), MoBossesCommand(this))
     tasks += server.scheduler.runTaskTimer(this, Runnable { visuals.tick(); bars.tick(); PlanData.bossesAlive = bosses.all.size }, 20L, 20L)
@@ -127,6 +127,7 @@ class MoBossesPlugin : JavaPlugin() {
     tasks.forEach(BukkitTask::cancel)
     geoIpTask?.cancel()
     expansion?.unregister()
+    worldApi.disconnect()
     miniPlaceholders?.close()
     // Cobwebs and the like go back now, or they'd stay in the world for good.
     blockChanges.temporary.restoreAll()
