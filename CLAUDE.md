@@ -15,7 +15,7 @@ A Paper 26.3 plugin that turns ordinary mobs into bosses of six classes, with ab
 |---|---|
 | `MoBossesPlugin.kt` | Startup, `reload()`, and shutdown. Reload reads every file again and keeps the plugin, its command, and its bosses running |
 | `MoBossesCommand.kt` | `/mobosses reload`, `spawn`, `killall`, `language`, with suggestions |
-| `config/` | One model per file (`Settings`, `AbilitySettings`, `Classes`, `BossSpec`, `MinionSettings`, `RewardSettings`, `LootTable`), read by `Configs` through kaml, not strict. `Yamls.decode` drops a value that doesn’t fit, with a warning, so it takes its default; `Ids` resolves game ids against the registries, 1.x enum names included |
+| `config/` | One model per file (`Settings`, `AbilitySettings`, `Classes`, `BossSpec`, `MinionSettings`, `RewardSettings`, `LootTable`), read by `Configs` through kaml, not strict. `Yamls.decode` drops a value that doesn’t fit, with a warning, so it takes its default; `Ids` resolves game ids against the registries, 1.x enum names included; `BundledFiles` swaps a server’s untouched older copies for the jar’s |
 | `algebra/` | The math, pure: `Curves` (the shared growth curve), `Stats` (health, damage, armor, vanilla experience), `Leveling` (player levels, boss levels, relevance), `Rolls` (minions, cooldowns, weighted picks) |
 | `boss/` | `Catalog` (configs with ids resolved), `Bosses` (live bosses: make, adopt, forget), `BossFactory` and `Equipment` (stats and gear), `Boss` (the fight state, kept on the entity through `Keys` and `Codec`), `Minions`, `NameTags` (names per language), `BossBars`, `Visuals` |
 | `spawn/` | `SpawnListener` (events), `NaturalSpawns` (the roll and the level), `SpawnLimiter` (cooldowns per player, the cap on bosses nearby) |
@@ -41,6 +41,7 @@ A Paper 26.3 plugin that turns ordinary mobs into bosses of six classes, with ab
 - Game ids stay strings in the config models and resolve in `Catalog`; a bad one logs a warning and drops out, never failing the file.
 - A new message gets a `Message` entry and a line in every file in `src/main/resources/lang/`; a new boss type, minion, class, or loot `id` needs its name in every language too. `ResourcesTest` fails otherwise.
 - A new key in `config.yml`, `abilities.yml`, `classes.yml`, or `rewards.yml` gets the same default in its model; `ResourcesTest` checks they match. 1.x files must keep loading (`src/test/resources/v1/`).
+- A change to a file the plugin copies to its folder (`Configs.FILES` and `lang/`) adds the new copy’s hash to `src/main/resources/bundled.sha256`; `BundledFilesTest` prints the line. Never remove a line: it’s how a server’s untouched older copy gets replaced on start. The loot table keeps junk blocks out; `ResourcesTest` lists them.
 - The table `player_progress` keeps 1.x’s name, columns, and index. Progress changes go through `Store.add`, which reads and writes in one transaction.
 - Player-provided text goes into messages through `Placeholder.unparsed`. PlaceholderAPI goes through the `<papi:…>` tag only, never `%…%` replacement over whole texts.
 

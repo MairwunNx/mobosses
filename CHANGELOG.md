@@ -2,6 +2,16 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.8.0
+
+### New
+
+- 🔄 **Files you never changed follow the plugin.** Up to 2.7 the plugin copied `loottable.yml`, `bosses.yml`, `classes.yml`, `abilities.yml`, and the rest into `plugins/MoBosses/` once and never again, so a server that started on 2.1 kept 2.1’s loot, cobblestone stacks included, through every update. Now, on start, a file equal to a copy any 2.x release shipped gets this version’s, and the log says `updated to this version’s`. A file you edited stays as it is; delete it to take the new defaults.
+
+### Changed
+
+- 🧹 **No junk blocks in the loot:** the last one, oak logs for Common bosses up to level 5, gives way to leather leggings and boots, at the same weight, so every other item comes exactly as often as before. A test now keeps stone, dirt, gravel, sand, logs, planks, and the like out of the table.
+
 ## 2.7.0
 
 ### New
