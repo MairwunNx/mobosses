@@ -41,6 +41,29 @@ class ResourcesTest {
     assertTrue(loot.items.none { it.title != null || it.lore.isNotEmpty() }, "loottable.yml has fixed names; they belong in lang/")
   }
 
+  @Test fun `no loot table entry, shared or a type's own, drops junk blocks`() {
+    val junk = LootTable.parse(resource("loottable.yml")).items
+      .map { it.material.trim().uppercase().removePrefix("MINECRAFT:") }
+      .filter { it in JUNK || JUNK_FAMILIES.any { family -> family.matches(it) } }
+    assertEquals(emptyList(), junk.distinct(), "loottable.yml drops junk blocks")
+  }
+
+  private companion object {
+    /** Blocks anyone digs or crafts by the stack: a boss never drops them. Ores and blocks of metals or gems stay. */
+    val JUNK = setOf(
+      "COBBLESTONE", "MOSSY_COBBLESTONE", "STONE", "SMOOTH_STONE", "ANDESITE", "DIORITE", "GRANITE", "TUFF", "CALCITE",
+      "DRIPSTONE_BLOCK", "POINTED_DRIPSTONE", "DIRT", "COARSE_DIRT", "ROOTED_DIRT", "GRASS_BLOCK", "PODZOL", "MYCELIUM", "MUD",
+      "PACKED_MUD", "CLAY", "GRAVEL", "SAND", "RED_SAND", "SANDSTONE", "RED_SANDSTONE", "NETHERRACK", "BASALT", "SMOOTH_BASALT",
+      "BLACKSTONE", "SOUL_SAND", "SOUL_SOIL", "END_STONE", "ICE", "SNOW_BLOCK", "MOSS_BLOCK", "TERRACOTTA", "GLASS", "BRICKS",
+      "CRAFTING_TABLE", "FURNACE", "CHEST", "LADDER", "BOOKSHELF",
+    )
+    val JUNK_FAMILIES = listOf(
+      ".+_(LOG|WOOD|STEM|HYPHAE|PLANKS|SLAB|STAIRS|FENCE|WOOL|CARPET|LEAVES|SAPLING|TERRACOTTA|CONCRETE|CONCRETE_POWDER|SIGN|STAINED_GLASS)",
+      "(COBBLED_|POLISHED_)?DEEPSLATE(_BRICKS|_TILES)?",
+      "POLISHED_(ANDESITE|DIORITE|GRANITE|TUFF|BLACKSTONE|BASALT)",
+    ).map(::Regex)
+  }
+
   @Test fun `every bundled language sets every key the bundled files use`() {
     val bosses = BossSpec.parse(resource("bosses.yml")).keys.map { "bosses.${it.lowercase()}" }
     val minions = MinionSettings.parse(resource("minions.yml")).minions.map { "minions.${it.summoner.lowercase()}" }
