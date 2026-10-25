@@ -1,0 +1,15 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+license = "MIT"
+
+[[mods]]
+modId = "mobosses_gametest"
+version = "0.0.0-dev"
+displayName = "Mo’Bosses game tests"
+
+[[dependencies.mobosses_gametest]]
+modId = "mobosses"
+type = "required"
+versionRange = "*"
+ordering = "AFTER"
+side = "BOTH"

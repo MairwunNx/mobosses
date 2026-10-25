@@ -1,3 +1,5 @@
+import java.time.Duration
+
 plugins {
   kotlin("jvm")
   kotlin("plugin.serialization")
@@ -22,8 +24,21 @@ evaluationDependsOn(core.path)
 val modcoreMain: SourceSet = modcore.sourceSets.main.get()
 val coreMain: SourceSet = core.sourceSets.main.get()
 
+// Game tests on a real server (`./gradlew :neoforge:runGameTestServer`) and a singleplayer world in a game window
+// (`./gradlew :neoforge:runClientGameTest`). They are modcore's, shared with Fabric, and run in a dev-only mod of their
+// own, so the release jar doesn't carry them.
+val gametest: SourceSet = sourceSets.create("gametest") {
+  compileClasspath += sourceSets.main.get().output + modcoreMain.output
+  runtimeClasspath += sourceSets.main.get().output + modcoreMain.output
+}
+kotlin.sourceSets.named("gametest") {
+  kotlin.srcDir(modcore.file("src/gametest/kotlin"))
+  kotlin.srcDir(modcore.file("src/gametestPlain/kotlin"))
+}
+
 neoForge {
   version = neoforgeVersion
+  addModdingDependenciesTo(gametest)
 
   // The mod is this module, modcore, and core together, in dev runs as in the jar: they share packages, which
   // NeoForge's module layers keep to one jar each.
@@ -32,6 +47,9 @@ neoForge {
       sourceSet(sourceSets.main.get())
       sourceSet(modcoreMain)
       sourceSet(coreMain)
+    }
+    register("mobosses_gametest") {
+      sourceSet(gametest)
     }
   }
 
@@ -47,6 +65,20 @@ neoForge {
       programArgument("--nogui")
       loadedMods = listOf(mods["mobosses"])
     }
+    // Runs every test and stops.
+    register("gameTestServer") {
+      type = "gameTestServer"
+      sourceSet = gametest
+      gameDirectory = file("run/gametest")
+      systemProperty("neoforge.enabledGameTestNamespaces", "mobosses_gametest")
+    }
+    // A singleplayer world in a game window, checked and closed by the test mod.
+    register("clientGameTest") {
+      client()
+      sourceSet = gametest
+      gameDirectory = file("run/clientgametest")
+      systemProperty("mobosses.clientGameTest", "true")
+    }
   }
 }
 
@@ -59,6 +91,10 @@ dependencies {
   implementation(project(":core")) { exclude(group = "org.slf4j") }
   // Without its Minecraft: the game comes from NeoForge here.
   compileOnly(project(":modcore")) { isTransitive = false }
+  "gametestCompileOnly"(project(":modcore")) { isTransitive = false }
+  "gametestImplementation"(project(":core")) { exclude(group = "org.slf4j") }
+  "gametestRuntimeOnly"("org.xerial:sqlite-jdbc:$sqlite")
+  adventure.forEach { "gametestImplementation"(it) { exclude(group = "com.google.code.gson") } }
   shade(project(":core")) { exclude(group = "org.slf4j") }
   shade(project(":modcore")) { isTransitive = false }
   adventure.forEach {
@@ -115,5 +151,20 @@ tasks {
 
   assemble {
     dependsOn(shadowJar)
+  }
+
+  named("runGameTestServer") {
+    timeout = Duration.ofMinutes(10)
+  }
+
+  // The singleplayer check writes what it found; anything but `ok` fails the run.
+  named("runClientGameTest") {
+    timeout = Duration.ofMinutes(6)
+    val result = file("run/clientgametest/mobosses-check.txt")
+    doFirst { result.delete() }
+    doLast {
+      val text = if (result.exists()) result.readText().trim() else "the game closed before the check ran"
+      if (text != "ok") throw GradleException("The singleplayer check failed:\n$text")
+    }
   }
 }
