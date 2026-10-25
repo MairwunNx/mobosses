@@ -39,6 +39,7 @@ import ru.mairwunnx.mobosses.modcore.lang.PlayerLanguages
 import ru.mairwunnx.mobosses.modcore.lang.Texts
 import ru.mairwunnx.mobosses.modcore.menu.Stats
 import ru.mairwunnx.mobosses.modcore.protect.BlockChanges
+import ru.mairwunnx.mobosses.modcore.protect.Claims
 import ru.mairwunnx.mobosses.modcore.protect.Guards
 import ru.mairwunnx.mobosses.modcore.spawn.FullMoon
 import ru.mairwunnx.mobosses.modcore.spawn.Spawns
@@ -177,7 +178,7 @@ class MoBosses(val server: MinecraftServer, val loader: Loader) {
     if (LocaleResolver.normalize(configs.defaultLanguage) !in texts) log.warn("locales.default: no lang/${configs.defaultLanguage}.yml, using ${resolver.default}")
 
     catalog = Catalog(configs, Ids(server, log), log)
-    guards = Guards(emptyList())
+    guards = Guards(listOfNotNull(Claims.load(configs.settings.protection.claims, loader, log)))
     setUpGeoIp(configs.settings)
     progression.open(database(configs.settings.database), data)
 
