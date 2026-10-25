@@ -75,6 +75,21 @@ fun main(args: Array<String>) {
       .joinToString("\t") { Difficulty.part(m, it).digits(3) })
   }
 
-  println("\nPlayer level by counted kills, without experience")
-  println(listOf(10, 25, 50, 100, 200, 400, 800, 1600).joinToString("\t") { "$it: ${Leveling.playerLevel(settings.progression.levelCurve, 0, it)}" })
+  // A zombie of the player's own level, of a class picked by the classes' chances, killed alone: what a level costs.
+  val curve = settings.progression.levelCurve
+  val weights = classes.sumOf { it.chance }
+  fun kill(level: Int) = classes.sumOf { c ->
+    c.chance / weights * Leveling.bossExperience(settings.progression.expGain, Stats.health(formula.health, 20.0, c.health, level), c.experience, level)
+  }
+  println("\nPlayer levels: experience in all, to the next level, solo kills of zombies at the level to get there (classes by chance), and kills in all to reach the level")
+  println("Lvl\tin all\tto next\tkills\tkills in all")
+  var kills = 0.0
+  (1..curve.maxLevel.coerceAtLeast(1)).forEach { level ->
+    val from = Leveling.experienceFor(curve, level)!!
+    val step = Leveling.experienceFor(curve, level + 1)?.minus(from)
+    if (level in levels || level % 10 == 0 || level == 2) {
+      println("$level\t$from\t${step ?: "—"}\t${step?.let { (it / kill(level)).digits(1) } ?: "—"}\t${kills.digits(0)}")
+    }
+    if (step != null) kills += step / kill(level)
+  }
 }
