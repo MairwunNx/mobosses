@@ -6,6 +6,9 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.boss.enderdragon.EndCrystal
+import net.minecraft.world.entity.projectile.Projectile
+import ru.mairwunnx.mobosses.modcore.ability.AbilityEntities
 
 /**
  * Where the game's moments reach Mo’Bosses: the mixins call these, the same on both loaders, and each hands the
@@ -50,8 +53,31 @@ object Hooks {
     if (mod.decoys.isDecoy(entity)) mod.decoys.forget(entity)
   }
 
-  /** Whether the game drops its own experience for [entity]: not for a boss, whose went out by share. */
-  fun dropsExperience(entity: LivingEntity): Boolean = mod?.deaths?.paid(entity) != true
+  /** Whether the game drops its own experience for [entity]: not for a boss, whose went out by share, nor a copy, which drops 1. */
+  fun dropsExperience(entity: LivingEntity): Boolean {
+    val mod = mod ?: return true
+    return !mod.deaths.paid(entity) && !mod.abilityEntities.copyDied(entity)
+  }
+
+  /** Whether a projectile may hit [entity]: an ability's hits only the boss's foes. */
+  fun mayHit(projectile: Projectile, entity: Entity): Boolean = mod?.arrowHits?.mayHit(projectile, projectile.owner, entity) ?: true
+
+  /** Whom an ability's splash potion reaches: the boss's foes alone. */
+  fun splashed(potion: Projectile, entities: List<LivingEntity>): List<LivingEntity> {
+    val hits = mod?.arrowHits ?: return entities
+    return if (hits.fromAbility(potion)) entities.filter { hits.mayHit(potion, potion.owner, it) } else entities
+  }
+
+  fun mayBite(owner: Entity?, entity: Entity): Boolean = mod?.arrowHits?.mayBite(owner, entity) ?: true
+
+  /** True when [crystal] is an obelisk, which only players' hits wear down and which never explodes. */
+  fun obeliskHurt(crystal: EndCrystal, source: DamageSource): Boolean = mod?.abilityEntities?.obeliskHurt(crystal, source) ?: false
+
+  /**
+   * Whether the game must not save [entity]: what abilities leave in the world. Asked of the entity's own data, since
+   * the game saves its worlds after Mo’Bosses has stopped.
+   */
+  fun fleeting(entity: Entity): Boolean = AbilityEntities.fleeting(entity)
 
   fun mayRide(entity: Entity, vehicle: Entity): Boolean = mod?.antiCheese?.mayRide(entity, vehicle) ?: true
 

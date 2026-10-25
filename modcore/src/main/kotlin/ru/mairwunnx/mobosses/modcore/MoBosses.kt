@@ -14,7 +14,10 @@ import ru.mairwunnx.mobosses.lang.LanguageFiles
 import ru.mairwunnx.mobosses.lang.Languages
 import ru.mairwunnx.mobosses.lang.LocaleResolver
 import ru.mairwunnx.mobosses.modcore.ability.Abilities
+import ru.mairwunnx.mobosses.modcore.ability.AbilityEntities
+import ru.mairwunnx.mobosses.modcore.ability.ArrowHits
 import ru.mairwunnx.mobosses.modcore.ability.kinds.Chain
+import ru.mairwunnx.mobosses.modcore.ability.kinds.Obelisk
 import ru.mairwunnx.mobosses.modcore.achievement.Achievements
 import ru.mairwunnx.mobosses.modcore.boss.BossBars
 import ru.mairwunnx.mobosses.modcore.boss.Bosses
@@ -106,6 +109,8 @@ class MoBosses(val server: MinecraftServer, val loader: Loader) {
   val deathPenalty = DeathPenalty(this)
   val blockChanges = BlockChanges(this)
   val menuStats = Stats(this)
+  val arrowHits = ArrowHits(this)
+  val abilityEntities = AbilityEntities(this)
 
   /** Names of the players seen this session, for those who left before a boss they fought fell. */
   private val names = ConcurrentHashMap<UUID, String>()
@@ -137,6 +142,7 @@ class MoBosses(val server: MinecraftServer, val loader: Loader) {
     allay.disconnect()
     // Cobwebs and the like go back now, or they'd stay in the world for good.
     if (::catalog.isInitialized) blockChanges.temporary.restoreAll()
+    Obelisk.removeAll()
     Chain.clear()
     decoys.removeAll()
     nameTags.clearAll()

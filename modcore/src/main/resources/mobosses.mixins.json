@@ -3,8 +3,9 @@
   "package": "ru.mairwunnx.mobosses.modcore.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [
-    "AdvancementsMixin", "BreakMixin", "CreeperAccess", "CustomDataAccess", "DeathMixin", "DisplayAccess", "DisplayAccess$Text", "FireballMixin", "HurtMixin",
-    "LevelEntityMixin", "PlayerDeathMixin", "PlayerHurtMixin", "RespawnMixin", "RideMixin", "SpawnReasonMixin", "TrackingMixin"
+    "AdvancementsMixin", "BreakMixin", "CreeperAccess", "CrystalMixin", "CustomDataAccess", "DeathMixin", "DisplayAccess", "DisplayAccess$Text",
+    "FallingBlockAccess", "FangsMixin", "FireballMixin", "HurtMixin", "LevelEntityMixin", "PlayerDeathMixin", "PlayerHurtMixin", "ProjectileHitMixin",
+    "RespawnMixin", "RideMixin", "SpawnReasonMixin", "SplashMixin", "TrackingMixin", "TransientMixin"
   ],
   "injectors": {
     "defaultRequire": 1
