@@ -123,6 +123,16 @@ class ProgressionTest {
     assertTrue(Leveling.playerLevel(curve, floor - 1, 120) < level, "one less would drop the level")
   }
 
+  @Test fun `the experience for the next level is the least that reaches it`() {
+    val curve = progression.levelCurve
+    val level = Leveling.playerLevel(curve, 40_000, 120)
+    val next = Leveling.experienceFor(curve, level + 1, 120)!!
+    assertTrue(next > 40_000)
+    assertEquals(level + 1, Leveling.playerLevel(curve, next, 120))
+    assertTrue(Leveling.playerLevel(curve, next - 1, 120) <= level, "one less stays below")
+    assertEquals(null, Leveling.experienceFor(curve, curve.maxLevel + 1, 120))
+  }
+
   @Test fun `spawner fatigue starts after a few kills and has a floor`() {
     val cfg = settings.spawnerFatigue
     assertEquals(1.0, SpawnerFatigue.factor(cfg.free, cfg.step, cfg.floor, 3.0))

@@ -74,3 +74,8 @@ dependencies:
       load: BEFORE
       required: false
       join-classpath: true
+    # Brings the expansion API's classes, which hooks/AllayBosses uses.
+    Allay:
+      load: BEFORE
+      required: false
+      join-classpath: true

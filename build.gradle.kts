@@ -37,6 +37,8 @@ dependencies {
   compileOnly("net.coreprotect:coreprotect:24.1") { isTransitive = false }
   // WorldAPI brings these classes; Mo’Bosses only compiles against them.
   compileOnly("com.mairwunnx:worldapi-expansion:1.0.0")
+  // So does Allay, the AI helper, for its expansion API.
+  compileOnly("chat.allay:allay-expansion:1.3.0")
 
   implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.11.0")
   implementation("com.charleskorn.kaml:kaml:0.104.0")

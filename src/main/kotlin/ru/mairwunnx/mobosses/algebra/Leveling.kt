@@ -37,6 +37,22 @@ object Leveling {
     return low
   }
 
+  /** The least experience that reaches [level] with [kills]; null past `max_level`, which no experience reaches. */
+  fun experienceFor(curve: Settings.LevelCurve, level: Int, kills: Int): Long? {
+    if (level > curve.maxLevel.coerceAtLeast(1)) return null
+    var high = 1L
+    while (playerLevel(curve, high, kills) < level) {
+      if (high > Long.MAX_VALUE / 4) return null
+      high *= 2
+    }
+    var low = 0L
+    while (low < high) {
+      val mid = low + (high - low) / 2
+      if (playerLevel(curve, mid, kills) >= level) high = mid else low = mid + 1
+    }
+    return low
+  }
+
   /** What a level grows from: experience and kills together. The board ranks by it, so it never disagrees with levels. */
   fun score(curve: Settings.LevelCurve, experience: Long, kills: Int): Double =
     sqrt(experience.coerceAtLeast(0).toDouble()) / curve.expScale.coerceAtLeast(MIN) + kills.coerceAtLeast(0).toDouble() / curve.killScale.coerceAtLeast(MIN)

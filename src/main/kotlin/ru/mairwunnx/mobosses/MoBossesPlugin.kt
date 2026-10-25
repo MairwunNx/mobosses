@@ -13,6 +13,7 @@ import ru.mairwunnx.mobosses.boss.Bosses
 import ru.mairwunnx.mobosses.boss.Catalog
 import ru.mairwunnx.mobosses.boss.Decoys
 import ru.mairwunnx.mobosses.hooks.WorldApiLink
+import ru.mairwunnx.mobosses.hooks.AllayLink
 import ru.mairwunnx.mobosses.achievement.Achievements
 import ru.mairwunnx.mobosses.boss.Despawns
 import ru.mairwunnx.mobosses.boss.Keys
@@ -80,6 +81,7 @@ class MoBossesPlugin : JavaPlugin() {
   val decoys = Decoys(this)
   val achievements = Achievements(this)
   val worldApi = WorldApiLink(this)
+  val allay = AllayLink(this)
   val survival = SurvivalBonus(this)
   val fullMoon = FullMoon(this)
   val groupHealth = GroupHealth(this)
@@ -116,6 +118,7 @@ class MoBossesPlugin : JavaPlugin() {
     }
     if (PlanData.available) PlanData.register(this)
     worldApi.connect()
+    allay.connect()
     if (MiniPlaceholderTags.available) {
       miniPlaceholders = MiniPlaceholderTags.register(this)
       log.info("MiniPlaceholders found: its tags work in messages, and <mobosses_level>, <mobosses_xp>, <mobosses_kills> work elsewhere")
@@ -128,6 +131,7 @@ class MoBossesPlugin : JavaPlugin() {
     geoIpTask?.cancel()
     expansion?.unregister()
     worldApi.disconnect()
+    allay.disconnect()
     miniPlaceholders?.close()
     // Cobwebs and the like go back now, or they'd stay in the world for good.
     blockChanges.temporary.restoreAll()
