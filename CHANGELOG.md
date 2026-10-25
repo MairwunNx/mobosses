@@ -2,6 +2,16 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.10.0
+
+### New
+
+- 🤖 **Allay knows your bosses.** With [Allay](https://github.com/allay-ai/minecraft) 6.17.0 or newer on the server, the AI helper can answer “what can this boss do?”, “how rare is Mythic here?”, or “how far is my next level?” from your server’s own settings. Mo’Bosses hands it four tools: the classes with their chances, multipliers, and the levels abilities start at; the mobs that become bosses, with their minions and signature abilities; the asker’s level, experience to the next one, place among hunters, and bestiary; and the bosses within 64 blocks of them. Every tool only reads, and names come in the language Allay answers in. Without Allay nothing changes.
+
+### Changed
+
+- 📦 **The jar is now `mobosses-paper-2.10.0.jar`.** Mo’Bosses is getting ready for Fabric and NeoForge, and each platform’s jar will carry its name. On Paper it works exactly as before; delete the old `mobosses-2.9.0.jar` from `plugins/` when you put in the new one. The GitHub release still attaches `mobosses.jar`, so links to `releases/latest/download/mobosses.jar` keep working.
+
 ## 2.9.0
 
 ### Changed
