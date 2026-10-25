@@ -16,10 +16,10 @@ allprojects {
   repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/")
-    maven("https://repo.extendedclip.com/releases/")
-    maven("https://repo.playeranalytics.net/releases/")
+    maven("https://repo.extendedclip.com/releases/") { content { includeGroup("me.clip") } }
+    maven("https://repo.playeranalytics.net/releases/") { content { includeGroup("com.djrapitops") } }
     maven("https://maven.enginehub.org/repo/") { content { includeGroupByRegex("com\\.sk89q.*|org\\.enginehub.*") } }
-    maven("https://maven.playpro.com/")
+    maven("https://maven.playpro.com/") { content { includeGroup("net.coreprotect") } }
     maven("https://jitpack.io/") { content { includeGroup("com.github.GriefPrevention") } }
     // Mixin's annotations for modcore, as Fabric publishes them.
     maven("https://maven.fabricmc.net/") { content { includeModule("net.fabricmc", "sponge-mixin") } }
