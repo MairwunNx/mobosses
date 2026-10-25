@@ -104,4 +104,13 @@ class BossGameTests {
     mod.bosses.remove(boss)
     helper.succeed()
   }
+
+  @GameTest
+  fun aNaturalSpawnWaitsForAPlayerToSeeIt(helper: GameTestHelper) {
+    val zombie = EntityTypes.ZOMBIE.spawn(helper.level, helper.absolutePos(BlockPos(2, 2, 2)), EntitySpawnReason.NATURAL)!!
+    helper.assertTrue(Data(zombie).string(Keys.PENDING) == "NATURAL", "a natural zombie doesn't wait to roll: ${Data(zombie).string(Keys.PENDING)}")
+    val egg = EntityTypes.ZOMBIE.spawn(helper.level, helper.absolutePos(BlockPos(4, 2, 2)), EntitySpawnReason.BREEDING)!!
+    helper.assertFalse(Data(egg).has(Keys.PENDING), "a bred zombie waits to roll, though breeding isn't an allowed reason")
+    helper.succeed()
+  }
 }
