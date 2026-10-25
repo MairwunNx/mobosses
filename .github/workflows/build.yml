@@ -24,9 +24,14 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           name: mobosses
-          path: paper/build/libs/*.jar
+          # The mods' frames too, without their slim jars, which don't load.
+          path: |
+            paper/build/libs/*.jar
+            fabric/build/libs/mobosses-fabric-*.jar
+            neoforge/build/libs/mobosses-neoforge-*.jar
+            !**/*-slim.jar
       - uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: test-reports
-          path: paper/build/reports/tests/
+          path: "*/build/reports/tests/"

@@ -8,6 +8,10 @@ plugins {
   id("io.papermc.hangar-publish-plugin")
 }
 
+// `mobosses.mods=true` in gradle.properties, once the mods play, gives each platform its own Modrinth version, as
+// “Platforms” in CLAUDE.md says: X.Y.Z+paper. Off, the plugin keeps the number it always had: X.Y.Z.
+val mods = providers.gradleProperty("mobosses.mods").map(String::toBoolean).getOrElse(false)
+
 dependencies {
   // What doesn't touch Bukkit: the formulas, the configs, the languages, the store. Shaded with its libraries.
   implementation(project(":core"))
@@ -80,8 +84,8 @@ val releaseNotes = (findProperty("changelogFile") as String?)?.let { rootProject
 modrinth {
   token = providers.environmentVariable("MODRINTH_TOKEN")
   projectId = "mobosses"
-  versionNumber = project.version.toString()
-  versionName = "Mo’Bosses ${project.version}"
+  versionNumber = if (mods) "${project.version}+paper" else project.version.toString()
+  versionName = if (mods) "Mo’Bosses ${project.version} for Paper" else "Mo’Bosses ${project.version}"
   versionType = "release"
   uploadFile.set(tasks.shadowJar)
   gameVersions.addAll("26.3")
