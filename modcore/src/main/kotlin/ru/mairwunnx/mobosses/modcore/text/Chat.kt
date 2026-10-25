@@ -16,6 +16,11 @@ import net.kyori.adventure.text.Component as Text
 object Chat {
   private val gson = GsonComponentSerializer.gson()
 
+  /** The game's text as Adventure's, for a placeholder another mod filled; its plain words when the JSON won't read. */
+  fun adventure(text: Vanilla, registries: HolderLookup.Provider): Text =
+    ComponentSerialization.CODEC.encodeStart(registries.createSerializationContext(JsonOps.INSTANCE), text).result()
+      .map { runCatching { gson.deserializeFromTree(it) }.getOrNull() }.orElse(null) ?: Text.text(text.string)
+
   fun vanilla(text: Text, registries: HolderLookup.Provider): Vanilla {
     val json = gson.serializeToTree(text)
     return ComponentSerialization.CODEC.parse(registries.createSerializationContext(JsonOps.INSTANCE), json).result()

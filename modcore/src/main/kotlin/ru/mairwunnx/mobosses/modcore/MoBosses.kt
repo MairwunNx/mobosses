@@ -37,6 +37,7 @@ import ru.mairwunnx.mobosses.modcore.combat.Rewards
 import ru.mairwunnx.mobosses.modcore.combat.SpawnerFatigue
 import ru.mairwunnx.mobosses.modcore.config.Ids
 import ru.mairwunnx.mobosses.modcore.hooks.AllayLink
+import ru.mairwunnx.mobosses.modcore.hooks.Placeholders
 import ru.mairwunnx.mobosses.modcore.hooks.WorldApiLink
 import ru.mairwunnx.mobosses.modcore.lang.PlayerLanguages
 import ru.mairwunnx.mobosses.modcore.lang.Texts
@@ -132,6 +133,7 @@ class MoBosses(val server: MinecraftServer, val loader: Loader) {
     server.playerList.players.forEach { names[it.uuid] = it.plainTextName }
     worldApi.connect()
     allay.connect()
+    if (Placeholders.register()) log.info("Text Placeholder API found: %mobosses:level%, %mobosses:xp%, and %mobosses:kills% work, and so do <papi:…> tags in messages")
     val side = if (server.isDedicatedServer) "a dedicated server" else "a singleplayer world"
     log.info("Mo’Bosses ${loader.version} for ${loader.name} is on $side: ${catalog.types.size} boss types, ${languages.codes.sorted().joinToString()}, default ${resolver.default}; protection: ${guards.name}")
   }
