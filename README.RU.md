@@ -27,11 +27,12 @@ Mo’Bosses работает на Moonlands — моём сервере со с�
 - 🏆 **Есть к чему стремиться:** достижения в своей вкладке, бестиарий, лучшие охотники, ночи охоты в полнолуние и бонус выживания: чем дольше вы живы, тем больше боссов вас находит.
 - 🌍 **Каждый игрок читает на своём языке,** даже имена над головами боссов: пять языков в комплекте, выбор по IP или по языку игры.
 - 🛡️ **Постройки в безопасности:** приваты GriefPrevention и регионы WorldGuard закрыты для боссов, а CoreProtect записывает всё, что они сломали, и откатывает.
-- 🧩 **Дружит с другими плагинами:** PlaceholderAPI, MiniPlaceholders, Plan, WorldAPI и SQLite, MySQL, MariaDB или PostgreSQL для уровней игроков.
+- 🤖 **Спросите Allay о боссе перед вами:** с [Allay](https://github.com/allay-ai/minecraft), ИИ-помощником, игроки узнают, что умеет босс, насколько редок его класс и сколько осталось до следующего уровня, по числам именно этого сервера.
+- 🧩 **Дружит с другими плагинами:** PlaceholderAPI, MiniPlaceholders, Plan, WorldAPI, Allay и SQLite, MySQL, MariaDB или PostgreSQL для уровней игроков.
 
 ## Как начать
 
-1. Положите jar с [Modrinth](https://modrinth.com/plugin/mobosses), [Hangar](https://hangar.papermc.io/MairwunNx/MoBosses) или [GitHub](https://github.com/MairwunNx/mobosses/releases/latest/download/mobosses.jar) в `plugins/` на Paper 26.3 с Java 25 или добавьте `mobosses` в `MODRINTH_PROJECTS` в [itzg/minecraft-server](https://docker-minecraft-server.readthedocs.io).
+1. Положите jar с [Modrinth](https://modrinth.com/plugin/mobosses), [Hangar](https://hangar.papermc.io/MairwunNx/MoBosses) или [GitHub](https://github.com/MairwunNx/mobosses/releases/latest/download/mobosses-paper.jar) в `plugins/` на Paper 26.3 с Java 25 или добавьте `mobosses` в `MODRINTH_PROJECTS` в [itzg/minecraft-server](https://docker-minecraft-server.readthedocs.io).
 2. Перезапустите сервер и сразу встретьте босса: `/mobosses spawn zombie 30 epic`.
 3. Прочитайте [First steps](https://github.com/MairwunNx/mobosses/wiki/First-steps), чтобы настроить, как часто приходят боссы.
 

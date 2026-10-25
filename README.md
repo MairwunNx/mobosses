@@ -27,11 +27,12 @@ Mo’Bosses runs on Moonlands, my hard survival server with friends. Come in and
 - 🏆 **Something to chase:** achievements in a tab of their own, a bestiary, the best hunters, nights of the hunt under a full moon, and a survival bonus that brings more bosses the longer you live.
 - 🌍 **Every player reads their own language,** even the names over bosses’ heads: five languages bundled, picked by IP or game language.
 - 🛡️ **Builds stay safe:** GriefPrevention claims and WorldGuard regions keep bosses out, and CoreProtect logs whatever they break, ready to roll back.
-- 🧩 **Plays well with others:** PlaceholderAPI, MiniPlaceholders, Plan, WorldAPI, and SQLite, MySQL, MariaDB, or PostgreSQL for players’ levels.
+- 🤖 **Ask Allay about the boss in front of you:** with [Allay](https://github.com/allay-ai/minecraft), the AI helper, players learn what a boss can do, how rare its class is, and how far their next level is, from this server’s own numbers.
+- 🧩 **Plays well with others:** PlaceholderAPI, MiniPlaceholders, Plan, WorldAPI, Allay, and SQLite, MySQL, MariaDB, or PostgreSQL for players’ levels.
 
 ## Get started
 
-1. Put the jar from [Modrinth](https://modrinth.com/plugin/mobosses), [Hangar](https://hangar.papermc.io/MairwunNx/MoBosses), or [GitHub](https://github.com/MairwunNx/mobosses/releases/latest/download/mobosses.jar) in `plugins/` on Paper 26.3 with Java 25, or add `mobosses` to `MODRINTH_PROJECTS` in [itzg/minecraft-server](https://docker-minecraft-server.readthedocs.io).
+1. Put the jar from [Modrinth](https://modrinth.com/plugin/mobosses), [Hangar](https://hangar.papermc.io/MairwunNx/MoBosses), or [GitHub](https://github.com/MairwunNx/mobosses/releases/latest/download/mobosses-paper.jar) in `plugins/` on Paper 26.3 with Java 25, or add `mobosses` to `MODRINTH_PROJECTS` in [itzg/minecraft-server](https://docker-minecraft-server.readthedocs.io).
 2. Restart the server, then meet a boss right away: `/mobosses spawn zombie 30 epic`.
 3. Read [First steps](https://github.com/MairwunNx/mobosses/wiki/First-steps) to tune how often bosses come.
 
