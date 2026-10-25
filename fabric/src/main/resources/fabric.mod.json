@@ -14,10 +14,15 @@
   "icon": "assets/mobosses/icon.png",
   "environment": "*",
   "entrypoints": {
-    "main": ["ru.mairwunnx.mobosses.fabric.MoBossesMod"]
+    "main": ["ru.mairwunnx.mobosses.fabric.MoBossesMod"],
+    "client": ["ru.mairwunnx.mobosses.fabric.client.MoBossesClient"],
+    "modmenu": ["ru.mairwunnx.mobosses.fabric.client.ModMenu"]
   },
   "mixins": ["mobosses.mixins.json"],
   "jars": [{ "file": "META-INF/jars/sqlite-jdbc-${sqlite}.jar" }],
+  "suggests": {
+    "modmenu": "*"
+  },
   "depends": {
     "fabricloader": ">=${loader}",
     "fabric-api": "*",

@@ -7,16 +7,25 @@ import net.minecraft.world.level.storage.LevelResource
 import ru.mairwunnx.mobosses.Permissions
 import ru.mairwunnx.mobosses.modcore.Mod
 import ru.mairwunnx.mobosses.modcore.Perms
+import ru.mairwunnx.mobosses.modcore.client.SettingsScreen
+import ru.mairwunnx.mobosses.modcore.client.SettingsSource
+import ru.mairwunnx.mobosses.modcore.net.Payloads
 
 /**
  * A real client in a fresh singleplayer world: Mo’Bosses starts on the game's own server, keeps its database in the
  * world's save and its configs in `config/mobosses/`, reads the client's language, lets the world's owner reload
- * without cheats, and spawns a boss ahead of the player. `./gradlew :fabric:runClientGameTest` opens a
+ * without cheats, spawns a boss ahead of the player, and opens the settings screen in the menu and in the world, where
+ * a change reaches the world's server's files. `./gradlew :fabric:runClientGameTest` opens a
  * game window.
  */
 class SingleplayerClientTest : FabricClientGameTest {
   override fun runTest(context: ClientGameTestContext) {
     context.runOnClient<RuntimeException> { it.options.languageCode = "ru_ru" }
+    // From the main menu, the settings screen edits the game's own files.
+    context.setScreen { SettingsScreen(null) }
+    context.waitTicks(10)
+    context.takeScreenshot("mobosses-settings-menu")
+    context.setScreen { null }
     context.worldBuilder().create().use { world ->
       world.connection.waitForChunksRender()
       val problems = world.server.computeOnServer<List<String>, RuntimeException> { server ->
@@ -36,6 +45,18 @@ class SingleplayerClientTest : FabricClientGameTest {
       context.waitTicks(20)
       val made = world.server.computeOnServer<Int, RuntimeException> { Mod.current?.bosses?.all?.size ?: 0 }
       check(made == 1) { "the player's spawn made $made bosses" }
+
+      // In a world, the screen edits the world's server's files: the owner's in singleplayer.
+      context.setScreen { SettingsScreen(null) }
+      context.waitTicks(20)
+      context.takeScreenshot("mobosses-settings-world")
+      var answer: SettingsSource.State? = null
+      context.runOnClient<RuntimeException> { SettingsSource.Remote.save("config.yml", listOf(Payloads.Change(listOf("anti_cheese", "step_out", "stuck_seconds"), "7"))) { answer = it } }
+      context.waitFor { answer != null }
+      check(answer?.failed == false) { "the server refused the change: ${answer?.message}" }
+      val saved = world.server.computeOnServer<String, RuntimeException> { Mod.current!!.folder.resolve("config.yml").readText() }
+      check("    stuck_seconds: 7" in saved) { "the server's config.yml didn't change" }
+      context.setScreen { null }
     }
   }
 }

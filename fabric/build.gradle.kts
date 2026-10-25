@@ -21,6 +21,15 @@ base {
   archivesName = "mobosses-fabric"
 }
 
+// What only a player's game runs goes in the client source set, so a dedicated server never loads a client class.
+loom {
+  splitEnvironmentSourceSets()
+  mods.register("mobosses") {
+    sourceSet(sourceSets.main.get())
+    sourceSet(sourceSets.getByName("client"))
+  }
+}
+
 // Core's files, the ones Mo’Bosses copies, belong to the mod in dev runs as in the jar: Mo’Bosses reads them from its
 // own mod, never through the class loader, which would find another mod's `config.yml` first.
 sourceSets.main {
@@ -68,6 +77,8 @@ dependencies {
   nested("org.xerial:sqlite-jdbc:$sqlite") { isTransitive = false }
   // Optional mods Mo’Bosses will talk to, asked only when they're loaded; they bring these classes.
   compileOnly("me.lucko:fabric-permissions-api:0.7.0")
+  // Mod Menu's button opens the settings screen; asked only when it's there.
+  "clientCompileOnly"("maven.modrinth:modmenu:21.0.0") { isTransitive = false }
   compileOnly("com.mairwunnx:worldapi-expansion:1.0.0")
   compileOnly("chat.allay:allay-expansion:1.3.0")
 }
@@ -128,6 +139,7 @@ tasks {
     archiveClassifier = ""
     // Core's files come with its jar and with this module's resources alike.
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from(sourceSets.getByName("client").output)
     configurations = listOf(shade)
     from(sqliteMod) { into("META-INF/jars") }
     listOf(
