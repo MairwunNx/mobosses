@@ -113,7 +113,7 @@ loot_page:
   levels: "<gray>Boss levels</gray> <white><min>–<max></white>"
   bosses: "<gray>Only</gray> <white><bosses></white>"
   every_boss: "<gray>Any boss</gray>"
-  odds: "<gray>About</gray> <white><percent>%</white> <gray>of a</gray> <class> <gray>boss’s drops</gray>"
+  odds: "<gray>About</gray> <white><percent>%</white> <gray>of</gray> <class> <gray>drops</gray>"
 
 # The bestiary page. <class>, <kills>, <level> (the best one); <opened> and <total> cells of kind × class.
 bestiary:

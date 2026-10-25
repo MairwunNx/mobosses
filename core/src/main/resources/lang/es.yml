@@ -113,7 +113,7 @@ loot_page:
   levels: "<gray>Niveles del jefe</gray> <white><min>–<max></white>"
   bosses: "<gray>Solo</gray> <white><bosses></white>"
   every_boss: "<gray>Cualquier jefe</gray>"
-  odds: "<gray>Cerca del</gray> <white><percent> %</white> <gray>del botín de un jefe</gray> <class>"
+  odds: "<gray>Cerca del</gray> <white><percent> %</white> <gray>del botín</gray> <class>"
 
 # La página del bestiario. <class>, <kills>, <level> (el mejor); <opened> y <total> casillas tipo × clase.
 bestiary:

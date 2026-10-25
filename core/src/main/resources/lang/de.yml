@@ -113,7 +113,7 @@ loot_page:
   levels: "<gray>Bossstufen</gray> <white><min>–<max></white>"
   bosses: "<gray>Nur</gray> <white><bosses></white>"
   every_boss: "<gray>Jeder Boss</gray>"
-  odds: "<gray>Etwa</gray> <white><percent> %</white> <gray>der Beute eines</gray> <class><gray>-Bosses</gray>"
+  odds: "<gray>Etwa</gray> <white><percent> %</white> <gray>der Beute von</gray> <class>"
 
 # Die Seite des Bestiariums. <class>, <kills>, <level> (die beste); <opened> und <total> Felder Art × Klasse.
 bestiary:

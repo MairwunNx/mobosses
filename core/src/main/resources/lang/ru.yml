@@ -109,11 +109,11 @@ settings:
 # Страницы лута боссов в JEI, REI и EMI. <class> — самый низкий класс, с которого падает; <min>, <max> — уровни босса; <bosses> — виды боссов; <percent>.
 loot_page:
   title: "Лут боссов"
-  class: "<gray>С боссов</gray> <class> <gray>и выше</gray>"
+  class: "<gray>С боссов класса</gray> <class> <gray>и выше</gray>"
   levels: "<gray>Уровни босса</gray> <white><min>–<max></white>"
   bosses: "<gray>Только</gray> <white><bosses></white>"
   every_boss: "<gray>С любого босса</gray>"
-  odds: "<gray>Около</gray> <white><percent>%</white> <gray>добычи босса класса</gray> <class>"
+  odds: "<gray>Около</gray> <white><percent>%</white> <gray>добычи класса</gray> <class>"
 
 # Страница бестиария. <class>, <kills>, <level> (лучший); <opened> и <total> — клетки «вид × класс».
 bestiary:
