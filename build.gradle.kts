@@ -27,5 +27,8 @@ allprojects {
     maven("https://maven.nucleoid.xyz/") { content { includeGroup("eu.pb4") } }
     // Flan and Open Parties and Claims, the claims mods, publish to Modrinth.
     maven("https://api.modrinth.com/maven") { content { includeGroup("maven.modrinth") } }
+    // JEI and REI, the recipe viewers that show bosses' loot.
+    maven("https://maven.blamejared.com/") { content { includeGroup("mezz.jei") } }
+    maven("https://maven.shedaniel.me/") { content { includeGroupByRegex("me\\.shedaniel.*|dev\\.architectury") } }
   }
 }
