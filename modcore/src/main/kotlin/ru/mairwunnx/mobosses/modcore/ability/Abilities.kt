@@ -6,6 +6,7 @@ import ru.mairwunnx.mobosses.lang.Message
 import ru.mairwunnx.mobosses.modcore.MoBosses
 import ru.mairwunnx.mobosses.modcore.ability.kinds.Chain
 import ru.mairwunnx.mobosses.modcore.ability.kinds.Enrage
+import ru.mairwunnx.mobosses.modcore.ability.kinds.FireRing
 import ru.mairwunnx.mobosses.modcore.ability.kinds.Grapple
 import ru.mairwunnx.mobosses.modcore.ability.kinds.Lightning
 import ru.mairwunnx.mobosses.modcore.ability.kinds.PhaseTwo
@@ -67,7 +68,7 @@ class Abilities(private val mod: MoBosses) {
 
     /** The abilities a hit may set off, at random. */
     val PICKED: List<Ability> = listOf(
-      Lightning, Summoning, Regeneration, TeleportStrike, Grapple, Chain,
+      Lightning, Summoning, Regeneration, FireRing, TeleportStrike, Grapple, Chain,
     )
   }
 }
