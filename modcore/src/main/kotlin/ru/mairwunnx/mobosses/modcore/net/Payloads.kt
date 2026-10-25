@@ -23,12 +23,14 @@ object Payloads {
   private fun FriendlyByteBuf.readStrings(): List<String> = List(readVarInt()) { readUtf() }
 
   /** The settings screen opens: the game asks for the server's files. */
-  class SettingsWanted : CustomPacketPayload {
+  class SettingsWanted private constructor() : CustomPacketPayload {
     override fun type() = TYPE
 
     companion object {
       val TYPE = type<SettingsWanted>("settings_wanted")
-      val CODEC: StreamCodec<RegistryFriendlyByteBuf, SettingsWanted> = StreamCodec.unit(SettingsWanted())
+      /** The one there is: the game's codec for a message without content sends only this instance. */
+      val INSTANCE = SettingsWanted()
+      val CODEC: StreamCodec<RegistryFriendlyByteBuf, SettingsWanted> = StreamCodec.unit(INSTANCE)
     }
   }
 
@@ -37,9 +39,9 @@ object Payloads {
 
   /**
    * The server's files for the screen, or none when the player may not change them ([allowed] false); [message] says
-   * what the last change did, empty after a plain look.
+   * what the last change did, empty after a plain look, and [failed] whether any of it was refused.
    */
-  class Settings(val allowed: Boolean, val message: String, val files: List<SettingsFile>) : CustomPacketPayload {
+  class Settings(val allowed: Boolean, val message: String, val failed: Boolean, val files: List<SettingsFile>) : CustomPacketPayload {
     override fun type() = TYPE
 
     companion object {
@@ -47,6 +49,7 @@ object Payloads {
       val CODEC: StreamCodec<RegistryFriendlyByteBuf, Settings> = CustomPacketPayload.codec({ value, out ->
         out.writeBoolean(value.allowed)
         out.writeUtf(value.message)
+        out.writeBoolean(value.failed)
         out.writeVarInt(value.files.size)
         value.files.forEach { file ->
           out.writeUtf(file.name)
@@ -62,28 +65,42 @@ object Payloads {
       }, { input ->
         val allowed = input.readBoolean()
         val message = input.readUtf()
+        val failed = input.readBoolean()
         val files = List(input.readVarInt()) {
           val name = input.readUtf()
           SettingsFile(name, List(input.readVarInt()) {
             Field(input.readStrings(), input.readEnum(Field.Kind::class.java), input.readUtf(), input.readUtf(), input.readUtf())
           })
         }
-        Settings(allowed, message, files)
+        Settings(allowed, message, failed, files)
       })
     }
   }
 
-  /** The player changes one value of one file. */
-  class SettingChanged(val file: String, val path: List<String>, val value: String) : CustomPacketPayload {
+  /** One value of a file, by its path, as the player typed it. */
+  class Change(val path: List<String>, val value: String)
+
+  /** The player changes values of one file, as the screen's Done sends them together. */
+  class SettingsChanged(val file: String, val changes: List<Change>) : CustomPacketPayload {
     override fun type() = TYPE
 
     companion object {
-      val TYPE = type<SettingChanged>("setting_changed")
-      val CODEC: StreamCodec<RegistryFriendlyByteBuf, SettingChanged> = CustomPacketPayload.codec({ value, out ->
+      /** More at once than any screen sends. */
+      const val MAX = 256
+
+      val TYPE = type<SettingsChanged>("settings_changed")
+      val CODEC: StreamCodec<RegistryFriendlyByteBuf, SettingsChanged> = CustomPacketPayload.codec({ value, out ->
         out.writeUtf(value.file)
-        out.writeStrings(value.path)
-        out.writeUtf(value.value)
-      }, { input -> SettingChanged(input.readUtf(), input.readStrings(), input.readUtf()) })
+        out.writeVarInt(value.changes.size)
+        value.changes.forEach { change ->
+          out.writeStrings(change.path)
+          out.writeUtf(change.value)
+        }
+      }, { input ->
+        val file = input.readUtf()
+        val count = input.readVarInt().coerceIn(0, MAX)
+        SettingsChanged(file, List(count) { Change(input.readStrings(), input.readUtf()) })
+      })
     }
   }
 }

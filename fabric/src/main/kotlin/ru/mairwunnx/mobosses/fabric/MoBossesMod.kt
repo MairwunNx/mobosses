@@ -30,9 +30,9 @@ class MoBossesMod : ModInitializer {
     ServerPlayConnectionEvents.DISCONNECT.register { handler, _ -> Mod.left(handler.player) }
     // What a player's game with Mo’Bosses says to the server, and back; Fabric API runs the handlers on the server thread.
     PayloadTypeRegistry.serverboundPlay().register(Payloads.SettingsWanted.TYPE, Payloads.SettingsWanted.CODEC)
-    PayloadTypeRegistry.serverboundPlay().register(Payloads.SettingChanged.TYPE, Payloads.SettingChanged.CODEC)
+    PayloadTypeRegistry.serverboundPlay().register(Payloads.SettingsChanged.TYPE, Payloads.SettingsChanged.CODEC)
     PayloadTypeRegistry.clientboundPlay().register(Payloads.Settings.TYPE, Payloads.Settings.CODEC)
     ServerPlayNetworking.registerGlobalReceiver(Payloads.SettingsWanted.TYPE) { _, context -> Mod.settingsWanted(context.player()) }
-    ServerPlayNetworking.registerGlobalReceiver(Payloads.SettingChanged.TYPE) { change, context -> Mod.settingChanged(context.player(), change) }
+    ServerPlayNetworking.registerGlobalReceiver(Payloads.SettingsChanged.TYPE) { change, context -> Mod.settingsChanged(context.player(), change) }
   }
 }

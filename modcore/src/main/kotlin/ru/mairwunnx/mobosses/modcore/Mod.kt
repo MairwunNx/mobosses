@@ -64,9 +64,9 @@ object Mod {
     current?.settings?.wanted(player)
   }
 
-  /** A player's game changes one setting. */
-  fun settingChanged(player: ServerPlayer, change: Payloads.SettingChanged) {
-    current?.settings?.changed(player, change)
+  /** A player's game changes settings. */
+  fun settingsChanged(player: ServerPlayer, batch: Payloads.SettingsChanged) {
+    current?.settings?.changed(player, batch)
   }
 
   /** The command tree, which the game builds before a server starts; the commands find the server when they run. */
