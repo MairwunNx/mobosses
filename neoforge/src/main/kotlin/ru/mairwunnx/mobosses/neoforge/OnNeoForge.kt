@@ -41,9 +41,13 @@ object OnNeoForge : Loader {
     event.addNodes(nodes.values)
   }
 
-  // A command block or the console has no player to ask PermissionAPI about.
+  /**
+   * A command block or the console has no player to ask PermissionAPI about. Nor does a command the console runs as a
+   * player, through `/execute as`: it carries the console's rights, more than the player's own, as on Fabric.
+   */
   override fun permission(source: CommandSourceStack, node: String, fallback: Boolean): Boolean {
     val player = source.player ?: return fallback
+    if (source.permissions().hasPermission(Game.COMMANDS_GAMEMASTER) && !player.permissions().hasPermission(Game.COMMANDS_GAMEMASTER)) return fallback
     val known = nodes[node] ?: return fallback
     return try {
       PermissionAPI.getPermission(player, known)
