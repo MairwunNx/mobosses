@@ -77,7 +77,7 @@ class NaturalSpawns(private val mod: MoBosses) {
     val nearest = seer ?: World.players(level, at, spawn.spawnRadius.toDouble()).minByOrNull { it.position().distanceToSqr(at) } ?: return null
     if (spawn.checkVerticalZone && onSurface(level, nearest.position(), spawn) != onSurface(level, at, spawn)) return null
     val graded = Difficulty.part(difficulty, catalog.settings.difficulty.weights.spawnChance)
-    if (Random.nextDouble() >= chance(type.spec.spawnChance, spawn, level) * graded * mod.survival.multiplier(nearest) * mod.fullMoon.chance(level)) return null
+    if (Random.nextDouble() >= chance(type.spec.spawnChance, spawn, level) * graded * mod.survival.multiplier(nearest) * mod.fullMoon.chance(level, at)) return null
 
     val group = World.players(level, at, spawn.groupRadius.toDouble()).ifEmpty { listOf(nearest) }
     val where = "${entity.blockX} ${entity.blockY} ${entity.blockZ}"
@@ -91,7 +91,7 @@ class NaturalSpawns(private val mod: MoBosses) {
     } else {
       Leveling.bossLevel(progression.variance, Leveling.groupLevel(group.map { mod.progression.level(it.uuid) }), progression.levelCurve.maxLevel, Random)
     }
-    val clazz = Rolls.weighted(catalog.classes.all.map { it to mod.fullMoon.weight(level, it) }, Random) ?: catalog.classes.all.first()
+    val clazz = Rolls.weighted(catalog.classes.all.map { it to mod.fullMoon.weight(level, at, it) }, Random) ?: catalog.classes.all.first()
     val boss = mod.bosses.make(entity, type, clazz, bossLevel, summoner).also(mod.bosses::vanillaName)
     if (reason == "SPAWNER" || reason == "TRIAL_SPAWNER") boss.fromSpawner = true
     limiter.spawned(group)

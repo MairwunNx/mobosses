@@ -4,6 +4,7 @@ import net.minecraft.server.level.ServerLevel
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.attribute.EnvironmentAttributes
 import net.minecraft.world.level.MoonPhase
+import net.minecraft.world.phys.Vec3
 import ru.mairwunnx.mobosses.config.BossClass
 import ru.mairwunnx.mobosses.lang.Message
 import ru.mairwunnx.mobosses.modcore.MoBosses
@@ -18,16 +19,17 @@ class FullMoon(private val mod: MoBosses) {
   /** The day each world last announced, so each full moon is announced once. */
   private val announced = HashMap<String, Long>()
 
-  fun isUp(level: ServerLevel): Boolean {
+  /** Whether the moon over [at] is full and up; the game reads the moon's phase by place, so a world's spawn stands in for the world. */
+  fun isUp(level: ServerLevel, at: Vec3 = Vec3.atCenterOf(level.respawnData.globalPos.pos())): Boolean {
     if (!mod.catalog.settings.fullMoon.enabled || !level.dimensionType().hasSkyLight() || level.dimensionType().hasCeiling()) return false
-    return level.environmentAttributes().getDimensionValue(EnvironmentAttributes.MOON_PHASE) == MoonPhase.FULL_MOON && level.defaultClockTime % 24000L in NIGHT
+    return level.environmentAttributes().getValue(EnvironmentAttributes.MOON_PHASE, at) == MoonPhase.FULL_MOON && level.defaultClockTime % 24000L in NIGHT
   }
 
-  /** What the spawn chance is multiplied by in [level] now. */
-  fun chance(level: ServerLevel) = if (isUp(level)) mod.catalog.settings.fullMoon.chance.coerceAtLeast(1.0) else 1.0
+  /** What the spawn chance is multiplied by at [at] now. */
+  fun chance(level: ServerLevel, at: Vec3) = if (isUp(level, at)) mod.catalog.settings.fullMoon.chance.coerceAtLeast(1.0) else 1.0
 
-  fun weight(level: ServerLevel, clazz: BossClass): Double =
-    if (!isUp(level)) clazz.chance else Hunt.moonWeight(mod.catalog.settings.fullMoon, clazz.chance, mod.catalog.classes.rank(clazz.key), mod.catalog.classes.all.size)
+  fun weight(level: ServerLevel, at: Vec3, clazz: BossClass): Double =
+    if (!isUp(level, at)) clazz.chance else Hunt.moonWeight(mod.catalog.settings.fullMoon, clazz.chance, mod.catalog.classes.rank(clazz.key), mod.catalog.classes.all.size)
 
   /** Every minute: worlds where a full moon just rose tell their players, and WorldAPI's clients. */
   fun tick() {

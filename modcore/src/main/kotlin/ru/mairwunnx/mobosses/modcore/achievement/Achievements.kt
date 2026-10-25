@@ -56,7 +56,7 @@ class Achievements(private val mod: MoBosses) {
     if (boss.phaseTwo) grant(player, Achievement.SECOND_LIFE)
     if (alone && boss.level >= 50) grant(player, Achievement.LONE_WOLF)
     if (boss.level >= 30 && player.uuid.toString() !in hurt(boss)) grant(player, Achievement.UNTOUCHED)
-    if ((boss.entity.level() as? ServerLevel)?.let(mod.fullMoon::isUp) == true) grant(player, Achievement.FULL_MOON_HUNTER)
+    if ((boss.entity.level() as? ServerLevel)?.let { mod.fullMoon.isUp(it, boss.entity.position()) } == true) grant(player, Achievement.FULL_MOON_HUNTER)
     if (mod.decoys.all.any { it.isAlive && mod.decoys.bossOf(it)?.uuid == boss.uuid }) grant(player, Achievement.FIND_THE_REAL)
     val data = Data(player)
     val avenge = data.string(Keys.AVENGE)?.split('|')
