@@ -24,12 +24,18 @@ evaluationDependsOn(core.path)
 val modcoreMain: SourceSet = modcore.sourceSets.main.get()
 val coreMain: SourceSet = core.sourceSets.main.get()
 
+// What only a player's game runs goes in the client source set, so a dedicated server never loads a client class.
+val client: SourceSet = sourceSets.create("client") {
+  compileClasspath += sourceSets.main.get().output + modcoreMain.output
+  runtimeClasspath += sourceSets.main.get().output + modcoreMain.output
+}
+
 // Game tests on a real server (`./gradlew :neoforge:runGameTestServer`) and a singleplayer world in a game window
 // (`./gradlew :neoforge:runClientGameTest`). They are modcore's, shared with Fabric, and run in a dev-only mod of their
 // own, so the release jar doesn't carry them.
 val gametest: SourceSet = sourceSets.create("gametest") {
-  compileClasspath += sourceSets.main.get().output + modcoreMain.output
-  runtimeClasspath += sourceSets.main.get().output + modcoreMain.output
+  compileClasspath += sourceSets.main.get().output + client.output + modcoreMain.output
+  runtimeClasspath += sourceSets.main.get().output + client.output + modcoreMain.output
 }
 kotlin.sourceSets.named("gametest") {
   kotlin.srcDir(modcore.file("src/gametest/kotlin"))
@@ -38,6 +44,7 @@ kotlin.sourceSets.named("gametest") {
 
 neoForge {
   version = neoforgeVersion
+  addModdingDependenciesTo(client)
   addModdingDependenciesTo(gametest)
 
   // The mod is this module, modcore, and core together, in dev runs as in the jar: they share packages, which
@@ -45,6 +52,7 @@ neoForge {
   mods {
     register("mobosses") {
       sourceSet(sourceSets.main.get())
+      sourceSet(client)
       sourceSet(modcoreMain)
       sourceSet(coreMain)
     }
@@ -92,6 +100,9 @@ dependencies {
   // Without its Minecraft: the game comes from NeoForge here.
   compileOnly(project(":modcore")) { isTransitive = false }
   "gametestCompileOnly"(project(":modcore")) { isTransitive = false }
+  "clientCompileOnly"(project(":modcore")) { isTransitive = false }
+  "clientImplementation"(project(":core")) { exclude(group = "org.slf4j") }
+  adventure.forEach { "clientImplementation"(it) { exclude(group = "com.google.code.gson") } }
   "gametestImplementation"(project(":core")) { exclude(group = "org.slf4j") }
   "gametestRuntimeOnly"("org.xerial:sqlite-jdbc:$sqlite")
   adventure.forEach { "gametestImplementation"(it) { exclude(group = "com.google.code.gson") } }
@@ -129,6 +140,7 @@ tasks {
   // ships its own copy. The SQLite driver rides along as NeoForge's jar in jar.
   shadowJar {
     archiveClassifier = ""
+    from(client.output)
     configurations = listOf(shade)
     from(named("jarJar"))
     listOf(

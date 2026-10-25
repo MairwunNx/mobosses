@@ -20,12 +20,16 @@ import org.slf4j.LoggerFactory
 import ru.mairwunnx.mobosses.Permissions
 import ru.mairwunnx.mobosses.modcore.Mod
 import ru.mairwunnx.mobosses.modcore.Perms
+import ru.mairwunnx.mobosses.modcore.client.SettingsScreen
+import ru.mairwunnx.mobosses.modcore.client.SettingsSource
+import ru.mairwunnx.mobosses.modcore.net.Payloads
 import java.io.File
 
 /**
  * A real client in a fresh singleplayer world without cheats, as Fabric's client game test opens one: Mo’Bosses starts
  * on the game's own server, keeps its database in the world's save and its configs in `config/mobosses/`, reads the
- * client's language, lets the world's owner reload without cheats, and spawns a boss ahead of the player. The result
+ * client's language, lets the world's owner reload without cheats, spawns a boss ahead of the player, and takes a
+ * change from the settings screen into the world's server's config.yml. The result
  * goes to `mobosses-check.txt` in the run folder, then the game closes; `./gradlew :neoforge:runClientGameTest` fails
  * unless it says `ok`.
  */
@@ -39,6 +43,7 @@ object ClientCheck {
     private var created = false
     private var joinedTicks = 0
     private var spawnedAt = -1
+    private var saved: Boolean? = null
     private var done = false
     private var closeIn = -1
     private var ticks = 0
@@ -86,6 +91,14 @@ object ClientCheck {
         return
       }
       if (joinedTicks < spawnedAt + 20) return
+      // The settings screen in the world: a change reaches the world's server's config.yml.
+      if (saved == null) {
+        saved = false
+        game.gui.setScreen(SettingsScreen(null))
+        SettingsSource.Remote.save("config.yml", listOf(Payloads.Change(listOf("anti_cheese", "step_out", "stuck_seconds"), "7"))) { saved = !it.failed }
+        return
+      }
+      if (saved == false && joinedTicks < spawnedAt + 100) return
       done = true
       val problems = runCatching {
         server.submit<List<String>> {
@@ -98,6 +111,7 @@ object ClientCheck {
             "the owner reads ${mod?.texts?.languageOf(owner)}, not the client's Russian".takeUnless { mod?.texts?.languageOf(owner) == "ru" },
             "the world's owner can't reload without cheats".takeUnless { Perms.check(owner.createCommandSourceStack(), Permissions.RELOAD) },
             "the player's spawn made ${mod?.bosses?.all?.size} bosses".takeUnless { mod?.bosses?.all?.size == 1 },
+            "the settings screen's change didn't reach config.yml".takeUnless { saved == true && mod?.folder?.resolve("config.yml")?.readText()?.contains("    stuck_seconds: 7") == true },
           )
         }.get()
       }.getOrElse { listOf("the check failed: $it") }
