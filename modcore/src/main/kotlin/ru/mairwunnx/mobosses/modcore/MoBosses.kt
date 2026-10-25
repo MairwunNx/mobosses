@@ -33,6 +33,7 @@ import ru.mairwunnx.mobosses.modcore.combat.Loot
 import ru.mairwunnx.mobosses.modcore.combat.Rewards
 import ru.mairwunnx.mobosses.modcore.combat.SpawnerFatigue
 import ru.mairwunnx.mobosses.modcore.config.Ids
+import ru.mairwunnx.mobosses.modcore.hooks.AllayLink
 import ru.mairwunnx.mobosses.modcore.hooks.WorldApiLink
 import ru.mairwunnx.mobosses.modcore.lang.PlayerLanguages
 import ru.mairwunnx.mobosses.modcore.lang.Texts
@@ -93,6 +94,7 @@ class MoBosses(val server: MinecraftServer, val loader: Loader) {
   val decoys = Decoys(this)
   val achievements = Achievements(this)
   val worldApi = WorldApiLink(this)
+  val allay = AllayLink(this)
   val survival = SurvivalBonus(this)
   val fullMoon = FullMoon(this)
   val groupHealth = GroupHealth(this)
@@ -123,6 +125,7 @@ class MoBosses(val server: MinecraftServer, val loader: Loader) {
     server.allLevels.forEach { level -> level.allEntities.forEach { entity -> bosses.adopt(entity)?.let(bosses::vanillaName) ?: minions.adopt(entity) } }
     server.playerList.players.forEach { names[it.uuid] = it.plainTextName }
     worldApi.connect()
+    allay.connect()
     val side = if (server.isDedicatedServer) "a dedicated server" else "a singleplayer world"
     log.info("Mo’Bosses ${loader.version} for ${loader.name} is on $side: ${catalog.types.size} boss types, ${languages.codes.sorted().joinToString()}, default ${resolver.default}; protection: ${guards.name}")
   }
@@ -130,6 +133,7 @@ class MoBosses(val server: MinecraftServer, val loader: Loader) {
   fun disable() {
     geoIpTask?.cancel()
     worldApi.disconnect()
+    allay.disconnect()
     // Cobwebs and the like go back now, or they'd stay in the world for good.
     if (::catalog.isInitialized) blockChanges.temporary.restoreAll()
     Chain.clear()
