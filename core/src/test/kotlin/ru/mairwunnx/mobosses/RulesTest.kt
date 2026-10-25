@@ -2,6 +2,8 @@ package ru.mairwunnx.mobosses
 
 import ru.mairwunnx.mobosses.combat.Fatigue
 import ru.mairwunnx.mobosses.combat.LootRules
+import ru.mairwunnx.mobosses.combat.Payout
+import ru.mairwunnx.mobosses.lang.Message
 import ru.mairwunnx.mobosses.combat.RewardRules
 import ru.mairwunnx.mobosses.config.Classes
 import ru.mairwunnx.mobosses.config.LootTable
@@ -87,5 +89,18 @@ class RulesTest {
     val cfg = Settings.FullMoon()
     assertEquals(63.0, Hunt.moonWeight(cfg, 63.0, 0, 6))
     assertEquals(2.0, Hunt.moonWeight(cfg, 1.0, 5, 6))
+  }
+
+  @Test fun `a solo kill pays it all, and the note says no more`() {
+    val payout = Payout.of(Settings(), RewardSettings(), 1.0, 1.0, 1.0, 100, 200.0, 1.0, 20, 20, 1)
+    assertEquals(100, payout.vanilla)
+    assertTrue(payout.counts && payout.took && payout.gained > 0)
+    assertEquals(listOf(Message.NOTE_HEADER), payout.notes(Settings(), emptyArray(), 0.0, null).map { it.first })
+  }
+
+  @Test fun `a small share in a group says why it got no loot`() {
+    val payout = Payout.of(Settings(), RewardSettings(), 0.1, 1.0, 1.0, 100, 200.0, 1.0, 20, 20, 2)
+    assertEquals(10, payout.vanilla)
+    assertTrue(Message.NOTE_SMALL_SHARE in payout.notes(Settings(), emptyArray(), 0.0, null).map { it.first })
   }
 }

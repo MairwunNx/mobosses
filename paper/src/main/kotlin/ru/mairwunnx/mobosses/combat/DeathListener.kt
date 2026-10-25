@@ -59,68 +59,34 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
   /** [petWorth] is the share of the player's damage that counts for experience: 1 without pets. Players who get loot go into [looted]. */
   private fun pay(player: Player, boss: Boss, share: Double, petWorth: Double, group: Int, experience: Int, looted: MutableMap<Player, Double>) {
     val settings = plugin.catalog.settings
-    val progression = settings.progression
     // A spawner boss farmed in one spot gives less, and comes back to full with time.
     val fatigue = if (boss.fromSpawner) plugin.fatigue.take(player, boss.entity.location) else 1.0
-    val vanilla = Math.round(experience * share * petWorth * fatigue).toInt()
-    player.giveExp(vanilla)
+    val baseHealth = boss.entity.getAttribute(Attribute.MAX_HEALTH)?.baseValue ?: 0.0
+    val payout = Payout.of(settings, plugin.catalog.rewards, share, petWorth, fatigue, experience, baseHealth, boss.clazz.experience, boss.level, plugin.progression.level(player.uniqueId), group)
+    player.giveExp(payout.vanilla)
 
-    val level = plugin.progression.level(player.uniqueId)
-    val worth = Leveling.bossExperience(progression.expGain, boss.entity.getAttribute(Attribute.MAX_HEALTH)?.baseValue ?: 0.0, boss.clazz.experience, boss.level)
-    val counts = Leveling.countsAsKill(progression, share, group, level, boss.level)
-    val relevance = Leveling.relevance(progression.relevance, level, boss.level)
-    val gained = Leveling.gained(worth * share * petWorth * relevance * fatigue, counts)
     val levelBefore = plugin.progression.level(player.uniqueId)
-    plugin.progression.add(player.uniqueId, player.name, gained, counts)
+    plugin.progression.add(player.uniqueId, player.name, payout.gained, payout.counts)
     plugin.progression.level(player.uniqueId).takeIf { it > levelBefore }?.let { plugin.worldApi.levelUp(player, levelBefore, it) }
     if (PlanData.available) PlanData.update(player)
 
-    // Four players who split a boss evenly each deal 25%; the thresholds come down to meet them.
-    val lootShare = Leveling.threshold(settings.loot.minDamageShare, progression.groupShare, group)
-    if (share >= lootShare && Random.nextDouble() < fatigue) {
+    if (share >= payout.lootShare && Random.nextDouble() < fatigue) {
       plugin.loot.drop(boss, player)
       looted[player] = share
     }
 
-    // Achievements and the bestiary take anyone whose share made the kill theirs, whatever the levels.
-    val took = share >= Leveling.threshold(progression.minShare, progression.groupShare, group)
-    plugin.achievements.killed(player, boss, took, counts, alone = group == 1)
-    if (took) plugin.progression.bestiaryKill(player.uniqueId, boss.type.key, boss.clazz.key, boss.level).thenAccept { entries ->
+    plugin.achievements.killed(player, boss, payout.took, payout.counts, alone = group == 1)
+    if (payout.took) plugin.progression.bestiaryKill(player.uniqueId, boss.type.key, boss.clazz.key, boss.level).thenAccept { entries ->
       Bukkit.getScheduler().runTask(plugin, Runnable { if (player.isOnline) plugin.achievements.bestiary(player, entries) })
     }
-    val rewardsShare = Leveling.threshold(plugin.catalog.rewards.minDamageShare, progression.groupShare, group)
-    val rewardsIn = if (share >= rewardsShare) plugin.rewards.give(player, boss) else null
+    val rewardsIn = if (share >= payout.rewardsShare) plugin.rewards.give(player, boss) else null
     val volume = (0.2f + 0.15f * plugin.catalog.classes.rank(boss.clazz.key).coerceAtLeast(0)).coerceAtMost(1f)
     plugin.catalog.killSound?.let { player.playSound(player.location, it, volume, 1f) }
-    plugin.log.debug { "${player.name} dealt ${"%.0f".format(share * 100)}% of a level ${boss.level} ${boss.clazz.key} ${boss.type.key}: +$gained Mo’Bosses experience" }
+    plugin.log.debug { "${player.name} dealt ${"%.0f".format(share * 100)}% of a level ${boss.level} ${boss.clazz.key} ${boss.type.key}: +${payout.gained} Mo’Bosses experience" }
 
     if (!settings.broadcast.killNotes) return
-    // One block in the chat: what they got, then why it was less, or more, line by line.
-    val killShare = Leveling.threshold(progression.minShare, progression.groupShare, group)
-    fun percent(name: String, value: Double) = Placeholder.unparsed(name, Math.round(value * 100).toString())
-    val levels = arrayOf(Placeholder.unparsed("boss_level", boss.level.toString()), Placeholder.unparsed("your_level", level.toString()))
-    val notes = mutableListOf<Pair<Message, Array<out TagResolver>>>()
-    notes += Message.NOTE_HEADER to arrayOf(
-      *plugin.texts.boss(plugin.texts.languageOf(player), boss), percent("share", share),
-      Placeholder.unparsed("experience", vanilla.toString()), Placeholder.unparsed("mobosses_experience", gained.toString()),
-    )
-    // A few percent either way isn't worth a line.
-    when {
-      relevance >= 1.05 -> notes += Message.NOTE_ABOVE to arrayOf(*levels, percent("percent", relevance - 1.0))
-      relevance <= 0.95 -> notes += Message.NOTE_BELOW to arrayOf(*levels, percent("percent", relevance))
-    }
-    when {
-      share < killShare -> notes += Message.NOTE_SMALL_SHARE to arrayOf(percent("share", share), percent("kill", killShare), percent("loot", lootShare))
-      !counts -> notes += Message.NOTE_NOT_COUNTED to levels
-      share < lootShare -> notes += Message.NOTE_NO_LOOT to arrayOf(percent("share", share), percent("loot", lootShare))
-    }
-    if (fatigue < 0.95) notes += Message.NOTE_SPAWNER to arrayOf(percent("percent", fatigue))
-    rewardsIn?.let { notes += Message.NOTE_REWARDS_COOLDOWN to arrayOf(Placeholder.unparsed("seconds", it.toString())) }
-    if (petWorth <= 0.95) {
-      val pets = (boss.petDamage[player.uniqueId] ?: 0.0) / (boss.damage[player.uniqueId] ?: 1.0)
-      notes += Message.NOTE_PETS to arrayOf(percent("pets", pets), percent("weight", Leveling.petWeight(progression.petDamage, boss.level)))
-    }
-    plugin.texts.sendBlock(player, notes)
+    val petShare = (boss.petDamage[player.uniqueId] ?: 0.0) / (boss.damage[player.uniqueId] ?: 1.0)
+    plugin.texts.sendBlock(player, payout.notes(settings, plugin.texts.boss(plugin.texts.languageOf(player), boss), petShare, rewardsIn))
   }
 
   private fun announce(boss: Boss, shares: Map<UUID, Double>, experience: Int) {
