@@ -17,6 +17,7 @@ import ru.mairwunnx.mobosses.hooks.PlanData
 import ru.mairwunnx.mobosses.lang.Message
 import java.util.UUID
 import kotlin.random.Random
+import kotlin.math.roundToInt
 
 /**
  * A boss's death. Each player's share of its health, their pets' damage included, decides their part
@@ -34,7 +35,8 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
     val shares = Shares.of(boss.damage, plugin.groupHealth.whole(boss, maxHealth))
     if (shares.isNotEmpty()) {
       val formula = plugin.catalog.settings.formula
-      val experience = Stats.experience(formula.experience, event.droppedExp, boss.clazz.experience, boss.type.spec.expModifier, boss.level)
+      val graded = boss.graded(plugin.catalog.settings.difficulty.weights.experience)
+      val experience = (Stats.experience(formula.experience, event.droppedExp, boss.clazz.experience, boss.type.spec.expModifier, boss.level) * graded).roundToInt().coerceAtLeast(event.droppedExp)
       event.droppedExp = 0
       val pets = boss.petDamage
       val dealt = boss.damage

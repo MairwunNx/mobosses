@@ -10,6 +10,7 @@ import org.bukkit.entity.Player
 import org.bukkit.entity.Tameable
 import org.bukkit.persistence.PersistentDataType
 import ru.mairwunnx.mobosses.MoBossesPlugin
+import ru.mairwunnx.mobosses.algebra.Difficulty
 import ru.mairwunnx.mobosses.algebra.Leveling
 import ru.mairwunnx.mobosses.boss.Boss
 import ru.mairwunnx.mobosses.lang.Message
@@ -67,10 +68,12 @@ class NaturalSpawns(private val plugin: MoBossesPlugin) {
     val type = catalog.types[entity.type]?.takeIf { it.spec.enabled } ?: return null
     val at = entity.location
     if (plugin.bosses.count(at.world) >= spawn.maxBossesPerWorld) return null
+    val difficulty = plugin.bosses.difficulty(at.world) ?: return null
 
     val nearest = seer ?: players(at, spawn.spawnRadius.toDouble()).minByOrNull { it.location.distanceSquared(at) } ?: return null
     if (spawn.checkVerticalZone && onSurface(nearest.location, spawn) != onSurface(at, spawn)) return null
-    if (Random.nextDouble() >= chance(type.spec.spawnChance, spawn, at) * plugin.survival.multiplier(nearest) * plugin.fullMoon.chance(at.world)) return null
+    val graded = Difficulty.part(difficulty, catalog.settings.difficulty.weights.spawnChance)
+    if (Random.nextDouble() >= chance(type.spec.spawnChance, spawn, at) * graded * plugin.survival.multiplier(nearest) * plugin.fullMoon.chance(at.world)) return null
 
     val group = players(at, spawn.groupRadius.toDouble()).ifEmpty { listOf(nearest) }
     if (!limiter.allows(at, group)) return null.also { plugin.log.debug { "No ${type.key} boss at ${at.blockX} ${at.blockY} ${at.blockZ}: too many bosses near, or its players' cooldown" } }

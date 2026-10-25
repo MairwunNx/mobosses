@@ -7,6 +7,7 @@ import org.bukkit.entity.LivingEntity
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitTask
 import ru.mairwunnx.mobosses.config.BossClass
+import ru.mairwunnx.mobosses.algebra.Difficulty
 import java.util.UUID
 
 /**
@@ -101,6 +102,12 @@ class Boss(
   var phaseTwo: Boolean
     get() = entity.persistentDataContainer.get(keys.phaseTwo, PersistentDataType.BOOLEAN) == true
     set(value) = entity.persistentDataContainer.set(keys.phaseTwo, PersistentDataType.BOOLEAN, value)
+
+  /** The difficulty's modifier it was made with, which a later change of difficulty leaves alone. */
+  val difficulty: Double get() = entity.persistentDataContainer.get(keys.difficulty, PersistentDataType.DOUBLE) ?: Difficulty.UNGRADED
+
+  /** What a part of it is multiplied by, from its [difficulty] and that part's weight in `difficulty.weights`. */
+  fun graded(weight: Double): Double = Difficulty.part(difficulty, weight)
 
   var aura: BukkitTask? = null
 

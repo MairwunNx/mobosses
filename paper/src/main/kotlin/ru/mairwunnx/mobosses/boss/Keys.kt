@@ -32,6 +32,8 @@ class Keys(plugin: Plugin) {
   val summoner = NamespacedKey(plugin, "summoner")
   /** On meteors: they land without leaving a block. */
   val meteor = NamespacedKey(plugin, "meteor")
+  /** On bosses: the difficulty's modifier it was made with; bosses from before 2.11 have none and count as hard. */
+  val difficulty = NamespacedKey(plugin, "difficulty")
   /** On bosses past their second phase. */
   val phaseTwo = NamespacedKey(plugin, "phase_two")
   /** On burning bosses: who set them alight, `uuid` or `uuid|pet`, so the fire's damage is theirs. */

@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.11.0
+
+### New
+
+- ⚖️ **The game’s difficulty grades bosses.** On hard they stay exactly as they were. Normal bosses have about 88% of the health and damage, easy ones about 73%, and a hardcore world’s about 123%; armor, minions, cooldowns, and how often bosses come move by half as much, and the experience they drop with their health. Peaceful makes no bosses. A boss keeps what it was made with, so a change of difficulty moves only the bosses after it, and none is ever weaker than its vanilla mob. On easy or normal, your bosses get softer with this update; `difficulty.enabled: false` in `config.yml` keeps them as on hard. The modifiers and weights live under `difficulty`, and `./gradlew balance` prints them.
+
 ## 2.10.0
 
 ### New

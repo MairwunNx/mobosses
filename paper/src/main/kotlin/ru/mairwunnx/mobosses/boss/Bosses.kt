@@ -6,6 +6,7 @@ import org.bukkit.entity.Entity
 import org.bukkit.entity.LivingEntity
 import org.bukkit.persistence.PersistentDataType
 import ru.mairwunnx.mobosses.MoBossesPlugin
+import ru.mairwunnx.mobosses.algebra.Difficulty
 import ru.mairwunnx.mobosses.config.BossClass
 import ru.mairwunnx.mobosses.config.BossSpec
 import ru.mairwunnx.mobosses.lang.Message
@@ -30,10 +31,26 @@ class Bosses(private val plugin: MoBossesPlugin) {
 
   fun near(at: Location, radius: Double) = live.values.count { it.entity.world == at.world && it.entity.location.distanceSquared(at) <= radius * radius }
 
+  /**
+   * The modifier a new boss in [world] takes from the world's difficulty; null on peaceful, where no mob
+   * turns into a boss on its own.
+   */
+  fun difficulty(world: World): Double? {
+    val difficulty = when (world.difficulty) {
+      org.bukkit.Difficulty.PEACEFUL -> Difficulty.PEACEFUL
+      org.bukkit.Difficulty.EASY -> Difficulty.EASY
+      org.bukkit.Difficulty.NORMAL -> Difficulty.NORMAL
+      org.bukkit.Difficulty.HARD -> Difficulty.HARD
+    }
+    return Difficulty.modifier(plugin.catalog.settings.difficulty, difficulty, world.isHardcore)
+  }
+
   /** Scales [entity] into a boss and marks it as one, so it stays a boss after a restart. */
   fun make(entity: LivingEntity, type: Catalog.BossType, clazz: BossClass, level: Int, summoner: UUID? = null): Boss {
     val lvl = level.coerceAtLeast(1)
-    factory.apply(entity, type, clazz, lvl, summoner, plugin.catalog.settings.formula)
+    val settings = plugin.catalog.settings
+    // A boss an admin spawns on peaceful plays as on hard, for as long as the game lets it stay.
+    factory.apply(entity, type, clazz, lvl, summoner, settings.formula, difficulty(entity.world) ?: Difficulty.UNGRADED, settings.difficulty.weights)
     val boss = register(entity, type, clazz, lvl, summoner)
     boss.seen = System.currentTimeMillis()
     plugin.progression.count(type.key, clazz.key, killed = false)

@@ -51,7 +51,7 @@ class Abilities(private val plugin: MoBossesPlugin) {
     val ability = ready.shuffled().firstOrNull { it.cast(cast) } ?: return
     // Each cooldown's random stretch is rolled once, here, so more hits don't mean more chances.
     val (cooldown, bias) = ability.cooldown(settings)
-    val factor = PhaseTwo.factor(settings, boss.phaseTwo)
+    val factor = PhaseTwo.factor(settings, boss.phaseTwo) / boss.graded(plugin.catalog.settings.difficulty.weights.cooldowns)
     boss.used(
       ability.key,
       now + (Rolls.biased(cooldown.toDouble(), bias, Random) * factor).toLong(),

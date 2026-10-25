@@ -12,6 +12,7 @@ import ru.mairwunnx.mobosses.config.AbilitySettings
 import ru.mairwunnx.mobosses.config.AbilityThresholds
 import ru.mairwunnx.mobosses.lang.Message
 import kotlin.random.Random
+import kotlin.math.roundToInt
 
 /**
  * Minions from `minions.yml` at the boss's feet, topping up to `summoning_max_alive`; some may roll
@@ -36,7 +37,9 @@ object Summoning : Ability {
 
   override fun cast(cast: Cast): Boolean {
     val minion = cast.plugin.catalog.minions[cast.boss.entity.type] ?: return false
-    val count = minOf(Rolls.minions(cast.plugin.catalog.settings.formula.minions, cast.level, Random), room(cast))
+    val settings = cast.plugin.catalog.settings
+    val rolled = (Rolls.minions(settings.formula.minions, cast.level, Random) * cast.boss.graded(settings.difficulty.weights.minions)).roundToInt().coerceAtLeast(1)
+    val count = minOf(rolled, room(cast))
     repeat(count) {
       val entity = cast.at.world.spawn(cast.at, minion.entity.entityClass!!, SpawnReason.CUSTOM) { spawned ->
         spawned.persistentDataContainer.set(cast.plugin.keys.summoner, PersistentDataType.STRING, cast.boss.uuid.toString())

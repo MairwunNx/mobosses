@@ -87,7 +87,8 @@ class DamageListener(private val plugin: MoBossesPlugin) : Listener {
     val boss = (shot.shooter as? LivingEntity)?.let(plugin.bosses::get) ?: return
     if (shot.persistentDataContainer.has(plugin.keys.arrow, PersistentDataType.BOOLEAN) || shot.persistentDataContainer.has(plugin.keys.meteor, PersistentDataType.BOOLEAN)) return
     val formula = plugin.catalog.settings.formula
-    event.damage *= Stats.ranged(formula.damage, boss.clazz.damage, boss.level, formula.rangedDamage)
+    val graded = boss.graded(plugin.catalog.settings.difficulty.weights.damage)
+    event.damage *= (Stats.ranged(formula.damage, boss.clazz.damage, boss.level, formula.rangedDamage) * graded).coerceAtLeast(1.0)
   }
 
   @EventHandler
