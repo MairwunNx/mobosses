@@ -1,6 +1,10 @@
 package ru.mairwunnx.mobosses.neoforge
 
 import net.minecraft.commands.CommandSourceStack
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload
+import net.minecraft.server.level.ServerPlayer
+import net.neoforged.neoforge.network.PacketDistributor
+import net.neoforged.neoforge.network.registration.NetworkRegistry
 import net.neoforged.fml.ModList
 import net.neoforged.fml.loading.FMLPaths
 import net.neoforged.neoforge.server.permission.PermissionAPI
@@ -25,6 +29,10 @@ object OnNeoForge : Loader {
 
   override fun resource(path: String): ByteArray? =
     ModList.get().getModFileById("mobosses")?.file?.contents?.takeIf { it.containsFile(path) }?.readFile(path)
+
+  override fun send(player: ServerPlayer, payload: CustomPacketPayload) = PacketDistributor.sendToPlayer(player, payload)
+
+  override fun canSend(player: ServerPlayer, type: CustomPacketPayload.Type<*>) = NetworkRegistry.hasChannel(player.connection, type.id())
 
   override fun loaded(mod: String) = ModList.get().isLoaded(mod)
 

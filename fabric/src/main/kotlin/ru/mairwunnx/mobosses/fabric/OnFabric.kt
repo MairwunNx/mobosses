@@ -1,7 +1,10 @@
 package ru.mairwunnx.mobosses.fabric
 
 import net.fabricmc.loader.api.FabricLoader
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.commands.CommandSourceStack
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload
+import net.minecraft.server.level.ServerPlayer
 import ru.mairwunnx.mobosses.modcore.Loader
 import java.nio.file.Files
 import java.nio.file.Path
@@ -17,6 +20,10 @@ object OnFabric : Loader {
 
   override fun resource(path: String): ByteArray? =
     FabricLoader.getInstance().getModContainer("mobosses").flatMap { it.findPath(path) }.map(Files::readAllBytes).orElse(null)
+
+  override fun send(player: ServerPlayer, payload: CustomPacketPayload) = ServerPlayNetworking.send(player, payload)
+
+  override fun canSend(player: ServerPlayer, type: CustomPacketPayload.Type<*>) = ServerPlayNetworking.canSend(player, type)
 
   override fun loaded(mod: String) = FabricLoader.getInstance().isModLoaded(mod)
 

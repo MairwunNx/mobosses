@@ -1,6 +1,8 @@
 package ru.mairwunnx.mobosses.modcore
 
 import net.minecraft.commands.CommandSourceStack
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload
+import net.minecraft.server.level.ServerPlayer
 import java.nio.file.Path
 
 /**
@@ -28,6 +30,12 @@ interface Loader {
 
   /** Whether a mod with this id runs. */
   fun loaded(mod: String): Boolean
+
+  /** Sends [payload] to [player]'s game, which said it takes it ([canSend]). */
+  fun send(player: ServerPlayer, payload: CustomPacketPayload)
+
+  /** Whether [player]'s game has Mo’Bosses' channel for [type]: a vanilla game has none. */
+  fun canSend(player: ServerPlayer, type: CustomPacketPayload.Type<*>): Boolean
 
   /**
    * Whether [source] has [node], through the loader's permissions API when a permissions mod answers it (LuckPerms

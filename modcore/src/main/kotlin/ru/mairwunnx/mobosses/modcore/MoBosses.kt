@@ -36,6 +36,7 @@ import ru.mairwunnx.mobosses.modcore.combat.Loot
 import ru.mairwunnx.mobosses.modcore.combat.Rewards
 import ru.mairwunnx.mobosses.modcore.combat.SpawnerFatigue
 import ru.mairwunnx.mobosses.modcore.config.Ids
+import ru.mairwunnx.mobosses.modcore.config.SettingsService
 import ru.mairwunnx.mobosses.modcore.hooks.AllayLink
 import ru.mairwunnx.mobosses.modcore.hooks.Placeholders
 import ru.mairwunnx.mobosses.modcore.hooks.WorldApiLink
@@ -110,6 +111,7 @@ class MoBosses(val server: MinecraftServer, val loader: Loader) {
   val deathPenalty = DeathPenalty(this)
   val blockChanges = BlockChanges(this)
   val menuStats = Stats(this)
+  val settings = SettingsService(this)
   val arrowHits = ArrowHits(this)
   val abilityEntities = AbilityEntities(this)
 

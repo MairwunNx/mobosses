@@ -6,6 +6,7 @@ import net.minecraft.server.MinecraftServer
 import net.minecraft.server.level.ServerPlayer
 import org.slf4j.LoggerFactory
 import ru.mairwunnx.mobosses.Log
+import ru.mairwunnx.mobosses.modcore.net.Payloads
 
 /**
  * Mo’Bosses for each server the game starts: a dedicated one, or the one under a singleplayer or LAN world. Both mods
@@ -56,6 +57,16 @@ object Mod {
 
   fun left(player: ServerPlayer) {
     current?.left(player)
+  }
+
+  /** A player's game asks for the settings screen's files. */
+  fun settingsWanted(player: ServerPlayer) {
+    current?.settings?.wanted(player)
+  }
+
+  /** A player's game changes one setting. */
+  fun settingChanged(player: ServerPlayer, change: Payloads.SettingChanged) {
+    current?.settings?.changed(player, change)
   }
 
   /** The command tree, which the game builds before a server starts; the commands find the server when they run. */

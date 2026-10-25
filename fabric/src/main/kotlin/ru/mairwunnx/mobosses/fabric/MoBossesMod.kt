@@ -4,11 +4,14 @@ import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking
 import net.minecraft.core.Registry
 import net.minecraft.core.registries.BuiltInRegistries
 import ru.mairwunnx.mobosses.modcore.Mod
 import ru.mairwunnx.mobosses.modcore.achievement.BossKilled
+import ru.mairwunnx.mobosses.modcore.net.Payloads
 
 /**
  * Mo’Bosses on Fabric: hands Fabric API's events to the shared mod ([Mod]), for each server the game starts, a
@@ -25,5 +28,11 @@ class MoBossesMod : ModInitializer {
     CommandRegistrationCallback.EVENT.register { dispatcher, _, _ -> Mod.commands(dispatcher) }
     ServerPlayConnectionEvents.JOIN.register { handler, _, _ -> Mod.joined(handler.player) }
     ServerPlayConnectionEvents.DISCONNECT.register { handler, _ -> Mod.left(handler.player) }
+    // What a player's game with Mo’Bosses says to the server, and back; Fabric API runs the handlers on the server thread.
+    PayloadTypeRegistry.serverboundPlay().register(Payloads.SettingsWanted.TYPE, Payloads.SettingsWanted.CODEC)
+    PayloadTypeRegistry.serverboundPlay().register(Payloads.SettingChanged.TYPE, Payloads.SettingChanged.CODEC)
+    PayloadTypeRegistry.clientboundPlay().register(Payloads.Settings.TYPE, Payloads.Settings.CODEC)
+    ServerPlayNetworking.registerGlobalReceiver(Payloads.SettingsWanted.TYPE) { _, context -> Mod.settingsWanted(context.player()) }
+    ServerPlayNetworking.registerGlobalReceiver(Payloads.SettingChanged.TYPE) { change, context -> Mod.settingChanged(context.player(), change) }
   }
 }
