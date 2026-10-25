@@ -18,10 +18,14 @@ allprojects {
     maven("https://repo.papermc.io/repository/maven-public/")
     maven("https://repo.extendedclip.com/releases/")
     maven("https://repo.playeranalytics.net/releases/")
-    maven("https://maven.enginehub.org/repo/")
+    maven("https://maven.enginehub.org/repo/") { content { includeGroupByRegex("com\\.sk89q.*|org\\.enginehub.*") } }
     maven("https://maven.playpro.com/")
     maven("https://jitpack.io/") { content { includeGroup("com.github.GriefPrevention") } }
     // Mixin's annotations for modcore, as Fabric publishes them.
     maven("https://maven.fabricmc.net/") { content { includeModule("net.fabricmc", "sponge-mixin") } }
+    // Text Placeholder API and Common Protection API, for the mods.
+    maven("https://maven.nucleoid.xyz/") { content { includeGroup("eu.pb4") } }
+    // Flan and Open Parties and Claims, the claims mods, publish to Modrinth.
+    maven("https://api.modrinth.com/maven") { content { includeGroup("maven.modrinth") } }
   }
 }

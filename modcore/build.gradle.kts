@@ -29,6 +29,11 @@ dependencies {
   // WorldAPI and Allay run as mods too and bring their expansion APIs, as on Paper.
   compileOnly("com.mairwunnx:worldapi-expansion:1.0.0")
   compileOnly("chat.allay:allay-expansion:1.3.0")
+  // Optional mods: Mo’Bosses asks them only when they're loaded. Their APIs read the same on both loaders.
+  compileOnly("eu.pb4:placeholder-api:3.2.0+26.3") { isTransitive = false }
+  compileOnly("eu.pb4:common-protection-api:2.0.0") { isTransitive = false }
+  compileOnly("maven.modrinth:flan:26.3-1.12.8.b-fabric") { isTransitive = false }
+  compileOnly("maven.modrinth:open-parties-and-claims:neoforge-26.3-0.33.0") { isTransitive = false }
 
   testImplementation(kotlin("test"))
   testImplementation(platform("org.junit:junit-bom:6.1.3"))
