@@ -5,12 +5,14 @@
   <a href="https://hangar.papermc.io/MairwunNx/MoBosses"><img alt="Hangar" src="https://img.shields.io/hangar/dt/MoBosses?label=Hangar&color=1E88E5"></a>
   <a href="https://github.com/MairwunNx/mobosses/releases/latest"><img alt="Release" src="https://img.shields.io/github/v/release/MairwunNx/mobosses?label=release"></a>
   <img alt="Paper 26.3" src="https://img.shields.io/badge/Paper-26.3-F7CF0D">
+  <img alt="Fabric 26.3" src="https://img.shields.io/badge/Fabric-26.3-DBD0B4">
+  <img alt="NeoForge 26.3" src="https://img.shields.io/badge/NeoForge-26.3-E68C37">
   <img alt="Java 25" src="https://img.shields.io/badge/Java-25-E76F00">
   <a href="https://github.com/MairwunNx/mobosses/actions/workflows/build.yml"><img alt="Build" src="https://img.shields.io/github/actions/workflow/status/MairwunNx/mobosses/build.yml?branch=master&label=build"></a>
   <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/MairwunNx/mobosses"></a>
 </p>
 
-🏆 **Mo’Bosses** turns ordinary mobs on Paper servers into bosses. A zombie that spawns near you may come out as a level 40 Epic boss with more health, harder hits, a glow in its class color, a health bar, and abilities like lightning, meteor showers, and minions. Every kill raises your own Mo’Bosses level, and the bosses that find you grow with it.
+🏆 **Mo’Bosses** turns ordinary mobs into bosses, on Paper servers and, as a Fabric or NeoForge mod, on modded servers and in your singleplayer worlds. A zombie that spawns near you may come out as a level 40 Epic boss with more health, harder hits, a glow in its class color, a health bar, and abilities like lightning, meteor showers, and minions. Every kill raises your own Mo’Bosses level, and the bosses that find you grow with it.
 
 [Русская версия](https://github.com/MairwunNx/mobosses/blob/master/README.RU.md)
 
@@ -28,11 +30,12 @@ Mo’Bosses runs on Moonlands, my hard survival server with friends. Come in and
 - 🌍 **Every player reads their own language,** even the names over bosses’ heads: five languages bundled, picked by IP or game language.
 - 🛡️ **Builds stay safe:** GriefPrevention claims and WorldGuard regions keep bosses out, and CoreProtect logs whatever they break, ready to roll back.
 - 🤖 **Ask Allay about the boss in front of you:** with [Allay](https://github.com/allay-ai/minecraft), the AI helper, players learn what a boss can do, how rare its class is, and how far their next level is, from this server’s own numbers.
+- 🧱 **Paper, Fabric, or NeoForge, server or singleplayer:** the same bosses everywhere, and players join with a vanilla game. As a mod it brings a settings screen, boss loot in JEI, REI, and EMI, bosses from other mods’ mobs, and a trigger for your own advancements.
 - 🧩 **Plays well with others:** PlaceholderAPI, MiniPlaceholders, Plan, WorldAPI, Allay, and SQLite, MySQL, MariaDB, or PostgreSQL for players’ levels.
 
 ## Get started
 
-1. Put the jar from [Modrinth](https://modrinth.com/plugin/mobosses), [Hangar](https://hangar.papermc.io/MairwunNx/MoBosses), or [GitHub](https://github.com/MairwunNx/mobosses/releases/latest/download/mobosses-paper.jar) in `plugins/` on Paper 26.3 with Java 25, or add `mobosses` to `MODRINTH_PROJECTS` in [itzg/minecraft-server](https://docker-minecraft-server.readthedocs.io).
+1. Put the jar from [Modrinth](https://modrinth.com/plugin/mobosses), [Hangar](https://hangar.papermc.io/MairwunNx/MoBosses), or [GitHub](https://github.com/MairwunNx/mobosses/releases/latest/download/mobosses-paper.jar) in `plugins/` on Paper 26.3 with Java 25, or add `mobosses` to `MODRINTH_PROJECTS` in [itzg/minecraft-server](https://docker-minecraft-server.readthedocs.io). On Fabric or NeoForge, put `mobosses-fabric` or `mobosses-neoforge` in `mods/`; see [Fabric and NeoForge](https://github.com/MairwunNx/mobosses/wiki/Mods).
 2. Restart the server, then meet a boss right away: `/mobosses spawn zombie 30 epic`.
 3. Read [First steps](https://github.com/MairwunNx/mobosses/wiki/First-steps) to tune how often bosses come.
 
@@ -40,7 +43,7 @@ Mo’Bosses runs on Moonlands, my hard survival server with friends. Come in and
 
 The [wiki](https://github.com/MairwunNx/mobosses/wiki) has everything else.
 
-**For players and server owners:** [Installation](https://github.com/MairwunNx/mobosses/wiki/Installation) · [First steps](https://github.com/MairwunNx/mobosses/wiki/First-steps) · [Bosses and classes](https://github.com/MairwunNx/mobosses/wiki/Bosses-and-classes) · [Abilities](https://github.com/MairwunNx/mobosses/wiki/Abilities) · [Minions](https://github.com/MairwunNx/mobosses/wiki/Minions) · [Loot and rewards](https://github.com/MairwunNx/mobosses/wiki/Loot-and-rewards) · [Player levels](https://github.com/MairwunNx/mobosses/wiki/Player-levels) · [Claims and protection](https://github.com/MairwunNx/mobosses/wiki/Claims-and-protection) · [Commands and permissions](https://github.com/MairwunNx/mobosses/wiki/Commands-and-permissions) · [Configuration](https://github.com/MairwunNx/mobosses/wiki/Configuration) · [Languages](https://github.com/MairwunNx/mobosses/wiki/Languages) · [Integrations](https://github.com/MairwunNx/mobosses/wiki/Integrations) · [Upgrading from 1.x](https://github.com/MairwunNx/mobosses/wiki/Upgrading-from-1.x) · [FAQ](https://github.com/MairwunNx/mobosses/wiki/FAQ)
+**For players and server owners:** [Installation](https://github.com/MairwunNx/mobosses/wiki/Installation) · [Fabric and NeoForge](https://github.com/MairwunNx/mobosses/wiki/Mods) · [First steps](https://github.com/MairwunNx/mobosses/wiki/First-steps) · [Bosses and classes](https://github.com/MairwunNx/mobosses/wiki/Bosses-and-classes) · [Abilities](https://github.com/MairwunNx/mobosses/wiki/Abilities) · [Minions](https://github.com/MairwunNx/mobosses/wiki/Minions) · [Loot and rewards](https://github.com/MairwunNx/mobosses/wiki/Loot-and-rewards) · [Player levels](https://github.com/MairwunNx/mobosses/wiki/Player-levels) · [Claims and protection](https://github.com/MairwunNx/mobosses/wiki/Claims-and-protection) · [Commands and permissions](https://github.com/MairwunNx/mobosses/wiki/Commands-and-permissions) · [Configuration](https://github.com/MairwunNx/mobosses/wiki/Configuration) · [Languages](https://github.com/MairwunNx/mobosses/wiki/Languages) · [Integrations](https://github.com/MairwunNx/mobosses/wiki/Integrations) · [Upgrading from 1.x](https://github.com/MairwunNx/mobosses/wiki/Upgrading-from-1.x) · [FAQ](https://github.com/MairwunNx/mobosses/wiki/FAQ)
 
 **For developers:** [Building from source](https://github.com/MairwunNx/mobosses/wiki/Building-from-source) · [Architecture](https://github.com/MairwunNx/mobosses/wiki/Architecture) · [Development](https://github.com/MairwunNx/mobosses/wiki/Development) · [Releasing](https://github.com/MairwunNx/mobosses/wiki/Releasing)
 

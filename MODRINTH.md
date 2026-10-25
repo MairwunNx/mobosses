@@ -1,6 +1,6 @@
 # Mo’Bosses
 
-🏆 **Mo’Bosses** turns ordinary mobs into bosses. A zombie that spawns near a player may come out as a level 40 Epic boss with more health, harder hits, a glow in its class color, a health bar, and abilities like lightning, meteor showers, and minions. Every kill raises the player’s own Mo’Bosses level, and the bosses that find them grow with it.
+🏆 **Mo’Bosses** turns ordinary mobs into bosses, on Paper servers and, as a Fabric or NeoForge mod, on modded servers and in singleplayer worlds. A zombie that spawns near a player may come out as a level 40 Epic boss with more health, harder hits, a glow in its class color, a health bar, and abilities like lightning, meteor showers, and minions. Every kill raises the player’s own Mo’Bosses level, and the bosses that find them grow with it.
 
 ## What you get
 
@@ -12,11 +12,12 @@
 - 🌍 **Every player reads their own language,** even the names over bosses’ heads: five languages bundled, picked by IP or game language.
 - 🛡️ **Builds stay safe:** GriefPrevention claims and WorldGuard regions keep bosses out, and CoreProtect logs whatever they break, ready to roll back.
 - 🤖 **Ask Allay about the boss in front of you:** with [Allay](https://github.com/allay-ai/minecraft), the AI helper, players learn what a boss can do, how rare its class is, and how far their next level is, from this server’s own numbers.
+- 🧱 **Paper, Fabric, or NeoForge, server or singleplayer:** the same bosses everywhere, and players join with a vanilla game. As a mod it brings a settings screen, boss loot in JEI, REI, and EMI, bosses from other mods’ mobs, and a trigger for your own advancements.
 - 🧩 **Plays well with others:** PlaceholderAPI, MiniPlaceholders, Plan, WorldAPI, Allay, and SQLite, MySQL, MariaDB, or PostgreSQL for players’ levels.
 
 ## Get started
 
-1. Put the jar in `plugins/` on Paper 26.3 or a fork of it, on Java 25. With [itzg/minecraft-server](https://docker-minecraft-server.readthedocs.io), add `mobosses` to `MODRINTH_PROJECTS` instead.
+1. Put the jar in `plugins/` on Paper 26.3 or a fork of it, on Java 25, or in `mods/` on Fabric (with Fabric API) or NeoForge 26.3, on a server or in your game. With [itzg/minecraft-server](https://docker-minecraft-server.readthedocs.io), add `mobosses` to `MODRINTH_PROJECTS` instead.
 2. Restart the server, then meet a boss right away: `/mobosses spawn zombie 30 epic`.
 3. Read [First steps](https://github.com/MairwunNx/mobosses/wiki/First-steps) to tune how often bosses come.
 
@@ -24,7 +25,7 @@ Configs and databases from 1.x load as they are.
 
 ## Documentation
 
-The [wiki](https://github.com/MairwunNx/mobosses/wiki) explains everything else: [bosses and classes](https://github.com/MairwunNx/mobosses/wiki/Bosses-and-classes), [abilities](https://github.com/MairwunNx/mobosses/wiki/Abilities), [loot and rewards](https://github.com/MairwunNx/mobosses/wiki/Loot-and-rewards), [player levels](https://github.com/MairwunNx/mobosses/wiki/Player-levels), [claims and protection](https://github.com/MairwunNx/mobosses/wiki/Claims-and-protection), [commands and permissions](https://github.com/MairwunNx/mobosses/wiki/Commands-and-permissions), [configuration](https://github.com/MairwunNx/mobosses/wiki/Configuration), [languages](https://github.com/MairwunNx/mobosses/wiki/Languages), and [integrations](https://github.com/MairwunNx/mobosses/wiki/Integrations). Source code and issues live on [GitHub](https://github.com/MairwunNx/mobosses).
+The [wiki](https://github.com/MairwunNx/mobosses/wiki) explains everything else: [Fabric and NeoForge](https://github.com/MairwunNx/mobosses/wiki/Mods), [bosses and classes](https://github.com/MairwunNx/mobosses/wiki/Bosses-and-classes), [abilities](https://github.com/MairwunNx/mobosses/wiki/Abilities), [loot and rewards](https://github.com/MairwunNx/mobosses/wiki/Loot-and-rewards), [player levels](https://github.com/MairwunNx/mobosses/wiki/Player-levels), [claims and protection](https://github.com/MairwunNx/mobosses/wiki/Claims-and-protection), [commands and permissions](https://github.com/MairwunNx/mobosses/wiki/Commands-and-permissions), [configuration](https://github.com/MairwunNx/mobosses/wiki/Configuration), [languages](https://github.com/MairwunNx/mobosses/wiki/Languages), and [integrations](https://github.com/MairwunNx/mobosses/wiki/Integrations). Source code and issues live on [GitHub](https://github.com/MairwunNx/mobosses).
 
 ## Related projects
 
