@@ -3,7 +3,6 @@ package ru.mairwunnx.mobosses.algebra
 import ru.mairwunnx.mobosses.config.Settings
 import kotlin.math.pow
 import kotlin.math.roundToInt
-import kotlin.math.roundToLong
 import kotlin.math.sqrt
 
 /**
@@ -44,6 +43,7 @@ object LegacyLevels {
     val low = experienceFor(curve, level, kills) ?: 0L
     val high = experienceFor(curve, level + 1, kills)
     val way = if (high == null || high <= low) 0.0 else ((experience - low).toDouble() / (high - low)).coerceIn(0.0, 0.999)
-    return from + ((to - from) * way).roundToLong()
+    // Cut, never rounded up, and short of the next level: a short level would otherwise round a player past it.
+    return (from + ((to - from) * way).toLong()).coerceAtMost(to - 1).coerceAtLeast(from)
   }
 }
