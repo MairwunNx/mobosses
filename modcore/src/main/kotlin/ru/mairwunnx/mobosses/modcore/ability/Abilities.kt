@@ -7,6 +7,7 @@ import ru.mairwunnx.mobosses.modcore.MoBosses
 import ru.mairwunnx.mobosses.modcore.ability.kinds.Chain
 import ru.mairwunnx.mobosses.modcore.ability.kinds.Enrage
 import ru.mairwunnx.mobosses.modcore.ability.kinds.Grapple
+import ru.mairwunnx.mobosses.modcore.ability.kinds.Lightning
 import ru.mairwunnx.mobosses.modcore.ability.kinds.PhaseTwo
 import ru.mairwunnx.mobosses.modcore.ability.kinds.TeleportStrike
 import ru.mairwunnx.mobosses.modcore.boss.Boss
@@ -64,7 +65,7 @@ class Abilities(private val mod: MoBosses) {
 
     /** The abilities a hit may set off, at random. */
     val PICKED: List<Ability> = listOf(
-      TeleportStrike, Grapple, Chain,
+      Lightning, TeleportStrike, Grapple, Chain,
     )
   }
 }
