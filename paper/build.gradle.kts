@@ -8,9 +8,9 @@ plugins {
   id("io.papermc.hangar-publish-plugin")
 }
 
-val exposedVersion = "1.6.0"
-
 dependencies {
+  // What doesn't touch Bukkit: the formulas, the configs, the languages, the store. Shaded with its libraries.
+  implementation(project(":core"))
   compileOnly("io.papermc.paper:paper-api:26.3.build.205-stable")
   // Paper ships the SQLite driver, so it stays out of the jar.
   compileOnly("org.xerial:sqlite-jdbc:3.53.4.0")
@@ -26,18 +26,7 @@ dependencies {
   // So does Allay, the AI helper, for its expansion API.
   compileOnly("chat.allay:allay-expansion:1.3.0")
 
-  implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.11.0")
-  implementation("com.charleskorn.kaml:kaml:0.104.0")
-  implementation("com.maxmind.db:maxmind-db:4.2.0")
-  implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
-  implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
-  implementation("com.zaxxer:HikariCP:7.1.0")
-  implementation("org.postgresql:postgresql:42.7.14")
-  // MariaDB's driver also talks to MySQL; MySQL's own is GPL.
-  implementation("org.mariadb.jdbc:mariadb-java-client:3.5.10")
-
   testImplementation("io.papermc.paper:paper-api:26.3.build.205-stable")
-  testImplementation("org.xerial:sqlite-jdbc:3.53.4.0")
   testImplementation(kotlin("test"))
   testImplementation(platform("org.junit:junit-bom:6.1.3"))
   testImplementation("org.junit.jupiter:junit-jupiter")
@@ -50,13 +39,6 @@ kotlin {
 
 tasks.test {
   useJUnitPlatform()
-}
-
-// `./gradlew balance` prints the stat curves; `--args=plugins/MoBosses` reads a server's files instead.
-tasks.register<JavaExec>("balance") {
-  description = "Prints boss stats, experience, and player levels for the bundled config"
-  classpath = sourceSets.test.get().runtimeClasspath
-  mainClass = "ru.mairwunnx.mobosses.BalanceReportKt"
 }
 
 tasks.processResources {
