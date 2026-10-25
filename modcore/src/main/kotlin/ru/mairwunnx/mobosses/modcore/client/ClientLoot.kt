@@ -1,6 +1,7 @@
 package ru.mairwunnx.mobosses.modcore.client
 
 import net.minecraft.client.Minecraft
+import net.minecraft.network.chat.Component
 import ru.mairwunnx.mobosses.modcore.net.Payloads
 
 /**
@@ -23,6 +24,12 @@ object ClientLoot {
       listeners.forEach { it(pages) }
     }
   }
+
+  /** A page's line as the viewers draw it: its words alone, in their own dark tone, since their pages are light. */
+  fun plain(line: Component): Component = Component.literal(line.string)
+
+  /** The tone viewers draw their own text in on a light page. */
+  const val INK = 0xFF404040.toInt()
 
   /** The player left the world: the next one sends its own. */
   fun left() {

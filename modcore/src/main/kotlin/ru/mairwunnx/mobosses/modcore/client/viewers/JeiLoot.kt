@@ -73,7 +73,7 @@ class JeiLoot : IModPlugin {
 
     override fun draw(page: Payloads.LootPage, slots: IRecipeSlotsView, graphics: GuiGraphicsExtractor, mouseX: Double, mouseY: Double) {
       val font = Minecraft.getInstance().font
-      page.lines.forEachIndexed { i, line -> graphics.text(font, line, 22, 1 + i * 11, -1) }
+      page.lines.forEachIndexed { i, line -> graphics.text(font, ClientLoot.plain(line), 22, 1 + i * 11, ClientLoot.INK, false) }
     }
   }
 
