@@ -35,6 +35,8 @@ object Fields {
       }
       is PrimitiveKind -> {
         val kind = kind(descriptor.kind as PrimitiveKind) ?: return
+        // A key with no default that the file leaves out, like 1.x's `language`, is there only for old files.
+        if (descriptor.isNullable && scalar(fallback) == null && scalar(current) == null) return
         val default = scalar(fallback).orEmpty()
         into += Field(path, kind, scalar(current) ?: default, default, notes[path].orEmpty())
       }

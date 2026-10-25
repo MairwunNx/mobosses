@@ -23,6 +23,7 @@ class EditorTest {
     assertEquals("0.8777777773", normal.value)
     val flag = config.fields(bundled("config.yml")).single { it.key == "anti_cheese.vehicles" }
     assertTrue("boats" in flag.note, flag.note)
+    assertTrue(config.fields(bundled("config.yml")).none { it.key == "language" }, "1.x's language shows")
   }
 
   @Test fun `a value changes on its own line and every other line stays`() {
