@@ -14,6 +14,7 @@ import net.neoforged.bus.api.IEventBus
 import net.neoforged.fml.common.Mod
 import net.neoforged.neoforge.event.RegisterGameTestsEvent
 import net.neoforged.neoforge.registries.DeferredRegister
+import ru.mairwunnx.mobosses.modcore.gametest.AbilityGameTests
 import ru.mairwunnx.mobosses.modcore.gametest.BossGameTests
 import ru.mairwunnx.mobosses.modcore.gametest.FightGameTests
 import ru.mairwunnx.mobosses.modcore.gametest.GameTest
@@ -31,7 +32,7 @@ import java.util.function.Consumer
 class MoBossesTests(modBus: IEventBus) {
   private class Test(val id: Identifier, val annotation: GameTest, val run: Consumer<GameTestHelper>)
 
-  private val tests = listOf(BossGameTests(), FightGameTests())
+  private val tests = listOf(BossGameTests(), FightGameTests(), AbilityGameTests())
     .flatMap { instance -> instance.javaClass.methods.filter { it.isAnnotationPresent(GameTest::class.java) }.map { test(instance, it) } }
 
   init {

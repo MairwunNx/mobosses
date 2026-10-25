@@ -5,7 +5,7 @@
   "name": "Mo’Bosses game tests",
   "environment": "*",
   "entrypoints": {
-    "fabric-gametest": ["ru.mairwunnx.mobosses.modcore.gametest.BossGameTests", "ru.mairwunnx.mobosses.modcore.gametest.FightGameTests"],
+    "fabric-gametest": ["ru.mairwunnx.mobosses.modcore.gametest.BossGameTests", "ru.mairwunnx.mobosses.modcore.gametest.FightGameTests", "ru.mairwunnx.mobosses.modcore.gametest.AbilityGameTests"],
     "fabric-client-gametest": ["ru.mairwunnx.mobosses.fabric.gametest.SingleplayerClientTest"]
   },
   "depends": {
