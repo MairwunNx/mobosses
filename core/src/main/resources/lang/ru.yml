@@ -95,6 +95,17 @@ language:
   current: "<green>Ваш язык сейчас</green>"
   pick: "<gray>Нажмите, чтобы выбрать</gray>"
 
+# Экран настроек в игре с модом: Mod Menu, список модов NeoForge или в мире. <default> — значение по умолчанию.
+settings:
+  title: "Настройки Mo’Bosses"
+  search: "Поиск"
+  default: "<gray>По умолчанию:</gray> <white><default></white>"
+  denied: "<err>Вам нельзя менять настройки этого сервера.</err>"
+  elsewhere: "<gray>На этом сервере Mo’Bosses не мод: его настройки живут на сервере.</gray>"
+  local: "<gray>Изменения коснутся миров, которые вы откроете дальше.</gray>"
+  waiting: "<gray>Спрашиваем сервер…</gray>"
+  done: "Готово"
+
 # Страница бестиария. <class>, <kills>, <level> (лучший); <opened> и <total> — клетки «вид × класс».
 bestiary:
   title: "Бестиарий"

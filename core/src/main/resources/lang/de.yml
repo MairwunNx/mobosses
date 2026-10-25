@@ -95,6 +95,17 @@ language:
   current: "<green>Deine Sprache gerade</green>"
   pick: "<gray>Klick zum Auswählen</gray>"
 
+# Der Einstellungsbildschirm, in einem Spiel mit dem Mod: Mod Menu, die Mod-Liste von NeoForge oder in einer Welt. <default>: der Standardwert.
+settings:
+  title: "Mo’Bosses-Einstellungen"
+  search: "Suchen"
+  default: "<gray>Standard:</gray> <white><default></white>"
+  denied: "<err>Du darfst die Einstellungen dieses Servers nicht ändern.</err>"
+  elsewhere: "<gray>Auf diesem Server läuft Mo’Bosses nicht als Mod: Seine Einstellungen liegen auf dem Server.</gray>"
+  local: "<gray>Änderungen gelten für die Welten, die du ab jetzt öffnest.</gray>"
+  waiting: "<gray>Der Server wird gefragt …</gray>"
+  done: "Fertig"
+
 # Die Seite des Bestiariums. <class>, <kills>, <level> (die beste); <opened> und <total> Felder Art × Klasse.
 bestiary:
   title: "Bestiarium"

@@ -95,6 +95,17 @@ language:
   current: "<green>Your language now</green>"
   pick: "<gray>Click to pick</gray>"
 
+# The settings screen, in a game with the mod: Mod Menu, NeoForge's mod list, or in a world. <default>: a value's default.
+settings:
+  title: "Mo’Bosses settings"
+  search: "Search"
+  default: "<gray>Default:</gray> <white><default></white>"
+  denied: "<err>You may not change this server’s settings.</err>"
+  elsewhere: "<gray>This server doesn’t run Mo’Bosses as a mod: its settings live on the server.</gray>"
+  local: "<gray>Changes apply to the worlds you open from now on.</gray>"
+  waiting: "<gray>Asking the server…</gray>"
+  done: "Done"
+
 # The bestiary page. <class>, <kills>, <level> (the best one); <opened> and <total> cells of kind × class.
 bestiary:
   title: "Bestiary"
