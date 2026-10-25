@@ -23,6 +23,9 @@ object OnNeoForge : Loader {
   override val config: Path
     get() = FMLPaths.CONFIGDIR.get()
 
+  override fun resource(path: String): ByteArray? =
+    ModList.get().getModFileById("mobosses")?.file?.contents?.takeIf { it.containsFile(path) }?.readFile(path)
+
   override fun loaded(mod: String) = ModList.get().isLoaded(mod)
 
   /** PermissionAPI answers only for nodes named before the server starts: every one Mo’Bosses has. */

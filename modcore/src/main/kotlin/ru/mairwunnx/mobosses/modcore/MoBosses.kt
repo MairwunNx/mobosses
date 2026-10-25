@@ -209,7 +209,8 @@ class MoBosses(val server: MinecraftServer, val loader: Loader) {
   fun idOf(name: String): UUID? = server.playerList.getPlayerByName(name)?.uuid ?: server.services().nameToIdCache().get(name).map { it.id() }.orElse(null)
 
   companion object {
-    fun bundled(path: String): String = MoBosses::class.java.classLoader.getResourceAsStream(path)!!.use { it.readBytes().toString(Charsets.UTF_8) }
+    /** A file the jar ships, from Mo’Bosses' own jar ([Loader.resource]). */
+    fun bundled(path: String): String = (Mod.loader.resource(path) ?: error("$path isn't in Mo’Bosses' jar")).toString(Charsets.UTF_8)
 
     /**
      * The achievements' switch, language, and texts, read from the files before a server's Mo’Bosses starts: the

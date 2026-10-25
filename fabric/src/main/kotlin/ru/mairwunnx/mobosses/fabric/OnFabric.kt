@@ -3,6 +3,7 @@ package ru.mairwunnx.mobosses.fabric
 import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.commands.CommandSourceStack
 import ru.mairwunnx.mobosses.modcore.Loader
+import java.nio.file.Files
 import java.nio.file.Path
 
 /** Fabric as modcore's loader: Fabric Loader's mod list and folders, and fabric-permissions-api. */
@@ -13,6 +14,9 @@ object OnFabric : Loader {
     get() = FabricLoader.getInstance().getModContainer("mobosses").map { it.metadata.version.friendlyString }.orElse("dev")
   override val config: Path
     get() = FabricLoader.getInstance().configDir
+
+  override fun resource(path: String): ByteArray? =
+    FabricLoader.getInstance().getModContainer("mobosses").flatMap { it.findPath(path) }.map(Files::readAllBytes).orElse(null)
 
   override fun loaded(mod: String) = FabricLoader.getInstance().isModLoaded(mod)
 

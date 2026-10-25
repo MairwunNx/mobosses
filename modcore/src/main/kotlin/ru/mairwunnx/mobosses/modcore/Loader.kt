@@ -20,6 +20,12 @@ interface Loader {
   /** The game's `config/` folder; Mo’Bosses' files go to `config/mobosses/`. */
   val config: Path
 
+  /**
+   * A file from Mo’Bosses' own jar, like `config.yml`: never through the class loader, which on Fabric finds the first
+   * mod's file of that name, often another mod's own `config.yml`. Null when there's no such file.
+   */
+  fun resource(path: String): ByteArray?
+
   /** Whether a mod with this id runs. */
   fun loaded(mod: String): Boolean
 
