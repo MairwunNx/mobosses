@@ -24,8 +24,8 @@ MODS = {
     # loader: its name on the version, the projects it can't run without, the ones it works with, and where it runs.
     # Mo’Bosses runs on either side: on a dedicated server and under a singleplayer or LAN world. Players joining a
     # server with it need nothing on their side, and Kotlin is inside the jar.
-    "fabric": ("Fabric", ["fabric-api"], [], "client_or_server"),
-    "neoforge": ("NeoForge", [], [], "client_or_server"),
+    "fabric": ("Fabric", ["fabric-api"], ["modmenu", "jei", "rei", "placeholder-api", "flan", "open-parties-and-claims", "luckperms"], "client_or_server"),
+    "neoforge": ("NeoForge", [], ["jei", "rei", "flan", "open-parties-and-claims", "luckperms"], "client_or_server"),
 }
 
 
