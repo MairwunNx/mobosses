@@ -26,14 +26,18 @@ killed_none: "<pri>[Mo’Bosses]</pri> <warn>Боссов нет, убирать
 player_not_found: "<err>Игрок <player> здесь ещё не играл.</err>"
 no_database: "<warn>Статистике нужна база данных, а она сейчас недоступна.</warn>"
 
-# /mobosses info. <player>, <level>, <max>, <rank> (место в таблице), <experience>, <kills>, <cooldown> (сколько ждать босса рядом с игроком), <bonus>, <hours>, <minutes> (бонус выживания).
+# /mobosses info. <player>, <level>, <max>, <rank> (место в таблице), <experience>, <next_level> (путь до следующего уровня), <kills>, <cooldown> (сколько ждать босса рядом с игроком), <bonus>, <hours>, <minutes> (бонус выживания).
 info: |-
   <pri>Mo’Bosses</pri> <dark_gray>·</dark_gray> <white><player></white>
   <gray>Уровень</gray> <num><level></num><dark_gray>/<max></dark_gray> <dark_gray>·</dark_gray> <gray>Место</gray> <num>#<rank></num>
+  <next_level>
   <gray>Опыт</gray> <xp><experience></xp> <dark_gray>·</dark_gray> <gray>Убито боссов</gray> <num><kills></num>
   <gray>Следующий босс рядом</gray> <white><cooldown></white>
   <gray>Бонус выживания</gray> <num>+<bonus>%</num> <dark_gray>· <hours> ч <minutes> мин без смертей</dark_gray>
 info_ready: "в любой момент"
+# <next>, <progress>, <needed>, <percent>.
+info_next: "<gray>До уровня</gray> <num><next></num> <xp><progress></xp><dark_gray>/<needed> · <percent>%</dark_gray>"
+info_top: "<gray>Высший уровень:</gray> <ok>расти больше некуда</ok>"
 survival_lost: "<pri>[Mo’Bosses]</pri> <warn>Бонус выживания сгорел: +<bonus>% к боссам за <hours> ч <minutes> мин без смертей.</warn>"
 death_penalty: "<pri>[Mo’Bosses]</pri> <warn>Вы пали от</warn> <boss><boss_name></boss><warn>: прогресс к <next>-му уровню сгорел, −<lost> опыта Mo’Bosses.</warn> <gray>Уровень остаётся.</gray>"
 full_moon: "<pri>[Mo’Bosses]</pri> <boss>Взошла полная луна.</boss> <gray>Этой ночью боссов больше, а редкие приходят ещё чаще.</gray>"
@@ -170,7 +174,7 @@ kill_notes:
   header: "<pri>[Mo’Bosses]</pri> <class_color>[Ур. <level>] [<class>]</class_color> <boss_name> <gray>повержен · ваша доля <share>%:</gray> <xp>+<experience> опыта</xp><gray>,</gray> <xp>+<mobosses_experience> опыта Mo’Bosses</xp>"
   above: "<dark_gray>  ›</dark_gray> <ok>Босс был <boss_level>-го уровня, выше вашего <your_level>-го: +<percent>% опыта.</ok>"
   below: "<dark_gray>  ›</dark_gray> <warn>Босс был <boss_level>-го уровня, ниже вашего <your_level>-го: вы получили <percent>% его опыта.</warn> <gray>Боссы вашего уровня дают весь.</gray>"
-  not_counted: "<dark_gray>  ›</dark_gray> <warn>Убийство не засчитано в уровень: босс <boss_level>-го уровня слишком слаб для <your_level>-го.</warn>"
+  not_counted: "<dark_gray>  ›</dark_gray> <warn>Убийство не засчитано: босс <boss_level>-го уровня слишком слаб для <your_level>-го.</warn>"
   small_share: "<dark_gray>  ›</dark_gray> <warn>Вы сняли <share>% здоровья босса: для убийства нужно <kill>%, для добычи — <loot>%.</warn>"
   no_loot: "<dark_gray>  ›</dark_gray> <warn>Без добычи: вы сняли <share>% здоровья босса, а нужно <loot>%.</warn>"
   rewards_cooldown: "<dark_gray>  ›</dark_gray> <gray>Зелий-наград на этот раз нет: следующие — через <seconds> с.</gray>"

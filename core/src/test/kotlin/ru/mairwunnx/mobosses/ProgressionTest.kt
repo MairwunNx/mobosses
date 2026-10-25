@@ -1,5 +1,6 @@
 package ru.mairwunnx.mobosses
 
+import ru.mairwunnx.mobosses.algebra.LegacyLevels
 import ru.mairwunnx.mobosses.algebra.Leveling
 import ru.mairwunnx.mobosses.algebra.Rolls
 import ru.mairwunnx.mobosses.algebra.Stats
@@ -20,13 +21,37 @@ class ProgressionTest {
   private val settings = Settings()
   private val progression = settings.progression
 
-  @Test fun `levels climb slower at first than in 1x`() {
+  @Test fun `levels before 2_11 climbed slower at first than in 1x`() {
     // Kills only, every one counted: 1.x gave level 29 after 100 kills.
-    assertEquals(listOf(3, 8, 19, 40, 67, 86), listOf(20, 50, 100, 200, 400, 800).map { Leveling.playerLevel(progression.levelCurve, 0, it) })
+    assertEquals(listOf(3, 8, 19, 40, 67, 86), listOf(20, 50, 100, 200, 400, 800).map { LegacyLevels.level(progression.levelCurve, 0, it) })
+  }
+
+  @Test fun `levels ask for experience by the curve`() {
+    val curve = progression.levelCurve
+    assertEquals(0L, Leveling.experienceFor(curve, 1))
+    assertEquals(80L, Leveling.experienceFor(curve, 2))
+    // Level 20: 80 × 19² × (1 + (19/60)⁴).
+    assertEquals(29_170L, Leveling.experienceFor(curve, 20))
+    assertEquals(19, Leveling.playerLevel(curve, 29_169))
+    assertEquals(20, Leveling.playerLevel(curve, 29_170))
+    assertEquals(1, Leveling.playerLevel(curve, 0))
   }
 
   @Test fun `levels never pass max_level`() {
-    assertEquals(100, Leveling.playerLevel(progression.levelCurve, Long.MAX_VALUE / 2, Int.MAX_VALUE / 2))
+    assertEquals(100, Leveling.playerLevel(progression.levelCurve, Long.MAX_VALUE / 2))
+    assertEquals(null, Leveling.toNext(progression.levelCurve, Long.MAX_VALUE / 2))
+  }
+
+  @Test fun `players carried over from before 2_11 keep their level and their way to the next`() {
+    val curve = progression.levelCurve
+    // The owner's card: level 20 with 97 kills and 95 experience.
+    assertEquals(20, LegacyLevels.level(curve, 95, 97))
+    assertEquals(20, Leveling.playerLevel(curve, LegacyLevels.carry(curve, 95, 97)))
+    for (kills in listOf(0, 3, 40, 97, 300, 900, 5000)) for (experience in listOf(0L, 10, 95, 2_000, 40_000, 1_000_000)) {
+      val carried = LegacyLevels.carry(curve, experience, kills)
+      assertEquals(LegacyLevels.level(curve, experience, kills), Leveling.playerLevel(curve, carried), "$kills kills, $experience experience")
+    }
+    assertEquals(0L, LegacyLevels.carry(curve, 0, 0))
   }
 
   @Test fun `a cut boss level stays within its share`() {
@@ -116,21 +141,20 @@ class ProgressionTest {
 
   @Test fun `dying to a boss keeps the level and burns the way to the next`() {
     val curve = progression.levelCurve
-    val level = Leveling.playerLevel(curve, 40_000, 120)
-    val floor = Leveling.levelFloor(curve, 40_000, 120)
+    val level = Leveling.playerLevel(curve, 40_000)
+    val floor = Leveling.levelFloor(curve, 40_000)
     assertTrue(floor < 40_000)
-    assertEquals(level, Leveling.playerLevel(curve, floor, 120))
-    assertTrue(Leveling.playerLevel(curve, floor - 1, 120) < level, "one less would drop the level")
+    assertEquals(level, Leveling.playerLevel(curve, floor))
+    assertTrue(Leveling.playerLevel(curve, floor - 1) < level, "one less would drop the level")
   }
 
-  @Test fun `the experience for the next level is the least that reaches it`() {
+  @Test fun `the way to the next level counts from the level's own floor`() {
     val curve = progression.levelCurve
-    val level = Leveling.playerLevel(curve, 40_000, 120)
-    val next = Leveling.experienceFor(curve, level + 1, 120)!!
-    assertTrue(next > 40_000)
-    assertEquals(level + 1, Leveling.playerLevel(curve, next, 120))
-    assertTrue(Leveling.playerLevel(curve, next - 1, 120) <= level, "one less stays below")
-    assertEquals(null, Leveling.experienceFor(curve, curve.maxLevel + 1, 120))
+    val level = Leveling.playerLevel(curve, 40_000)
+    val (gathered, asked) = Leveling.toNext(curve, 40_000)!!
+    assertEquals(40_000 - Leveling.experienceFor(curve, level)!!, gathered)
+    assertEquals(Leveling.experienceFor(curve, level + 1)!! - Leveling.experienceFor(curve, level)!!, asked)
+    assertEquals(null, Leveling.experienceFor(curve, curve.maxLevel + 1))
   }
 
   @Test fun `spawner fatigue starts after a few kills and has a floor`() {

@@ -77,7 +77,7 @@ class AllayBosses private constructor(private val mod: MoBosses) : AllayExpansio
       ToolResult.later(mod.menuStats.card(player.uuid, player.plainTextName).thenCombine(mod.progression.bestiary(player.uuid)) { card, bestiary ->
         ToolResult.of(mapOf(
           "level" to card.level, "max_level" to curve.maxLevel, "experience" to card.progress.experience,
-          "next_level_experience" to Leveling.experienceFor(curve, card.level + 1, card.progress.kills),
+          "next_level_experience" to Leveling.experienceFor(curve, card.level + 1),
           "kills" to card.progress.kills, "rank" to card.rank, "next_boss_in_seconds" to card.nextBossInSeconds,
           "survival_minutes" to card.survivalMinutes, "death_penalty" to deathPenalty,
           "bestiary" to bestiary.map { mapOf("type" to it.type, "class" to it.clazz, "kills" to it.kills, "best_level" to it.bestLevel) },

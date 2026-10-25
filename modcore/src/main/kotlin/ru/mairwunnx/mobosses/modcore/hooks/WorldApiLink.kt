@@ -66,7 +66,7 @@ class WorldApiLink(private val mod: MoBosses) {
 
   fun hunter(id: UUID, name: String?, progress: Progress) = mapOf(
     "uuid" to id, "name" to name, "kills" to progress.kills, "experience" to progress.experience,
-    "level" to Leveling.playerLevel(mod.catalog.settings.progression.levelCurve, progress.experience, progress.kills),
+    "level" to Leveling.playerLevel(mod.catalog.settings.progression.levelCurve, progress.experience),
   )
 
   /** A boss's type, class, level, and max health; its place under `location`, which anonymous clients don't get. */

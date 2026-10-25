@@ -1,6 +1,7 @@
 package ru.mairwunnx.mobosses.progress
 
 import ru.mairwunnx.mobosses.Log
+import ru.mairwunnx.mobosses.algebra.LegacyLevels
 import ru.mairwunnx.mobosses.algebra.Leveling
 import ru.mairwunnx.mobosses.config.Settings
 import java.io.File
@@ -36,7 +37,11 @@ class Progression(
     Thread({
       old?.close()
       try {
-        store = Store(next, folder).also { log.info("Progress is stored in ${it.description}") }
+        val curve = settings().progression.levelCurve
+        store = Store(next, folder) { LegacyLevels.carry(curve, it.experience, it.kills) }.also {
+          log.info("Progress is stored in ${it.description}")
+          if (it.carried > 0) log.info("Carried ${it.carried} players over to 2.11.0's levels, each at the level they had; the rows as they were are in player_progress_before_2_11")
+        }
         loadOnline()
       } catch (e: Exception) {
         log.error("Can't open the database; players' progress lasts only until they leave: ${e.message}")
@@ -66,8 +71,8 @@ class Progression(
   /** A player's place on the board; null without a database. */
   fun rank(player: UUID): CompletableFuture<Int?> = store?.rank(player, score())?.thenApply { it } ?: CompletableFuture.completedFuture(null)
 
-  /** The board ranks by what levels grow from, so it agrees with them. Taken now, on the asking thread, for the store's. */
-  private fun score(): (Progress) -> Double = settings().progression.levelCurve.let { curve -> { Leveling.score(curve, it.experience, it.kills) } }
+  /** The board ranks by experience, what levels grow from, so it agrees with them. */
+  private fun score(): (Progress) -> Double = { it.experience.toDouble() }
 
   /** Bosses by type and class; empty without a database. */
   fun counts(): CompletableFuture<List<BossCount>> = store?.counts() ?: CompletableFuture.completedFuture(emptyList())
@@ -86,7 +91,7 @@ class Progression(
   /** Null for a player whose progress isn't loaded, so Plan keeps what it stored last instead of a zero. */
   fun known(player: UUID): Progress? = cache[player]
 
-  fun level(player: UUID): Int = settings().progression.levelCurve.let { Leveling.playerLevel(it, of(player).experience, of(player).kills) }
+  fun level(player: UUID): Int = Leveling.playerLevel(settings().progression.levelCurve, of(player).experience)
 
   /** A player logging in, off the server thread: their progress loads before they join. */
   fun login(player: UUID, name: String) {
@@ -127,7 +132,7 @@ class Progression(
    */
   fun penalize(player: UUID, name: String, done: (lost: Long) -> Unit) {
     val curve = settings().progression.levelCurve
-    val change = { p: Progress -> p.copy(experience = Leveling.levelFloor(curve, p.experience, p.kills)) }
+    val change = { p: Progress -> p.copy(experience = Leveling.levelFloor(curve, p.experience)) }
     val store = store
     if (store == null) {
       val before = of(player)

@@ -159,13 +159,23 @@ anti_cheese:
 #  Player levels
 # ---------------------------------------------------------------------------
 progression:
-  # A player's level, from the Mo’Bosses experience and kills they've gathered.
+  # A player's level, from the Mo’Bosses experience they've gathered. Level L
+  # asks for base × n^climb × (1 + (n / knee)^steepness) in all, n being L − 1:
+  # 80 for level 2, 29,170 for 20, 6.6 million for 100. A square at first, as
+  # bosses' experience grows, so each level takes about as many kills, then
+  # steeper past knee. `./gradlew balance` prints the table.
   level_curve:
     max_level: 100
-    exp_scale: 30.0    # Higher: experience counts for less.
-    kill_scale: 20.0   # Lower: kills count for more.
-    power: 1.6         # Higher: a steeper climb in the second half.
-    offset: 60.0       # Higher: longer at low levels.
+    base: 80.0
+    climb: 2.0
+    knee: 60.0         # Lower: the climb steepens sooner.
+    steepness: 4.0     # Higher: steeper past knee.
+    # The formula before 2.11.0, from experience and kills. Read once, when a
+    # database from before opens, to keep every player at the level they had.
+    exp_scale: 30.0
+    kill_scale: 20.0
+    power: 1.6
+    offset: 60.0
 
   # A minion that rolls into a boss is this many levels below its summoner.
   mini_bosses_level_curve:
@@ -183,6 +193,7 @@ progression:
     level_factor: 0.005   # Times the level to the power below.
     level_power: 2.0
     rarity_mul: true      # Times the class's experience multiplier.
+    scale: 100.0          # Times all of the above.
 
   # Now and then a boss comes weaker, by a share of its level: more often and by
   # more at high levels, but never from level 80 down to 20.

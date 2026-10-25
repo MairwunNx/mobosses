@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import ru.mairwunnx.mobosses.algebra.Leveling
+import ru.mairwunnx.mobosses.lang.LevelProgress
 import ru.mairwunnx.mobosses.lang.Message
 import ru.mairwunnx.mobosses.modcore.MoBosses
 import ru.mairwunnx.mobosses.modcore.boss.Keys
@@ -36,15 +37,16 @@ class Stats(private val mod: MoBosses) {
 
   fun counts(): CompletableFuture<List<BossCount>> = mod.progression.counts()
 
-  fun level(progress: Progress) = Leveling.playerLevel(mod.catalog.settings.progression.levelCurve, progress.experience, progress.kills)
+  fun level(progress: Progress) = Leveling.playerLevel(mod.catalog.settings.progression.levelCurve, progress.experience)
 
-  /** `<player>`, `<level>`, `<max>`, `<rank>`, `<experience>`, `<kills>`, `<cooldown>`, and `<bonus>`, `<hours>`, `<minutes>` of the survival bonus for a card. */
+  /** `<player>`, `<level>`, `<max>`, `<rank>`, `<experience>`, `<next_level>`, `<kills>`, `<cooldown>`, and `<bonus>`, `<hours>`, `<minutes>` of the survival bonus for a card. */
   fun resolvers(code: String, card: Card): Array<TagResolver> = arrayOf(
     Placeholder.unparsed("player", card.name),
     Placeholder.unparsed("level", card.level.toString()),
     Placeholder.unparsed("max", mod.catalog.settings.progression.levelCurve.maxLevel.toString()),
     Placeholder.unparsed("rank", card.rank?.toString() ?: "—"),
-    Placeholder.unparsed("experience", card.progress.experience.toString()),
+    Placeholder.unparsed("experience", LevelProgress.grouped(card.progress.experience)),
+    LevelProgress.resolver(mod.languages, code, mod.catalog.settings.progression.levelCurve, card.progress.experience),
     Placeholder.unparsed("kills", card.progress.kills.toString()),
     Placeholder.unparsed("bonus", mod.survival.percent(mod.catalog.settings.survivalBonus, card.survivalMinutes).toString()),
     *mod.survival.time(card.survivalMinutes),

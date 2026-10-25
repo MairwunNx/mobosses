@@ -187,7 +187,7 @@ data class Settings(
     @SerialName("exp_gain") val expGain: ExpGain = ExpGain(),
     val variance: Variance = Variance(),
     val relevance: Relevance = Relevance(),
-    /** The share of a boss's health a player must deal for the kill to count toward their level. */
+    /** The share of a boss's health a player must deal for the kill to count. */
     @SerialName("min_share") val minShare: Double = 0.15,
     /** In a group of N players, no share threshold (kills, loot, rewards) asks for more than this over N. */
     @SerialName("group_share") val groupShare: Double = 0.6,
@@ -207,9 +207,18 @@ data class Settings(
     val offset: Double = 300.0,
   )
 
+  /**
+   * The experience a level asks for in all, from level 1: `base × n^climb × (1 + (n / knee)^steepness)`, `n` being
+   * the level less one. Kills don't raise it since 2.11.0; the four keys after them are the formula before, which
+   * carries players' levels over once ([ru.mairwunnx.mobosses.algebra.LegacyLevels]).
+   */
   @Serializable
   data class LevelCurve(
     @SerialName("max_level") val maxLevel: Int = 100,
+    val base: Double = 80.0,
+    val climb: Double = 2.0,
+    val knee: Double = 60.0,
+    val steepness: Double = 4.0,
     @SerialName("exp_scale") val expScale: Double = 30.0,
     @SerialName("kill_scale") val killScale: Double = 20.0,
     val power: Double = 1.6,
@@ -232,6 +241,8 @@ data class Settings(
     @SerialName("level_factor") val levelFactor: Double = 0.005,
     @SerialName("level_power") val levelPower: Double = 2.0,
     @SerialName("rarity_mul") val rarityMul: Boolean = true,
+    /** Times all of the above: 2.11.0's levels count in hundreds, where the formula before counted in ones. */
+    val scale: Double = 100.0,
   )
 
   /** Now and then a boss comes weaker: by a share of the level, more often and by more at high levels. */

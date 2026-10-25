@@ -45,3 +45,25 @@ object BossStatsTable : Table("boss_stats") {
 
   override val primaryKey = PrimaryKey(type, clazz)
 }
+
+/** What Mo’Bosses notes about the database itself, like which formula its experience follows. Came in 2.11. */
+object MetaTable : Table("mobosses_meta") {
+  val key = varchar("key", 32)
+  val value = varchar("value", 64)
+
+  override val primaryKey = PrimaryKey(key)
+
+  /** The key whose value says which formula levels follow: [LEVELS_2_11] since 2.11.0, none before. */
+  const val LEVELS = "levels"
+  const val LEVELS_2_11 = "2.11"
+}
+
+/** `player_progress` as it was before 2.11.0 carried levels over to its formula, kept to go back by hand. */
+object PlayerProgressBefore211Table : Table("player_progress_before_2_11") {
+  val uuid = varchar("uuid", 36)
+  val bossKills = integer("boss_kills")
+  val totalExperience = long("total_experience")
+  val name = varchar("name", 16).nullable()
+
+  override val primaryKey = PrimaryKey(uuid)
+}

@@ -11,10 +11,13 @@ import org.jetbrains.exposed.v1.core.vendors.MysqlDialect
 import org.jetbrains.exposed.v1.jdbc.Database
 import org.jetbrains.exposed.v1.jdbc.JdbcTransaction
 import org.jetbrains.exposed.v1.jdbc.SchemaUtils
+import org.jetbrains.exposed.v1.jdbc.batchInsert
+import org.jetbrains.exposed.v1.jdbc.insert
 import org.jetbrains.exposed.v1.jdbc.deleteWhere
 import org.jetbrains.exposed.v1.jdbc.selectAll
 import org.jetbrains.exposed.v1.jdbc.transactions.TransactionManager
 import org.jetbrains.exposed.v1.jdbc.transactions.transaction
+import org.jetbrains.exposed.v1.jdbc.update
 import org.jetbrains.exposed.v1.jdbc.upsert
 import org.jetbrains.exposed.v1.jdbc.vendors.currentDialectMetadata
 import ru.mairwunnx.mobosses.config.Settings
@@ -27,14 +30,19 @@ import java.util.concurrent.TimeUnit
 
 /**
  * Players' progress in SQLite, MySQL or MariaDB, or PostgreSQL. Every query runs on one thread of
- * its own, in the order it came, never on the server thread.
+ * its own, in the order it came, never on the server thread. A database from before 2.11.0 has its
+ * experience [carry]-ed over to the levels' formula of 2.11.0 once, as it opens.
  */
-class Store(private val settings: Settings.Database, folder: File) : AutoCloseable {
+class Store(private val settings: Settings.Database, folder: File, private val carry: (Progress) -> Long) : AutoCloseable {
   private val type = Type.of(settings.type)
   // The pool comes first: it fails fast on a database it can't reach, before the thread starts.
   private val pool = HikariDataSource(hikari(folder))
   private val worker: ExecutorService = Executors.newSingleThreadExecutor { Thread(it, "Mo’Bosses store").apply { isDaemon = true } }
   private val database: Database
+
+  /** How many players' experience this opening carried over to 2.11.0's levels. */
+  var carried = 0
+    private set
 
   init {
     try {
@@ -173,6 +181,34 @@ class Store(private val settings: Settings.Database, folder: File) : AutoCloseab
       val names = columns[table].orEmpty().map { it.name.lowercase() }
       table.columns.filter { it.name.lowercase() !in names }.forEach { column -> column.ddl.forEach(::exec) }
     }
+    carryLevels()
+  }
+
+  /**
+   * Once per database: experience from before 2.11.0, when kills raised levels too, becomes what keeps each player
+   * at their level under 2.11.0's formula. The rows as they were go to `player_progress_before_2_11` first.
+   */
+  private fun JdbcTransaction.carryLevels() {
+    SchemaUtils.create(MetaTable)
+    if (MetaTable.selectAll().where { MetaTable.key eq MetaTable.LEVELS }.any()) return
+    val rows = PlayerProgressTable.selectAll().map { Triple(it[PlayerProgressTable.uuid], it[PlayerProgressTable.name], progress(it)) }
+    if (rows.isNotEmpty()) {
+      SchemaUtils.create(PlayerProgressBefore211Table)
+      PlayerProgressBefore211Table.batchInsert(rows, ignore = true) { (uuid, name, progress) ->
+        this[PlayerProgressBefore211Table.uuid] = uuid
+        this[PlayerProgressBefore211Table.name] = name
+        this[PlayerProgressBefore211Table.bossKills] = progress.kills
+        this[PlayerProgressBefore211Table.totalExperience] = progress.experience
+      }
+      rows.forEach { (uuid, _, progress) ->
+        PlayerProgressTable.update({ PlayerProgressTable.uuid eq uuid }) { it[totalExperience] = carry(progress) }
+      }
+    }
+    MetaTable.insert {
+      it[key] = MetaTable.LEVELS
+      it[value] = MetaTable.LEVELS_2_11
+    }
+    carried = rows.size
   }
 
   /** Finishes the queued queries, waiting up to ten seconds, then closes the pool. */

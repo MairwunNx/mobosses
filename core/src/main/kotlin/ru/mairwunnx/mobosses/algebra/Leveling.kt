@@ -6,7 +6,6 @@ import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.roundToInt
 import kotlin.math.roundToLong
-import kotlin.math.sqrt
 import kotlin.random.Random
 
 /** Players' levels and the levels of the bosses they meet. */
@@ -14,48 +13,38 @@ object Leveling {
   /** Keeps a zero in the config from dividing by zero. */
   private const val MIN = 1e-9
 
-  /** A player's level from their Mo’Bosses experience and the kills that counted, 1 to `max_level`. */
-  fun playerLevel(curve: Settings.LevelCurve, experience: Long, kills: Int): Int {
-    val raw = score(curve, experience, kills)
-    val progress = raw.pow(curve.power) / (curve.offset.coerceAtLeast(MIN) + raw.pow(curve.power))
-    // Rounded, not cut: the curve only nears its top, and cutting kept max_level out of reach.
-    return (1 + (curve.maxLevel - 1) * progress).roundToInt().coerceIn(1, curve.maxLevel.coerceAtLeast(1))
-  }
-
   /**
-   * The least experience that keeps a player at their level with their kills: what dying to a boss
-   * leaves them, so the progress toward the next level burns and the level itself stays.
+   * The experience that reaches [level] in all, from level 1; null past `max_level`. It grows as a square at first,
+   * as bosses' experience does, so each level asks for a similar number of kills, then steeper past `knee`.
    */
-  fun levelFloor(curve: Settings.LevelCurve, experience: Long, kills: Int): Long {
-    val level = playerLevel(curve, experience, kills)
-    var low = 0L
-    var high = experience.coerceAtLeast(0)
-    while (low < high) {
-      val mid = low + (high - low) / 2
-      if (playerLevel(curve, mid, kills) >= level) high = mid else low = mid + 1
-    }
-    return low
-  }
-
-  /** The least experience that reaches [level] with [kills]; null past `max_level`, which no experience reaches. */
-  fun experienceFor(curve: Settings.LevelCurve, level: Int, kills: Int): Long? {
+  fun experienceFor(curve: Settings.LevelCurve, level: Int): Long? {
     if (level > curve.maxLevel.coerceAtLeast(1)) return null
-    var high = 1L
-    while (playerLevel(curve, high, kills) < level) {
-      if (high > Long.MAX_VALUE / 4) return null
-      high *= 2
-    }
-    var low = 0L
+    val n = (level - 1).coerceAtLeast(0).toDouble()
+    val total = curve.base.coerceAtLeast(0.0) * n.pow(curve.climb.coerceAtLeast(0.0)) * (1 + (n / curve.knee.coerceAtLeast(MIN)).pow(curve.steepness.coerceAtLeast(0.0)))
+    return total.coerceAtMost(Long.MAX_VALUE / 2.0).roundToLong()
+  }
+
+  /** A player's level from their Mo’Bosses experience, 1 to `max_level`. */
+  fun playerLevel(curve: Settings.LevelCurve, experience: Long): Int {
+    var low = 1
+    var high = curve.maxLevel.coerceAtLeast(1)
     while (low < high) {
-      val mid = low + (high - low) / 2
-      if (playerLevel(curve, mid, kills) >= level) high = mid else low = mid + 1
+      val mid = (low + high + 1) / 2
+      if ((experienceFor(curve, mid) ?: Long.MAX_VALUE) <= experience) low = mid else high = mid - 1
     }
     return low
   }
 
-  /** What a level grows from: experience and kills together. The board ranks by it, so it never disagrees with levels. */
-  fun score(curve: Settings.LevelCurve, experience: Long, kills: Int): Double =
-    sqrt(experience.coerceAtLeast(0).toDouble()) / curve.expScale.coerceAtLeast(MIN) + kills.coerceAtLeast(0).toDouble() / curve.killScale.coerceAtLeast(MIN)
+  /** The least experience that keeps a player at their level: what dying to a boss leaves them. */
+  fun levelFloor(curve: Settings.LevelCurve, experience: Long): Long = experienceFor(curve, playerLevel(curve, experience)) ?: 0L
+
+  /** How far a player is on their way to the next level: what they gathered on it and what it asks; null at `max_level`. */
+  fun toNext(curve: Settings.LevelCurve, experience: Long): Pair<Long, Long>? {
+    val level = playerLevel(curve, experience)
+    val next = experienceFor(curve, level + 1) ?: return null
+    val floor = experienceFor(curve, level) ?: 0L
+    return (experience - floor).coerceAtLeast(0) to (next - floor).coerceAtLeast(1)
+  }
 
   /** The level a group sets for a boss: their average, so one veteran doesn't drag newcomers into their fights. */
   fun groupLevel(levels: List<Int>): Int = if (levels.isEmpty()) 1 else levels.average().roundToInt().coerceAtLeast(1)
@@ -88,7 +77,7 @@ object Leveling {
   fun bossExperience(gain: Settings.ExpGain, maxHealth: Double, classMul: Double, level: Int): Double {
     val hpPart = maxHealth * gain.healthFactor
     val lvlPart = gain.levelFactor * level.toDouble().pow(gain.levelPower)
-    return (hpPart + lvlPart) * (if (gain.rarityMul) classMul else 1.0)
+    return (hpPart + lvlPart) * (if (gain.rarityMul) classMul else 1.0) * gain.scale.coerceAtLeast(0.0)
   }
 
   /** What a player gains from a kill: never nothing for a kill that counts, or the first bosses would show “+0”. */

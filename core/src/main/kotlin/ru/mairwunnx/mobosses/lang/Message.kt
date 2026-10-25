@@ -31,6 +31,8 @@ enum class Message(val key: String) {
   NOTE_PETS("kill_notes.pets"),
   INFO("info"),
   INFO_READY("info_ready"),
+  INFO_NEXT("info_next"),
+  INFO_TOP("info_top"),
   SURVIVAL_LOST("survival_lost"),
   DEATH_PENALTY("death_penalty"),
   FULL_MOON("full_moon"),

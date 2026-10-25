@@ -26,14 +26,18 @@ killed_none: "<pri>[Mo’Bosses]</pri> <warn>Es gibt keine Bosse, die du entfern
 player_not_found: "<err>Ein Spieler namens <player> hat hier noch nie gespielt.</err>"
 no_database: "<warn>Die Statistik braucht die Datenbank, und die ist gerade nicht offen.</warn>"
 
-# /mobosses info. <player>, <level>, <max>, <rank> (auf der Bestenliste), <experience>, <kills>, <cooldown> (bis in der Nähe des Spielers ein Boss erscheinen kann), <bonus>, <hours>, <minutes> (der Überlebensbonus).
+# /mobosses info. <player>, <level>, <max>, <rank> (auf der Bestenliste), <experience>, <next_level> (der Weg zur nächsten Stufe), <kills>, <cooldown> (bis in der Nähe des Spielers ein Boss erscheinen kann), <bonus>, <hours>, <minutes> (der Überlebensbonus).
 info: |-
   <pri>Mo’Bosses</pri> <dark_gray>·</dark_gray> <white><player></white>
   <gray>Stufe</gray> <num><level></num><dark_gray>/<max></dark_gray> <dark_gray>·</dark_gray> <gray>Rang</gray> <num>#<rank></num>
+  <next_level>
   <gray>Erfahrung</gray> <xp><experience></xp> <dark_gray>·</dark_gray> <gray>Besiegte Bosse</gray> <num><kills></num>
   <gray>Nächster Boss bei dir</gray> <white><cooldown></white>
   <gray>Überlebensbonus</gray> <num>+<bonus> %</num> <dark_gray>· <hours> h <minutes> min ohne Tod</dark_gray>
 info_ready: "jeden Moment"
+# <next>, <progress>, <needed>, <percent>.
+info_next: "<gray>Bis Stufe</gray> <num><next></num> <xp><progress></xp><dark_gray>/<needed> · <percent>%</dark_gray>"
+info_top: "<gray>Höchste Stufe:</gray> <ok>mehr geht nicht</ok>"
 survival_lost: "<pri>[Mo’Bosses]</pri> <warn>Dein Überlebensbonus ist weg: +<bonus> % auf Bosse nach <hours> h <minutes> min ohne Tod.</warn>"
 death_penalty: "<pri>[Mo’Bosses]</pri> <warn>Du bist gefallen durch</warn> <boss><boss_name></boss><warn>: Dein Fortschritt zu Stufe <next> ist verbrannt, −<lost> Mo’Bosses-Erfahrung.</warn> <gray>Deine Stufe bleibt.</gray>"
 full_moon: "<pri>[Mo’Bosses]</pri> <boss>Ein Vollmond geht auf.</boss> <gray>Heute Nacht kommen Bosse öfter, seltene noch öfter.</gray>"
@@ -170,7 +174,7 @@ kill_notes:
   header: "<pri>[Mo’Bosses]</pri> <class_color>[Lvl. <level>] [<class>]</class_color> <boss_name> <gray>besiegt · dein Anteil <share> %:</gray> <xp>+<experience> Erfahrung</xp><gray>,</gray> <xp>+<mobosses_experience> Mo’Bosses-Erfahrung</xp>"
   above: "<dark_gray>  ›</dark_gray> <ok>Der Boss war Stufe <boss_level>, über deiner <your_level>: +<percent> % Erfahrung.</ok>"
   below: "<dark_gray>  ›</dark_gray> <warn>Der Boss war Stufe <boss_level>, unter deiner <your_level>: Du bekommst <percent> % seiner Erfahrung.</warn> <gray>Bosse auf deiner Stufe geben alles.</gray>"
-  not_counted: "<dark_gray>  ›</dark_gray> <warn>Das zählt nicht als Kill für deine Stufe: Ein Boss der Stufe <boss_level> ist zu schwach für Stufe <your_level>.</warn>"
+  not_counted: "<dark_gray>  ›</dark_gray> <warn>Das zählt nicht als Kill: Ein Boss der Stufe <boss_level> ist zu schwach für Stufe <your_level>.</warn>"
   small_share: "<dark_gray>  ›</dark_gray> <warn>Du hast <share> % vom Leben des Bosses abgezogen: Ein Kill braucht <kill> %, Beute <loot> %.</warn>"
   no_loot: "<dark_gray>  ›</dark_gray> <warn>Keine Beute: Du hast <share> % vom Leben des Bosses abgezogen, Beute braucht <loot> %.</warn>"
   rewards_cooldown: "<dark_gray>  ›</dark_gray> <gray>Diesmal keine Tränke als Belohnung: Die nächsten gibt es in <seconds> s.</gray>"

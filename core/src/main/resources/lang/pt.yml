@@ -26,14 +26,18 @@ killed_none: "<pri>[Mo’Bosses]</pri> <warn>Não há chefes para remover.</warn
 player_not_found: "<err>Nenhum jogador chamado <player> jogou aqui.</err>"
 no_database: "<warn>As estatísticas precisam do banco de dados, e ele não está aberto agora.</warn>"
 
-# /mobosses info. <player>, <level>, <max>, <rank> (no placar), <experience>, <kills>, <cooldown> (até um chefe poder surgir perto do jogador), <bonus>, <hours>, <minutes> (o bônus de sobrevivência).
+# /mobosses info. <player>, <level>, <max>, <rank> (no placar), <experience>, <next_level> (o caminho até o próximo nível), <kills>, <cooldown> (até um chefe poder surgir perto do jogador), <bonus>, <hours>, <minutes> (o bônus de sobrevivência).
 info: |-
   <pri>Mo’Bosses</pri> <dark_gray>·</dark_gray> <white><player></white>
   <gray>Nível</gray> <num><level></num><dark_gray>/<max></dark_gray> <dark_gray>·</dark_gray> <gray>Posição</gray> <num>#<rank></num>
+  <next_level>
   <gray>Experiência</gray> <xp><experience></xp> <dark_gray>·</dark_gray> <gray>Chefes derrotados</gray> <num><kills></num>
   <gray>Próximo chefe perto de você</gray> <white><cooldown></white>
   <gray>Bônus de sobrevivência</gray> <num>+<bonus>%</num> <dark_gray>· <hours> h <minutes> min sem morrer</dark_gray>
 info_ready: "a qualquer momento"
+# <next>, <progress>, <needed>, <percent>.
+info_next: "<gray>Até o nível</gray> <num><next></num> <xp><progress></xp><dark_gray>/<needed> · <percent>%</dark_gray>"
+info_top: "<gray>Nível máximo:</gray> <ok>não há mais para onde subir</ok>"
 survival_lost: "<pri>[Mo’Bosses]</pri> <warn>Seu bônus de sobrevivência acabou: +<bonus>% de chefes depois de <hours> h <minutes> min sem morrer.</warn>"
 death_penalty: "<pri>[Mo’Bosses]</pri> <warn>Você caiu para</warn> <boss><boss_name></boss><warn>: seu progresso rumo ao nível <next> queimou, −<lost> de experiência Mo’Bosses.</warn> <gray>Seu nível fica.</gray>"
 full_moon: "<pri>[Mo’Bosses]</pri> <boss>A lua cheia nasce.</boss> <gray>Esta noite os chefes vêm mais vezes, e os raros mais ainda.</gray>"
@@ -170,7 +174,7 @@ kill_notes:
   header: "<pri>[Mo’Bosses]</pri> <class_color>[Nv. <level>] [<class>]</class_color> <boss_name> <gray>derrotado · sua parte <share>%:</gray> <xp>+<experience> de experiência</xp><gray>,</gray> <xp>+<mobosses_experience> do Mo’Bosses</xp>"
   above: "<dark_gray>  ›</dark_gray> <ok>O chefe era nível <boss_level>, acima do seu <your_level>: +<percent>% de experiência.</ok>"
   below: "<dark_gray>  ›</dark_gray> <warn>O chefe era nível <boss_level>, abaixo do seu <your_level>: você recebeu <percent>% da experiência dele.</warn> <gray>Chefes do seu nível dão tudo.</gray>"
-  not_counted: "<dark_gray>  ›</dark_gray> <warn>Não conta como abate para o seu nível: um chefe nível <boss_level> é fraco demais para o nível <your_level>.</warn>"
+  not_counted: "<dark_gray>  ›</dark_gray> <warn>Não conta como abate: um chefe nível <boss_level> é fraco demais para o nível <your_level>.</warn>"
   small_share: "<dark_gray>  ›</dark_gray> <warn>Você tirou <share>% da vida do chefe: um abate pede <kill>% e o saque <loot>%.</warn>"
   no_loot: "<dark_gray>  ›</dark_gray> <warn>Sem saque: você tirou <share>% da vida do chefe, e o saque pede <loot>%.</warn>"
   rewards_cooldown: "<dark_gray>  ›</dark_gray> <gray>Desta vez não há poções de recompensa: as próximas vêm em <seconds> s.</gray>"

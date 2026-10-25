@@ -48,7 +48,7 @@ class BossesExpansion private constructor(private val plugin: MoBossesPlugin, pr
       val curve = plugin.catalog.settings.progression.levelCurve
       val (title, unit, score) = when (board) {
         "kills" -> Triple("Bosses killed", "bosses", { p: Progress -> p.kills.toDouble() })
-        "level" -> Triple("Mo’Bosses level", "level", { p: Progress -> Leveling.score(curve, p.experience, p.kills) })
+        "level" -> Triple("Mo’Bosses level", "level", { p: Progress -> p.experience.toDouble() })
         "experience" -> Triple("Mo’Bosses experience", "xp", { p: Progress -> p.experience.toDouble() })
         else -> throw NoSuchElementException("Boards: kills, level, experience")
       }
@@ -58,7 +58,7 @@ class BossesExpansion private constructor(private val plugin: MoBossesPlugin, pr
           "entries" to hunters.mapIndexed { i, hunter ->
             val value = when (board) {
               "kills" -> hunter.progress.kills.toDouble()
-              "level" -> Leveling.playerLevel(curve, hunter.progress.experience, hunter.progress.kills).toDouble()
+              "level" -> Leveling.playerLevel(curve, hunter.progress.experience).toDouble()
               else -> hunter.progress.experience.toDouble()
             }
             mapOf("place" to i + 1, "player" to mapOf("uuid" to hunter.uuid, "name" to plugin.menuStats.name(hunter)), "value" to value)
