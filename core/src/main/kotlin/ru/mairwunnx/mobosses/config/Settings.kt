@@ -215,9 +215,9 @@ data class Settings(
   @Serializable
   data class LevelCurve(
     @SerialName("max_level") val maxLevel: Int = 100,
-    val base: Double = 80.0,
+    val base: Double = 40.0,
     val climb: Double = 2.0,
-    val knee: Double = 60.0,
+    val knee: Double = 65.0,
     val steepness: Double = 4.0,
     @SerialName("exp_scale") val expScale: Double = 30.0,
     @SerialName("kill_scale") val killScale: Double = 20.0,

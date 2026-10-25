@@ -18,8 +18,8 @@ class LevelProgressTest {
     LegacyComponentSerializer.legacySection().serialize(MiniMessage.miniMessage().deserialize("<next_level>", LevelProgress.resolver(languages, "en", Settings.LevelCurve(), experience)))
 
   @Test fun `a card shows the way to the next level`() {
-    // Level 20 starts at 29,170 and level 21 at 32,395.
-    assertEquals("To level 21 1\u00A0613/3\u00A0225 · 50%", line(30_783))
+    // Level 20 starts at 14,545 and level 21 at 16,143.
+    assertEquals("To level 21 799/1\u00A0598 · 50%", line(15_344))
     assertEquals("The top level", line(Long.MAX_VALUE / 2))
   }
 

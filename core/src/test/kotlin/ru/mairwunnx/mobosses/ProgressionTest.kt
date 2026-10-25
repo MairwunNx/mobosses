@@ -29,11 +29,11 @@ class ProgressionTest {
   @Test fun `levels ask for experience by the curve`() {
     val curve = progression.levelCurve
     assertEquals(0L, Leveling.experienceFor(curve, 1))
-    assertEquals(80L, Leveling.experienceFor(curve, 2))
-    // Level 20: 80 × 19² × (1 + (19/60)⁴).
-    assertEquals(29_170L, Leveling.experienceFor(curve, 20))
-    assertEquals(19, Leveling.playerLevel(curve, 29_169))
-    assertEquals(20, Leveling.playerLevel(curve, 29_170))
+    assertEquals(40L, Leveling.experienceFor(curve, 2))
+    // Level 20: 40 × 19² × (1 + (19/65)⁴).
+    assertEquals(14_545L, Leveling.experienceFor(curve, 20))
+    assertEquals(19, Leveling.playerLevel(curve, 14_544))
+    assertEquals(20, Leveling.playerLevel(curve, 14_545))
     assertEquals(1, Leveling.playerLevel(curve, 0))
   }
 

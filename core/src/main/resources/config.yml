@@ -161,14 +161,14 @@ anti_cheese:
 progression:
   # A player's level, from the Mo’Bosses experience they've gathered. Level L
   # asks for base × n^climb × (1 + (n / knee)^steepness) in all, n being L − 1:
-  # 80 for level 2, 29,170 for 20, 6.6 million for 100. A square at first, as
+  # 40 for level 2, 14,545 for 20, 2.5 million for 100. A square at first, as
   # bosses' experience grows, so each level takes about as many kills, then
   # steeper past knee. `./gradlew balance` prints the table.
   level_curve:
     max_level: 100
-    base: 80.0
+    base: 40.0
     climb: 2.0
-    knee: 60.0         # Lower: the climb steepens sooner.
+    knee: 65.0         # Lower: the climb steepens sooner.
     steepness: 4.0     # Higher: steeper past knee.
     # The formula before 2.11.0, from experience and kills. Read once, when a
     # database from before opens, to keep every player at the level they had.
