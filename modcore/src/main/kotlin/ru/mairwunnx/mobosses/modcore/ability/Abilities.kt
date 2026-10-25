@@ -13,6 +13,7 @@ import ru.mairwunnx.mobosses.modcore.ability.kinds.PhaseTwo
 import ru.mairwunnx.mobosses.modcore.ability.kinds.Regeneration
 import ru.mairwunnx.mobosses.modcore.ability.kinds.Summoning
 import ru.mairwunnx.mobosses.modcore.ability.kinds.TeleportStrike
+import ru.mairwunnx.mobosses.modcore.ability.kinds.WebRing
 import ru.mairwunnx.mobosses.modcore.boss.Boss
 import kotlin.random.Random
 
@@ -68,7 +69,7 @@ class Abilities(private val mod: MoBosses) {
 
     /** The abilities a hit may set off, at random. */
     val PICKED: List<Ability> = listOf(
-      Lightning, Summoning, Regeneration, FireRing, TeleportStrike, Grapple, Chain,
+      Lightning, Summoning, Regeneration, FireRing, WebRing, TeleportStrike, Grapple, Chain,
     )
   }
 }
