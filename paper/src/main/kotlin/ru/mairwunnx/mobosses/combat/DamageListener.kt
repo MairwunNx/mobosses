@@ -37,20 +37,23 @@ class DamageListener(private val plugin: MoBossesPlugin) : Listener {
     Bukkit.getScheduler().runTask(plugin, Runnable { plugin.bars.update(boss) })
 
     val by = (event as? EntityDamageByEntityEvent)?.damager
+    val dealt = event.finalDamage.coerceIn(0.0, boss.entity.health)
     if (by == null) {
       // The game burns a mob in nobody's name: without this, a Flame bow left a third of the boss to nobody.
-      if (event.cause != EntityDamageEvent.DamageCause.FIRE_TICK) return
-      val (id, byPet) = boss.igniter ?: return
-      boss.addDamage(id, event.finalDamage.coerceIn(0.0, boss.entity.health), byPet)
+      val igniter = boss.igniter.takeIf { event.cause == EntityDamageEvent.DamageCause.FIRE_TICK }
+      // Anything else nobody dealt by hand, a fall after a knockback, lava, poison, goes to the players fighting it,
+      // or a solo player who knocked it off a ledge would lose part of their share.
+      if (igniter != null) boss.addDamage(igniter.first, dealt, igniter.second) else boss.credit(dealt)
       plugin.groupHealth.update(boss)
       return
     }
-    val source = (by as? Projectile)?.shooter as? Entity ?: by
+    // Who's behind the hit: an arrow's shooter, the player who lit the TNT, the trident that called the lightning.
+    val source = event.damageSource.causingEntity ?: (by as? Projectile)?.shooter as? Entity ?: by
     val pet = (source as? Tameable)?.takeIf { it.isTamed }
     val player = source as? Player ?: pet?.owner as? Player
     // A hit can't be worth more than the health left: overkill used to push a share past the whole boss.
     player?.let {
-      boss.addDamage(it.uniqueId, event.finalDamage.coerceIn(0.0, boss.entity.health), byPet = pet != null)
+      boss.addDamage(it.uniqueId, dealt, byPet = pet != null)
       plugin.groupHealth.update(boss)
     }
     if (source !is Player) {

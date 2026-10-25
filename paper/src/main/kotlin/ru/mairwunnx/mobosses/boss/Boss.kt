@@ -8,6 +8,7 @@ import org.bukkit.persistence.PersistentDataType
 import org.bukkit.scheduler.BukkitTask
 import ru.mairwunnx.mobosses.config.BossClass
 import ru.mairwunnx.mobosses.algebra.Difficulty
+import ru.mairwunnx.mobosses.combat.Shares
 import java.util.UUID
 
 /**
@@ -34,10 +35,19 @@ class Boss(
   /** The part of [damage] that each player's pets dealt. */
   val petDamage: Map<UUID, Double> get() = players(keys.petDamage)
 
-  fun addDamage(player: UUID, amount: Double, byPet: Boolean = false) {
+  /** [hit] false for damage credited to them that they didn't deal by hand, which keeps them in the fight no longer. */
+  fun addDamage(player: UUID, amount: Double, byPet: Boolean = false, hit: Boolean = true) {
     add(keys.damage, player, amount)
     if (byPet) add(keys.petDamage, player, amount)
-    write(keys.hitAt, read(keys.hitAt) + (player.toString() to System.currentTimeMillis().toDouble()))
+    if (hit) write(keys.hitAt, read(keys.hitAt) + (player.toString() to System.currentTimeMillis().toDouble()))
+  }
+
+  /** Damage with no player behind it, split among the players who hit it lately ([Shares.credit]). */
+  fun credit(amount: Double) {
+    Shares.credit(amount, damage, petDamage, hitWithin(CREDIT_MILLIS)).forEach { (id, credit) ->
+      if (credit.own > 0.0) addDamage(id, credit.own, hit = false)
+      if (credit.pets > 0.0) addDamage(id, credit.pets, byPet = true, hit = false)
+    }
   }
 
   /** The players who hit it, themselves or through a pet, within the last [millis]. */
@@ -119,6 +129,9 @@ class Boss(
   companion object {
     /** The shared cooldown's key among the abilities'. */
     const val SHARED = "*"
+
+    /** How long after their last hit a player still gets the damage nobody dealt by hand. */
+    const val CREDIT_MILLIS = 30_000L
 
     fun colorOf(clazz: BossClass): TextColor =
       clazz.color.trim().let { TextColor.fromHexString(it) ?: NamedTextColor.NAMES.value(it.lowercase()) } ?: NamedTextColor.WHITE
