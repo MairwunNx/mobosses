@@ -103,4 +103,23 @@ class RulesTest {
     assertEquals(10, payout.vanilla)
     assertTrue(Message.NOTE_SMALL_SHARE in payout.notes(Settings(), emptyArray(), 0.0, null).map { it.first })
   }
+
+  @Test fun `damage nobody dealt by hand goes to the recent hitters by what they dealt`() {
+    val a = java.util.UUID.randomUUID()
+    val b = java.util.UUID.randomUUID()
+    val gone = java.util.UUID.randomUUID()
+    val credit = ru.mairwunnx.mobosses.combat.Shares.credit(30.0, mapOf(a to 30.0, b to 10.0, gone to 60.0), mapOf(a to 15.0), setOf(a, b))
+    assertEquals(22.5, credit.getValue(a).own + credit.getValue(a).pets, 1e-9)
+    assertEquals(11.25, credit.getValue(a).pets, 1e-9)
+    assertEquals(7.5, credit.getValue(b).own, 1e-9)
+    assertTrue(gone !in credit)
+    assertTrue(ru.mairwunnx.mobosses.combat.Shares.credit(30.0, mapOf(a to 30.0), emptyMap(), emptySet()).isEmpty())
+  }
+
+  @Test fun `a solo fight keeps the whole share whatever the fall`() {
+    val a = java.util.UUID.randomUUID()
+    val credit = ru.mairwunnx.mobosses.combat.Shares.credit(40.0, mapOf(a to 60.0), emptyMap(), setOf(a)).getValue(a)
+    val shares = ru.mairwunnx.mobosses.combat.Shares.of(mapOf(a to 60.0 + credit.own), 100.0)
+    assertEquals(1.0, shares.getValue(a), 1e-9)
+  }
 }
