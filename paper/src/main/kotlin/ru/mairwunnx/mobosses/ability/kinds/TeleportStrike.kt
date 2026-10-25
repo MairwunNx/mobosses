@@ -3,12 +3,14 @@ package ru.mairwunnx.mobosses.ability.kinds
 import org.bukkit.Location
 import org.bukkit.Particle
 import org.bukkit.Sound
+import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Spider
 import ru.mairwunnx.mobosses.ability.Ability
 import ru.mairwunnx.mobosses.ability.Cast
 import ru.mairwunnx.mobosses.config.AbilitySettings
 import ru.mairwunnx.mobosses.config.AbilityThresholds
 import ru.mairwunnx.mobosses.lang.Message
+import ru.mairwunnx.mobosses.protect.Guard
 
 /** The boss steps out of thin air two blocks behind the player it fights, within 15 blocks, on solid ground it fits on. Spiders don't: they climb instead. */
 object TeleportStrike : Ability {
@@ -26,11 +28,12 @@ object TeleportStrike : Ability {
    * water or lava, and no protected area it couldn't spawn in. Not over a ravine, not in a wall,
    * not on the other side of one.
    */
-  fun fits(cast: Cast, at: Location): Boolean {
-    val entity = cast.boss.entity
+  fun fits(cast: Cast, at: Location): Boolean = fits(cast.boss.entity, cast.plugin.guards, at)
+
+  fun fits(entity: LivingEntity, guard: Guard, at: Location): Boolean {
     if (!at.block.getRelative(0, -1, 0).type.isSolid || at.block.isLiquid || at.block.getRelative(0, 1, 0).isLiquid) return false
     val box = entity.boundingBox.shift(at.toVector().subtract(entity.location.toVector()))
-    return !at.world.hasCollisionsIn(box) && cast.plugin.guards.canSpawnBoss(at)
+    return !at.world.hasCollisionsIn(box) && guard.canSpawnBoss(at)
   }
 
   override fun cast(cast: Cast): Boolean {
