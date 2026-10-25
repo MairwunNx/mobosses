@@ -20,6 +20,7 @@ import ru.mairwunnx.mobosses.boss.Keys
 import ru.mairwunnx.mobosses.boss.Minions
 import ru.mairwunnx.mobosses.boss.NameTags
 import ru.mairwunnx.mobosses.boss.Visuals
+import ru.mairwunnx.mobosses.combat.AntiCheese
 import ru.mairwunnx.mobosses.combat.DamageListener
 import ru.mairwunnx.mobosses.combat.DeathListener
 import ru.mairwunnx.mobosses.combat.Loot
@@ -86,6 +87,7 @@ class MoBossesPlugin : JavaPlugin() {
   val fullMoon = FullMoon(this)
   val groupHealth = GroupHealth(this)
   val fatigue = SpawnerFatigue(this)
+  val antiCheese = AntiCheese(this)
   val blockChanges = BlockChanges(this)
   val menuStats = Stats(this)
 
@@ -101,10 +103,10 @@ class MoBossesPlugin : JavaPlugin() {
 
   override fun onEnable() {
     if (!reload()) log.warn("Started with errors in the config files; fix them and run /mobosses reload")
-    listOf(playerLanguages, progression, spawns, survival, DeathPenalty(this), achievements, DamageListener(this), DeathListener(this), MeteorListener(this), ArrowListener(this), AbilityEntities(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener())
+    listOf(playerLanguages, progression, spawns, survival, DeathPenalty(this), achievements, DamageListener(this), DeathListener(this), antiCheese, MeteorListener(this), ArrowListener(this), AbilityEntities(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener())
       .forEach { server.pluginManager.registerEvents(it, this) }
     registerCommand("mobosses", "Your Mo’Bosses level and the best hunters; for admins, reload, spawn, or remove bosses", listOf("mb", "moboss"), MoBossesCommand(this))
-    tasks += server.scheduler.runTaskTimer(this, Runnable { visuals.tick(); bars.tick(); PlanData.bossesAlive = bosses.all.size }, 20L, 20L)
+    tasks += server.scheduler.runTaskTimer(this, Runnable { visuals.tick(); bars.tick(); antiCheese.tick(); PlanData.bossesAlive = bosses.all.size }, 20L, 20L)
     tasks += server.scheduler.runTaskTimer(this, Runnable { nameTags.tick(); spawns.natural.tick() }, 10L, 10L)
     tasks += server.scheduler.runTaskTimer(this, Runnable { despawns.tick() }, 100L, 100L)
     tasks += server.scheduler.runTaskTimer(this, Runnable { survival.tick(); fullMoon.tick() }, 1200L, 1200L)

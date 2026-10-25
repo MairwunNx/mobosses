@@ -78,6 +78,7 @@ class Bosses(private val plugin: MoBossesPlugin) {
   fun forget(boss: Boss) {
     if (live.remove(boss.uuid) == null) return
     plugin.bars.remove(boss)
+    plugin.antiCheese.forget(boss)
     plugin.visuals.off(boss)
     plugin.nameTags.clear(boss.entity)
   }
