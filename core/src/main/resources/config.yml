@@ -413,6 +413,12 @@ protection:
     no_bosses_in_owned_regions: true
     ability_flags: true   # Block-changing abilities follow mobosses-abilities and build.
     damage_flags: true    # Ability damage to players follows mob-damage.
+  # On Fabric and NeoForge: claims of Flan, Open Parties and Claims, and the
+  # mods behind Common Protection API, like GOML.
+  claims:
+    enabled: true
+    no_bosses_in_claims: true            # No boss spawns naturally in a claim.
+    no_block_abilities_in_claims: true   # No ability breaks, places, or ignites blocks in a claim.
   admin_spawn_bypass: true   # /mobosses spawn works anywhere; false makes it ask too.
 
 # Block changes by bosses, their abilities, and their minions go to CoreProtect

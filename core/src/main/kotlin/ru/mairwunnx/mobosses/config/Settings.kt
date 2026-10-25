@@ -439,12 +439,23 @@ data class Settings(
   data class Protection(
     val griefprevention: GriefPrevention = GriefPrevention(),
     val worldguard: WorldGuard = WorldGuard(),
+    /** The mods' claims: Flan, Open Parties and Claims, and those behind Common Protection API. */
+    val claims: Claims = Claims(),
     /** Whether `/mobosses spawn` ignores protected areas. */
     @SerialName("admin_spawn_bypass") val adminSpawnBypass: Boolean = true,
   )
 
   @Serializable
   data class GriefPrevention(
+    val enabled: Boolean = true,
+    /** No boss spawns naturally inside a claim. */
+    @SerialName("no_bosses_in_claims") val noBossesInClaims: Boolean = true,
+    /** No ability breaks, places, or ignites blocks inside a claim. */
+    @SerialName("no_block_abilities_in_claims") val noBlockAbilitiesInClaims: Boolean = true,
+  )
+
+  @Serializable
+  data class Claims(
     val enabled: Boolean = true,
     /** No boss spawns naturally inside a claim. */
     @SerialName("no_bosses_in_claims") val noBossesInClaims: Boolean = true,
