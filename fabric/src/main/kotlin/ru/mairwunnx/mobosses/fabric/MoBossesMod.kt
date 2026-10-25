@@ -32,6 +32,7 @@ class MoBossesMod : ModInitializer {
     PayloadTypeRegistry.serverboundPlay().register(Payloads.SettingsWanted.TYPE, Payloads.SettingsWanted.CODEC)
     PayloadTypeRegistry.serverboundPlay().register(Payloads.SettingsChanged.TYPE, Payloads.SettingsChanged.CODEC)
     PayloadTypeRegistry.clientboundPlay().register(Payloads.Settings.TYPE, Payloads.Settings.CODEC)
+    PayloadTypeRegistry.clientboundPlay().register(Payloads.LootPages.TYPE, Payloads.LootPages.CODEC)
     ServerPlayNetworking.registerGlobalReceiver(Payloads.SettingsWanted.TYPE) { _, context -> Mod.settingsWanted(context.player()) }
     ServerPlayNetworking.registerGlobalReceiver(Payloads.SettingsChanged.TYPE) { change, context -> Mod.settingsChanged(context.player(), change) }
   }

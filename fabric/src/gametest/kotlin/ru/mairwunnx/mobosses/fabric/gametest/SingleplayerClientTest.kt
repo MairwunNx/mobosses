@@ -7,7 +7,9 @@ import net.minecraft.world.level.storage.LevelResource
 import ru.mairwunnx.mobosses.Permissions
 import ru.mairwunnx.mobosses.modcore.Mod
 import ru.mairwunnx.mobosses.modcore.Perms
+import ru.mairwunnx.mobosses.modcore.client.ClientLoot
 import ru.mairwunnx.mobosses.modcore.client.SettingsScreen
+import ru.mairwunnx.mobosses.modcore.client.viewers.JeiLoot
 import ru.mairwunnx.mobosses.modcore.client.SettingsSource
 import ru.mairwunnx.mobosses.modcore.net.Payloads
 
@@ -15,7 +17,7 @@ import ru.mairwunnx.mobosses.modcore.net.Payloads
  * A real client in a fresh singleplayer world: Mo’Bosses starts on the game's own server, keeps its database in the
  * world's save and its configs in `config/mobosses/`, reads the client's language, lets the world's owner reload
  * without cheats, spawns a boss ahead of the player, and opens the settings screen in the menu and in the world, where
- * a change reaches the world's server's files. `./gradlew :fabric:runClientGameTest` opens a
+ * a change reaches the world's server's files, and shows the loot pages in JEI. `./gradlew :fabric:runClientGameTest` opens a
  * game window.
  */
 class SingleplayerClientTest : FabricClientGameTest {
@@ -56,6 +58,17 @@ class SingleplayerClientTest : FabricClientGameTest {
       check(answer?.failed == false) { "the server refused the change: ${answer?.message}" }
       val saved = world.server.computeOnServer<String, RuntimeException> { Mod.current!!.folder.resolve("config.yml").readText() }
       check("    stuck_seconds: 7" in saved) { "the server's config.yml didn't change" }
+      context.setScreen { null }
+
+      // The loot table reached the player's JEI: a page for each entry.
+      val entries = world.server.computeOnServer<Int, RuntimeException> { Mod.current!!.catalog.loot.size }
+      context.waitFor { ClientLoot.pages.size == entries }
+      context.runOnClient<RuntimeException> {
+        val runtime = JeiLoot.runtime ?: error("JEI isn't on")
+        runtime.recipesGui.showTypes(listOf(JeiLoot.TYPE))
+      }
+      context.waitTicks(20)
+      context.takeScreenshot("mobosses-loot-jei")
       context.setScreen { null }
     }
   }

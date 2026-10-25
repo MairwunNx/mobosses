@@ -32,6 +32,7 @@ class MoBossesMod(modBus: IEventBus) {
         .playToServer(Payloads.SettingsWanted.TYPE, Payloads.SettingsWanted.CODEC) { _, context -> (context.player() as? ServerPlayer)?.let(Mod::settingsWanted) }
         .playToServer(Payloads.SettingsChanged.TYPE, Payloads.SettingsChanged.CODEC) { change, context -> (context.player() as? ServerPlayer)?.let { Mod.settingsChanged(it, change) } }
         .playToClient(Payloads.Settings.TYPE, Payloads.Settings.CODEC)
+        .playToClient(Payloads.LootPages.TYPE, Payloads.LootPages.CODEC)
     }
     val bus = NeoForge.EVENT_BUS
     bus.addListener { event: ServerStartedEvent -> Mod.start(event.server) }
