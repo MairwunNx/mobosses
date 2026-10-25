@@ -1,0 +1,29 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+license = "MIT"
+issueTrackerURL = "https://github.com/MairwunNx/mobosses/issues"
+
+[[mods]]
+modId = "mobosses"
+version = "${version}"
+displayName = "Mo’Bosses"
+displayURL = "https://github.com/MairwunNx/mobosses"
+iconFile = "mobosses.png"
+authors = "MairwunNx"
+description = '''
+Ordinary mobs spawn as bosses of six classes, with abilities, minions, health bars, loot, and player levels, each player reading it in their own language. On a server, or in singleplayer and LAN worlds.
+'''
+
+[[dependencies.mobosses]]
+modId = "neoforge"
+type = "required"
+versionRange = "[${neoforge},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.mobosses]]
+modId = "minecraft"
+type = "required"
+versionRange = "[${minecraft},26.4)"
+ordering = "NONE"
+side = "BOTH"

@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "mobosses",
+  "version": "${version}",
+  "name": "Mo’Bosses",
+  "description": "Ordinary mobs spawn as bosses of six classes, with abilities, minions, health bars, loot, and player levels, each player reading it in their own language. On a server, or in singleplayer and LAN worlds.",
+  "authors": ["MairwunNx"],
+  "contact": {
+    "homepage": "https://modrinth.com/plugin/mobosses",
+    "sources": "https://github.com/MairwunNx/mobosses",
+    "issues": "https://github.com/MairwunNx/mobosses/issues"
+  },
+  "license": "MIT",
+  "icon": "assets/mobosses/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["ru.mairwunnx.mobosses.fabric.MoBossesMod"]
+  },
+  "jars": [{ "file": "META-INF/jars/sqlite-jdbc-${sqlite}.jar" }],
+  "depends": {
+    "fabricloader": ">=${loader}",
+    "fabric-api": "*",
+    "minecraft": "~${minecraft}",
+    "java": ">=25"
+  }
+}
