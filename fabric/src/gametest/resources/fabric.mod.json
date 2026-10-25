@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "id": "mobosses_gametest",
+  "version": "0.0.0",
+  "name": "Mo’Bosses game tests",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": ["ru.mairwunnx.mobosses.modcore.gametest.BossGameTests", "ru.mairwunnx.mobosses.modcore.gametest.FightGameTests"],
+    "fabric-client-gametest": ["ru.mairwunnx.mobosses.fabric.gametest.SingleplayerClientTest"]
+  },
+  "depends": {
+    "mobosses": "*"
+  }
+}

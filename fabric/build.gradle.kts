@@ -1,3 +1,4 @@
+import java.time.Duration
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
 import java.util.zip.ZipOutputStream
@@ -18,6 +19,28 @@ val sqlite = "3.53.4.0"
 // Each platform's jar carries its name, as “Platforms” in CLAUDE.md says: mobosses-fabric-X.Y.Z.jar.
 base {
   archivesName = "mobosses-fabric"
+}
+
+// Core's files, the ones Mo’Bosses copies, belong to the mod in dev runs as in the jar: Mo’Bosses reads them from its
+// own mod, never through the class loader, which would find another mod's `config.yml` first.
+sourceSets.main {
+  resources.srcDir(project(":core").file("src/main/resources"))
+}
+
+// Game tests on a real server (`./gradlew :fabric:runGameTest`), and a singleplayer world in a game window
+// (`./gradlew :fabric:runClientGameTest`). They live in `src/gametest` as a mod of their own, so the release jar doesn't
+// carry them; the tests themselves are modcore's, shared with NeoForge.
+fabricApi {
+  configureTests {
+    createSourceSet = true
+    modId = "mobosses_gametest"
+    enableGameTests = true
+    enableClientGameTests = true
+    eula = true
+  }
+}
+kotlin.sourceSets.named("gametest") {
+  kotlin.srcDir(project(":modcore").file("src/gametest/kotlin"))
 }
 
 // What goes into the jar besides the mod's own classes: modcore, core, and their libraries, relocated as on Paper.
@@ -103,6 +126,8 @@ tasks {
   // ships its own copy.
   shadowJar {
     archiveClassifier = ""
+    // Core's files come with its jar and with this module's resources alike.
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     configurations = listOf(shade)
     from(sqliteMod) { into("META-INF/jars") }
     listOf(
@@ -125,5 +150,10 @@ tasks {
 
   assemble {
     dependsOn(shadowJar)
+  }
+
+  // A game that hangs is killed, and the run fails.
+  matching { it.name == "runGameTest" || it.name == "runClientGameTest" }.configureEach {
+    timeout = Duration.ofMinutes(10)
   }
 }
