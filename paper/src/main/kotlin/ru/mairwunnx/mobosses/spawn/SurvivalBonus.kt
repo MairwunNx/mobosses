@@ -33,7 +33,7 @@ class SurvivalBonus(private val plugin: MoBossesPlugin) : Listener {
   fun minutes(player: Player): Int = player.persistentDataContainer.get(plugin.keys.survival, PersistentDataType.INTEGER) ?: 0
 
   /** What the bonus multiplies boss spawn chances near [player] by: 1 without it. */
-  fun multiplier(player: Player): Double = plugin.catalog.settings.survivalBonus.let { if (it.enabled) 1.0 + bonus(it, minutes(player)) else 1.0 }
+  fun multiplier(player: Player): Double = Hunt.multiplier(plugin.catalog.settings.survivalBonus, minutes(player))
 
   @EventHandler(priority = EventPriority.MONITOR)
   fun onDeath(event: PlayerDeathEvent) {
@@ -55,10 +55,6 @@ class SurvivalBonus(private val plugin: MoBossesPlugin) : Listener {
   companion object {
     private val PLAYING = setOf(GameMode.SURVIVAL, GameMode.ADVENTURE)
 
-    /** The bonus after [minutes]: half of `max_bonus` at `half_at_minutes`, nearing all of it later. */
-    fun bonus(cfg: Settings.SurvivalBonus, minutes: Int): Double {
-      val m = minutes.coerceAtLeast(0).toDouble()
-      return cfg.maxBonus.coerceAtLeast(0.0) * m / (cfg.halfAtMinutes.coerceAtLeast(1) + m)
-    }
+    fun bonus(cfg: Settings.SurvivalBonus, minutes: Int) = Hunt.bonus(cfg, minutes)
   }
 }

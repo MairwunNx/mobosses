@@ -7,7 +7,6 @@ import org.bukkit.potion.PotionEffectType
 import ru.mairwunnx.mobosses.MoBossesPlugin
 import org.bukkit.persistence.PersistentDataType
 import ru.mairwunnx.mobosses.boss.Boss
-import kotlin.random.Random
 
 /**
  * Potion effects from `rewards.yml` for players who dealt enough of a boss's health: a few from the
@@ -31,22 +30,16 @@ class Rewards(private val plugin: MoBossesPlugin) {
     if (cfg.cleanseNegatives) NEGATIVE.forEach(player::removePotionEffect)
 
     val tier = plugin.catalog.tiers[boss.clazz.key] ?: plugin.catalog.tiers["common"] ?: return null
-    val seconds = (cfg.baseDurationSeconds + cfg.durationPerLevel * boss.level).toInt().coerceIn(1, cfg.maxDurationSeconds.coerceAtLeast(1))
+    val seconds = RewardRules.seconds(cfg, boss.level)
     val ticks = seconds * 20
-    val amplifier = (cfg.amplifierBase + cfg.amplifierPerLevel * boss.level).toInt().coerceIn(0, cfg.amplifierMax.coerceAtLeast(0))
+    val amplifier = RewardRules.amplifier(cfg, boss.level)
 
-    val low = minOf(tier.spec.effectsMin, tier.spec.effectsMax).coerceAtLeast(0)
-    val high = maxOf(tier.spec.effectsMin, tier.spec.effectsMax).coerceAtLeast(low)
-    val count = if (high == low) low else Random.nextInt(low, high + 1)
+    val count = RewardRules.count(tier.spec)
     tier.effects.distinct().shuffled().take(count).forEach { player.addPotionEffect(PotionEffect(it, ticks, amplifier, true, true, true)) }
-    // Each absorption level is two more hearts.
-    if (tier.spec.extraAbsorptionHearts > 0) {
-      player.addPotionEffect(PotionEffect(PotionEffectType.ABSORPTION, ticks, (tier.spec.extraAbsorptionHearts / 2).coerceAtLeast(1) - 1, true, true, true))
-    }
+    RewardRules.absorption(tier.spec)?.let { player.addPotionEffect(PotionEffect(PotionEffectType.ABSORPTION, ticks, it, true, true, true)) }
     player.world.spawnParticle(Particle.CRIT, player.location.add(0.0, 1.0, 0.0), 24, 0.5, 0.6, 0.5, 0.01)
 
-    val cooldown = (seconds * cfg.cooldownMultiplier.coerceAtLeast(0.0)).toInt()
-      .coerceIn(cfg.cooldownMinSeconds.coerceAtLeast(0), cfg.cooldownMaxSeconds.coerceAtLeast(cfg.cooldownMinSeconds.coerceAtLeast(0)))
+    val cooldown = RewardRules.cooldown(cfg, seconds)
     player.persistentDataContainer.set(plugin.keys.rewardsUntil, PersistentDataType.LONG, now + cooldown * 1000L)
     plugin.log.debug { "${player.name} got $count effects for ${seconds}s, next rewards in ${cooldown}s" }
     return null

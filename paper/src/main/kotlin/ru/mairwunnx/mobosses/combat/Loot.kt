@@ -3,7 +3,6 @@ package ru.mairwunnx.mobosses.combat
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
-import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
@@ -16,7 +15,6 @@ import ru.mairwunnx.mobosses.config.LootTable
 import ru.mairwunnx.mobosses.lang.Message
 import org.bukkit.persistence.PersistentDataType
 import ru.mairwunnx.mobosses.spawn.SurvivalBonus
-import kotlin.math.ceil
 import kotlin.random.Random
 
 /**
@@ -65,24 +63,20 @@ class Loot(private val plugin: MoBossesPlugin) {
    * shared table and its type's own entries, or, with [own], only the latter.
    */
   fun pool(boss: Boss, luck: Double = 0.0, own: Boolean = false): List<Pair<Catalog.Loot, Double>> {
-    val classes = plugin.catalog.classes
-    val bossRank = classes.rank(boss.clazz.key)
     return plugin.catalog.loot.mapNotNull { loot ->
-      val itemRank = classes.rank(loot.spec.mobclass)
       val theirs = if (loot.types.isEmpty()) !own else boss.type.entity in loot.types
-      if (!theirs || itemRank < 0 || itemRank > bossRank || boss.level !in loot.spec.minLevel..loot.spec.maxLevel) null
-      else loot to loot.spec.weight * crossClass(bossRank - itemRank) * (1.0 + luck.coerceAtLeast(0.0) * (LUCK_TIER[loot.spec.itemClass?.lowercase()] ?: 0.0))
+      LootRules.weight(loot.spec, plugin.catalog.classes, boss.clazz.key, boss.level, theirs, luck)?.let { loot to it }
     }
   }
 
-  private fun isRare(loot: Catalog.Loot) = loot.spec.itemClass?.lowercase() in LUCK_TIER
+  private fun isRare(loot: Catalog.Loot) = LootRules.isRare(loot.spec)
 
   private fun pityDue(player: Player): Boolean {
     val pity = plugin.catalog.settings.loot.pity
     if (!pity.enabled) return false
     val data = player.persistentDataContainer
     val dry = data.get(plugin.keys.lootDry, PersistentDataType.INTEGER) ?: 0
-    val at = data.get(plugin.keys.lootPityAt, PersistentDataType.INTEGER) ?: rollPity().also { data.set(plugin.keys.lootPityAt, PersistentDataType.INTEGER, it) }
+    val at = data.get(plugin.keys.lootPityAt, PersistentDataType.INTEGER) ?: LootRules.pityAt(pity).also { data.set(plugin.keys.lootPityAt, PersistentDataType.INTEGER, it) }
     return dry >= at
   }
 
@@ -91,22 +85,15 @@ class Loot(private val plugin: MoBossesPlugin) {
     val data = player.persistentDataContainer
     if (rare) {
       data.set(plugin.keys.lootDry, PersistentDataType.INTEGER, 0)
-      data.set(plugin.keys.lootPityAt, PersistentDataType.INTEGER, rollPity())
+      data.set(plugin.keys.lootPityAt, PersistentDataType.INTEGER, LootRules.pityAt(plugin.catalog.settings.loot.pity))
     } else {
       data.set(plugin.keys.lootDry, PersistentDataType.INTEGER, (data.get(plugin.keys.lootDry, PersistentDataType.INTEGER) ?: 0) + 1)
     }
   }
 
-  private fun rollPity(): Int {
-    val pity = plugin.catalog.settings.loot.pity
-    val low = pity.minDrops.coerceAtLeast(1)
-    return Random.nextInt(low, pity.maxDrops.coerceAtLeast(low) + 1)
-  }
-
   private fun stack(loot: Catalog.Loot, level: Int, code: String): ItemStack {
     val spec = loot.spec
-    val factor = 1.0 + (spec.perLevel ?: plugin.catalog.configs.loot.settings.perLevelDropFactor) * (level - spec.minLevel).coerceAtLeast(0)
-    val amount = ceil(spec.amount.random() * factor).toInt().coerceIn(1, loot.material.maxStackSize.coerceAtLeast(1))
+    val amount = LootRules.amount(spec, plugin.catalog.configs.loot.settings, level, loot.material.maxStackSize)
     val stack = ItemStack(loot.material, amount)
 
     stack.editMeta { meta ->
@@ -118,7 +105,7 @@ class Loot(private val plugin: MoBossesPlugin) {
       }
       name(spec, code)?.let { meta.displayName(it) }
       lore(spec, code)?.let { meta.lore(it) }
-      if (spec.randomDurability && meta is Damageable) durability(meta, loot.material, spec.itemClass)
+      if (meta is Damageable) LootRules.damage(plugin.catalog.settings.loot.randomDurability, spec, loot.material.maxDurability.toInt())?.let { meta.damage = it }
     }
     return stack
   }
@@ -137,19 +124,6 @@ class Loot(private val plugin: MoBossesPlugin) {
   /** Item text isn't italic unless it asks to be. */
   private fun plain(text: Component) = text.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE)
 
-  /**
-   * The share of durability left, between `min_durability` and `max_durability`, pulled toward the
-   * top for better classes. 1.x read these as wear, so mythic loot came out the most worn.
-   */
-  private fun durability(meta: Damageable, material: Material, itemClass: String?) {
-    val cfg = plugin.catalog.settings.loot.randomDurability
-    if (!cfg.enabled || material.maxDurability <= 0) return
-    val min = cfg.minDurability.coerceIn(0.1, 1.0)
-    val max = cfg.maxDurability.coerceIn(min, 1.0)
-    val left = Rolls.biasedInRange(min, max, WEAR_BIAS[itemClass?.lowercase()] ?: 0.0, Random)
-    meta.damage = (material.maxDurability * (1.0 - left)).toInt().coerceIn(0, material.maxDurability - 1)
-  }
-
   private fun announce(loot: Catalog.Loot, stack: ItemStack, player: Player) {
     if (!plugin.catalog.settings.broadcast.rareLoot) return
     val message = when (loot.spec.itemClass?.lowercase()) {
@@ -163,24 +137,6 @@ class Loot(private val plugin: MoBossesPlugin) {
       // Each reader sees the item's name in their own language, and its tooltip on hover.
       val name = (name(loot.spec, code) ?: Component.translatable(stack.type.translationKey())).hoverEvent(stack.asHoverEvent())
       arrayOf(Placeholder.unparsed("player", player.name), Placeholder.component("itemstack", name))
-    }
-  }
-
-  private companion object {
-    /** How much the survival bonus tips each rare item class up: rarer ones more. */
-    val LUCK_TIER = mapOf("rare" to 1.0, "epic" to 1.5, "legendary" to 2.0, "mythic" to 2.5)
-
-    /** How far toward `max_durability` each class pulls. */
-    val WEAR_BIAS = mapOf("common" to 0.0, "uncommon" to 0.3, "rare" to 0.6, "epic" to 1.0, "legendary" to 1.4, "mythic" to 2.0)
-
-    /** The odds a boss drops loot of a lower class, by how many classes lower. */
-    fun crossClass(steps: Int) = when (steps) {
-      0 -> 1.0
-      1 -> 0.6
-      2 -> 0.3
-      3 -> 0.15
-      4 -> 0.08
-      else -> 0.03
     }
   }
 }

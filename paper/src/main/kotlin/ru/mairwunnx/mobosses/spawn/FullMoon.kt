@@ -27,9 +27,7 @@ class FullMoon(private val plugin: MoBossesPlugin) {
   /** A class's weight under the moon: Common's stays, the rarest's grows by `rarer_classes`, the ones between by their share. */
   fun weight(world: World, clazz: BossClass): Double {
     if (!isUp(world)) return clazz.chance
-    val rank = plugin.catalog.classes.rank(clazz.key).coerceAtLeast(0)
-    val top = (plugin.catalog.classes.all.size - 1).coerceAtLeast(1)
-    return clazz.chance * (1.0 + (plugin.catalog.settings.fullMoon.rarerClasses.coerceAtLeast(1.0) - 1.0) * rank / top)
+    return Hunt.moonWeight(plugin.catalog.settings.fullMoon, clazz.chance, plugin.catalog.classes.rank(clazz.key), plugin.catalog.classes.all.size)
   }
 
   /** Every minute: worlds where a full moon just rose tell their players, and WorldAPI's clients. */
