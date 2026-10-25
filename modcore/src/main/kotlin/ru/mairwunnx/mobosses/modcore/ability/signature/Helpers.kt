@@ -5,10 +5,6 @@ import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.projectile.Projectile
-import net.minecraft.world.entity.projectile.arrow.AbstractArrow
-import net.minecraft.world.entity.projectile.arrow.Arrow
-import net.minecraft.world.item.ItemStack
-import net.minecraft.world.item.Items
 import net.minecraft.world.phys.Vec3
 import ru.mairwunnx.mobosses.modcore.ability.Cast
 import ru.mairwunnx.mobosses.modcore.boss.Keys
@@ -58,11 +54,3 @@ internal fun launch(cast: Cast, projectile: Projectile, velocity: Vec3, lifetime
   if (lifetimeTicks > 0) cast.mod.scheduler.later(lifetimeTicks) { if (projectile.isAlive) projectile.discard() }
 }
 
-/** An arrow of the boss's that nobody can pick up, gone after [lifetimeSeconds]. */
-internal fun arrow(cast: Cast, velocity: Vec3, damage: Double, lifetimeSeconds: Int) {
-  val arrow = Arrow(cast.world, cast.entity, ItemStack(Items.ARROW), null)
-  arrow.pickup = AbstractArrow.Pickup.DISALLOWED
-  arrow.setBaseDamage(damage)
-  arrow.isCritArrow = false
-  launch(cast, arrow, velocity, lifetimeSeconds * 20L)
-}
