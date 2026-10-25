@@ -42,6 +42,7 @@ import ru.mairwunnx.mobosses.lang.Texts
 import ru.mairwunnx.mobosses.menu.MenuListener
 import ru.mairwunnx.mobosses.menu.Stats
 import ru.mairwunnx.mobosses.progress.Progression
+import ru.mairwunnx.mobosses.progress.ProgressionListener
 import ru.mairwunnx.mobosses.protect.BlockChanges
 import ru.mairwunnx.mobosses.protect.BlockLog
 import ru.mairwunnx.mobosses.protect.BlockLogListener
@@ -68,7 +69,7 @@ class MoBossesPlugin : JavaPlugin() {
   val geoIp by lazy { GeoIp(dataFolder.resolve("geoip"), log) }
   val playerLanguages = PlayerLanguages(this)
   val texts = Texts(this)
-  val progression = Progression(this)
+  val progression = Progression(log, { catalog.settings }, { server.onlinePlayers.map { it.uniqueId } }) { server.scheduler.runTask(this, it) }
   val bosses = Bosses(this)
   val minions = Minions(this)
   val nameTags = NameTags(this)
@@ -103,7 +104,7 @@ class MoBossesPlugin : JavaPlugin() {
 
   override fun onEnable() {
     if (!reload()) log.warn("Started with errors in the config files; fix them and run /mobosses reload")
-    listOf(playerLanguages, progression, spawns, survival, DeathPenalty(this), achievements, DamageListener(this), DeathListener(this), antiCheese, MeteorListener(this), ArrowListener(this), AbilityEntities(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener())
+    listOf(playerLanguages, ProgressionListener(progression), spawns, survival, DeathPenalty(this), achievements, DamageListener(this), DeathListener(this), antiCheese, MeteorListener(this), ArrowListener(this), AbilityEntities(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener())
       .forEach { server.pluginManager.registerEvents(it, this) }
     registerCommand("mobosses", "Your Mo’Bosses level and the best hunters; for admins, reload, spawn, or remove bosses", listOf("mb", "moboss"), MoBossesCommand(this))
     tasks += server.scheduler.runTaskTimer(this, Runnable { visuals.tick(); bars.tick(); antiCheese.tick(); PlanData.bossesAlive = bosses.all.size }, 20L, 20L)

@@ -71,7 +71,7 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
     val relevance = Leveling.relevance(progression.relevance, level, boss.level)
     val gained = Leveling.gained(worth * share * petWorth * relevance * fatigue, counts)
     val levelBefore = plugin.progression.level(player.uniqueId)
-    plugin.progression.add(player, gained, counts)
+    plugin.progression.add(player.uniqueId, player.name, gained, counts)
     plugin.progression.level(player.uniqueId).takeIf { it > levelBefore }?.let { plugin.worldApi.levelUp(player, levelBefore, it) }
     if (PlanData.available) PlanData.update(player)
 

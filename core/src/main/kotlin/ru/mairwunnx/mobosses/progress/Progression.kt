@@ -1,45 +1,45 @@
 package ru.mairwunnx.mobosses.progress
 
-import org.bukkit.Bukkit
-import org.bukkit.entity.Player
-import org.bukkit.event.EventHandler
-import org.bukkit.event.EventPriority
-import org.bukkit.event.Listener
-import org.bukkit.event.player.AsyncPlayerPreLoginEvent
-import org.bukkit.event.player.PlayerQuitEvent
-import ru.mairwunnx.mobosses.MoBossesPlugin
+import ru.mairwunnx.mobosses.Log
 import ru.mairwunnx.mobosses.algebra.Leveling
 import ru.mairwunnx.mobosses.config.Settings
 import java.io.File
-import java.util.concurrent.CompletableFuture
 import java.util.UUID
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 
 /**
  * Players' Mo’Bosses levels. Progress loads while a player logs in, off the server thread, and
  * stays cached while they're online; each kill saves in the background. Without a database (it
- * failed to open) progress lives only until the player leaves.
+ * failed to open) progress lives only until the player leaves. A platform hands in its log, the
+ * settings it runs, the players online, and a way back to the server thread, and calls [login] and
+ * [quit] from its events.
  */
-class Progression(private val plugin: MoBossesPlugin) : Listener {
+class Progression(
+  private val log: Log,
+  private val settings: () -> Settings,
+  private val online: () -> List<UUID>,
+  private val onMain: (Runnable) -> Unit,
+) {
   private val cache = ConcurrentHashMap<UUID, Progress>()
 
   @Volatile var store: Store? = null; private set
-  private var settings: Settings.Database? = null
+  private var database: Settings.Database? = null
 
   /** Opens the database off the server thread, since a remote one can take a while; only when its settings changed. */
   fun open(next: Settings.Database, folder: File) {
-    if (next == settings) return
-    settings = next
+    if (next == database) return
+    database = next
     val old = store
     store = null
     Thread({
       old?.close()
       try {
-        store = Store(next, folder).also { plugin.log.info("Progress is stored in ${it.description}") }
+        store = Store(next, folder).also { log.info("Progress is stored in ${it.description}") }
         loadOnline()
       } catch (e: Exception) {
-        plugin.log.error("Can't open the database; players' progress lasts only until they leave: ${e.message}")
+        log.error("Can't open the database; players' progress lasts only until they leave: ${e.message}")
       }
     }, "Mo’Bosses database").start()
   }
@@ -47,7 +47,7 @@ class Progression(private val plugin: MoBossesPlugin) : Listener {
   fun close() {
     store?.close()
     store = null
-    settings = null
+    database = null
   }
 
   /** Any thread: PlaceholderAPI asks from its own. */
@@ -67,7 +67,7 @@ class Progression(private val plugin: MoBossesPlugin) : Listener {
   fun rank(player: UUID): CompletableFuture<Int?> = store?.rank(player, score())?.thenApply { it } ?: CompletableFuture.completedFuture(null)
 
   /** The board ranks by what levels grow from, so it agrees with them. Taken now, on the asking thread, for the store's. */
-  private fun score(): (Progress) -> Double = plugin.catalog.settings.progression.levelCurve.let { curve -> { Leveling.score(curve, it.experience, it.kills) } }
+  private fun score(): (Progress) -> Double = settings().progression.levelCurve.let { curve -> { Leveling.score(curve, it.experience, it.kills) } }
 
   /** Bosses by type and class; empty without a database. */
   fun counts(): CompletableFuture<List<BossCount>> = store?.counts() ?: CompletableFuture.completedFuture(emptyList())
@@ -86,29 +86,26 @@ class Progression(private val plugin: MoBossesPlugin) : Listener {
   /** Null for a player whose progress isn't loaded, so Plan keeps what it stored last instead of a zero. */
   fun known(player: UUID): Progress? = cache[player]
 
-  fun level(player: UUID): Int = plugin.catalog.settings.progression.levelCurve.let { Leveling.playerLevel(it, of(player).experience, of(player).kills) }
+  fun level(player: UUID): Int = settings().progression.levelCurve.let { Leveling.playerLevel(it, of(player).experience, of(player).kills) }
 
-  @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-  fun onPreLogin(event: AsyncPlayerPreLoginEvent) {
-    if (event.loginResult != AsyncPlayerPreLoginEvent.Result.ALLOWED) return
+  /** A player logging in, off the server thread: their progress loads before they join. */
+  fun login(player: UUID, name: String) {
     val store = store ?: return
-    runCatching { store.load(event.uniqueId).get(10, TimeUnit.SECONDS) }
-      .onSuccess { cache[event.uniqueId] = it }
-      .onFailure { plugin.log.warn("Can't load the progress of ${event.name}: ${it.message}") }
+    runCatching { store.load(player).get(10, TimeUnit.SECONDS) }
+      .onSuccess { cache[player] = it }
+      .onFailure { log.warn("Can't load the progress of $name: ${it.message}") }
   }
 
-  @EventHandler(priority = EventPriority.MONITOR)
-  fun onQuit(event: PlayerQuitEvent) {
-    cache.remove(event.player.uniqueId)
+  fun quit(player: UUID) {
+    cache.remove(player)
   }
 
   /** For players already online when the plugin starts or the database changes. */
   fun loadOnline() {
     val store = store ?: return
-    Bukkit.getOnlinePlayers().forEach { player ->
-      val id = player.uniqueId
+    online().forEach { id ->
       store.load(id).whenComplete { progress, error ->
-        if (error != null) plugin.log.warn("Can't load the progress of ${player.name}: ${error.message}")
+        if (error != null) log.warn("Can't load the progress of $id: ${error.message}")
         else cache.putIfAbsent(id, progress)
       }
     }
@@ -128,35 +125,33 @@ class Progression(private val plugin: MoBossesPlugin) : Listener {
    * After a player died to a boss: their experience drops to the least that keeps their level, so the
    * way to the next one starts over. [done] gets what they lost, on the server thread.
    */
-  fun penalize(player: Player, done: (lost: Long) -> Unit) {
-    val id = player.uniqueId
-    val curve = plugin.catalog.settings.progression.levelCurve
+  fun penalize(player: UUID, name: String, done: (lost: Long) -> Unit) {
+    val curve = settings().progression.levelCurve
     val change = { p: Progress -> p.copy(experience = Leveling.levelFloor(curve, p.experience, p.kills)) }
     val store = store
     if (store == null) {
-      val before = of(id)
-      cache.computeIfPresent(id) { _, p -> change(p) }
-      return (before.experience - of(id).experience).takeIf { it > 0 }?.let(done) ?: Unit
+      val before = of(player)
+      cache.computeIfPresent(player) { _, p -> change(p) }
+      return (before.experience - of(player).experience).takeIf { it > 0 }?.let(done) ?: Unit
     }
-    store.update(id, player.name, change).whenComplete { result, error ->
-      if (error != null) return@whenComplete plugin.log.warn("Can't save the progress of ${player.name}: ${error.message}")
+    store.update(player, name, change).whenComplete { result, error ->
+      if (error != null) return@whenComplete log.warn("Can't save the progress of $name: ${error.message}")
       val (before, after) = result
-      cache.computeIfPresent(id) { _, _ -> after }
+      cache.computeIfPresent(player) { _, _ -> after }
       val lost = before.experience - after.experience
-      if (lost > 0) Bukkit.getScheduler().runTask(plugin, Runnable { done(lost) })
+      if (lost > 0) onMain(Runnable { done(lost) })
     }
   }
 
   /** Adds a player's experience from a kill, and the kill itself when it [counts]. The server thread. */
-  fun add(player: Player, experience: Long, counts: Boolean) {
-    val id = player.uniqueId
+  fun add(player: UUID, name: String, experience: Long, counts: Boolean) {
     val kills = if (counts) 1 else 0
-    cache[id] = of(id).let { Progress(it.kills + kills, it.experience + experience) }
-    store?.add(id, player.name, kills, experience)?.whenComplete { saved, error ->
-      if (error != null) plugin.log.warn("Can't save the progress of ${player.name}: ${error.message}")
+    cache[player] = of(player).let { Progress(it.kills + kills, it.experience + experience) }
+    store?.add(player, name, kills, experience)?.whenComplete { saved, error ->
+      if (error != null) log.warn("Can't save the progress of $name: ${error.message}")
       // The database's totals win: they count kills from before a failed load, or from another server on the same database.
-      else cache.computeIfPresent(id) { _, _ -> saved }
+      else cache.computeIfPresent(player) { _, _ -> saved }
     }
-    plugin.log.debug { "${player.name}: +$experience experience${if (counts) " and a kill" else ""}, level ${level(id)}" }
+    log.debug { "$name: +$experience experience${if (counts) " and a kill" else ""}, level ${level(player)}" }
   }
 }

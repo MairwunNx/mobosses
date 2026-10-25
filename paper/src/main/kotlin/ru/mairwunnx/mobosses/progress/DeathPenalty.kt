@@ -25,7 +25,7 @@ class DeathPenalty(private val plugin: MoBossesPlugin) : Listener {
     val boss = source?.let(plugin.bosses::get) ?: return
     plugin.achievements.diedTo(player, boss)
     if (!plugin.catalog.settings.progression.deathPenalty) return plugin.worldApi.diedTo(player, boss, 0)
-    plugin.progression.penalize(player) { lost ->
+    plugin.progression.penalize(player.uniqueId, player.name) { lost ->
       plugin.worldApi.diedTo(player, boss, lost)
       if (!player.isOnline) return@penalize
       plugin.texts.send(player, Message.DEATH_PENALTY, Placeholder.unparsed("lost", lost.toString()),
