@@ -16,6 +16,7 @@
   "entrypoints": {
     "main": ["ru.mairwunnx.mobosses.fabric.MoBossesMod"]
   },
+  "mixins": ["mobosses.mixins.json"],
   "jars": [{ "file": "META-INF/jars/sqlite-jdbc-${sqlite}.jar" }],
   "depends": {
     "fabricloader": ">=${loader}",

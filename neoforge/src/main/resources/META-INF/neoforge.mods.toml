@@ -14,6 +14,9 @@ description = '''
 Ordinary mobs spawn as bosses of six classes, with abilities, minions, health bars, loot, and player levels, each player reading it in their own language. On a server, or in singleplayer and LAN worlds.
 '''
 
+[[mixins]]
+config = "mobosses.mixins.json"
+
 [[dependencies.mobosses]]
 modId = "neoforge"
 type = "required"
