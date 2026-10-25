@@ -2,9 +2,12 @@ package ru.mairwunnx.mobosses.modcore.net
 
 import net.minecraft.network.FriendlyByteBuf
 import net.minecraft.network.RegistryFriendlyByteBuf
+import net.minecraft.network.chat.Component
+import net.minecraft.network.chat.ComponentSerialization
 import net.minecraft.network.codec.StreamCodec
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload
 import net.minecraft.resources.Identifier
+import net.minecraft.world.item.ItemStack
 import ru.mairwunnx.mobosses.config.edit.Field
 
 /**
@@ -100,6 +103,30 @@ object Payloads {
         val file = input.readUtf()
         val count = input.readVarInt().coerceIn(0, MAX)
         SettingsChanged(file, List(count) { Change(input.readStrings(), input.readUtf()) })
+      })
+    }
+  }
+
+  /** One entry of the loot table, for the recipe viewers: the item as it drops, and lines that say from whom, in the player's language. */
+  class LootPage(val stack: ItemStack, val lines: List<Component>)
+
+  /** The loot table for a player's recipe viewer: sent once they join, and again after a reload. */
+  class LootPages(val pages: List<LootPage>) : CustomPacketPayload {
+    override fun type() = TYPE
+
+    companion object {
+      val TYPE = type<LootPages>("loot_pages")
+      val CODEC: StreamCodec<RegistryFriendlyByteBuf, LootPages> = CustomPacketPayload.codec({ value, out ->
+        out.writeVarInt(value.pages.size)
+        value.pages.forEach { page ->
+          ItemStack.OPTIONAL_STREAM_CODEC.encode(out, page.stack)
+          out.writeVarInt(page.lines.size)
+          page.lines.forEach { ComponentSerialization.STREAM_CODEC.encode(out, it) }
+        }
+      }, { input ->
+        LootPages(List(input.readVarInt()) {
+          LootPage(ItemStack.OPTIONAL_STREAM_CODEC.decode(input), List(input.readVarInt()) { ComponentSerialization.STREAM_CODEC.decode(input) })
+        })
       })
     }
   }

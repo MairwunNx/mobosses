@@ -33,6 +33,7 @@ import ru.mairwunnx.mobosses.modcore.combat.DeathPenalty
 import ru.mairwunnx.mobosses.modcore.combat.Deaths
 import ru.mairwunnx.mobosses.modcore.combat.GroupHealth
 import ru.mairwunnx.mobosses.modcore.combat.Loot
+import ru.mairwunnx.mobosses.modcore.combat.LootPages
 import ru.mairwunnx.mobosses.modcore.combat.Rewards
 import ru.mairwunnx.mobosses.modcore.combat.SpawnerFatigue
 import ru.mairwunnx.mobosses.modcore.config.Ids
@@ -112,6 +113,7 @@ class MoBosses(val server: MinecraftServer, val loader: Loader) {
   val blockChanges = BlockChanges(this)
   val menuStats = Stats(this)
   val settings = SettingsService(this)
+  val lootPages = LootPages(this)
   val arrowHits = ArrowHits(this)
   val abilityEntities = AbilityEntities(this)
 
@@ -166,7 +168,11 @@ class MoBosses(val server: MinecraftServer, val loader: Loader) {
     Thread({
       playerLanguages.login(player.uuid, address)
       progression.login(player.uuid, player.plainTextName)
-      server.execute { if (!player.hasDisconnected()) achievements.joined(player) }
+      server.execute {
+        if (player.hasDisconnected()) return@execute
+        achievements.joined(player)
+        lootPages.send(player)
+      }
     }, "Mo’Bosses login").start()
   }
 
@@ -196,6 +202,8 @@ class MoBosses(val server: MinecraftServer, val loader: Loader) {
     bars.clear()
     nameTags.clearAll()
     bosses.all.forEach(bosses::vanillaName)
+    // The pages read the table and the languages just loaded.
+    lootPages.sendAll()
     return ok
   }
 
