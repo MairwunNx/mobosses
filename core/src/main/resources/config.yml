@@ -271,6 +271,28 @@ formula:
     offset: 80.0
     variance: 0.15   # ±15%.
 
+# The game's difficulty grades new bosses; bosses already around keep theirs.
+# Peaceful makes none. Each difficulty has a modifier, and each part of a boss
+# takes its weight of it: 1 + (modifier − 1) × weight, so a weight of 0 leaves
+# that part as on hard, and cooldowns divide by their part. A boss is never
+# weaker than its vanilla mob. The balance was built for hard, which is 1.0.
+# enabled: false plays every difficulty but peaceful as hard.
+difficulty:
+  enabled: true
+  modifiers:
+    easy: 0.7333333337
+    normal: 0.8777777773
+    hard: 1.0
+    hardcore: 1.2333333339
+  weights:
+    health: 1.0
+    damage: 1.0         # Melee, and ranged through formula.ranged_damage.
+    armor: 0.5          # Armor and toughness.
+    cooldowns: 0.5      # Abilities' cooldowns divide by their part.
+    minions: 0.5        # How many a summon brings.
+    spawn_chance: 0.5
+    experience: 1.0     # The vanilla experience a boss drops.
+
 # ---------------------------------------------------------------------------
 #  Looks
 # ---------------------------------------------------------------------------

@@ -25,6 +25,7 @@ data class Settings(
   @SerialName("spawner_fatigue") val spawnerFatigue: SpawnerFatigue = SpawnerFatigue(),
   val progression: Progression = Progression(),
   val formula: Formulas = Formulas(),
+  val difficulty: DifficultySettings = DifficultySettings(),
   val effects: Effects = Effects(),
   @SerialName("boss_bar") val bossBar: BossBar = BossBar(),
   @SerialName("name_tags") val nameTags: NameTags = NameTags(),

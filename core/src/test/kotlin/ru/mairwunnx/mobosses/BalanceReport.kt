@@ -1,5 +1,6 @@
 package ru.mairwunnx.mobosses
 
+import ru.mairwunnx.mobosses.algebra.Difficulty
 import ru.mairwunnx.mobosses.algebra.Leveling
 import ru.mairwunnx.mobosses.algebra.Rolls
 import ru.mairwunnx.mobosses.algebra.Stats
@@ -52,6 +53,27 @@ fun main(args: Array<String>) {
 
   println("\nMinions per summon, without variance")
   println(levels.joinToString("\t") { "$it: ${Rolls.minions(formula.minions.copy(variance = 0.0), it, Random(0))}" })
+
+  val grading = settings.difficulty
+  val difficulties = listOf("easy" to grading.modifiers.easy, "normal" to grading.modifiers.normal, "hard" to grading.modifiers.hard, "hardcore" to grading.modifiers.hardcore)
+    .map { (name, modifier) -> name to if (grading.enabled) modifier else Difficulty.UNGRADED }
+  val common = classes.first()
+  fun byDifficulty(title: String, cell: (level: Int, modifier: Double) -> String) {
+    println("\n$title")
+    println("Lvl\t" + difficulties.joinToString("\t") { it.first })
+    levels.forEach { level -> println("$level\t" + difficulties.joinToString("\t") { cell(level, it.second) }) }
+  }
+  byDifficulty("Health of a Common zombie (20) by difficulty") { l, m ->
+    (Stats.health(formula.health, 20.0, common.health, l) * Difficulty.part(m, grading.weights.health)).coerceIn(20.0, 1024.0).digits(0)
+  }
+  byDifficulty("Damage of a Common zombie (3) by difficulty") { l, m ->
+    (Stats.damage(formula.damage, 3.0, common.damage, l) * Difficulty.part(m, grading.weights.damage)).coerceAtLeast(3.0).digits(1)
+  }
+  println("\nBy difficulty: armor ×, cooldowns ÷, minions ×, spawn chance ×, vanilla experience ×")
+  difficulties.forEach { (name, m) ->
+    println("$name\t" + listOf(grading.weights.armor, grading.weights.cooldowns, grading.weights.minions, grading.weights.spawnChance, grading.weights.experience)
+      .joinToString("\t") { Difficulty.part(m, it).digits(3) })
+  }
 
   println("\nPlayer level by counted kills, without experience")
   println(listOf(10, 25, 50, 100, 200, 400, 800, 1600).joinToString("\t") { "$it: ${Leveling.playerLevel(settings.progression.levelCurve, 0, it)}" })
