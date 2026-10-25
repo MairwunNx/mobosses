@@ -17,7 +17,8 @@
     "main": ["ru.mairwunnx.mobosses.fabric.MoBossesMod"],
     "client": ["ru.mairwunnx.mobosses.fabric.client.MoBossesClient"],
     "modmenu": ["ru.mairwunnx.mobosses.fabric.client.ModMenu"],
-    "jei_mod_plugin": ["ru.mairwunnx.mobosses.modcore.client.viewers.JeiLoot"]
+    "jei_mod_plugin": ["ru.mairwunnx.mobosses.modcore.client.viewers.JeiLoot"],
+    "rei_client": ["ru.mairwunnx.mobosses.modcore.client.viewers.ReiLoot"]
   },
   "mixins": ["mobosses.mixins.json"],
   "jars": [{ "file": "META-INF/jars/sqlite-jdbc-${sqlite}.jar" }],

@@ -1,6 +1,8 @@
 package ru.mairwunnx.mobosses.neoforge.gametest
 
+import me.shedaniel.rei.api.client.view.ViewSearchBuilder
 import net.minecraft.client.Minecraft
+import net.minecraft.client.Screenshot
 import net.minecraft.client.gui.screens.AccessibilityOnboardingScreen
 import net.minecraft.client.gui.screens.TitleScreen
 import net.minecraft.world.level.GameType
@@ -20,8 +22,10 @@ import org.slf4j.LoggerFactory
 import ru.mairwunnx.mobosses.Permissions
 import ru.mairwunnx.mobosses.modcore.Mod
 import ru.mairwunnx.mobosses.modcore.Perms
+import ru.mairwunnx.mobosses.modcore.client.ClientLoot
 import ru.mairwunnx.mobosses.modcore.client.SettingsScreen
 import ru.mairwunnx.mobosses.modcore.client.SettingsSource
+import ru.mairwunnx.mobosses.modcore.client.viewers.ReiLoot
 import ru.mairwunnx.mobosses.modcore.net.Payloads
 import java.io.File
 
@@ -29,7 +33,7 @@ import java.io.File
  * A real client in a fresh singleplayer world without cheats, as Fabric's client game test opens one: Mo’Bosses starts
  * on the game's own server, keeps its database in the world's save and its configs in `config/mobosses/`, reads the
  * client's language, lets the world's owner reload without cheats, spawns a boss ahead of the player, and takes a
- * change from the settings screen into the world's server's config.yml. The result
+ * change from the settings screen into the world's server's config.yml, and gets the loot pages for REI. The result
  * goes to `mobosses-check.txt` in the run folder, then the game closes; `./gradlew :neoforge:runClientGameTest` fails
  * unless it says `ok`.
  */
@@ -44,6 +48,7 @@ object ClientCheck {
     private var joinedTicks = 0
     private var spawnedAt = -1
     private var saved: Boolean? = null
+    private var shot = -1
     private var done = false
     private var closeIn = -1
     private var ticks = 0
@@ -99,6 +104,15 @@ object ClientCheck {
         return
       }
       if (saved == false && joinedTicks < spawnedAt + 100) return
+      // REI on the loot pages, kept as a screenshot to look at.
+      if (shot < 0) {
+        shot = joinedTicks
+        game.gui.setScreen(null)
+        ViewSearchBuilder.builder().addCategory(ReiLoot.ID).open()
+        return
+      }
+      if (joinedTicks == shot + 30) Screenshot.grab(game.gameDirectory, "mobosses-loot-rei.png", game.gameRenderer.mainRenderTarget(), 1) {}
+      if (joinedTicks < shot + 40) return
       done = true
       val problems = runCatching {
         server.submit<List<String>> {
@@ -111,6 +125,7 @@ object ClientCheck {
             "the owner reads ${mod?.texts?.languageOf(owner)}, not the client's Russian".takeUnless { mod?.texts?.languageOf(owner) == "ru" },
             "the world's owner can't reload without cheats".takeUnless { Perms.check(owner.createCommandSourceStack(), Permissions.RELOAD) },
             "the player's spawn made ${mod?.bosses?.all?.size} bosses".takeUnless { mod?.bosses?.all?.size == 1 },
+            "the loot pages didn't reach the player's game".takeUnless { ClientLoot.pages.size == mod?.catalog?.loot?.size },
             "the settings screen's change didn't reach config.yml".takeUnless { saved == true && mod?.folder?.resolve("config.yml")?.readText()?.contains("    stuck_seconds: 7") == true },
           )
         }.get()

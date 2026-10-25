@@ -101,10 +101,16 @@ dependencies {
   compileOnly(project(":modcore")) { isTransitive = false }
   "gametestCompileOnly"(project(":modcore")) { isTransitive = false }
   "clientCompileOnly"(project(":modcore")) { isTransitive = false }
+  // REI's annotation, by which REI finds the loot pages' plugin on NeoForge.
+  "clientCompileOnly"("maven.modrinth:rei:uwE0PJmc") { isTransitive = false }
+  "clientCompileOnly"("me.shedaniel:RoughlyEnoughItems-api:26.3.822") { isTransitive = false }
   "clientImplementation"(project(":core")) { exclude(group = "org.slf4j") }
   adventure.forEach { "clientImplementation"(it) { exclude(group = "com.google.code.gson") } }
   "gametestImplementation"(project(":core")) { exclude(group = "org.slf4j") }
   "gametestRuntimeOnly"("org.xerial:sqlite-jdbc:$sqlite")
+  // REI with Cloth Config and Architectury in the dev runs, to see the loot pages in a game.
+  "gametestCompileOnly"("me.shedaniel:RoughlyEnoughItems-api:26.3.822") { isTransitive = false }
+  listOf("maven.modrinth:rei:uwE0PJmc", "maven.modrinth:cloth-config:GchRXPnb", "maven.modrinth:architectury-api:dZ7iNvS4").forEach { "gametestRuntimeOnly"(it) { isTransitive = false } }
   adventure.forEach { "gametestImplementation"(it) { exclude(group = "com.google.code.gson") } }
   shade(project(":core")) { exclude(group = "org.slf4j") }
   shade(project(":modcore")) { isTransitive = false }
