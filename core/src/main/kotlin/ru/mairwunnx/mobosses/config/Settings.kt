@@ -18,6 +18,7 @@ data class Settings(
   val geoip: GeoIpSettings = GeoIpSettings(),
   val spawn: Spawn = Spawn(),
   val despawn: Despawn = Despawn(),
+  @SerialName("anti_cheese") val antiCheese: AntiCheese = AntiCheese(),
   @SerialName("survival_bonus") val survivalBonus: SurvivalBonus = SurvivalBonus(),
   @SerialName("full_moon") val fullMoon: FullMoon = FullMoon(),
   val achievements: Achievements = Achievements(),
