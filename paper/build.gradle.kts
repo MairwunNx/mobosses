@@ -67,8 +67,9 @@ tasks.processResources {
   }
 }
 
+// Each platform's jar carries its name, as “Platforms” in CLAUDE.md says: mobosses-paper-X.Y.Z.jar.
 tasks.shadowJar {
-  archiveBaseName = "mobosses"
+  archiveBaseName = "mobosses-paper"
   archiveClassifier = ""
   mergeServiceFiles()
   dependencies {
@@ -122,7 +123,7 @@ hangarPublish {
     platforms {
       register(Platforms.PAPER) {
         // The jar is over Hangar's 15 MB limit (Exposed brings kotlin-reflect), so Hangar links to the GitHub release instead.
-        url = "https://github.com/MairwunNx/mobosses/releases/download/v${project.version}/mobosses-${project.version}.jar"
+        url = "https://github.com/MairwunNx/mobosses/releases/download/v${project.version}/mobosses-paper-${project.version}.jar"
         platformVersions = listOf("26.3")
       }
     }

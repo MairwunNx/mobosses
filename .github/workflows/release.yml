@@ -68,10 +68,13 @@ jobs:
       - name: Build and test
         run: ./gradlew build -PreleaseVersion="$VERSION"
       - name: Publish the GitHub release
-        # mobosses.jar too, so releases/latest/download/mobosses.jar always fetches the newest one.
+        # The jar twice more without the version, so releases/latest/download/mobosses-paper.jar always fetches the newest;
+        # mobosses.jar, the Paper jar's name up to 2.9.0, keeps older links working.
         run: |
-          cp "paper/build/libs/mobosses-$VERSION.jar" paper/build/libs/mobosses.jar
-          gh release create "v$VERSION" --target "$GITHUB_SHA" --title "Mo’Bosses $VERSION" --notes-file "$NOTES" "paper/build/libs/mobosses-$VERSION.jar" paper/build/libs/mobosses.jar
+          cp "paper/build/libs/mobosses-paper-$VERSION.jar" paper/build/libs/mobosses-paper.jar
+          cp "paper/build/libs/mobosses-paper-$VERSION.jar" paper/build/libs/mobosses.jar
+          gh release create "v$VERSION" --target "$GITHUB_SHA" --title "Mo’Bosses $VERSION" --notes-file "$NOTES" \
+            "paper/build/libs/mobosses-paper-$VERSION.jar" paper/build/libs/mobosses-paper.jar paper/build/libs/mobosses.jar
         env:
           GH_TOKEN: ${{ github.token }}
       - name: Publish to Modrinth
