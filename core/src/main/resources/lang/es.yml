@@ -106,6 +106,15 @@ settings:
   waiting: "<gray>Preguntando al servidor…</gray>"
   done: "Listo"
 
+# Las páginas del botín de los jefes en JEI, REI y EMI. <class>: la clase más baja que lo suelta; <min>, <max>: niveles del jefe; <bosses>: los tipos de jefe; <percent>.
+loot_page:
+  title: "Botín de jefes"
+  class: "<gray>De jefes</gray> <class> <gray>y más raros</gray>"
+  levels: "<gray>Niveles del jefe</gray> <white><min>–<max></white>"
+  bosses: "<gray>Solo</gray> <white><bosses></white>"
+  every_boss: "<gray>Cualquier jefe</gray>"
+  odds: "<gray>Cerca del</gray> <white><percent> %</white> <gray>del botín de un jefe</gray> <class>"
+
 # La página del bestiario. <class>, <kills>, <level> (el mejor); <opened> y <total> casillas tipo × clase.
 bestiary:
   title: "Bestiario"

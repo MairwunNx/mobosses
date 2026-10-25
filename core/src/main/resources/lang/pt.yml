@@ -106,6 +106,15 @@ settings:
   waiting: "<gray>Perguntando ao servidor…</gray>"
   done: "Pronto"
 
+# As páginas do saque dos chefes no JEI, REI e EMI. <class>: a classe mais baixa que solta; <min>, <max>: níveis do chefe; <bosses>: os tipos de chefe; <percent>.
+loot_page:
+  title: "Saque dos chefes"
+  class: "<gray>De chefes</gray> <class> <gray>e mais raros</gray>"
+  levels: "<gray>Níveis do chefe</gray> <white><min>–<max></white>"
+  bosses: "<gray>Só</gray> <white><bosses></white>"
+  every_boss: "<gray>Qualquer chefe</gray>"
+  odds: "<gray>Cerca de</gray> <white><percent>%</white> <gray>do saque de um chefe</gray> <class>"
+
 # A página do bestiário. <class>, <kills>, <level> (o melhor); <opened> e <total> casas tipo × classe.
 bestiary:
   title: "Bestiário"

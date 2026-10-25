@@ -106,6 +106,15 @@ settings:
   waiting: "<gray>Der Server wird gefragt …</gray>"
   done: "Fertig"
 
+# Die Beuteseiten der Bosse in JEI, REI und EMI. <class>: die niedrigste Klasse, die es fallen lässt; <min>, <max>: Bossstufen; <bosses>: die Bossarten; <percent>.
+loot_page:
+  title: "Boss-Beute"
+  class: "<gray>Von</gray> <class><gray>-Bossen und seltener</gray>"
+  levels: "<gray>Bossstufen</gray> <white><min>–<max></white>"
+  bosses: "<gray>Nur</gray> <white><bosses></white>"
+  every_boss: "<gray>Jeder Boss</gray>"
+  odds: "<gray>Etwa</gray> <white><percent> %</white> <gray>der Beute eines</gray> <class><gray>-Bosses</gray>"
+
 # Die Seite des Bestiariums. <class>, <kills>, <level> (die beste); <opened> und <total> Felder Art × Klasse.
 bestiary:
   title: "Bestiarium"
