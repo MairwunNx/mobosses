@@ -10,6 +10,10 @@ The “Release” workflow takes the notes for a version from its section here, 
 - ⚖️ **The game’s difficulty grades bosses.** On hard they stay exactly as they were. Normal bosses have about 88% of the health and damage, easy ones about 73%, and a hardcore world’s about 123%; armor, minions, cooldowns, and how often bosses come move by half as much, and the experience they drop with their health. Peaceful makes no bosses. A boss keeps what it was made with, so a change of difficulty moves only the bosses after it, and none is ever weaker than its vanilla mob. On easy or normal, your bosses get softer with this update; `difficulty.enabled: false` in `config.yml` keeps them as on hard. The modifiers and weights live under `difficulty`, and `./gradlew balance` prints them.
 - 🧀 **No more cheese.** Bosses no longer get into boats or minecarts, and they stay out of portals. A boss you keep hitting from a pillar, over a wall, or while it sits in a hole or under a trapdoor steps out next to you after a few seconds (8 when it can’t reach you, 6 when it can’t move), and pulls you down when nothing next to you fits, as on top of a pillar. It does so once in 20 seconds at most, and an archer that can see you just keeps shooting. Every part has its switch under `anti_cheese` in `config.yml`.
 
+### Fixed
+
+- 🩹 **A boss you fight alone pays all of its share again.** Damage with no player behind it, a fall after you knock the boss back, lava, a cactus, poison, drowning, or fire your Fire Aspect or Flame didn’t light, went to nobody, so your share, and the experience, loot chances, and kill that hang on it, came out short of what you earned. Now it goes to the players who hit the boss in the last 30 seconds, split by what each dealt, so you keep it all alone and a group splits it as it fought. TNT you lit counts as your own hit.
+
 ## 2.10.0
 
 ### New
