@@ -64,9 +64,10 @@ class Damage(private val mod: MoBosses) {
   /** The damage a boss's own shot does to [target]: its arrows, fireballs, and tridents hit harder with its level. Abilities' shots have their own. */
   fun shot(target: LivingEntity, source: DamageSource, damage: Float): Float {
     val shot = source.directEntity as? Projectile ?: return damage
+    val data = Data(shot)
+    data.double(Keys.SHOT_DAMAGE)?.let { return it.toFloat() }
     val boss = (source.entity as? LivingEntity)?.let(mod.bosses::get) ?: return damage
     if (target == boss.entity || source.`is`(DamageTypeTags.IS_EXPLOSION)) return damage
-    val data = Data(shot)
     if (data.has(Keys.ARROW) || data.has(Keys.METEOR)) return damage
     val formula = mod.catalog.settings.formula
     val graded = boss.graded(mod.catalog.settings.difficulty.weights.damage)

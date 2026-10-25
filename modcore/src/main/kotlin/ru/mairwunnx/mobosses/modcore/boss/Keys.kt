@@ -25,6 +25,8 @@ object Keys {
   const val COOLDOWNS = "ready"
   /** On ability arrows: they hit players only. */
   const val ARROW = "arrow"
+  /** On an ability's shot whose damage the game fixes, like a trident's 8: what it deals instead. */
+  const val SHOT_DAMAGE = "shot_damage"
   const val ENRAGED = "enraged"
   /** On minions: the type of the boss that summoned them, for their name. */
   const val MINION_OF = "minion_of"
