@@ -16,6 +16,24 @@ import ru.mairwunnx.mobosses.modcore.ability.kinds.Shockwave
 import ru.mairwunnx.mobosses.modcore.ability.kinds.Summoning
 import ru.mairwunnx.mobosses.modcore.ability.kinds.TeleportStrike
 import ru.mairwunnx.mobosses.modcore.ability.kinds.WebRing
+import ru.mairwunnx.mobosses.modcore.ability.signature.AimedVolley
+import ru.mairwunnx.mobosses.modcore.ability.signature.Curse
+import ru.mairwunnx.mobosses.modcore.ability.signature.FangLine
+import ru.mairwunnx.mobosses.modcore.ability.signature.FireballBarrage
+import ru.mairwunnx.mobosses.modcore.ability.signature.Fuse
+import ru.mairwunnx.mobosses.modcore.ability.signature.Infection
+import ru.mairwunnx.mobosses.modcore.ability.signature.Phase
+import ru.mairwunnx.mobosses.modcore.ability.signature.PotionVolley
+import ru.mairwunnx.mobosses.modcore.ability.signature.Pounce
+import ru.mairwunnx.mobosses.modcore.ability.signature.Sandstorm
+import ru.mairwunnx.mobosses.modcore.ability.signature.Stampede
+import ru.mairwunnx.mobosses.modcore.ability.signature.Swap
+import ru.mairwunnx.mobosses.modcore.ability.signature.Terror
+import ru.mairwunnx.mobosses.modcore.ability.signature.TridentStorm
+import ru.mairwunnx.mobosses.modcore.ability.signature.WarCry
+import ru.mairwunnx.mobosses.modcore.ability.signature.Whirlwind
+import ru.mairwunnx.mobosses.modcore.ability.signature.WindBurst
+import ru.mairwunnx.mobosses.modcore.ability.signature.WitherAura
 import ru.mairwunnx.mobosses.modcore.boss.Boss
 import kotlin.random.Random
 
@@ -72,6 +90,9 @@ class Abilities(private val mod: MoBosses) {
     /** The abilities a hit may set off, at random. */
     val PICKED: List<Ability> = listOf(
       Lightning, Summoning, Regeneration, FireRing, WebRing, TeleportStrike, Shockwave, FrostNova, Grapple, Chain,
+      // Each boss type's own, which only its types pass `usable` for.
+      PotionVolley, FireballBarrage, AimedVolley, Pounce, Swap, TridentStorm, FangLine, Whirlwind, WitherAura,
+      Sandstorm, Infection, WindBurst, WarCry, Terror, Phase, Stampede, Curse, Fuse,
     )
   }
 }
