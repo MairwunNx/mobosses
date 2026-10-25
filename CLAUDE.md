@@ -118,7 +118,7 @@ To put a release on Moonlands, point the Mo’Bosses line in `minecraft/extras/j
 ## Releasing
 
 1. Add a `## X.Y.Z` section to CHANGELOG.md, written for server owners, and push it. After a change that reaches what the project ships, add it to CHANGELOG.md in the same push: under the topmost “## X.Y.Z” section while that version isn’t released (`gh release view vX.Y.Z` fails), or under a new section with the next version: patch for fixes, minor for features, major for breaking changes. A release then needs only the workflow, and the workflow runs only when the owner asks.
-2. Run the “Release” workflow with the new version: `gh workflow run release.yml -R MairwunNx/mobosses -f version=X.Y.Z -f modrinth=true -f hangar=true`. Its `changelog` field overrides the CHANGELOG.md section; one of the two must be there. It builds with `-PreleaseVersion`, tags `vX.Y.Z`, and attaches `mobosses-paper-X.Y.Z.jar` to a GitHub release, with `mobosses-paper.jar` and `mobosses.jar` (the name up to 2.9.0) beside it. Nothing in the repo holds the version; local and CI builds are `dev`.
+2. Run the “Release” workflow with the new version: `gh workflow run release.yml -R MairwunNx/mobosses -f version=X.Y.Z -f modrinth=true -f hangar=true -f curseforge=true`. Its `changelog` field overrides the CHANGELOG.md section; one of the two must be there. It builds with `-PreleaseVersion`, tags `vX.Y.Z`, and attaches `mobosses-paper-X.Y.Z.jar` to a GitHub release, with `mobosses-paper.jar` and `mobosses.jar` (the name up to 2.9.0) beside it. Nothing in the repo holds the version; local and CI builds are `dev`.
 3. Never delete or re-tag a published release. If GitHub succeeded and Modrinth didn’t, fix the build, finish the upload with `./gradlew :paper:modrinth -PreleaseVersion=X.Y.Z -PchangelogFile=… --no-configuration-cache` locally, and fix the workflow for next time.
 
 ## Modrinth
@@ -129,6 +129,10 @@ The project is `mobosses` (id `bRPqbgIV`), MIT, created 2026-10-15 and submitted
 
 The project is `MairwunNx/MoBosses` on hangar.papermc.io, MIT, created 2026-10-15 through the API; the owner set its avatar on the site. The “Release” workflow has a `hangar` switch, off by default: on, it runs `./gradlew :paper:publishPluginPublicationToHangar` with the `HANGAR_TOKEN` secret. The jar is over Hangar's 15 MB limit (Exposed brings `kotlin-reflect`), so Hangar gets a link to the GitHub release jar, as WorldAPI does; the GitHub release must exist first, which the workflow's order makes sure of. 2.1.0 went up this way from a local run after the workflow hit the limit. Hangar doesn't sync its page from MODRINTH.md, so edit it on the site after a big change.
 
+## CurseForge
+
+The plugin is project `1766137` (Bukkit Plugins, on dev.bukkit.org) and the mods project `1766190` (Mods, on minecraft.curseforge.com), MIT, created by the owner on authors.curseforge.com on 2026-10-25: CurseForge has no API to create a project. The “Release” workflow's `curseforge` switch, off by default, runs `scripts/curseforge.py` for each jar after the build, with Fabric API as required projects of the Fabric file; it takes the game version from the build files and looks up CurseForge's ids by name. Settings, the icon, and the page are edited on the site; the mods’ page is MODRINTH.md without the Paper parts, and each page links to the other. The token is the `CURSEFORGE_TOKEN` secret, also in `~/.secrets/cloud.env`; never put it in the repo.
+
 ## Platforms
 
 How the family ships a project to more than one platform. A project that builds only for Paper keeps its jar's present name until it gains a second platform, so links and Moonlands' `jars.txt` keep working.
@@ -137,6 +141,7 @@ How the family ships a project to more than one platform. A project that builds 
 - **Jars.** `<name>-paper-X.Y.Z.jar`, `<name>-fabric-X.Y.Z.jar`, and `<name>-neoforge-X.Y.Z.jar`, each attached again without the version, so `releases/latest/download/<name>-<platform>.jar` always fetches the newest.
 - **Modrinth.** One project for every platform. Each platform is its own version, numbered `X.Y.Z+paper`, `X.Y.Z+fabric`, or `X.Y.Z+neoforge`, with its own loaders and dependencies; a mod's version says it runs on the client and the server.
 - **Hangar.** Paper only, numbered `X.Y.Z`.
+- **CurseForge.** Two projects, since one holds a single class: Paper's jar in a Bukkit Plugins project, numbered `X.Y.Z`, and both mods as files of one Mods project, “X.Y.Z for Fabric” and “X.Y.Z for NeoForge”. A Paper-only project has the plugin project alone.
 - **Moonlands** runs the Paper jar only.
 
 Mo’Bosses has `core`, `paper`, `modcore`, `fabric`, and `neoforge` since 2.10.0. On the owner's word its Paper jar took its platform's name then, ahead of the mods: `mobosses-paper-X.Y.Z.jar`, with `mobosses.jar` attached too for old links. The mods play since 2.11.0, and `mobosses.mods=true` in `gradle.properties` ships all three: Modrinth's `X.Y.Z+paper`, `+fabric`, and `+neoforge` (the mods through `scripts/modrinth_mods.py`, on the client or the server), and the release attaches every jar.
