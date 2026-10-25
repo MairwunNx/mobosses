@@ -186,15 +186,5 @@ class MoBossesPlugin : JavaPlugin() {
 
   private val shipped by lazy { BundledFiles.parse(bundled(BundledFiles.LIST)) }
 
-  /**
-   * A file in the data folder, copied from the jar first when it isn't there yet, or again when it's
-   * an older version’s copy nobody changed: up to 2.7 the plugin copied files once and left them be.
-   */
-  private fun file(path: String): File = dataFolder.resolve(path).also {
-    if (!it.exists()) saveResource(path, false)
-    else if (BundledFiles.outdated(path, it.readText(), bundled(path), shipped)) {
-      saveResource(path, true)
-      log.info("$path: updated to this version’s, since it had no changes of yours")
-    }
-  }
+  private fun file(path: String): File = BundledFiles.copy(dataFolder, path, ::bundled, shipped, log)
 }

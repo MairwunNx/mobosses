@@ -1,5 +1,7 @@
 package ru.mairwunnx.mobosses.config
 
+import ru.mairwunnx.mobosses.Log
+import java.io.File
 import java.security.MessageDigest
 
 /**
@@ -27,5 +29,19 @@ object BundledFiles {
   fun outdated(path: String, onDisk: String, bundled: String, shipped: Map<String, Set<String>>): Boolean {
     val ours = hash(onDisk)
     return ours != hash(bundled) && ours in shipped[path].orEmpty()
+  }
+
+  /**
+   * The file at [path] in [folder], copied from the jar first when it isn't there yet, or again when it's an older
+   * version's copy nobody changed: up to 2.7 the plugin copied files once and left them be.
+   */
+  fun copy(folder: File, path: String, bundled: (String) -> String, shipped: Map<String, Set<String>>, log: Log): File = folder.resolve(path).also {
+    if (!it.exists()) {
+      it.parentFile.mkdirs()
+      it.writeText(bundled(path))
+    } else if (outdated(path, it.readText(), bundled(path), shipped)) {
+      it.writeText(bundled(path))
+      log.info("$path: updated to this version’s, since it had no changes of yours")
+    }
   }
 }
