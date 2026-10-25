@@ -5,6 +5,7 @@ import net.kyori.adventure.text.format.TextColor
 import net.minecraft.world.entity.LivingEntity
 import ru.mairwunnx.mobosses.algebra.Difficulty
 import ru.mairwunnx.mobosses.boss.Codec
+import ru.mairwunnx.mobosses.combat.Shares
 import ru.mairwunnx.mobosses.config.BossClass
 import ru.mairwunnx.mobosses.modcore.Scheduler
 import ru.mairwunnx.mobosses.modcore.data.Data
@@ -36,10 +37,19 @@ class Boss(
   /** The part of [damage] that each player's pets dealt. */
   val petDamage: Map<UUID, Double> get() = players(Keys.PET_DAMAGE)
 
-  fun addDamage(player: UUID, amount: Double, byPet: Boolean = false) {
+  /** [hit] false for damage credited to them that they didn't deal by hand, which keeps them in the fight no longer. */
+  fun addDamage(player: UUID, amount: Double, byPet: Boolean = false, hit: Boolean = true) {
     add(Keys.DAMAGE, player, amount)
     if (byPet) add(Keys.PET_DAMAGE, player, amount)
-    write(Keys.HIT_AT, read(Keys.HIT_AT) + (player.toString() to clock().toDouble()))
+    if (hit) write(Keys.HIT_AT, read(Keys.HIT_AT) + (player.toString() to clock().toDouble()))
+  }
+
+  /** Damage with no player behind it, split among the players who hit it lately ([Shares.credit]). */
+  fun credit(amount: Double) {
+    Shares.credit(amount, damage, petDamage, hitWithin(CREDIT_MILLIS)).forEach { (id, credit) ->
+      if (credit.own > 0.0) addDamage(id, credit.own, hit = false)
+      if (credit.pets > 0.0) addDamage(id, credit.pets, byPet = true, hit = false)
+    }
   }
 
   /** The players who hit it, themselves or through a pet, within the last [millis]. */
@@ -119,6 +129,9 @@ class Boss(
   companion object {
     /** The shared cooldown's key among the abilities'. */
     const val SHARED = "*"
+
+    /** How long after their last hit a player still gets the damage nobody dealt by hand. */
+    const val CREDIT_MILLIS = 30_000L
 
     fun colorOf(clazz: BossClass): TextColor =
       clazz.color.trim().let { TextColor.fromHexString(it) ?: NamedTextColor.NAMES.value(it.lowercase()) } ?: NamedTextColor.WHITE

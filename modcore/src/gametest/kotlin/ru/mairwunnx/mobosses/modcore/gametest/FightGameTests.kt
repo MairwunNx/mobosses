@@ -33,11 +33,17 @@ class FightGameTests {
     val sources = helper.level.damageSources()
     zombie.hurtServer(helper.level, sources.playerAttack(player), 5f)
     helper.assertTrue((boss.damage[player.uuid] ?: 0.0) in 4.9..5.0, "the hit didn't count as the player's: ${boss.damage}")
+    // A fall after the hit is the player's too: alone, they get all of it.
+    val before = zombie.health
+    val share = boss.damage[player.uuid] ?: 0.0
+    zombie.hurtServer(helper.level, sources.fall(), 12f)
+    val fell = (before - zombie.health).toDouble()
+    helper.assertTrue(fell > 0.0 && kotlin.math.abs((boss.damage[player.uuid] ?: 0.0) - share - fell) < 0.01, "the fall's $fell didn't count as the player's: ${boss.damage}")
     zombie.hurtServer(helper.level, sources.playerAttack(player), 100_000f)
     helper.assertTrue(zombie.isDeadOrDying, "the boss didn't die")
     helper.assertTrue(mod.bosses.get(zombie) == null, "a dead boss stays live")
     helper.assertTrue(player.totalExperience > experience, "the player got no experience")
-    helper.assertTrue(player.chat.any { it.contains("100%") }, "the kill note doesn't say 100%: ${player.chat}")
+    helper.assertTrue(player.chat.any { it.contains("100%") }, "the kill note doesn't say 100%, though the player fought alone: ${player.chat}")
     val loot = helper.level.getEntitiesOfClass(ItemEntity::class.java, zombie.boundingBox.inflate(4.0))
     helper.assertTrue(loot.any { owner(helper, it) == player.uuid }, "no loot for the player alone")
     helper.succeed()

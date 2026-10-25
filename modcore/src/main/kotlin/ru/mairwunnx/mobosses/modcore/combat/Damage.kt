@@ -3,7 +3,6 @@ package ru.mairwunnx.mobosses.modcore.combat
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.DamageTypeTags
 import net.minecraft.world.damagesource.DamageSource
-import net.minecraft.world.damagesource.DamageTypes
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.OwnableEntity
@@ -22,8 +21,8 @@ import ru.mairwunnx.mobosses.modcore.data.Data
  * Hits on bosses, as Paper's `DamageListener`: each player's share of the damage, their pets' included, kept on the
  * boss, the health bar, and the abilities a hit may set off. A player, their pet, or a golem sets abilities off; the
  * pet or golem becomes fair game for them. Only health the hit took counts, so overkill and absorbed hits give
- * nothing. Fire burns in the name of the player who last hurt the boss, as the game credits kills. Bosses' own shots
- * grow with their level here too.
+ * nothing. Damage nobody dealt by hand goes to the players fighting the boss ([Boss.credit]). Bosses' own shots grow
+ * with their level here too.
  */
 class Damage(private val mod: MoBosses) {
   /** After a hit took [dealt] health from [boss]. */
@@ -32,10 +31,10 @@ class Damage(private val mod: MoBosses) {
     val amount = dealt.toDouble().coerceAtLeast(0.0)
     val by = source.entity
     if (by == null) {
-      // The game burns a mob in nobody's name: without this, a Flame bow left a third of the boss to nobody.
-      if (!source.`is`(DamageTypes.ON_FIRE) || amount <= 0.0) return
-      val (player, byPet) = credit(boss.entity) ?: return
-      boss.addDamage(player.uuid, amount, byPet)
+      // Nobody dealt it by hand, fire, a fall after a knockback, lava, poison: it goes to the players fighting it, or a
+      // solo player who set it alight or knocked it off a ledge would lose part of their share.
+      if (amount <= 0.0) return
+      boss.credit(amount)
       mod.groupHealth.update(boss)
       return
     }
@@ -72,18 +71,5 @@ class Damage(private val mod: MoBosses) {
     val formula = mod.catalog.settings.formula
     val graded = boss.graded(mod.catalog.settings.difficulty.weights.damage)
     return damage * (Stats.ranged(formula.damage, boss.clazz.damage, boss.level, formula.rangedDamage) * graded).coerceAtLeast(1.0).toFloat()
-  }
-
-  /** Who the game credits for hurting [entity] lately: a player, or the owner of a pet that did; the pet's flag with it. */
-  private fun credit(entity: LivingEntity): Pair<ServerPlayer, Boolean>? {
-    (entity.lastHurtByPlayer as? ServerPlayer)?.let { return it to false }
-    val mob: Entity = entity.lastHurtByMob ?: return null
-    if (entity.tickCount - entity.lastHurtByMobTimestamp > MEMORY) return null
-    return ((mob as? OwnableEntity)?.owner as? ServerPlayer)?.let { it to true }
-  }
-
-  private companion object {
-    /** How long the game remembers who hurt a mob, in ticks: five seconds. */
-    const val MEMORY = 100
   }
 }
