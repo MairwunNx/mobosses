@@ -6,11 +6,22 @@ plugins {
 
 val adventureVersion = "5.2.0"
 
+// The game tests both mods run (`src/gametest`): each mod compiles them with its loader's `GameTest` annotation; here
+// they compile once with `src/gametestPlain` (the annotation for a loader without its own), so they're checked against
+// the game alone.
+val gametest: SourceSet = sourceSets.create("gametest") {
+  compileClasspath += sourceSets.main.get().output
+}
+kotlin.sourceSets.named("gametest") {
+  kotlin.srcDir("src/gametestPlain/kotlin")
+}
+
 // The game without a loader, as both mods see it: NeoForm's Minecraft, whose names are the game's own since 26.1.
 // Whatever spawns, fights, and rewards bosses the same way on Fabric and NeoForge lives here; `fabric` and `neoforge`
 // hand in what their loader does differently (see `Loader`). Only a frame so far: the mods make no bosses yet.
 neoForge {
   neoFormVersion = "26.3-1"
+  addModdingDependenciesTo(gametest)
 }
 
 dependencies {
@@ -39,6 +50,11 @@ dependencies {
   testImplementation(platform("org.junit:junit-bom:6.1.3"))
   testImplementation("org.junit.jupiter:junit-jupiter")
   testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+dependencies {
+  "gametestImplementation"(project(":core")) { exclude(group = "org.slf4j") }
+  "gametestCompileOnly"("net.kyori:adventure-text-minimessage:$adventureVersion")
 }
 
 kotlin {
