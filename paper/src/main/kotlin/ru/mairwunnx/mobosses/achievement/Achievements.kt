@@ -1,11 +1,7 @@
 package ru.mairwunnx.mobosses.achievement
 
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
 import io.papermc.paper.event.server.ServerResourcesReloadedEvent
 import net.kyori.adventure.key.Key
-import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer
 import org.bukkit.Bukkit
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Entity
@@ -125,31 +121,10 @@ class Achievements(private val plugin: MoBossesPlugin) : Listener {
   private fun hurt(boss: Boss): Set<String> =
     boss.entity.persistentDataContainer.get(plugin.keys.hurt, PersistentDataType.STRING).orEmpty().split(';').filter { it.isNotBlank() }.toSet()
 
-  private fun json(achievement: Achievement, code: String): String {
-    fun text(part: String) = GsonComponentSerializer.gson().serializeToTree(
-      plugin.languages.render(code, "achievements.${achievement.id}.$part") ?: Component.text(achievement.id),
-    )
-    val display = JsonObject().apply {
-      add("icon", JsonObject().apply { addProperty("id", achievement.icon.key.toString()) })
-      add("title", text("title"))
-      add("description", text("description"))
-      addProperty("frame", achievement.frame.name.lowercase())
-      addProperty("show_toast", true)
-      addProperty("announce_to_chat", true)
-      addProperty("hidden", false)
-      if (achievement.parent == null) addProperty("background", BACKGROUND)
-    }
-    return JsonObject().apply {
-      achievement.parent?.let { addProperty("parent", key(it).toString()) }
-      add("criteria", JsonObject().apply { add(CRITERION, JsonObject().apply { addProperty("trigger", "minecraft:impossible") }) })
-      add("display", display)
-      add("requirements", JsonArray().apply { add(JsonArray().apply { add(CRITERION) }) })
-    }.toString()
-  }
+  private fun json(achievement: Achievement, code: String): String = Advancement.json(achievement, code, plugin.languages, { key(it).toString() }).toString()
 
   private companion object {
-    const val CRITERION = "done"
-    const val BACKGROUND = "minecraft:gui/advancements/backgrounds/nether"
+    const val CRITERION = Advancement.CRITERION
     /** How long after dying to a boss a player may avenge it. */
     const val AVENGE_MILLIS = 10 * 60_000L
   }
