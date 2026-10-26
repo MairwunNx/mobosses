@@ -241,7 +241,8 @@ class Store(private val settings: Settings.Database, folder: File, private val c
       Type.MYSQL -> {
         val db = settings.mysql
         driverClassName = org.mariadb.jdbc.Driver::class.java.name
-        jdbcUrl = "jdbc:mariadb://${db.host}:${db.port}/${db.database}" + if (db.ssl) "?sslMode=verify-full" else ""
+        // The driver verifies TLS by default since 4.0; `ssl: false` still means a plain connection, as with 3.x.
+        jdbcUrl = "jdbc:mariadb://${db.host}:${db.port}/${db.database}?sslMode=" + if (db.ssl) "verify-full" else "disable"
         username = db.username
         password = db.password
       }
