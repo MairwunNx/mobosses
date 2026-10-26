@@ -15,7 +15,7 @@ val mods = providers.gradleProperty("mobosses.mods").map(String::toBoolean).getO
 dependencies {
   // What doesn't touch Bukkit: the formulas, the configs, the languages, the store. Shaded with its libraries.
   implementation(project(":core"))
-  compileOnly("io.papermc.paper:paper-api:26.3.build.205-stable")
+  compileOnly("io.papermc.paper:paper-api:26.3.build.223-stable")
   // Paper ships the SQLite driver, so it stays out of the jar.
   compileOnly("org.xerial:sqlite-jdbc:3.53.4.0")
   // Optional plugins: their classes load only when they're on the server.
@@ -30,7 +30,7 @@ dependencies {
   // So does Allay, the AI helper, for its expansion API.
   compileOnly("chat.allay:allay-expansion:1.3.0")
 
-  testImplementation("io.papermc.paper:paper-api:26.3.build.205-stable")
+  testImplementation("io.papermc.paper:paper-api:26.3.build.223-stable")
   testImplementation(kotlin("test"))
   testImplementation(platform("org.junit:junit-bom:6.1.3"))
   testImplementation("org.junit.jupiter:junit-jupiter")
