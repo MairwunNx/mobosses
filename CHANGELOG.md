@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.11.1
+
+### Changed
+
+- 🔧 **Fresher libraries.** The MySQL and MariaDB driver moves to 4.0.0 and kotlinx.serialization to 1.12.0. The new driver checks TLS by default, so Mo’Bosses now asks it for a plain connection outright when `database.mysql.ssl` is `false`, which keeps your database connecting as before. The NeoForge mod is built against NeoForge 26.3.0.99 and asks for it or newer.
+
 ## 2.11.0
 
 ### New
