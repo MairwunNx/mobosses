@@ -3,6 +3,7 @@ package ru.mairwunnx.mobosses.modcore.combat
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.DamageTypeTags
 import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.world.effect.MobEffects
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon
 import net.minecraft.world.entity.LivingEntity
@@ -12,6 +13,7 @@ import net.minecraft.world.entity.animal.golem.AbstractGolem
 import net.minecraft.world.entity.projectile.Projectile
 import ru.mairwunnx.mobosses.achievement.Achievement
 import ru.mairwunnx.mobosses.algebra.Stats
+import ru.mairwunnx.mobosses.boss.WorldBosses
 import ru.mairwunnx.mobosses.modcore.MoBosses
 import ru.mairwunnx.mobosses.modcore.ability.Targets
 import ru.mairwunnx.mobosses.modcore.ability.kinds.Chain
@@ -86,7 +88,8 @@ class Damage(private val mod: MoBosses) {
     if (data.has(Keys.ARROW) || data.has(Keys.METEOR)) return damage
     val formula = mod.catalog.settings.formula
     val graded = boss.graded(mod.catalog.settings.difficulty.weights.damage)
-    return damage * (Stats.ranged(formula.damage, boss.clazz.damage, boss.level, formula.rangedDamage) * graded).coerceAtLeast(1.0).toFloat()
+    val grown = damage * (Stats.ranged(formula.damage, boss.clazz.damage, boss.level, formula.rangedDamage) * graded).coerceAtLeast(1.0).toFloat()
+    return if (WorldBosses.isWorldBoss(boss.type.key)) grown + strength(boss.entity) else grown
   }
 
   private fun dragon(target: LivingEntity, source: DamageSource, damage: Float): Float {
@@ -94,6 +97,12 @@ class Damage(private val mod: MoBosses) {
     if (target == boss.entity) return damage
     val formula = mod.catalog.settings.formula
     val graded = boss.graded(mod.catalog.settings.difficulty.weights.damage)
-    return damage * (Stats.ranged(formula.damage, boss.clazz.damage, boss.level, formula.rangedDamage) * graded).coerceAtLeast(1.0).toFloat()
+    return damage * (Stats.ranged(formula.damage, boss.clazz.damage, boss.level, formula.rangedDamage) * graded).coerceAtLeast(1.0).toFloat() + strength(boss.entity)
   }
+
+  /**
+   * What enrage's Strength adds to the dragon's and the wither's attacks, which aren't blows the game would add it to:
+   * 3 a level, as to a blow.
+   */
+  private fun strength(entity: LivingEntity) = 3f * ((entity.getEffect(MobEffects.STRENGTH)?.amplifier ?: -1) + 1)
 }

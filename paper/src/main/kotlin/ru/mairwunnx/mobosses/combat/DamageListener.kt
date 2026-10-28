@@ -19,12 +19,14 @@ import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.persistence.PersistentDataType
+import org.bukkit.potion.PotionEffectType
 import ru.mairwunnx.mobosses.MoBossesPlugin
 import ru.mairwunnx.mobosses.ability.Targets
 import ru.mairwunnx.mobosses.achievement.Achievement
 import ru.mairwunnx.mobosses.ability.kinds.Chain
 import ru.mairwunnx.mobosses.algebra.Stats
 import ru.mairwunnx.mobosses.boss.Boss
+import ru.mairwunnx.mobosses.boss.WorldBosses
 
 /**
  * Hits on bosses: each player's share of the damage, their pets' included, kept on the boss, the
@@ -106,6 +108,7 @@ class DamageListener(private val plugin: MoBossesPlugin) : Listener {
     val formula = plugin.catalog.settings.formula
     val graded = boss.graded(plugin.catalog.settings.difficulty.weights.damage)
     event.damage *= (Stats.ranged(formula.damage, boss.clazz.damage, boss.level, formula.rangedDamage) * graded).coerceAtLeast(1.0)
+    if (WorldBosses.isWorldBoss(boss.type.key)) event.damage += strength(boss.entity)
   }
 
   /** The dragon's blows and breath have no attribute to grow with its level, so they grow here, as its fireballs do. */
@@ -116,8 +119,14 @@ class DamageListener(private val plugin: MoBossesPlugin) : Listener {
     val boss = plugin.bosses.get(dragon) ?: return
     val formula = plugin.catalog.settings.formula
     val graded = boss.graded(plugin.catalog.settings.difficulty.weights.damage)
-    event.damage *= (Stats.ranged(formula.damage, boss.clazz.damage, boss.level, formula.rangedDamage) * graded).coerceAtLeast(1.0)
+    event.damage = event.damage * (Stats.ranged(formula.damage, boss.clazz.damage, boss.level, formula.rangedDamage) * graded).coerceAtLeast(1.0) + strength(dragon)
   }
+
+  /**
+   * What enrage's Strength adds to the dragon's and the wither's attacks, which aren't blows the game would add it to:
+   * 3 a level, as to a blow.
+   */
+  private fun strength(entity: LivingEntity) = 3.0 * ((entity.getPotionEffect(PotionEffectType.STRENGTH)?.amplifier ?: -1) + 1)
 
   @EventHandler
   fun onQuit(event: PlayerQuitEvent) = plugin.bars.hide(event.player)

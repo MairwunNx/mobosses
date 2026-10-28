@@ -36,3 +36,5 @@ minions:
   - { summoner: HOGLIN, entity: HOGLIN }
   - { summoner: RAVAGER, entity: PILLAGER }
   - { summoner: GUARDIAN, entity: GUARDIAN }
+  - { summoner: ENDER_DRAGON, entity: PHANTOM }
+  - { summoner: WITHER, entity: WITHER_SKELETON }
