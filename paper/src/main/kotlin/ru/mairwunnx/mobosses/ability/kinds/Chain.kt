@@ -10,6 +10,7 @@ import ru.mairwunnx.mobosses.MoBossesPlugin
 import ru.mairwunnx.mobosses.ability.Ability
 import ru.mairwunnx.mobosses.ability.Cast
 import ru.mairwunnx.mobosses.achievement.Achievement
+import ru.mairwunnx.mobosses.algebra.Reel
 import ru.mairwunnx.mobosses.algebra.Rolls
 import ru.mairwunnx.mobosses.boss.Boss
 import ru.mairwunnx.mobosses.config.AbilitySettings
@@ -18,10 +19,11 @@ import ru.mairwunnx.mobosses.lang.Message
 import java.util.UUID
 
 /**
- * Against archers: the boss chains the farthest player it fights, in sight, who keeps away from it. For a few
- * seconds that player can't stray past `chain_length`: the chain yanks them back and hurts. A few
- * blows to the boss in melee break it early, so the way out is to close in and fight. A chain lasts
- * seconds, so it lives only in memory; a restart just ends it.
+ * Against archers: the boss chains the farthest player it fights, in sight, who keeps away from it, and hauls them in
+ * like a rope ([Reel]): past its length, which shortens as it goes, it pulls them back in heaves and hurts once a
+ * second. A sprint between heaves gains ground; an ender pearl past its slack gets them yanked back at once. A few
+ * blows to the boss in melee break it, so the way out is to close in and fight. A chain lasts seconds, so it lives
+ * only in memory; a restart just ends it.
  */
 object Chain : Ability {
   override val key = "chain"
@@ -57,9 +59,9 @@ object Chain : Ability {
     cast.sound(Sound.BLOCK_CHAIN_PLACE, 1.2f, 0.6f, target.location)
 
     var tick = 0
-    var lastYank = -20
-    cast.every(4) { task ->
-      tick += 4
+    var lastHurt = -20
+    cast.every(2) { task ->
+      tick += 2
       val boss = cast.boss.entity
       val gone = !boss.isValid || boss.isDead || !target.isOnline || target.isDead || target.world != boss.world || !cast.canHit(target)
       if (gone || tick >= ticks || links[target.uniqueId] !== link) {
@@ -69,11 +71,19 @@ object Chain : Ability {
       }
       val from = boss.location.add(0.0, boss.height * 0.6, 0.0)
       val to = target.location.add(0.0, 1.0, 0.0)
-      draw(from, to)
+      if (tick % 4 == 0) draw(from, to)
       val away = to.toVector().subtract(from.toVector())
-      if (away.length() > cfg.length && tick - lastYank >= 20) {
-        lastYank = tick
-        target.velocity = away.multiply(-1).normalize().multiply(1.1).setY(0.35)
+      val distance = away.length()
+      val seconds = tick / 20.0
+      val length = Reel.length(cfg, seconds)
+      if (distance <= length) return@every
+      val back = away.multiply(-1).normalize()
+      target.velocity = if (distance > length + cfg.slack) back.multiply(1.1).setY(0.35) else {
+        val pull = Reel.pull(cfg, cast.level, seconds)
+        back.clone().multiply(pull).setY((back.y * pull).coerceIn(-0.08, 0.2))
+      }
+      if (tick - lastHurt >= 20) {
+        lastHurt = tick
         target.damage(damage, boss)
         cast.sound(Sound.BLOCK_CHAIN_BREAK, 1f, 0.5f, target.location)
       }

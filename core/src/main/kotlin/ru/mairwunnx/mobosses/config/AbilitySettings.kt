@@ -218,8 +218,20 @@ data class AbilitySettings(
     /** Chains the farthest player in sight within this range, but only one at least min_distance away: an archer, not a fighter. */
     val range: Double = 24.0,
     @SerialName("min_distance") val minDistance: Double = 8.0,
-    /** How far the chained player may stray before it yanks them back and hurts. */
+    /** How far the chained player may stray at first; past it the chain pulls them back and hurts. */
     val length: Double = 8.0,
+    /** The boss hauls the chain in this many blocks a second, down to min_length. */
+    @SerialName("reel_per_second") val reelPerSecond: Double = 0.6,
+    @SerialName("min_length") val minLength: Double = 3.0,
+    /** How fast it pulls, in blocks a tick, by level: 0.2 about holds a sprinting player in place. */
+    @SerialName("pull_base") val pullBase: Double = 0.2,
+    @SerialName("pull_per_level") val pullPerLevel: Double = 0.002,
+    @SerialName("pull_max") val pullMax: Double = 0.32,
+    /** The pull heaves by this share up and down every surge_seconds, so a sprint between heaves gains ground. */
+    val surge: Double = 0.5,
+    @SerialName("surge_seconds") val surgeSeconds: Double = 1.6,
+    /** This far past its length, as after an ender pearl, it yanks the player back at once. */
+    val slack: Double = 8.0,
     @SerialName("seconds_base") val secondsBase: Double = 5.0,
     @SerialName("seconds_per_level") val secondsPerLevel: Double = 0.05,
     @SerialName("seconds_max") val secondsMax: Double = 10.0,

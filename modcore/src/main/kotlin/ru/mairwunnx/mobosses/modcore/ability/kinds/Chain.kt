@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.phys.Vec3
 import ru.mairwunnx.mobosses.achievement.Achievement
+import ru.mairwunnx.mobosses.algebra.Reel
 import ru.mairwunnx.mobosses.algebra.Rolls
 import ru.mairwunnx.mobosses.config.AbilitySettings
 import ru.mairwunnx.mobosses.config.AbilityThresholds
@@ -20,8 +21,9 @@ import ru.mairwunnx.mobosses.modcore.boss.Boss
 import java.util.UUID
 
 /**
- * The boss chains the farthest archer it fights and sees: straying past `length` blocks yanks them back and hurts.
- * Three melee blows on the boss break it, as on Paper.
+ * The boss chains the farthest archer it fights and sees, and hauls them in like a rope ([Reel]): past its length,
+ * which shortens as it goes, it pulls them back in heaves and hurts once a second. Three melee blows on the boss break
+ * it, as on Paper.
  */
 object Chain : Ability {
   override val key = "chain"
@@ -57,9 +59,9 @@ object Chain : Ability {
     cast.sound(SoundEvents.CHAIN_PLACE, 1.2f, 0.6f, target.position())
 
     var tick = 0
-    var lastYank = -20
-    cast.every(4) { task ->
-      tick += 4
+    var lastHurt = -20
+    cast.every(2) { task ->
+      tick += 2
       val boss = cast.entity
       val gone = !boss.isAlive || target.hasDisconnected() || target.isDeadOrDying || target.level() != boss.level() || !cast.canHit(target)
       if (gone || tick >= ticks || links[target.uuid] !== link) {
@@ -69,11 +71,19 @@ object Chain : Ability {
       }
       val from = boss.position().add(0.0, boss.bbHeight * 0.6, 0.0)
       val to = target.position().add(0.0, 1.0, 0.0)
-      draw(cast.world, from, to)
+      if (tick % 4 == 0) draw(cast.world, from, to)
       val away = to.subtract(from)
-      if (away.length() > cfg.length && tick - lastYank >= 20) {
-        lastYank = tick
-        cast.push(target, away.scale(-1.0).normalize().scale(1.1).multiply(1.0, 0.0, 1.0).add(0.0, 0.35, 0.0))
+      val distance = away.length()
+      val seconds = tick / 20.0
+      val length = Reel.length(cfg, seconds)
+      if (distance <= length) return@every
+      val back = away.scale(-1.0).normalize()
+      cast.push(target, if (distance > length + cfg.slack) back.scale(1.1).multiply(1.0, 0.0, 1.0).add(0.0, 0.35, 0.0) else {
+        val pull = Reel.pull(cfg, cast.level, seconds)
+        Vec3(back.x * pull, (back.y * pull).coerceIn(-0.08, 0.2), back.z * pull)
+      })
+      if (tick - lastHurt >= 20) {
+        lastHurt = tick
         target.hurtServer(cast.world, cast.world.damageSources().mobAttack(boss), damage.toFloat())
         cast.sound(SoundEvents.CHAIN_BREAK, 1f, 0.5f, target.position())
       }
