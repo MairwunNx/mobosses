@@ -72,6 +72,7 @@ class NaturalSpawns(private val mod: MoBosses) {
     if (!catalog.settings.enabled || !spawn.enabled || entity.isNoAi) return null
     val type = catalog.types[entity.type]?.takeIf { it.spec.enabled } ?: return null
     val level = entity.level() as? ServerLevel ?: return null
+    if (type.spec.adultsOnly && entity.isBaby) return null
     // A world's first dragon stays the game's own: it becomes a boss only once it's been beaten and comes back.
     if (entity is EnderDragon && level.dragonFight?.hasPreviouslyKilledDragon() != true) return null
     // The dragon and the wither are fights someone sets up: no cooldown or crowd keeps them ordinary, and they start none.

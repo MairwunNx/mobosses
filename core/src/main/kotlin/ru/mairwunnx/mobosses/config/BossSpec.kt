@@ -20,6 +20,8 @@ data class BossSpec(
   @SerialName("exp_modifier") val expModifier: Double = 1.0,
   /** The chance, 0 to 1, of one more item per kill, from this type's own loot, for one of the players who got loot. */
   @SerialName("bonus_loot_chance") val bonusLootChance: Double = 0.0,
+  /** Only grown mobs of this type become bosses, never babies. */
+  @SerialName("adults_only") val adultsOnly: Boolean = false,
   /** Creepers only: a charged creeper. */
   @SerialName("is_powered") val isPowered: Boolean? = null,
   val equipment: Equipment = Equipment(),

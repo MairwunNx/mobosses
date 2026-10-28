@@ -5,6 +5,7 @@ import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.Particle
 import org.bukkit.Sound
+import org.bukkit.entity.Ageable
 import org.bukkit.entity.EnderDragon
 import org.bukkit.entity.Mob
 import org.bukkit.entity.Player
@@ -68,6 +69,7 @@ class NaturalSpawns(private val plugin: MoBossesPlugin) {
     val spawn = catalog.settings.spawn
     if (!catalog.settings.enabled || !spawn.enabled || !entity.hasAI()) return null
     val type = catalog.types[entity.type]?.takeIf { it.spec.enabled } ?: return null
+    if (type.spec.adultsOnly && (entity as? Ageable)?.isAdult == false) return null
     // A world's first dragon stays the game's own: it becomes a boss only once it's been beaten and comes back.
     if (entity is EnderDragon && entity.world.enderDragonBattle?.hasBeenPreviouslyKilled() != true) return null
     // The dragon and the wither are fights someone sets up: no cooldown or crowd keeps them ordinary, and they start none.
