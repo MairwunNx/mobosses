@@ -43,17 +43,15 @@ class LootPages(private val mod: MoBosses) {
     }
   }
 
-  /** The entry's share of the drops of a boss of its own lowest class at its lowest level, by weight, as a short number. */
+  /** The entry's share of the drops of a boss of its own lowest class at its lowest level, as a short number. */
   private fun percent(loot: Catalog.Loot): String {
     val catalog = mod.catalog
     val spec = loot.spec
     val type = loot.types.firstOrNull()
-    val pool = catalog.loot.mapNotNull { other ->
-      val theirs = other.types.isEmpty() || (type != null && type in other.types)
-      LootRules.weight(other.spec, catalog.classes, spec.mobclass, spec.minLevel, theirs)
-    }.sum()
-    val own = LootRules.weight(spec, catalog.classes, spec.mobclass, spec.minLevel, true) ?: 0.0
-    val share = if (pool > 0) own * 100 / pool else 0.0
+    val pool = LootRules.pool(catalog.loot, { it.spec }, { other -> other.types.isEmpty() || (type != null && type in other.types) }, catalog.classes, spec.mobclass, spec.minLevel)
+    val own = pool.firstOrNull { it.first === loot }?.second ?: 0.0
+    val all = pool.sumOf { it.second }
+    val share = if (all > 0) own * 100 / all else 0.0
     return if (share >= 10) share.roundToInt().toString() else "%.1f".format(Locale.ROOT, share)
   }
 }

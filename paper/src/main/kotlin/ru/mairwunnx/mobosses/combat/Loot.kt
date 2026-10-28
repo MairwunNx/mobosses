@@ -18,8 +18,9 @@ import ru.mairwunnx.mobosses.spawn.SurvivalBonus
 import kotlin.random.Random
 
 /**
- * One item from `loottable.yml` for each player who dealt enough of a boss's health. A boss drops
- * loot of its class and the classes below, at falling odds the further down, never above. The
+ * Items from `loottable.yml` for each player who dealt enough of a boss's health: one, and more from
+ * higher levels. A boss drops loot of its class and the classes below, at falling odds the further
+ * down, never above. The
  * survival bonus tips the odds toward rare and better items, and a player whose drops from bosses
  * that could give one brought none for a while gets one for sure: after a count rolled anew each time,
  * so it shows no pattern. Entries with `types` belong to those boss types only. A type with a
@@ -33,10 +34,12 @@ class Loot(private val plugin: MoBossesPlugin) {
     val pool = pool(boss, luck)
     // Only a pool with something rare in it moves the pity count: a Common boss neither owes one nor pays it.
     val rarePool = pool.filter { (loot, _) -> isRare(loot) }
-    val item = (if (rarePool.isNotEmpty() && pityDue(player)) Rolls.weighted(rarePool, Random) else null) ?: Rolls.weighted(pool, Random)
-      ?: return plugin.log.debug { "No loot for ${player.name} from a level ${boss.level} ${boss.clazz.key} boss" }
-    if (rarePool.isNotEmpty()) track(player, isRare(item))
-    give(boss, player, item)
+    repeat(LootRules.items(plugin.catalog.settings.loot.items, boss.level)) {
+      val item = (if (rarePool.isNotEmpty() && pityDue(player)) Rolls.weighted(rarePool, Random) else null) ?: Rolls.weighted(pool, Random)
+        ?: return plugin.log.debug { "No loot for ${player.name} from a level ${boss.level} ${boss.clazz.key} boss" }
+      if (rarePool.isNotEmpty()) track(player, isRare(item))
+      give(boss, player, item)
+    }
   }
 
   /** The bonus roll after a kill: [shares] holds the players who got loot, with their shares. */
@@ -62,12 +65,8 @@ class Loot(private val plugin: MoBossesPlugin) {
    * The items for the boss's level and class, with their weights, rare ones tipped up by [luck]: the
    * shared table and its type's own entries, or, with [own], only the latter.
    */
-  fun pool(boss: Boss, luck: Double = 0.0, own: Boolean = false): List<Pair<Catalog.Loot, Double>> {
-    return plugin.catalog.loot.mapNotNull { loot ->
-      val theirs = if (loot.types.isEmpty()) !own else boss.type.entity in loot.types
-      LootRules.weight(loot.spec, plugin.catalog.classes, boss.clazz.key, boss.level, theirs, luck)?.let { loot to it }
-    }
-  }
+  fun pool(boss: Boss, luck: Double = 0.0, own: Boolean = false): List<Pair<Catalog.Loot, Double>> =
+    LootRules.pool(plugin.catalog.loot, { it.spec }, { loot -> if (loot.types.isEmpty()) !own else boss.type.entity in loot.types }, plugin.catalog.classes, boss.clazz.key, boss.level, luck)
 
   private fun isRare(loot: Catalog.Loot) = LootRules.isRare(loot.spec)
 

@@ -20,25 +20,47 @@ import kotlin.test.assertTrue
 class RulesTest {
   private val classes = Classes.parse(Settings::class.java.classLoader.getResource("classes.yml")!!.readText())
 
+  private fun weight(item: LootTable.Item, bossClass: String, level: Int, theirs: Boolean = true, luck: Double = 0.0, others: List<LootTable.Item> = emptyList()) =
+    LootRules.pool(others + item, { it }, { it !== item || theirs }, classes, bossClass, level, luck).firstOrNull { it.first === item }?.second
+
   @Test fun `a boss drops its class and below, at falling odds, never above`() {
     val rare = LootTable.Item(material = "diamond", mobclass = "rare", weight = 2.0)
-    assertNull(LootRules.weight(rare, classes, "uncommon", 50, theirs = true))
-    assertEquals(2.0, LootRules.weight(rare, classes, "rare", 50, theirs = true))
-    assertEquals(2.0 * 0.6, LootRules.weight(rare, classes, "epic", 50, theirs = true)!!, 1e-12)
-    assertEquals(2.0 * 0.15, LootRules.weight(rare, classes, "mythic", 50, theirs = true)!!, 1e-12)
+    assertNull(weight(rare, "uncommon", 50))
+    assertEquals(1.0, weight(rare, "rare", 50))
+    assertEquals(0.6, weight(rare, "epic", 50)!!, 1e-12)
+    assertEquals(0.15, weight(rare, "mythic", 50)!!, 1e-12)
+  }
+
+  @Test fun `a class drops as often however many entries it has`() {
+    val epic = LootTable.Item(material = "diamond_sword", mobclass = "epic", weight = 1.0)
+    val commons = List(40) { LootTable.Item(material = "iron_ingot", mobclass = "common", weight = 5.0) }
+    val pool = LootRules.pool(commons + epic, { it }, { true }, classes, "epic", 30)
+    assertEquals(1.0 / 1.15, pool.first { it.first === epic }.second / pool.sumOf { it.second }, 1e-12)
+    val two = LootTable.Item(material = "diamond", mobclass = "epic", weight = 3.0)
+    assertEquals(0.25, weight(epic, "epic", 30, others = listOf(two))!!, 1e-12)
   }
 
   @Test fun `levels and types keep an entry out`() {
     val item = LootTable.Item(material = "diamond", minLevel = 10, maxLevel = 20)
-    assertNull(LootRules.weight(item, classes, "common", 9, theirs = true))
-    assertNull(LootRules.weight(item, classes, "common", 15, theirs = false))
-    assertEquals(1.0, LootRules.weight(item, classes, "common", 15, theirs = true))
+    assertNull(weight(item, "common", 9))
+    assertNull(weight(item, "common", 15, theirs = false))
+    assertEquals(1.0, weight(item, "common", 15))
   }
 
   @Test fun `luck tips rare items up by their tier`() {
     val mythic = LootTable.Item(material = "mace", mobclass = "common", itemClass = "mythic")
-    assertEquals(1.0 + 0.5 * 2.5, LootRules.weight(mythic, classes, "common", 50, theirs = true, luck = 0.5)!!, 1e-12)
+    assertEquals(1.0 + 0.5 * 2.5, weight(mythic, "common", 50, luck = 0.5)!!, 1e-12)
     assertTrue(LootRules.isRare(mythic))
+  }
+
+  @Test fun `higher levels give more items, up to the cap`() {
+    val items = Settings.Items()
+    assertEquals(1, LootRules.items(items, 0))
+    assertEquals(1, LootRules.items(items, 19))
+    assertEquals(2, LootRules.items(items, 20))
+    assertEquals(3, LootRules.items(items, 40))
+    assertEquals(3, LootRules.items(items, 100))
+    assertEquals(1, LootRules.items(Settings.Items(everyLevels = 0), 100))
   }
 
   @Test fun `amounts grow with levels above the entry's lowest, up to a stack`() {

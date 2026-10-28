@@ -378,9 +378,17 @@ data class Settings(
     @SerialName("random_durability") val randomDurability: RandomDurability = RandomDurability(),
     /** The share of a boss's health a player must deal to get loot. */
     @SerialName("min_damage_share") val minDamageShare: Double = 0.27777777,
+    val items: Items = Items(),
     val pity: Pity = Pity(),
     /** How much the survival bonus tips loot toward rare and better items: their weights grow by bonus × this × their tier. */
     @SerialName("survival_luck") val survivalLuck: Double = 1.0,
+  )
+
+  /** How many items a player who earns loot gets: one, and one more every [everyLevels] of the boss's level, up to [max]. */
+  @Serializable
+  data class Items(
+    @SerialName("every_levels") val everyLevels: Int = 20,
+    val max: Int = 3,
   )
 
   /**

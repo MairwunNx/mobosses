@@ -355,6 +355,11 @@ loot:
     min_durability: 0.1   # At least 10% of their durability left,
     max_durability: 0.9   # at most 90%; better classes lean toward the top.
   min_damage_share: 0.27777777   # The share of the boss's health a player must deal for loot.
+  # Each player who earns loot gets one item, and one more every every_levels of
+  # the boss's level, up to max: two from level 20, three from 40.
+  items:
+    every_levels: 20
+    max: 3
   # A player whose drops from bosses that can give rare loot brought nothing rare
   # or better gets a rare item at least, after a count rolled anew each time
   # between min_drops and max_drops, so it shows no pattern. Never above the

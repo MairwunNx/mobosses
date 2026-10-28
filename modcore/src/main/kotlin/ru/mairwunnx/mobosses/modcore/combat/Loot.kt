@@ -23,8 +23,8 @@ import ru.mairwunnx.mobosses.spawn.Hunt
 import kotlin.random.Random
 
 /**
- * One item from `loottable.yml` for each player who dealt enough of a boss's health, by [LootRules], as on Paper. The
- * item drops for its player alone, and its name and lore come in their language. A type with a `bonus_loot_chance`
+ * Items from `loottable.yml` for each player who dealt enough of a boss's health, by [LootRules], as on Paper: one, and
+ * more from higher levels. Each item drops for its player alone, and its name and lore come in their language. A type with a `bonus_loot_chance`
  * may drop one more item per kill, for one of the players who got loot, picked by their shares.
  */
 class Loot(private val mod: MoBosses) {
@@ -33,10 +33,12 @@ class Loot(private val mod: MoBosses) {
     val pool = pool(boss, luck)
     // Only a pool with something rare in it moves the pity count: a Common boss neither owes one nor pays it.
     val rarePool = pool.filter { (loot, _) -> LootRules.isRare(loot.spec) }
-    val item = (if (rarePool.isNotEmpty() && pityDue(player)) Rolls.weighted(rarePool, Random) else null) ?: Rolls.weighted(pool, Random)
-      ?: return mod.log.debug { "No loot for ${player.plainTextName} from a level ${boss.level} ${boss.clazz.key} boss" }
-    if (rarePool.isNotEmpty()) track(player, LootRules.isRare(item.spec))
-    give(boss, player, item)
+    repeat(LootRules.items(mod.catalog.settings.loot.items, boss.level)) {
+      val item = (if (rarePool.isNotEmpty() && pityDue(player)) Rolls.weighted(rarePool, Random) else null) ?: Rolls.weighted(pool, Random)
+        ?: return mod.log.debug { "No loot for ${player.plainTextName} from a level ${boss.level} ${boss.clazz.key} boss" }
+      if (rarePool.isNotEmpty()) track(player, LootRules.isRare(item.spec))
+      give(boss, player, item)
+    }
   }
 
   /** The bonus roll after a kill: [shares] holds the players who got loot, with their shares. */
@@ -65,10 +67,7 @@ class Loot(private val mod: MoBosses) {
    * its type's own entries, or, with [own], only the latter.
    */
   fun pool(boss: Boss, luck: Double = 0.0, own: Boolean = false): List<Pair<Catalog.Loot, Double>> =
-    mod.catalog.loot.mapNotNull { loot ->
-      val theirs = if (loot.types.isEmpty()) !own else boss.type.entity in loot.types
-      LootRules.weight(loot.spec, mod.catalog.classes, boss.clazz.key, boss.level, theirs, luck)?.let { loot to it }
-    }
+    LootRules.pool(mod.catalog.loot, { it.spec }, { loot -> if (loot.types.isEmpty()) !own else boss.type.entity in loot.types }, mod.catalog.classes, boss.clazz.key, boss.level, luck)
 
   private fun pityDue(player: ServerPlayer): Boolean {
     val pity = mod.catalog.settings.loot.pity
