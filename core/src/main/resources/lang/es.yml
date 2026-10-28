@@ -229,6 +229,7 @@ abilities:
   chain: "<boss><boss_name></boss> lanza una <item>cadena</item>: el encadenado no puede alejarse; ¡tres golpes cuerpo a cuerpo la rompen!"
   chain_broken: "<ok>¡Rompiste la cadena de</ok> <boss><boss_name></boss><ok>!</ok>"
   doubles: "<boss><boss_name></boss> se divide en <item>dobles</item>: ¡encuentra al verdadero!"
+  blindness: "<boss><boss_name></boss> reúne <item>oscuridad</item>: ¡corre o quedarás ciego!"
   phase_two: "¡<boss><boss_name></boss> entra en su <hp>segunda fase</hp>!"
 
 classes:
@@ -294,6 +295,8 @@ minions:
   hoglin: "Hoglincito"
   ravager: "Batidor"
   guardian: "Vigía abisal"
+  ender_dragon: "Colmillo del Cielo"
+  wither: "Guardia de Ceniza"
 
 # Nombres y descripciones del botín, por el id de loottable.yml.
 items:

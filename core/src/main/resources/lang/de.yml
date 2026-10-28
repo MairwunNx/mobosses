@@ -229,6 +229,7 @@ abilities:
   chain: "<boss><boss_name></boss> wirft eine <item>Kette</item>: Wer gefesselt ist, kommt nicht weit; drei Schläge aus der Nähe sprengen sie!"
   chain_broken: "<ok>Du hast die Kette von</ok> <boss><boss_name></boss> <ok>gesprengt!</ok>"
   doubles: "<boss><boss_name></boss> teilt sich in <item>Doppelgänger</item>: Finde den echten!"
+  blindness: "<boss><boss_name></boss> sammelt <item>Finsternis</item>: Lauf, oder du erblindest!"
   phase_two: "<boss><boss_name></boss> geht in die <hp>zweite Phase</hp>!"
 
 classes:
@@ -294,6 +295,8 @@ minions:
   hoglin: "Hoglinferkel"
   ravager: "Vorreiter"
   guardian: "Tiefenwächter"
+  ender_dragon: "Himmelsfang"
+  wither: "Aschewächter"
 
 # Namen und Beschreibungen der Beute, nach der id in loottable.yml.
 items:

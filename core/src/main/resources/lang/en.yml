@@ -229,6 +229,7 @@ abilities:
   chain: "<boss><boss_name></boss> casts a <item>chain</item>: the chained can’t get away; three blows in melee break it!"
   chain_broken: "<ok>You broke the chain of</ok> <boss><boss_name></boss><ok>!</ok>"
   doubles: "<boss><boss_name></boss> splits into <item>doubles</item>: find the real one!"
+  blindness: "<boss><boss_name></boss> gathers <item>darkness</item>: run, or go blind!"
   phase_two: "<boss><boss_name></boss> enters its <hp>second phase</hp>!"
 
 classes:
@@ -294,6 +295,8 @@ minions:
   hoglin: "Hoglet"
   ravager: "Outrider"
   guardian: "Deep Watcher"
+  ender_dragon: "Sky Fang"
+  wither: "Ash Guard"
 
 # Loot names and lore, by the id in loottable.yml.
 items:

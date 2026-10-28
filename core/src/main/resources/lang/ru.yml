@@ -229,6 +229,7 @@ abilities:
   chain: "<boss><boss_name></boss> набрасывает <item>цепь</item>: прикованный не уйдёт далеко; три удара вблизи её рвут!"
   chain_broken: "<ok>Вы разорвали цепь</ok> <boss><boss_name></boss><ok>!</ok>"
   doubles: "<boss><boss_name></boss> распадается на <item>двойников</item>: найдите настоящего!"
+  blindness: "<boss><boss_name></boss> сгущает <item>тьму</item>: бегите, или ослепнете!"
   phase_two: "<boss><boss_name></boss> переходит во <hp>вторую фазу</hp>!"
 
 classes:
@@ -294,6 +295,8 @@ minions:
   hoglin: "Хоглинёнок"
   ravager: "Передовой"
   guardian: "Глубинный страж"
+  ender_dragon: "Небесный клык"
+  wither: "Пепельный страж"
 
 # Названия и описания лута по id из loottable.yml.
 items:

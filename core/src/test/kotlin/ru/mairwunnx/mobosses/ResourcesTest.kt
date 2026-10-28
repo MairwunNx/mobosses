@@ -35,7 +35,7 @@ class ResourcesTest {
     val bosses = clean("bosses.yml", BossSpec::parse)
     assertEquals(27, bosses.size)
     assertTrue(bosses.values.all { it.name == null }, "bosses.yml names bosses; they belong in lang/")
-    assertEquals(23, clean("minions.yml", MinionSettings::parse).minions.size)
+    assertEquals(25, clean("minions.yml", MinionSettings::parse).minions.size)
     val loot = clean("loottable.yml", LootTable::parse)
     assertTrue(loot.items.size > 500)
     assertTrue(loot.items.none { it.title != null || it.lore.isNotEmpty() }, "loottable.yml has fixed names; they belong in lang/")

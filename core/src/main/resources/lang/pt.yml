@@ -229,6 +229,7 @@ abilities:
   chain: "<boss><boss_name></boss> lança uma <item>corrente</item>: quem está preso não vai longe; três golpes corpo a corpo a quebram!"
   chain_broken: "<ok>Você quebrou a corrente de</ok> <boss><boss_name></boss><ok>!</ok>"
   doubles: "<boss><boss_name></boss> se divide em <item>sósias</item>: encontre o verdadeiro!"
+  blindness: "<boss><boss_name></boss> reúne <item>escuridão</item>: corra, ou vai ficar cego!"
   phase_two: "<boss><boss_name></boss> entra na <hp>segunda fase</hp>!"
 
 classes:
@@ -294,6 +295,8 @@ minions:
   hoglin: "Hoglinzinho"
   ravager: "Batedor"
   guardian: "Vigia Abissal"
+  ender_dragon: "Presa dos Céus"
+  wither: "Guarda de Cinzas"
 
 # Nomes e descrições do saque, pelo id em loottable.yml.
 items:

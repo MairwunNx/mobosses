@@ -4,8 +4,13 @@ The “Release” workflow takes the notes for a version from its section here, 
 
 ## 2.15.0
 
+### New
+
+- 🌑 **Blindness.** The boss gathers darkness, with ink and a low warning, and a second later blinds every player in the fight still within 10 blocks, up to 16 by level, for 3 seconds and a tenth more a level, up to 11. Run at the warning and you get away; run 8 blocks past the radius once blind, and it lifts early, as it does once the boss is gone. Blindness from a potion or anything else stays. It starts at level 45 for a Common boss and 15 for a Mythic one; `blindness` in `abilities.yml` and `classes.yml` holds the numbers.
+
 ### Changed
 
+- 🐉 **The dragon and the wither fight with everything they have.** A boss high over the fight looses its ring of arrows down at the ground around it instead of over everyone’s heads. The dragon summons phantoms, which fly, and the wither summons wither skeletons. Enrage’s Strength now adds 3 a level to the dragon’s blows and breath and to both bosses’ shots, which it never reached.
 - ⚡ **Lightning hits harder where it lands.** Each bolt past every player’s own now strikes one of them outright by a 15% chance, up to three bolts a player in all, instead of always falling around them. Each bolt also sets the block it strikes alight half the time, as the game’s lightning does, for 8 seconds, though fire it spreads burns on as usual; it never does within 6 blocks of a claim or a protected region. `lightning_aimed` and `lightning_fire` in `abilities.yml` set the chances, the cap, the seconds, and the distance.
 
 ## 2.14.0
