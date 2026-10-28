@@ -4,6 +4,8 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon
 import ru.mairwunnx.mobosses.modcore.MoBosses
+import ru.mairwunnx.mobosses.modcore.data.Data
+import ru.mairwunnx.mobosses.modcore.boss.Keys
 
 /**
  * Spawns that may become bosses, and bosses and minions coming and going with their chunks, as Paper's
@@ -23,6 +25,17 @@ class Spawns(private val mod: MoBosses) {
     val allowed = reason in mod.catalog.spawnReasons || mob is EnderDragon
     if (spawningByCommand || !allowed || mod.decoys.isDecoy(mob) || mod.bosses.get(mob) != null) return
     natural.spawned(mob, mod.minions.summonerOf(mob), reason)
+  }
+
+  /**
+   * A mob a structure places as the world generates, like a bastion's brutes, before it enters the world: no spawn tells
+   * of it, so it waits to be seen as `CHUNK_GEN`. Off the server thread, so it only marks the mob.
+   */
+  fun generated(entity: Entity) {
+    val mob = entity as? Mob ?: return
+    val catalog = mod.catalog
+    if ("CHUNK_GEN" !in catalog.spawnReasons || !catalog.settings.spawn.onSight.enabled) return
+    if (catalog.types[mob.type]?.spec?.enabled == true) Data(mob)[Keys.PENDING] = "CHUNK_GEN"
   }
 
   fun loaded(entity: Entity) {

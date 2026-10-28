@@ -24,6 +24,11 @@ object Hooks {
     mod?.spawns?.spawned(entity)
   }
 
+  /** A mob a structure places as the world generates, off the server thread. */
+  fun generated(entity: Entity) {
+    mod?.spawns?.generated(entity)
+  }
+
   fun loaded(entity: Entity) {
     mod?.spawns?.loaded(entity)
   }
