@@ -13,7 +13,11 @@ import kotlin.math.cos
 import kotlin.math.sin
 import kotlin.random.Random
 
-/** Fire on the ground in a ring around the player the boss fights, however far, for a few seconds; never in place of water, next to anything that burns, or where protection forbids it. */
+/**
+ * Fire on the ground in a ring around the player the boss fights, however far, for a few seconds; never in place of water,
+ * next to anything that burns, or where protection forbids it. Where that leaves less than a third of a ring, the boss
+ * casts something else.
+ */
 object FireRing : Ability {
   override val key = "fire_ring"
   override val message = Message.FIRE_RING
@@ -31,17 +35,20 @@ object FireRing : Ability {
     val radius = if (cfg.fireRingMaxRadius > cfg.fireRingMinRadius) Random.nextDouble(cfg.fireRingMinRadius, cfg.fireRingMaxRadius) else cfg.fireRingMinRadius
     val density = cfg.fireRingDensity.coerceIn(0.0, 1.0)
     val fire = Material.FIRE.createBlockData()
-    val lit = (0 until POINTS).count { i ->
-      if (Random.nextDouble() > density) return@count false
+    val spots = (0 until POINTS).mapNotNull { i ->
+      if (Random.nextDouble() > density) return@mapNotNull null
       val angle = 2 * PI * i / POINTS
-      val ground = Targets.ground(center.world, center.x + radius * cos(angle), center.y, center.z + radius * sin(angle)) ?: return@count false
-      val above = ground.getRelative(0, 1, 0)
-      !cast.boss.entity.boundingBox.contains(above.x + 0.5, above.y.toDouble(), above.z + 0.5) && Targets.isOpen(above) &&
-        // Nothing within the fire's reach may burn: the ring scorches the ground, not a house.
-        REACH.none { (dx, dy, dz) -> above.getRelative(dx, dy, dz).type.isFlammable } &&
-        // Temporary, since with doFireTick off fire would never burn out.
-        cast.plugin.blockChanges.setFor(above, fire, cfg.fireRingSeconds.coerceAtLeast(1) * 20L)
+      val ground = Targets.ground(center.world, center.x + radius * cos(angle), center.y, center.z + radius * sin(angle)) ?: return@mapNotNull null
+      ground.getRelative(0, 1, 0).takeIf { above ->
+        !cast.boss.entity.boundingBox.contains(above.x + 0.5, above.y.toDouble(), above.z + 0.5) && Targets.isOpen(above) &&
+          // Nothing within the fire's reach may burn: the ring scorches the ground, not a house.
+          REACH.none { (dx, dy, dz) -> above.getRelative(dx, dy, dz).type.isFlammable } && cast.plugin.guards.canChangeBlock(above.location)
+      }
     }
+    // Grass, leaves, or a claim all around leave only a spark or two, which nobody would call a ring: something else instead.
+    if (spots.size < POINTS * density / 3) return false.also { cast.plugin.log.debug { "No fire ring for ${cast.boss.type.key}: room for ${spots.size} of ${POINTS * density}" } }
+    // Temporary, since with doFireTick off fire would never burn out.
+    val lit = spots.count { cast.plugin.blockChanges.setFor(it, fire, cfg.fireRingSeconds.coerceAtLeast(1) * 20L) }
     if (lit > 0) cast.sound(Sound.ENTITY_BLAZE_SHOOT, 1f, 0.8f)
     return lit > 0
   }
