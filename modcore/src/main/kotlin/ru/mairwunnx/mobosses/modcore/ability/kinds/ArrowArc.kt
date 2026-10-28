@@ -32,13 +32,16 @@ object ArrowArc : Ability {
     val box = cast.entity.boundingBox
     val height = (box.maxY - box.minY).coerceAtLeast(0.5)
     val step = 2 * PI / arrows
+    // A boss high over the fight, a flyer or a wither, looses its rings down at the ground around it, not over everyone's heads.
+    val above = cast.foes().minByOrNull { it.position().distanceToSqr(cast.at) }?.let { cast.at.y - it.y } ?: 0.0
+    val dip = if (above > DIP_FROM) -(above / 10.0).coerceAtMost(1.5) else 0.0
 
     for (ring in 0 until rings) {
       val y = box.minY + height * (ring + 0.5) / rings
       val phase = if (cfg.arcStaggered && ring % 2 == 1) step / 2 else 0.0
       val tipped = Arrows.tipped(arrows, cfg.arcEffectsMaxPerRing, effects)
       for (i in 0 until arrows) {
-        val direction = Vec3(cos(i * step + phase), 0.0, sin(i * step + phase))
+        val direction = Vec3(cos(i * step + phase), dip, sin(i * step + phase)).normalize()
         val at = Vec3(cast.at.x, y, cast.at.z).add(direction.scale(0.3))
         Arrows.shoot(cast, at, direction.scale(cfg.arcSpeed), damage, !cfg.arcNoGravity, cfg.arcLifetimeSeconds, tip.takeIf { i in tipped })
       }
@@ -46,4 +49,7 @@ object ArrowArc : Ability {
     cast.sound(SoundEvents.CROSSBOW_SHOOT)
     return true
   }
+
+  /** How many blocks above the nearest player it fights a boss starts aiming its rings down. */
+  private const val DIP_FROM = 3.0
 }
