@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.15.0
+
+### Changed
+
+- ⚡ **Lightning hits harder where it lands.** Each bolt past every player’s own now strikes one of them outright by a 15% chance, up to three bolts a player in all, instead of always falling around them. Each bolt also sets the block it strikes alight half the time, as the game’s lightning does, for 8 seconds, though fire it spreads burns on as usual; it never does within 6 blocks of a claim or a protected region. `lightning_aimed` and `lightning_fire` in `abilities.yml` set the chances, the cap, the seconds, and the distance.
+
 ## 2.14.0
 
 ### Changed

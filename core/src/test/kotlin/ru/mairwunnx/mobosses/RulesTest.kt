@@ -1,5 +1,6 @@
 package ru.mairwunnx.mobosses
 
+import ru.mairwunnx.mobosses.algebra.Bolts
 import ru.mairwunnx.mobosses.algebra.Reel
 import ru.mairwunnx.mobosses.combat.Fatigue
 import ru.mairwunnx.mobosses.combat.Threat
@@ -111,6 +112,14 @@ class RulesTest {
     assertEquals(5.0, threat.of(me, 6000, aggro.halfLifeSeconds), 1e-9)
     assertTrue(threat.turns(aggro, me, null, 0))
     assertTrue(!threat.turns(aggro.copy(enabled = false), friend, me, 0))
+  }
+
+  @Test fun `extra bolts strike a player outright by chance, up to three each`() {
+    val aimed = AbilitySettings.LightningAimed(chance = 1.0, max = 3)
+    assertEquals(listOf(0, 0, null, null), Bolts.aim(1, 4, aimed, Random(1)))
+    assertEquals(List(5) { null }, Bolts.aim(0, 5, aimed, Random(1)))
+    assertEquals(List(5) { null }, Bolts.aim(2, 5, aimed.copy(chance = 0.0), Random(1)))
+    assertEquals(4, Bolts.aim(2, 8, aimed, Random(1)).count { it != null })
   }
 
   @Test fun `amounts grow with levels above the entry's lowest, up to a stack`() {
