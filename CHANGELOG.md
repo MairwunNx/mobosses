@@ -2,6 +2,16 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.12.0
+
+### Changed
+
+- 🎁 **Strong bosses pay like strong bosses.** Up to now a boss picked its loot from one big pile, where the many Common and Uncommon entries outweighed its own class: a Legendary boss dropped Legendary loot about one time in ten, and an Epic one time in six. Now a boss picks a class first, its own or one below at the same ×0.6, ×0.3, ×0.15, ×0.08, ×0.03 as before, then an entry within it, so a Rare, Epic, or Legendary boss drops loot of its own class about half the time, however many entries the classes below have.
+- 🎒 **More items from higher levels.** Each player who earns loot gets one item, two from level 20, and three from level 40. `loot.items` in `config.yml` sets the step and the cap; `every_levels: 0` keeps one item.
+- 🧹 **Less filler from level 10 to 70.** Coal, bones, paper, sugar, cooked meat, raw ore, quartz, prismarine, chainmail, shears, buckets, fishing rods, saddles, leads, and name tags leave those levels. In their place come enchanted books (Protection, Sharpness, Efficiency, Unbreaking, Power, Feather Falling, and from Rare bosses Mending), iron armor and tools with enchantments, diamonds, emeralds, and golden apples, with diamond gear for Uncommon bosses from level 17. Rare and better bosses drop more diamonds, emeralds, and experience bottles at a time, and a Legendary one may drop an enchanted golden apple. Resin clumps stop at level 15.
+
+A server whose `loottable.yml` is the bundled one gets the new table on start; one you edited keeps yours, and the new class-first picking applies to it too.
+
 ## 2.11.1
 
 ### Changed
