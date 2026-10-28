@@ -269,6 +269,7 @@ bosses:
   guardian: "Glotzauge"
   ender_dragon: "Der Himmelstyrann"
   wither: "Der Dreiköpfige"
+  zombified_piglin: "Moderschnauze"
 
 # Nach dem Boss, der sie beschwört, wie in minions.yml.
 minions:
@@ -297,6 +298,7 @@ minions:
   guardian: "Tiefenwächter"
   ender_dragon: "Himmelsfang"
   wither: "Aschewächter"
+  zombified_piglin: "Faulrüssel"
 
 # Namen und Beschreibungen der Beute, nach der id in loottable.yml.
 items:

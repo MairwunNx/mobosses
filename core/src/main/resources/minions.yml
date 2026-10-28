@@ -38,3 +38,4 @@ minions:
   - { summoner: GUARDIAN, entity: GUARDIAN }
   - { summoner: ENDER_DRAGON, entity: PHANTOM }
   - { summoner: WITHER, entity: WITHER_SKELETON }
+  - { summoner: ZOMBIFIED_PIGLIN, entity: ZOMBIFIED_PIGLIN }

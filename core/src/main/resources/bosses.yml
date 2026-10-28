@@ -12,6 +12,7 @@
 #                  who got loot, picked by their shares; for mobs found only
 #                  in raids, mansions, bastions, fortresses, trial chambers,
 #                  and monuments
+#   adults_only    true: babies of this type never become bosses
 #   is_powered     creepers only: a charged creeper
 #   equipment      weapons and armor sets by boss level: a boss takes a random
 #                  one within 7 levels of the best it qualifies for; an armor
@@ -1113,6 +1114,78 @@ GUARDIAN:
       spawn: "minecraft:entity.guardian.ambient"
       death: "minecraft:entity.guardian.death"
       summon: "minecraft:entity.guardian.attack"
+
+ZOMBIFIED_PIGLIN:
+  enabled: true
+  spawn_chance: 0.05 # 5%
+  exp_modifier: 0.4
+  adults_only: true
+  equipment:
+    weapons:
+      - { material: "GOLDEN_SWORD", min_lvl: 1, enchantments: { sharpness: 2 } }
+      - { material: "GOLDEN_AXE", min_lvl: 3, enchantments: { sharpness: 1 } }
+      - { material: "GOLDEN_SWORD", min_lvl: 6, enchantments: { sharpness: 2, knockback: 1 } }
+      - { material: "GOLDEN_AXE", min_lvl: 9, enchantments: { sharpness: 2, efficiency: 1 } }
+      - { material: "GOLDEN_SWORD", min_lvl: 12, enchantments: { sharpness: 2, fire_aspect: 1 } }
+      - { material: "GOLDEN_AXE", min_lvl: 15, enchantments: { sharpness: 2 } }
+      - { material: "GOLDEN_SWORD", min_lvl: 18, enchantments: { sharpness: 3, unbreaking: 1 } }
+      - { material: "GOLDEN_AXE", min_lvl: 21, enchantments: { sharpness: 2, fire_aspect: 1, efficiency: 2 } }
+      - { material: "GOLDEN_SWORD", min_lvl: 24, enchantments: { sharpness: 3, knockback: 1, fire_aspect: 1 } }
+      - { material: "GOLDEN_AXE", min_lvl: 27, enchantments: { sharpness: 3, unbreaking: 1 } }
+      - { material: "GOLDEN_SWORD", min_lvl: 30, enchantments: { sharpness: 3, fire_aspect: 1 } }
+      - { material: "GOLDEN_AXE", min_lvl: 33, enchantments: { sharpness: 3, fire_aspect: 1, knockback: 1 } }
+      - { material: "GOLDEN_SWORD", min_lvl: 36, enchantments: { sharpness: 4, fire_aspect: 1, unbreaking: 2 } }
+      - { material: "GOLDEN_AXE", min_lvl: 39, enchantments: { sharpness: 4, efficiency: 3 } }
+      - { material: "GOLDEN_SWORD", min_lvl: 42, enchantments: { sharpness: 4, fire_aspect: 2, knockback: 1 } }
+      - { material: "GOLDEN_AXE", min_lvl: 45, enchantments: { sharpness: 4, unbreaking: 1 } }
+      - { material: "GOLDEN_SWORD", min_lvl: 48, enchantments: { sharpness: 4, fire_aspect: 2, sweeping: 1 } }
+      - { material: "GOLDEN_AXE", min_lvl: 51, enchantments: { sharpness: 4, fire_aspect: 1, efficiency: 4, unbreaking: 2 } }
+      - { material: "GOLDEN_SWORD", min_lvl: 54, enchantments: { sharpness: 5, fire_aspect: 1, knockback: 2 } }
+      - { material: "NETHERITE_SWORD", min_lvl: 57, enchantments: { sharpness: 2, fire_aspect: 1 } }
+      - { material: "GOLDEN_AXE", min_lvl: 60, enchantments: { sharpness: 5, fire_aspect: 2, unbreaking: 3 } }
+      - { material: "NETHERITE_SWORD", min_lvl: 60, enchantments: { sharpness: 3, fire_aspect: 1 } }
+      - { material: "NETHERITE_AXE", min_lvl: 63, enchantments: { sharpness: 3, fire_aspect: 1 } }
+      - { material: "NETHERITE_SWORD", min_lvl: 66, enchantments: { sharpness: 3, fire_aspect: 2, knockback: 1 } }
+      - { material: "NETHERITE_AXE", min_lvl: 69, enchantments: { sharpness: 3, fire_aspect: 1, efficiency: 2 } }
+      - { material: "NETHERITE_SWORD", min_lvl: 72, enchantments: { sharpness: 4, fire_aspect: 1, unbreaking: 2 } }
+      - { material: "NETHERITE_AXE", min_lvl: 75, enchantments: { sharpness: 4, fire_aspect: 1 } }
+      - { material: "NETHERITE_SWORD", min_lvl: 78, enchantments: { sharpness: 4, fire_aspect: 2, sweeping: 2 } }
+      - { material: "NETHERITE_AXE", min_lvl: 81, enchantments: { sharpness: 4, fire_aspect: 2, unbreaking: 2 } }
+      - { material: "NETHERITE_SWORD", min_lvl: 84, enchantments: { sharpness: 5, fire_aspect: 1, knockback: 2, unbreaking: 2 } }
+      - { material: "NETHERITE_AXE", min_lvl: 87, enchantments: { sharpness: 5, fire_aspect: 2, efficiency: 3 } }
+      - { material: "NETHERITE_SWORD", min_lvl: 90, enchantments: { sharpness: 5, fire_aspect: 2, sweeping: 3 } }
+      - { material: "NETHERITE_AXE", min_lvl: 93, enchantments: { sharpness: 5, fire_aspect: 2, unbreaking: 3, efficiency: 4 } }
+      - { material: "NETHERITE_SWORD", min_lvl: 96, enchantments: { sharpness: 5, fire_aspect: 2, sweeping: 3, knockback: 2, unbreaking: 3 } }
+      - { material: "GOLDEN_SPEAR", min_lvl: 4, enchantments: { sharpness: 1 } }
+      - { material: "GOLDEN_SPEAR", min_lvl: 20, enchantments: { sharpness: 3 } }
+      - { material: "GOLDEN_SPEAR", min_lvl: 40, enchantments: { sharpness: 4, unbreaking: 2 } }
+    armors:
+      - { min_lvl: 1, chestplate: { material: "GOLDEN_CHESTPLATE" } }
+      - { min_lvl: 5, boots: { material: "GOLDEN_BOOTS" } }
+      - { min_lvl: 10, helmet: { material: "GOLDEN_HELMET" } }
+      - { min_lvl: 15, helmet: { material: "GOLDEN_HELMET", enchantments: { protection: 1 } }, boots: { material: "GOLDEN_BOOTS" } }
+      - { min_lvl: 20, leggings: { material: "GOLDEN_LEGGINGS" }, boots: { material: "GOLDEN_BOOTS", enchantments: { fire_protection: 2 } } }
+      - { min_lvl: 25, helmet: { material: "GOLDEN_HELMET", enchantments: { fire_protection: 2 } }, chestplate: { material: "GOLDEN_CHESTPLATE", enchantments: { fire_protection: 1 } } }
+      - { min_lvl: 30, chestplate: { material: "GOLDEN_CHESTPLATE", enchantments: { protection: 2 } }, leggings: { material: "GOLDEN_LEGGINGS" } }
+      - { min_lvl: 35, helmet: { material: "GOLDEN_HELMET", enchantments: { protection: 2, fire_protection: 2 } }, leggings: { material: "GOLDEN_LEGGINGS", enchantments: { fire_protection: 2 } }, boots: { material: "GOLDEN_BOOTS", enchantments: { fire_protection: 3 } } }
+      - { min_lvl: 42, helmet: { material: "GOLDEN_HELMET", enchantments: { protection: 3, unbreaking: 2 } }, chestplate: { material: "GOLDEN_CHESTPLATE", enchantments: { protection: 3, fire_protection: 3 } }, leggings: { material: "GOLDEN_LEGGINGS", enchantments: { protection: 2 } } }
+      - { min_lvl: 48, helmet: { material: "NETHERITE_HELMET", enchantments: { fire_protection: 2 } }, chestplate: { material: "GOLDEN_CHESTPLATE", enchantments: { protection: 4, thorns: 1 } } }
+      - { min_lvl: 50, helmet: { material: "NETHERITE_HELMET", enchantments: { fire_protection: 3 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { fire_protection: 4 } } }
+      - { min_lvl: 58, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 2, fire_protection: 3 } }, boots: { material: "NETHERITE_BOOTS", enchantments: { fire_protection: 3, soul_speed: 2 } } }
+      - { min_lvl: 65, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 3, fire_protection: 4 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { fire_protection: 3 } } }
+      - { min_lvl: 70, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 3 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 4, unbreaking: 2 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { protection: 3 } }, boots: { material: "NETHERITE_BOOTS", enchantments: { protection: 3 } } }
+      - { min_lvl: 78, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 4, fire_protection: 4, unbreaking: 2 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 4, thorns: 1, unbreaking: 3 } } }
+      - { min_lvl: 85, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 4, unbreaking: 3, respiration: 2 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { protection: 4, fire_protection: 4 } }, boots: { material: "NETHERITE_BOOTS", enchantments: { protection: 3, soul_speed: 3 } } }
+      - { min_lvl: 90, helmet: { material: "NETHERITE_HELMET", enchantments: { protection: 4, unbreaking: 3 } }, chestplate: { material: "NETHERITE_CHESTPLATE", enchantments: { protection: 4, thorns: 2 } }, leggings: { material: "NETHERITE_LEGGINGS", enchantments: { protection: 4 } }, boots: { material: "NETHERITE_BOOTS", enchantments: { protection: 4, feather_falling: 4 } } }
+      - { min_lvl: 9, helmet: { material: "COPPER_HELMET" }, boots: { material: "COPPER_BOOTS" } }
+      - { min_lvl: 11, helmet: { material: "COPPER_HELMET" }, chestplate: { material: "COPPER_CHESTPLATE" }, leggings: { material: "COPPER_LEGGINGS" } }
+      - { min_lvl: 14, helmet: { material: "COPPER_HELMET", enchantments: { protection: 1 } }, chestplate: { material: "COPPER_CHESTPLATE", enchantments: { protection: 1 } }, leggings: { material: "COPPER_LEGGINGS", enchantments: { protection: 1 } }, boots: { material: "COPPER_BOOTS", enchantments: { protection: 1 } } }
+  effects:
+    particles: "minecraft:crimson_spore"
+    sounds:
+      spawn: "minecraft:entity.zombified_piglin.ambient"
+      death: "minecraft:entity.zombified_piglin.death"
+      summon: "minecraft:entity.zombified_piglin.angry"
 
 # The dragon and the wither: their own health bar shows the boss's name, they
 # never despawn, and abilities that move them, pull players up to them, copy

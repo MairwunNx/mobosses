@@ -340,7 +340,7 @@ data class AbilitySettings(
       "sandstorm" to listOf("HUSK"),
       "infection" to listOf("ZOMBIE", "ZOMBIE_VILLAGER"),
       "wind_burst" to listOf("BREEZE"),
-      "war_cry" to listOf("PIGLIN"),
+      "war_cry" to listOf("PIGLIN", "ZOMBIFIED_PIGLIN"),
       "terror" to listOf("PHANTOM"),
       "phase" to listOf("VEX"),
       "stampede" to listOf("RAVAGER", "HOGLIN"),

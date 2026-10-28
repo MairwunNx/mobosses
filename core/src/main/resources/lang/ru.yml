@@ -269,6 +269,7 @@ bosses:
   guardian: "Глазастик"
   ender_dragon: "Небесный тиран"
   wither: "Трёхглавый"
+  zombified_piglin: "Зомбосвин"
 
 # По боссу, который их призывает, как в minions.yml.
 minions:
@@ -297,6 +298,7 @@ minions:
   guardian: "Глубинный страж"
   ender_dragon: "Небесный клык"
   wither: "Пепельный страж"
+  zombified_piglin: "Гнилорыл"
 
 # Названия и описания лута по id из loottable.yml.
 items:

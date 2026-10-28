@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.17.0
+
+### New
+
+- 🐷 **Zombified piglins can be bosses**, the grown ones only: 5% before the multipliers, the Nether’s ×1.4 on top. One keeps to itself like any zombified piglin until someone hits it. It wears a piglin’s gold, netherite from about level 50, and summons grown zombified piglins. Its war cry rallies every piglin within 12 blocks and turns the zombified ones on its foe, who then has the crowd after them. It drops gold ingots, enchanted golden swords from level 5, and, from Rare bosses at level 20, a gold block. A new `adults_only` key in `bosses.yml` keeps a type’s babies ordinary.
+
 ## 2.16.0
 
 ### Changed

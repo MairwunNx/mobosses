@@ -269,6 +269,7 @@ bosses:
   guardian: "Olhudo"
   ender_dragon: "O Tirano dos Céus"
   wither: "O Tricéfalo"
+  zombified_piglin: "Focinho Podre"
 
 # Pelo chefe que os invoca, como em minions.yml.
 minions:
@@ -297,6 +298,7 @@ minions:
   guardian: "Vigia Abissal"
   ender_dragon: "Presa dos Céus"
   wither: "Guarda de Cinzas"
+  zombified_piglin: "Fuça Podre"
 
 # Nomes e descrições do saque, pelo id em loottable.yml.
 items:

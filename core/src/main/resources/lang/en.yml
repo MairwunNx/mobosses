@@ -269,6 +269,7 @@ bosses:
   guardian: "Goggle-Eye"
   ender_dragon: "The Sky Tyrant"
   wither: "The Three-Headed"
+  zombified_piglin: "Ghoulsnout"
 
 # By the boss that summons them, as in minions.yml.
 minions:
@@ -297,6 +298,7 @@ minions:
   guardian: "Deep Watcher"
   ender_dragon: "Sky Fang"
   wither: "Ash Guard"
+  zombified_piglin: "Rotsnout"
 
 # Loot names and lore, by the id in loottable.yml.
 items:

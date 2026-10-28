@@ -852,6 +852,10 @@ level_loot:
   - { material: GOLD_INGOT, mobclass: common, min_level: 0, max_level: 100, amount: "2-4", per_level: 0.04, weight: 15.0, types: [ PIGLIN_BRUTE ] }
   - { material: GOLDEN_AXE, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", per_level: 0.0, weight: 6.0, random_durability: true, enchantments: { sharpness: "2-3" }, types: [ PIGLIN_BRUTE ] }
   - { material: NETHERITE_SCRAP, mobclass: epic, min_level: 25, max_level: 100, amount: "1", per_level: 0.0, weight: 0.3, itemClass: epic, types: [ PIGLIN_BRUTE ] }
+  # Zombified piglin: the Nether's crowds
+  - { material: GOLD_INGOT, mobclass: common, min_level: 0, max_level: 100, amount: "1-3", per_level: 0.04, weight: 12.0, types: [ ZOMBIFIED_PIGLIN ] }
+  - { material: GOLDEN_SWORD, mobclass: uncommon, min_level: 5, max_level: 100, amount: "1", per_level: 0.0, weight: 6.0, random_durability: true, enchantments: { sharpness: "2-3" }, types: [ ZOMBIFIED_PIGLIN ] }
+  - { material: GOLD_BLOCK, mobclass: rare, min_level: 20, max_level: 100, amount: "1", per_level: 0.0, weight: 1.0, types: [ ZOMBIFIED_PIGLIN ] }
   # Piglin
   - { material: GOLD_INGOT, mobclass: common, min_level: 0, max_level: 100, amount: "1-2", per_level: 0.04, weight: 12.0, types: [ PIGLIN ] }
   # Wither skeleton: fortresses

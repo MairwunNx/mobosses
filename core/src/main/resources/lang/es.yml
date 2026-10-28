@@ -269,6 +269,7 @@ bosses:
   guardian: "Ojazos"
   ender_dragon: "El Tirano del Cielo"
   wither: "El Tricéfalo"
+  zombified_piglin: "Hocico Podrido"
 
 # Por el jefe que los invoca, como en minions.yml.
 minions:
@@ -297,6 +298,7 @@ minions:
   guardian: "Vigía abisal"
   ender_dragon: "Colmillo del Cielo"
   wither: "Guardia de Ceniza"
+  zombified_piglin: "Morro Podrido"
 
 # Nombres y descripciones del botín, por el id de loottable.yml.
 items:
