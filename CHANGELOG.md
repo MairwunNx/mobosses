@@ -2,6 +2,21 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.13.0
+
+### New
+
+- 🐉 **The Ender Dragon and the Wither can be bosses.** Each rolls like any mob, 25% before the multipliers, with no cooldown or crowd in the way, since each is a fight someone set up. A built wither counts through the new `BUILD_WITHER` in `spawn.allowed_spawn_reasons`; add it to your own list if you keep one. The dragon never turns in a world’s first fight, only once it’s been beaten and comes back. Both keep the game’s own health bar, in its own color, with the boss’s name, class, and level on it, never despawn, and never cast abilities that would move them, pull you up to them, copy them, or build around them. The dragon’s blows and breath grow with its level, and its loot drops at each player’s feet instead of over the exit portal. Their experience stays near the game’s own up to about level 30 and tops out like a level 100 Mythic’s.
+- 🍖 **More of the game’s own drops.** What a boss’s mob always drops, Looting’s extra included, comes times 1 + level × 0.03 × its class’s share, from 1 for Common to 2 for Mythic: ×1.3 from a level 10 Common, ×3.25 from a level 50 Epic. A fraction adds one more by its own chance, so on average it comes out exact. The drops lie on the ground for everyone as before, spawner fatigue cuts the extra, and the boss’s gear, items that don’t stack, nether stars, the dragon egg, and heads drop as they are. `loot.vanilla_drops` in `config.yml` holds the numbers and the list.
+
+### Changed
+
+- ⛓️ **The chain hauls you in like a rope.** It pulled once a second, too weakly to matter. Now, past its length, it pulls you back in heaves, hard on the heave and slack between, while the boss shortens it from 8 blocks to 3; it still hurts once a second. A sprint between heaves gains ground, and standing still gets you dragged in. An ender pearl past its slack gets you yanked back at once. The new keys under `chain` in `abilities.yml` set the reel, the pull by level, and the heave.
+
+### Fixed
+
+- 🔥 **No more fire ring without a ring.** Fire never goes next to anything that burns, so in grass, under leaves, or by a claim the ring could come out as a spark or two, while the boss still announced it. Now a ring with room for less than a third of its fire isn’t cast, and the boss picks something else.
+
 ## 2.12.0
 
 ### Changed

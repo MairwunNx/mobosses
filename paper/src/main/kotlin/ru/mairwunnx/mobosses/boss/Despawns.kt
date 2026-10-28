@@ -27,7 +27,8 @@ class Despawns(private val plugin: MoBossesPlugin) {
     if (stale(boss, now)) Bukkit.getScheduler().runTask(plugin, Runnable { if (boss.entity.isValid) leave(boss) })
   }
 
-  private fun kept(boss: Boss) = boss.pinned && plugin.catalog.settings.despawn.keepSpawnedByCommand
+  /** The dragon and the wither stay: each is a fight someone set up. */
+  private fun kept(boss: Boss) = (boss.pinned && plugin.catalog.settings.despawn.keepSpawnedByCommand) || WorldBosses.isWorldBoss(boss.type.key)
 
   /** A boss from before 2.3 has no time on it; it starts counting now. */
   private fun stale(boss: Boss, now: Long): Boolean {

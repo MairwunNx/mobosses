@@ -1,5 +1,6 @@
 package ru.mairwunnx.mobosses.modcore.boss
 
+import ru.mairwunnx.mobosses.boss.WorldBosses
 import ru.mairwunnx.mobosses.modcore.MoBosses
 
 /**
@@ -25,7 +26,8 @@ class Despawns(private val mod: MoBosses) {
     if (stale(boss, now)) mod.scheduler.later(1) { if (boss.entity.isAlive) leave(boss) }
   }
 
-  private fun kept(boss: Boss) = boss.pinned && mod.catalog.settings.despawn.keepSpawnedByCommand
+  /** The dragon and the wither stay: each is a fight someone set up. */
+  private fun kept(boss: Boss) = (boss.pinned && mod.catalog.settings.despawn.keepSpawnedByCommand) || WorldBosses.isWorldBoss(boss.type.key)
 
   /** A boss with no time on it starts counting now. */
   private fun stale(boss: Boss, now: Long): Boolean {

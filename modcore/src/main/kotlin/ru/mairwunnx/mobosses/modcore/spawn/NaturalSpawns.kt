@@ -7,6 +7,8 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.entity.Leashable
 import net.minecraft.world.entity.Mob
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon
+import ru.mairwunnx.mobosses.boss.WorldBosses
 import net.minecraft.world.entity.OwnableEntity
 import net.minecraft.world.level.Level
 import net.minecraft.world.level.levelgen.Heightmap
@@ -70,6 +72,10 @@ class NaturalSpawns(private val mod: MoBosses) {
     if (!catalog.settings.enabled || !spawn.enabled || entity.isNoAi) return null
     val type = catalog.types[entity.type]?.takeIf { it.spec.enabled } ?: return null
     val level = entity.level() as? ServerLevel ?: return null
+    // A world's first dragon stays the game's own: it becomes a boss only once it's been beaten and comes back.
+    if (entity is EnderDragon && level.dragonFight?.hasPreviouslyKilledDragon() != true) return null
+    // The dragon and the wither are fights someone sets up: no cooldown or crowd keeps them ordinary, and they start none.
+    val worldBoss = WorldBosses.isWorldBoss(type.key)
     val at = entity.position()
     if (mod.bosses.count(level) >= spawn.maxBossesPerWorld) return null
     val difficulty = mod.bosses.difficulty(level) ?: return null
@@ -81,7 +87,7 @@ class NaturalSpawns(private val mod: MoBosses) {
 
     val group = World.players(level, at, spawn.groupRadius.toDouble()).ifEmpty { listOf(nearest) }
     val where = "${entity.blockX} ${entity.blockY} ${entity.blockZ}"
-    if (!limiter.allows(level, at, group)) return null.also { mod.log.debug { "No ${type.key} boss at $where: too many bosses near, or its players' cooldown" } }
+    if (!worldBoss && !limiter.allows(level, at, group)) return null.also { mod.log.debug { "No ${type.key} boss at $where: too many bosses near, or its players' cooldown" } }
     if (!mod.guards.canSpawnBoss(level, entity.blockPosition())) return null.also { mod.log.debug { "No ${type.key} boss at $where: protected" } }
 
     val parent = summoner?.let(mod.bosses::get)
@@ -94,7 +100,7 @@ class NaturalSpawns(private val mod: MoBosses) {
     val clazz = Rolls.weighted(catalog.classes.all.map { it to mod.fullMoon.weight(level, at, it) }, Random) ?: catalog.classes.all.first()
     val boss = mod.bosses.make(entity, type, clazz, bossLevel, summoner).also(mod.bosses::vanillaName)
     if (reason == "SPAWNER" || reason == "TRIAL_SPAWNER") boss.fromSpawner = true
-    limiter.spawned(group)
+    if (!worldBoss) limiter.spawned(group)
     announce(boss, level)
     return boss
   }

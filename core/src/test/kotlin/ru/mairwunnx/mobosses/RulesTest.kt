@@ -1,6 +1,8 @@
 package ru.mairwunnx.mobosses
 
+import ru.mairwunnx.mobosses.algebra.Reel
 import ru.mairwunnx.mobosses.combat.Fatigue
+import ru.mairwunnx.mobosses.config.AbilitySettings
 import ru.mairwunnx.mobosses.combat.LootRules
 import ru.mairwunnx.mobosses.combat.Payout
 import ru.mairwunnx.mobosses.lang.Message
@@ -61,6 +63,36 @@ class RulesTest {
     assertEquals(3, LootRules.items(items, 40))
     assertEquals(3, LootRules.items(items, 100))
     assertEquals(1, LootRules.items(Settings.Items(everyLevels = 0), 100))
+  }
+
+  @Test fun `the game's drops grow with level and class, fatigue cutting the extra`() {
+    val drops = Settings.VanillaDrops()
+    assertEquals(1.3, LootRules.vanillaMultiplier(drops, "common", 10), 1e-12)
+    assertEquals(3.25, LootRules.vanillaMultiplier(drops, "epic", 50), 1e-12)
+    assertEquals(1.15, LootRules.vanillaMultiplier(drops, "common", 10, fatigue = 0.5), 1e-12)
+    assertEquals(1.0, LootRules.vanillaMultiplier(drops.copy(enabled = false), "mythic", 100))
+    val counts = List(10_000) { LootRules.vanillaCount(1, 1.3, Random(it)) }
+    assertEquals(setOf(1, 2), counts.toSet())
+    assertEquals(1.3, counts.average(), 0.02)
+    assertEquals(4, LootRules.vanillaCount(2, 2.0))
+  }
+
+  @Test fun `heads, nether stars, and what doesn't stack drop as they are`() {
+    val drops = Settings.VanillaDrops()
+    assertTrue(LootRules.multiplies(drops, "ENDER_PEARL", 16))
+    assertTrue(!LootRules.multiplies(drops, "minecraft:nether_star", 64))
+    assertTrue(!LootRules.multiplies(drops, "WITHER_SKELETON_SKULL", 64))
+    assertTrue(!LootRules.multiplies(drops, "minecraft:trident", 1))
+  }
+
+  @Test fun `the chain shortens and heaves`() {
+    val chain = AbilitySettings.ChainSettings()
+    assertEquals(8.0, Reel.length(chain, 0.0))
+    assertEquals(5.0, Reel.length(chain, 5.0), 1e-12)
+    assertEquals(3.0, Reel.length(chain, 60.0))
+    assertEquals(0.2, Reel.pull(chain, 0, 0.0), 1e-12)
+    assertEquals(0.3, Reel.pull(chain, 0, 0.4), 1e-12)
+    assertEquals(0.1, Reel.pull(chain, 0, 1.2), 1e-12)
   }
 
   @Test fun `amounts grow with levels above the entry's lowest, up to a stack`() {

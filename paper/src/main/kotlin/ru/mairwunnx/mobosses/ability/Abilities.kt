@@ -24,6 +24,7 @@ import ru.mairwunnx.mobosses.ability.kinds.WebRing
 import ru.mairwunnx.mobosses.ability.signature.*
 import ru.mairwunnx.mobosses.algebra.Rolls
 import ru.mairwunnx.mobosses.boss.Boss
+import ru.mairwunnx.mobosses.boss.WorldBosses
 import kotlin.random.Random
 
 /**
@@ -45,7 +46,8 @@ class Abilities(private val plugin: MoBossesPlugin) {
     val now = System.currentTimeMillis()
     if (!turned && now < boss.readyAt(Boss.SHARED)) return
     val ready = PICKED.filter { ability ->
-      ability.enabled(settings) && boss.level >= ability.threshold(boss.clazz.abilityThresholds) && (turned || now >= boss.readyAt(ability.key)) && ability.usable(cast)
+      ability.enabled(settings) && WorldBosses.allows(boss.type.key, ability.key) && boss.level >= ability.threshold(boss.clazz.abilityThresholds) &&
+        (turned || now >= boss.readyAt(ability.key)) && ability.usable(cast)
     }
     // One that finds nothing to do, like a fire ring over water, gives way to the next.
     val ability = ready.shuffled().firstOrNull { it.cast(cast) } ?: return

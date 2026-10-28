@@ -8,6 +8,8 @@ import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.boss.enderdragon.EndCrystal
 import net.minecraft.world.entity.projectile.Projectile
+import net.minecraft.world.item.ItemStack
+import java.util.function.Consumer
 import ru.mairwunnx.mobosses.modcore.ability.AbilityEntities
 
 /**
@@ -52,6 +54,12 @@ object Hooks {
     // A boss's copy drops what its mob would and 1 experience.
     if (mod.decoys.isDecoy(entity)) mod.decoys.forget(entity)
   }
+
+  /** The game's own drops from [entity]'s loot table go through [drop]; a dying boss's come multiplied. */
+  fun drops(entity: LivingEntity, drop: Consumer<ItemStack>): Consumer<ItemStack> = mod?.deaths?.drops(entity, drop) ?: drop
+
+  /** Whether the dying dragon drops the game's experience: not a boss, whose went out by share. */
+  fun dragonExperience(dragon: LivingEntity): Boolean = mod?.deaths?.paidDragon(dragon) != true
 
   /** Whether the game drops its own experience for [entity]: not for a boss, whose went out by share, nor a copy, which drops 1. */
   fun dropsExperience(entity: LivingEntity): Boolean {

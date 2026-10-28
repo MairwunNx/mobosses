@@ -2,6 +2,7 @@ package ru.mairwunnx.mobosses.modcore.spawn
 
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.Mob
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon
 import ru.mairwunnx.mobosses.modcore.MoBosses
 
 /**
@@ -18,7 +19,9 @@ class Spawns(private val mod: MoBosses) {
   fun spawned(entity: Entity) {
     val mob = entity as? Mob ?: return
     val reason = SpawnReasons.of(mob)
-    if (spawningByCommand || reason !in mod.catalog.spawnReasons || mod.decoys.isDecoy(mob) || mod.bosses.get(mob) != null) return
+    // The game brings the dragon back with a reason of no use to anyone, so it rolls whatever the list says.
+    val allowed = reason in mod.catalog.spawnReasons || mob is EnderDragon
+    if (spawningByCommand || !allowed || mod.decoys.isDecoy(mob) || mod.bosses.get(mob) != null) return
     natural.spawned(mob, mod.minions.summonerOf(mob), reason)
   }
 
@@ -37,5 +40,6 @@ class Spawns(private val mod: MoBosses) {
     mod.bosses.get(entity)?.let(mod.bosses::forget)
     mod.minions.forget(entity)
     mod.decoys.forget(entity)
+    mod.deaths.forget(entity)
   }
 }

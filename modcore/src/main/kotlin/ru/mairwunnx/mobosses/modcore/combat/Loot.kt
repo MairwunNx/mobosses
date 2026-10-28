@@ -6,6 +6,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.minecraft.core.component.DataComponents
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon
 import net.minecraft.world.entity.item.ItemEntity
 import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.component.ItemLore
@@ -53,7 +54,8 @@ class Loot(private val mod: MoBosses) {
   private fun give(boss: Boss, player: ServerPlayer, item: Catalog.Loot) {
     val level = boss.entity.level() as? ServerLevel ?: return
     val stack = stack(item, boss.level, mod.texts.languageOf(player))
-    val at = boss.entity.position()
+    // The dragon dies over the exit portal, which would carry its loot off to the Overworld: it drops at the player.
+    val at = if (boss.entity is EnderDragon) player.position() else boss.entity.position()
     val drop = ItemEntity(level, at.x, at.y + 0.5, at.z, stack.copy())
     drop.setTarget(player.uuid)
     drop.setPickUpDelay(20)

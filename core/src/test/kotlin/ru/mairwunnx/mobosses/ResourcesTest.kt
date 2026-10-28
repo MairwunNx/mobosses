@@ -33,7 +33,7 @@ class ResourcesTest {
 
   @Test fun `the bundled boss, minion, and loot files read without warnings`() {
     val bosses = clean("bosses.yml", BossSpec::parse)
-    assertEquals(25, bosses.size)
+    assertEquals(27, bosses.size)
     assertTrue(bosses.values.all { it.name == null }, "bosses.yml names bosses; they belong in lang/")
     assertEquals(23, clean("minions.yml", MinionSettings::parse).minions.size)
     val loot = clean("loottable.yml", LootTable::parse)
@@ -96,7 +96,10 @@ class ResourcesTest {
     assertEquals(
       v1.copy(
         language = "ru",
-        spawn = v1.spawn.copy(worldMultipliers = mapOf("world" to 1.0, "world_nether" to 1.1, "world_the_end" to 1.3)),
+        spawn = v1.spawn.copy(
+          worldMultipliers = mapOf("world" to 1.0, "world_nether" to 1.1, "world_the_end" to 1.3),
+          allowedSpawnReasons = v1.spawn.allowedSpawnReasons - "BUILD_WITHER",
+        ),
         bossBar = Settings.BossBar(style = "SEGMENTED_20"),
         progression = v1.progression.copy(levelCurve = Settings.LevelCurve(power = 1.3, offset = 20.0), variance = Settings.Variance(extraChance = 0.45)),
         formula = v1.formula.copy(

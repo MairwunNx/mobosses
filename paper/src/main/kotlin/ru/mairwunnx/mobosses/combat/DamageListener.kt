@@ -1,6 +1,7 @@
 package ru.mairwunnx.mobosses.combat
 
 import org.bukkit.Bukkit
+import org.bukkit.entity.EnderDragon
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Golem
 import org.bukkit.entity.LivingEntity
@@ -89,6 +90,17 @@ class DamageListener(private val plugin: MoBossesPlugin) : Listener {
     val shot = event.damager as? Projectile ?: return
     val boss = (shot.shooter as? LivingEntity)?.let(plugin.bosses::get) ?: return
     if (shot.persistentDataContainer.has(plugin.keys.arrow, PersistentDataType.BOOLEAN) || shot.persistentDataContainer.has(plugin.keys.meteor, PersistentDataType.BOOLEAN)) return
+    val formula = plugin.catalog.settings.formula
+    val graded = boss.graded(plugin.catalog.settings.difficulty.weights.damage)
+    event.damage *= (Stats.ranged(formula.damage, boss.clazz.damage, boss.level, formula.rangedDamage) * graded).coerceAtLeast(1.0)
+  }
+
+  /** The dragon's blows and breath have no attribute to grow with its level, so they grow here, as its fireballs do. */
+  @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+  fun onDragon(event: EntityDamageByEntityEvent) {
+    if (event.damager is Projectile) return
+    val dragon = event.damageSource.causingEntity as? EnderDragon ?: return
+    val boss = plugin.bosses.get(dragon) ?: return
     val formula = plugin.catalog.settings.formula
     val graded = boss.graded(plugin.catalog.settings.difficulty.weights.damage)
     event.damage *= (Stats.ranged(formula.damage, boss.clazz.damage, boss.level, formula.rangedDamage) * graded).coerceAtLeast(1.0)

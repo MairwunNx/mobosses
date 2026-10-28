@@ -3,6 +3,7 @@ package ru.mairwunnx.mobosses.combat
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
+import org.bukkit.entity.EnderDragon
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
@@ -53,7 +54,9 @@ class Loot(private val plugin: MoBossesPlugin) {
 
   private fun give(boss: Boss, player: Player, item: Catalog.Loot) {
     val stack = stack(item, boss.level, plugin.texts.languageOf(player))
-    boss.entity.world.dropItemNaturally(boss.entity.location, stack) {
+    // The dragon dies over the exit portal, which would carry its loot off to the Overworld: it drops at the player.
+    val at = if (boss.entity is EnderDragon) player.location else boss.entity.location
+    at.world.dropItemNaturally(at, stack) {
       it.owner = player.uniqueId
       it.pickupDelay = 20
     }

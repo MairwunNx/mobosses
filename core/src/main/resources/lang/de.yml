@@ -266,6 +266,8 @@ bosses:
   hoglin: "Hauer"
   ravager: "Der Bulldozer"
   guardian: "Glotzauge"
+  ender_dragon: "Der Himmelstyrann"
+  wither: "Der Dreiköpfige"
 
 # Nach dem Boss, der sie beschwört, wie in minions.yml.
 minions:

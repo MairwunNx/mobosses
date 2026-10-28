@@ -150,7 +150,7 @@ data class Settings(
     @SerialName("vertical_zone_threshold") val verticalZoneThreshold: Int = 14,
     @SerialName("allowed_spawn_reasons") val allowedSpawnReasons: List<String> = listOf(
       "NATURAL", "JOCKEY", "SPAWNER", "TRIAL_SPAWNER", "EGG", "SPAWNER_EGG", "VILLAGE_INVASION",
-      "NETHER_PORTAL", "DROWNED", "RAID", "PATROL", "COMMAND", "CUSTOM",
+      "NETHER_PORTAL", "DROWNED", "RAID", "PATROL", "BUILD_WITHER", "COMMAND", "CUSTOM",
     ),
     /** The players this close to the mob set its level together, by their average. */
     @SerialName("group_radius") val groupRadius: Int = 24,
@@ -379,9 +379,25 @@ data class Settings(
     /** The share of a boss's health a player must deal to get loot. */
     @SerialName("min_damage_share") val minDamageShare: Double = 0.27777777,
     val items: Items = Items(),
+    @SerialName("vanilla_drops") val vanillaDrops: VanillaDrops = VanillaDrops(),
     val pity: Pity = Pity(),
     /** How much the survival bonus tips loot toward rare and better items: their weights grow by bonus × this × their tier. */
     @SerialName("survival_luck") val survivalLuck: Double = 1.0,
+  )
+
+  /**
+   * The game's own drops from a boss, Looting's included: times 1 + level × [perLevel] × its class's share in
+   * [classes], with spawner fatigue cutting the part above one. Items that don't stack, the boss's own gear, and
+   * [exclude] drop as they are.
+   */
+  @Serializable
+  data class VanillaDrops(
+    val enabled: Boolean = true,
+    @SerialName("per_level") val perLevel: Double = 0.03,
+    val classes: Map<String, Double> = mapOf("common" to 1.0, "uncommon" to 1.15, "rare" to 1.3, "epic" to 1.5, "legendary" to 1.75, "mythic" to 2.0),
+    val exclude: List<String> = listOf(
+      "NETHER_STAR", "DRAGON_EGG", "DRAGON_HEAD", "WITHER_SKELETON_SKULL", "SKELETON_SKULL", "ZOMBIE_HEAD", "CREEPER_HEAD", "PIGLIN_HEAD", "PLAYER_HEAD",
+    ),
   )
 
   /** How many items a player who earns loot gets: one, and one more every [everyLevels] of the boss's level, up to [max]. */

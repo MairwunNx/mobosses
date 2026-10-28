@@ -266,6 +266,8 @@ bosses:
   hoglin: "Colmilludo"
   ravager: "La Excavadora"
   guardian: "Ojazos"
+  ender_dragon: "El Tirano del Cielo"
+  wither: "El Tricéfalo"
 
 # Por el jefe que los invoca, como en minions.yml.
 minions:

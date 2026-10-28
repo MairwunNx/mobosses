@@ -266,6 +266,8 @@ bosses:
   hoglin: "Presudo"
   ravager: "A Escavadeira"
   guardian: "Olhudo"
+  ender_dragon: "O Tirano dos Céus"
+  wither: "O Tricéfalo"
 
 # Pelo chefe que os invoca, como em minions.yml.
 minions:

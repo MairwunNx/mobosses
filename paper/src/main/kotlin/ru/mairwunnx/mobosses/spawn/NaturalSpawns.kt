@@ -5,6 +5,7 @@ import org.bukkit.GameMode
 import org.bukkit.Location
 import org.bukkit.Particle
 import org.bukkit.Sound
+import org.bukkit.entity.EnderDragon
 import org.bukkit.entity.Mob
 import org.bukkit.entity.Player
 import org.bukkit.entity.Tameable
@@ -13,6 +14,7 @@ import ru.mairwunnx.mobosses.MoBossesPlugin
 import ru.mairwunnx.mobosses.algebra.Difficulty
 import ru.mairwunnx.mobosses.algebra.Leveling
 import ru.mairwunnx.mobosses.boss.Boss
+import ru.mairwunnx.mobosses.boss.WorldBosses
 import ru.mairwunnx.mobosses.lang.Message
 import ru.mairwunnx.mobosses.config.Settings
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason
@@ -66,6 +68,10 @@ class NaturalSpawns(private val plugin: MoBossesPlugin) {
     val spawn = catalog.settings.spawn
     if (!catalog.settings.enabled || !spawn.enabled || !entity.hasAI()) return null
     val type = catalog.types[entity.type]?.takeIf { it.spec.enabled } ?: return null
+    // A world's first dragon stays the game's own: it becomes a boss only once it's been beaten and comes back.
+    if (entity is EnderDragon && entity.world.enderDragonBattle?.hasBeenPreviouslyKilled() != true) return null
+    // The dragon and the wither are fights someone sets up: no cooldown or crowd keeps them ordinary, and they start none.
+    val worldBoss = WorldBosses.isWorldBoss(type.key)
     val at = entity.location
     if (plugin.bosses.count(at.world) >= spawn.maxBossesPerWorld) return null
     val difficulty = plugin.bosses.difficulty(at.world) ?: return null
@@ -76,7 +82,7 @@ class NaturalSpawns(private val plugin: MoBossesPlugin) {
     if (Random.nextDouble() >= chance(type.spec.spawnChance, spawn, at) * graded * plugin.survival.multiplier(nearest) * plugin.fullMoon.chance(at.world)) return null
 
     val group = players(at, spawn.groupRadius.toDouble()).ifEmpty { listOf(nearest) }
-    if (!limiter.allows(at, group)) return null.also { plugin.log.debug { "No ${type.key} boss at ${at.blockX} ${at.blockY} ${at.blockZ}: too many bosses near, or its players' cooldown" } }
+    if (!worldBoss && !limiter.allows(at, group)) return null.also { plugin.log.debug { "No ${type.key} boss at ${at.blockX} ${at.blockY} ${at.blockZ}: too many bosses near, or its players' cooldown" } }
     if (!plugin.guards.canSpawnBoss(at)) {
       return null.also { plugin.log.debug { "No ${type.key} boss at ${at.blockX} ${at.blockY} ${at.blockZ}: ${plugin.guards.regionsAt(at).joinToString().ifEmpty { "protected" }}" } }
     }
@@ -91,7 +97,7 @@ class NaturalSpawns(private val plugin: MoBossesPlugin) {
     val clazz = Rolls.weighted(catalog.classes.all.map { it to plugin.fullMoon.weight(at.world, it) }, Random) ?: catalog.classes.all.first()
     val boss = plugin.bosses.make(entity, type, clazz, level, summoner).also(plugin.bosses::vanillaName)
     if (reason == SpawnReason.SPAWNER || reason == SpawnReason.TRIAL_SPAWNER) boss.fromSpawner = true
-    limiter.spawned(group)
+    if (!worldBoss) limiter.spawned(group)
     announce(boss)
     return boss
   }

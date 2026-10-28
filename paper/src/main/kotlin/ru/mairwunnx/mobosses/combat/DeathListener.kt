@@ -5,6 +5,9 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.Bukkit
 import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
+import org.bukkit.inventory.EquipmentSlot
+import org.bukkit.inventory.InventoryHolder
+import org.bukkit.inventory.ItemStack
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
@@ -42,11 +45,13 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
       val dealt = boss.damage
       val group = shares.count { it.value > 0.0 }
       val looted = HashMap<Player, Double>()
+      val fatigues = HashMap<UUID, Double>()
       shares.forEach { (id, share) ->
         val worth = Shares.petWorth(dealt[id] ?: 0.0, pets[id] ?: 0.0, Leveling.petWeight(plugin.catalog.settings.progression.petDamage, boss.level))
-        Bukkit.getPlayer(id)?.let { pay(it, boss, share, worth, group, experience, looted) }
+        Bukkit.getPlayer(id)?.let { pay(it, boss, share, worth, group, experience, looted, fatigues) }
       }
       plugin.loot.bonus(boss, looted)
+      multiplyDrops(event, boss, shares.entries.sumOf { (id, share) -> share * (fatigues[id] ?: 1.0) } / shares.values.sum().coerceAtLeast(1e-9))
       plugin.progression.count(boss.type.key, boss.clazz.key, killed = true)
       announce(boss, shares, experience)
       plugin.worldApi.bossKilled(boss, shares, experience)
@@ -56,11 +61,15 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
     plugin.decoys.removeOf(boss.uuid)
   }
 
-  /** [petWorth] is the share of the player's damage that counts for experience: 1 without pets. Players who get loot go into [looted]. */
-  private fun pay(player: Player, boss: Boss, share: Double, petWorth: Double, group: Int, experience: Int, looted: MutableMap<Player, Double>) {
+  /**
+   * [petWorth] is the share of the player's damage that counts for experience: 1 without pets. Players who get loot go
+   * into [looted], and each player's spawner fatigue into [fatigues].
+   */
+  private fun pay(player: Player, boss: Boss, share: Double, petWorth: Double, group: Int, experience: Int, looted: MutableMap<Player, Double>, fatigues: MutableMap<UUID, Double>) {
     val settings = plugin.catalog.settings
     // A spawner boss farmed in one spot gives less, and comes back to full with time.
     val fatigue = if (boss.fromSpawner) plugin.fatigue.take(player, boss.entity.location) else 1.0
+    fatigues[player.uniqueId] = fatigue
     val baseHealth = boss.entity.getAttribute(Attribute.MAX_HEALTH)?.baseValue ?: 0.0
     val payout = Payout.of(settings, plugin.catalog.rewards, share, petWorth, fatigue, experience, baseHealth, boss.clazz.experience, boss.level, plugin.progression.level(player.uniqueId), group)
     player.giveExp(payout.vanilla)
@@ -87,6 +96,38 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
     if (!settings.broadcast.killNotes) return
     val petShare = (boss.petDamage[player.uniqueId] ?: 0.0) / (boss.damage[player.uniqueId] ?: 1.0)
     plugin.texts.sendBlock(player, payout.notes(settings, plugin.texts.boss(plugin.texts.languageOf(player), boss), petShare, rewardsIn))
+  }
+
+  /**
+   * The game's own drops, Looting's included, grow with the boss's level and class, cut by the fighters' spawner
+   * [fatigue], weighed by their shares. They lie on the ground for everyone, as they always did. The boss's gear and
+   * what it carried drop as they are: the game takes them off only after this event, so they're still on it here.
+   */
+  private fun multiplyDrops(event: EntityDeathEvent, boss: Boss, fatigue: Double) {
+    val settings = plugin.catalog.settings.loot.vanillaDrops
+    val multiplier = LootRules.vanillaMultiplier(settings, boss.clazz.key, boss.level, fatigue)
+    if (multiplier <= 1.0) return
+    val equipment = boss.entity.equipment
+    val own = (EquipmentSlot.entries.mapNotNull { slot -> runCatching { equipment?.getItem(slot) }.getOrNull() } +
+      ((boss.entity as? InventoryHolder)?.inventory?.contents?.filterNotNull() ?: emptyList())).filterNot { it.isEmpty }.toMutableList()
+    val drops = ArrayList<ItemStack>()
+    event.drops.forEach { stack ->
+      val worn = own.indexOfFirst { it.isSimilar(stack) }
+      if (worn >= 0 || !LootRules.multiplies(settings, stack.type.name, stack.maxStackSize)) {
+        if (worn >= 0) own.removeAt(worn)
+        drops += stack
+        return@forEach
+      }
+      var left = LootRules.vanillaCount(stack.amount, multiplier)
+      while (left > 0) {
+        val amount = minOf(left, stack.maxStackSize)
+        drops += stack.clone().apply { this.amount = amount }
+        left -= amount
+      }
+    }
+    plugin.log.debug { "The game's drops from a level ${boss.level} ${boss.clazz.key} ${boss.type.key} ×${"%.2f".format(multiplier)}: ${event.drops.sumOf { it.amount }} → ${drops.sumOf { it.amount }}" }
+    event.drops.clear()
+    event.drops.addAll(drops)
   }
 
   private fun announce(boss: Boss, shares: Map<UUID, Double>, experience: Int) {

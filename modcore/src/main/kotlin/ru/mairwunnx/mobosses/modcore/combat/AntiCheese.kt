@@ -19,6 +19,7 @@ import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart
 import net.minecraft.world.level.ClipContext
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
+import ru.mairwunnx.mobosses.boss.WorldBosses
 import ru.mairwunnx.mobosses.combat.Cheese
 import ru.mairwunnx.mobosses.modcore.MoBosses
 import ru.mairwunnx.mobosses.modcore.World
@@ -55,7 +56,7 @@ class AntiCheese(private val mod: MoBosses) {
     if (!stepOut.enabled) return watches.clear()
     mod.bosses.all.forEach { boss ->
       val entity = boss.entity as? Mob ?: return@forEach
-      if (!entity.isAlive || entity is Ghast || entity is Phantom || entity is Vex || entity is Blaze || entity is Breeze || entity is Guardian) return@forEach
+      if (!entity.isAlive || entity is Ghast || entity is Phantom || entity is Vex || entity is Blaze || entity is Breeze || entity is Guardian || WorldBosses.isWorldBoss(boss.type.key)) return@forEach
       val at = entity.position()
       val target = boss.hitWithin(PRESSED_MILLIS).mapNotNull(mod.server.playerList::getPlayer)
         .filter { it.level() == entity.level() && !it.isSpectator && Targets.canHit(it, mod.guards) }

@@ -3,6 +3,7 @@ package ru.mairwunnx.mobosses.spawn
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent
 import org.bukkit.Bukkit
+import org.bukkit.entity.EnderDragon
 import org.bukkit.entity.Mob
 import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
@@ -23,7 +24,9 @@ class SpawnListener(private val plugin: MoBossesPlugin) : Listener {
   @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
   fun onSpawn(event: CreatureSpawnEvent) {
     val entity = event.entity as? Mob ?: return
-    if (spawningByCommand || event.spawnReason !in plugin.catalog.spawnReasons || plugin.decoys.isDecoy(entity)) return
+    // The game brings the dragon back with a reason of no use to anyone, so it rolls whatever the list says.
+    val allowed = event.spawnReason in plugin.catalog.spawnReasons || entity is EnderDragon
+    if (spawningByCommand || !allowed || plugin.decoys.isDecoy(entity)) return
     natural.spawned(entity, plugin.minions.summonerOf(entity), event.spawnReason)
   }
 

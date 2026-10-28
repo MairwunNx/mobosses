@@ -4,6 +4,7 @@ import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.DamageTypeTags
 import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.OwnableEntity
 import net.minecraft.world.entity.animal.golem.AbstractGolem
@@ -60,14 +61,25 @@ class Damage(private val mod: MoBosses) {
     mod.abilities.onHit(boss, player?.takeIf { !it.hasDisconnected() })
   }
 
-  /** The damage a boss's own shot does to [target]: its arrows, fireballs, and tridents hit harder with its level. Abilities' shots have their own. */
+  /**
+   * The damage a boss's own shot does to [target]: its arrows, fireballs, and tridents hit harder with its level.
+   * Abilities' shots have their own. The dragon's blows and breath have no attribute to grow, so they grow as its shots.
+   */
   fun shot(target: LivingEntity, source: DamageSource, damage: Float): Float {
-    val shot = source.directEntity as? Projectile ?: return damage
+    val shot = source.directEntity as? Projectile ?: return dragon(target, source, damage)
     val data = Data(shot)
     data.double(Keys.SHOT_DAMAGE)?.let { return it.toFloat() }
     val boss = (source.entity as? LivingEntity)?.let(mod.bosses::get) ?: return damage
     if (target == boss.entity || source.`is`(DamageTypeTags.IS_EXPLOSION)) return damage
     if (data.has(Keys.ARROW) || data.has(Keys.METEOR)) return damage
+    val formula = mod.catalog.settings.formula
+    val graded = boss.graded(mod.catalog.settings.difficulty.weights.damage)
+    return damage * (Stats.ranged(formula.damage, boss.clazz.damage, boss.level, formula.rangedDamage) * graded).coerceAtLeast(1.0).toFloat()
+  }
+
+  private fun dragon(target: LivingEntity, source: DamageSource, damage: Float): Float {
+    val boss = (source.entity as? EnderDragon)?.let(mod.bosses::get) ?: return damage
+    if (target == boss.entity) return damage
     val formula = mod.catalog.settings.formula
     val graded = boss.graded(mod.catalog.settings.difficulty.weights.damage)
     return damage * (Stats.ranged(formula.damage, boss.clazz.damage, boss.level, formula.rangedDamage) * graded).coerceAtLeast(1.0).toFloat()

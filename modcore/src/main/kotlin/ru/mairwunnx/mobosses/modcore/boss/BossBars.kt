@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerBossEvent
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.BossEvent
 import ru.mairwunnx.mobosses.lang.Message
+import ru.mairwunnx.mobosses.boss.WorldBosses
 import ru.mairwunnx.mobosses.modcore.MoBosses
 import java.util.UUID
 
@@ -19,7 +20,8 @@ class BossBars(private val mod: MoBosses) {
   private val viewing = HashMap<UUID, UUID>()
 
   fun show(player: ServerPlayer, boss: Boss) {
-    if (!mod.catalog.settings.bossBar.enabled) return
+    // The dragon and the wither keep the game's own bar, which shows the boss's name in its own color.
+    if (!mod.catalog.settings.bossBar.enabled || WorldBosses.isWorldBoss(boss.type.key)) return
     if (viewing[player.uuid] != boss.uuid) hide(player)
     val code = mod.texts.languageOf(player)
     val bar = bars.getOrPut(boss.uuid) { HashMap() }.getOrPut(code) { create(boss, code) }

@@ -4,7 +4,11 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.damagesource.DamageSource
+import net.minecraft.core.registries.BuiltInRegistries
 import net.minecraft.world.entity.Entity
+import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.item.ItemStack
+import ru.mairwunnx.mobosses.combat.LootRules
 import net.minecraft.world.entity.ai.attributes.Attributes
 import ru.mairwunnx.mobosses.algebra.Leveling
 import ru.mairwunnx.mobosses.algebra.Stats
@@ -15,19 +19,51 @@ import ru.mairwunnx.mobosses.modcore.MoBosses
 import ru.mairwunnx.mobosses.modcore.World
 import ru.mairwunnx.mobosses.modcore.boss.Boss
 import java.util.UUID
+import java.util.function.Consumer
 import kotlin.math.roundToInt
 import kotlin.random.Random
 
 /**
  * A boss's death, as Paper's `DeathListener`. Each player's share of its health, their pets' damage included, decides
  * their part ([Payout]): vanilla and Mo’Bosses experience, the kill toward their level, loot, rewards, and a note in
- * the chat about why it was less or more. The game's own experience orb stays home: the boss's goes out by share.
+ * the chat about why it was less or more. The game's own experience orb stays home: the boss's goes out by share. The
+ * game's own drops grow with the boss.
  */
 class Deaths(private val mod: MoBosses) {
   /** Bosses whose experience went out by share, so the game drops none of its own. */
   private val paid = HashSet<UUID>()
 
+  /** What the game's own drops from each dying boss multiply by, until they drop. */
+  private val multipliers = HashMap<UUID, Double>()
+
   fun paid(entity: Entity) = paid.remove(entity.uuid)
+
+  /** Whether the dying dragon's experience went out by share: it drops its own over several seconds, not through [paid]. */
+  fun paidDragon(entity: Entity) = entity.uuid in paid
+
+  /** A boss gone from the world: whatever it didn't use goes too. */
+  fun forget(entity: Entity) {
+    paid.remove(entity.uuid)
+    multipliers.remove(entity.uuid)
+  }
+
+  /**
+   * The game's own drops from a dying boss's loot table, Looting's included, multiplied as [died] decided, through
+   * [drop]. Its gear drops elsewhere, as it is.
+   */
+  fun drops(entity: LivingEntity, drop: Consumer<ItemStack>): Consumer<ItemStack> {
+    val multiplier = multipliers.remove(entity.uuid) ?: return drop
+    val settings = mod.catalog.settings.loot.vanillaDrops
+    return Consumer { stack ->
+      if (!LootRules.multiplies(settings, BuiltInRegistries.ITEM.getKey(stack.item).toString(), stack.maxStackSize)) return@Consumer drop.accept(stack)
+      var left = LootRules.vanillaCount(stack.count, multiplier)
+      while (left > 0) {
+        val count = minOf(left, stack.maxStackSize)
+        drop.accept(stack.copyWithCount(count))
+        left -= count
+      }
+    }
+  }
 
   fun died(boss: Boss, source: DamageSource) {
     val entity = boss.entity
@@ -46,11 +82,16 @@ class Deaths(private val mod: MoBosses) {
       val dealt = boss.damage
       val group = shares.count { it.value > 0.0 }
       val looted = HashMap<ServerPlayer, Double>()
+      val fatigues = HashMap<UUID, Double>()
       shares.forEach { (id, share) ->
         val worth = Shares.petWorth(dealt[id] ?: 0.0, pets[id] ?: 0.0, Leveling.petWeight(mod.catalog.settings.progression.petDamage, boss.level))
-        mod.server.playerList.getPlayer(id)?.let { pay(it, boss, share, worth, group, experience, looted) }
+        mod.server.playerList.getPlayer(id)?.let { pay(it, boss, share, worth, group, experience, looted, fatigues) }
       }
       mod.loot.bonus(boss, looted)
+      // The fighters' spawner fatigue, by their shares, cuts the game's own drops too.
+      val fatigue = shares.entries.sumOf { (id, share) -> share * (fatigues[id] ?: 1.0) } / shares.values.sum().coerceAtLeast(1e-9)
+      val multiplier = LootRules.vanillaMultiplier(mod.catalog.settings.loot.vanillaDrops, boss.clazz.key, boss.level, fatigue)
+      if (multiplier > 1.0) multipliers[boss.uuid] = multiplier
       mod.progression.count(boss.type.key, boss.clazz.key, killed = true)
       announce(boss, shares, experience)
       mod.worldApi.bossKilled(boss, shares, experience)
@@ -60,11 +101,15 @@ class Deaths(private val mod: MoBosses) {
     mod.decoys.removeOf(boss.uuid)
   }
 
-  /** [petWorth] is the share of the player's damage that counts for experience: 1 without pets. Players who get loot go into [looted]. */
-  private fun pay(player: ServerPlayer, boss: Boss, share: Double, petWorth: Double, group: Int, experience: Int, looted: MutableMap<ServerPlayer, Double>) {
+  /**
+   * [petWorth] is the share of the player's damage that counts for experience: 1 without pets. Players who get loot go
+   * into [looted], and each player's spawner fatigue into [fatigues].
+   */
+  private fun pay(player: ServerPlayer, boss: Boss, share: Double, petWorth: Double, group: Int, experience: Int, looted: MutableMap<ServerPlayer, Double>, fatigues: MutableMap<UUID, Double>) {
     val settings = mod.catalog.settings
     // A spawner boss farmed in one spot gives less, and comes back to full with time.
     val fatigue = if (boss.fromSpawner) mod.fatigue.take(player, boss.entity) else 1.0
+    fatigues[player.uuid] = fatigue
     val baseHealth = boss.entity.getAttribute(Attributes.MAX_HEALTH)?.baseValue ?: 0.0
     val levelBefore = mod.progression.level(player.uuid)
     val payout = Payout.of(settings, mod.catalog.rewards, share, petWorth, fatigue, experience, baseHealth, boss.clazz.experience, boss.level, levelBefore, group)

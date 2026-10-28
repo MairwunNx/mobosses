@@ -266,6 +266,8 @@ bosses:
   hoglin: "Клыкач"
   ravager: "Бульдозер"
   guardian: "Глазастик"
+  ender_dragon: "Небесный тиран"
+  wither: "Трёхглавый"
 
 # По боссу, который их призывает, как в minions.yml.
 minions:

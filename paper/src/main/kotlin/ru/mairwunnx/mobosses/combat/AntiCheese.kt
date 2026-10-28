@@ -25,13 +25,15 @@ import ru.mairwunnx.mobosses.ability.Targets
 import ru.mairwunnx.mobosses.ability.kinds.Grapple
 import ru.mairwunnx.mobosses.ability.kinds.TeleportStrike
 import ru.mairwunnx.mobosses.boss.Boss
+import ru.mairwunnx.mobosses.boss.WorldBosses
 import java.util.UUID
 
 /**
  * Tricks that beat bosses without a fight. A boss never gets into a boat or a minecart and never goes through a
  * portal. A boss a player keeps hitting from beyond its reach, from a pillar, over a wall, or while it sits in a hole
  * or under a trapdoor, steps out next to them, or pulls them off when nothing there fits ([Cheese] decides when).
- * Flyers and guardians are left out: nothing traps them the same way, and a guardian can't leave its water.
+ * Flyers, the dragon and the wither among them, and guardians are left out: nothing traps them the same way, and a
+ * guardian can't leave its water.
  */
 class AntiCheese(private val plugin: MoBossesPlugin) : Listener {
   private val watches = HashMap<UUID, Cheese>()
@@ -56,7 +58,7 @@ class AntiCheese(private val plugin: MoBossesPlugin) : Listener {
     if (!stepOut.enabled) return watches.clear()
     plugin.bosses.all.forEach { boss ->
       val entity = boss.entity as? Mob ?: return@forEach
-      if (!entity.isValid || entity is Flying || entity is Vex || entity is Blaze || entity is Breeze || entity is Guardian) return@forEach
+      if (!entity.isValid || entity is Flying || entity is Vex || entity is Blaze || entity is Breeze || entity is Guardian || WorldBosses.isWorldBoss(boss.type.key)) return@forEach
       val at = entity.location
       val target = boss.hitWithin(PRESSED_MILLIS).mapNotNull(Bukkit::getPlayer)
         .filter { it.world == at.world && it.gameMode != GameMode.SPECTATOR && Targets.canHit(it, plugin.guards) }

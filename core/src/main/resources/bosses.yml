@@ -1113,3 +1113,22 @@ GUARDIAN:
       spawn: "minecraft:entity.guardian.ambient"
       death: "minecraft:entity.guardian.death"
       summon: "minecraft:entity.guardian.attack"
+
+# The dragon and the wither: their own health bar shows the boss's name, they
+# never despawn, and abilities that move them, pull players up to them, copy
+# them, or build around them stay off. The dragon becomes a boss only once its
+# first fight in a world is won, when it comes back. Their experience stays
+# near the game's own up to about level 30 and tops out like a level 100 Mythic.
+ENDER_DRAGON:
+  enabled: true
+  spawn_chance: 0.25 # 25%
+  exp_modifier: 0.01
+  effects:
+    particles: "minecraft:reverse_portal"
+
+WITHER:
+  enabled: true
+  spawn_chance: 0.25 # 25%
+  exp_modifier: 0.1
+  effects:
+    particles: "minecraft:smoke"

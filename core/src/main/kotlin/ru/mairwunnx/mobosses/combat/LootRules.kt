@@ -5,6 +5,7 @@ import ru.mairwunnx.mobosses.config.Classes
 import ru.mairwunnx.mobosses.config.LootTable
 import ru.mairwunnx.mobosses.config.Settings
 import kotlin.math.ceil
+import kotlin.math.floor
 import kotlin.random.Random
 
 /**
@@ -45,6 +46,26 @@ object LootRules {
   fun items(settings: Settings.Items, level: Int): Int {
     if (settings.everyLevels <= 0) return 1
     return (1 + level.coerceAtLeast(0) / settings.everyLevels).coerceIn(1, settings.max.coerceAtLeast(1))
+  }
+
+  /** What the game's own drops from a boss are multiplied by; [fatigue] cuts the part above one. */
+  fun vanillaMultiplier(settings: Settings.VanillaDrops, bossClass: String, level: Int, fatigue: Double = 1.0): Double {
+    if (!settings.enabled) return 1.0
+    val share = settings.classes[bossClass.trim().lowercase()] ?: 1.0
+    return 1.0 + (level.coerceAtLeast(0) * settings.perLevel * share).coerceAtLeast(0.0) * fatigue.coerceIn(0.0, 1.0)
+  }
+
+  /** [count] items times [multiplier]: the fraction adds one more by its own chance, so on average it comes out exact. */
+  fun vanillaCount(count: Int, multiplier: Double, rng: Random = Random): Int {
+    val exact = count * multiplier.coerceAtLeast(0.0)
+    val whole = floor(exact).toInt()
+    return whole + if (rng.nextDouble() < exact - whole) 1 else 0
+  }
+
+  /** Whether the game's drop of [item], an id like `NETHER_STAR` or `minecraft:nether_star`, may be multiplied: it stacks, and `exclude` doesn't name it. */
+  fun multiplies(settings: Settings.VanillaDrops, item: String, maxStack: Int): Boolean {
+    val id = item.trim().uppercase().removePrefix("MINECRAFT:")
+    return maxStack > 1 && settings.exclude.none { it.trim().uppercase().removePrefix("MINECRAFT:") == id }
   }
 
   /** Whether an entry is rare or better: announced, and what pity owes. */

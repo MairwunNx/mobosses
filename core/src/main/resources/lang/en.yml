@@ -266,6 +266,8 @@ bosses:
   hoglin: "Tusker"
   ravager: "The Bulldozer"
   guardian: "Goggle-Eye"
+  ender_dragon: "The Sky Tyrant"
+  wither: "The Three-Headed"
 
 # By the boss that summons them, as in minions.yml.
 minions:

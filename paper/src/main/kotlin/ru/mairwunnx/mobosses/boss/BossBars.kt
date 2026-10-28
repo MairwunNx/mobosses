@@ -12,7 +12,8 @@ import java.util.UUID
 /**
  * Health bars. A player sees the bar of the boss they hit last, in their own language: each boss
  * has one bar per language among its viewers. The bar goes away when the boss dies or unloads, or
- * when the player leaves, changes worlds, or walks past `boss_bar.hide_distance`.
+ * when the player leaves, changes worlds, or walks past `boss_bar.hide_distance`. The dragon and the wither have none:
+ * the game's own bar shows their names.
  */
 class BossBars(private val plugin: MoBossesPlugin) {
   private val bars = HashMap<UUID, MutableMap<String, BossBar>>()
@@ -20,7 +21,8 @@ class BossBars(private val plugin: MoBossesPlugin) {
   private val viewing = HashMap<UUID, UUID>()
 
   fun show(player: Player, boss: Boss) {
-    if (!plugin.catalog.settings.bossBar.enabled) return
+    // The dragon and the wither keep the game's own bar, which shows the boss's name in its own color.
+    if (!plugin.catalog.settings.bossBar.enabled || WorldBosses.isWorldBoss(boss.type.key)) return
     if (viewing[player.uniqueId] != boss.uuid) hide(player)
     val code = plugin.texts.languageOf(player)
     val bar = bars.getOrPut(boss.uuid) { HashMap() }.getOrPut(code) { create(boss, code) }

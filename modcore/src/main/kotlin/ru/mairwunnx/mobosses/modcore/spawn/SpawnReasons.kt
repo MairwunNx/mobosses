@@ -3,6 +3,8 @@ package ru.mairwunnx.mobosses.modcore.spawn
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntityTypes
+import net.minecraft.world.entity.boss.enderdragon.EnderDragon
+import net.minecraft.world.entity.boss.wither.WitherBoss
 import net.minecraft.world.entity.raid.Raider
 
 /**
@@ -19,7 +21,8 @@ object SpawnReasons {
     EntitySpawnReason.BREEDING -> "BREEDING"
     EntitySpawnReason.MOB_SUMMONED -> "SPELL"
     EntitySpawnReason.JOCKEY -> "JOCKEY"
-    EntitySpawnReason.EVENT -> if (entity is Raider) "RAID" else "VILLAGE_INVASION"
+    // Paper names the dragon's comeback after nothing in particular.
+    EntitySpawnReason.EVENT -> if (entity is Raider) "RAID" else if (entity is EnderDragon) "DEFAULT" else "VILLAGE_INVASION"
     EntitySpawnReason.CONVERSION -> when (entity.type) {
       EntityTypes.DROWNED -> "DROWNED"
       EntityTypes.ZOMBIE_VILLAGER -> "INFECTION"
@@ -28,7 +31,7 @@ object SpawnReasons {
       else -> "METAMORPHOSIS"
     }
     EntitySpawnReason.REINFORCEMENT -> "REINFORCEMENTS"
-    EntitySpawnReason.TRIGGERED -> "TRAP"
+    EntitySpawnReason.TRIGGERED -> if (entity is WitherBoss) "BUILD_WITHER" else "TRAP"
     EntitySpawnReason.BUCKET -> "BUCKET"
     EntitySpawnReason.SPAWN_ITEM_USE -> "SPAWNER_EGG"
     EntitySpawnReason.COMMAND -> "COMMAND"
