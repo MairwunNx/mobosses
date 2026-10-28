@@ -43,7 +43,7 @@ teleport_strike_cooldown_bias: 1.2
 #  Lightning: a bolt on every player the boss fights, however far, the rest
 #  within the radius around them; a lightning rod or copper next to a player
 #  draws that player's bolt. Each value grows by its modifier per boss level,
-#  up to max.
+#  up to max. Each bolt hurts everyone within 2.5 blocks of it.
 # ---------------------------------------------------------------------------
 lightning_damage: 5.0
 lightning_damage_modifier: 0.1
@@ -54,6 +54,13 @@ lightning_radius_max: 10.0
 lightning_strikes: 6
 lightning_strikes_modifier: 0.1
 lightning_strikes_max: 26
+# Each bolt past the players' own strikes one of them outright by chance, up
+# to max bolts a player in all.
+lightning_aimed: { chance: 0.15, max: 3 }
+# Each bolt sets the block it strikes alight by chance, for seconds, as the
+# game's lightning does; never within claim_distance blocks of a claim or a
+# protected region, since fire spreads.
+lightning_fire: { chance: 0.5, seconds: 8, claim_distance: 6 }
 
 # ---------------------------------------------------------------------------
 #  Regeneration: regeneration and resistance on the boss for a while.

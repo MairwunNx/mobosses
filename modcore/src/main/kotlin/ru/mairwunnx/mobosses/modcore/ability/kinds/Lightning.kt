@@ -9,6 +9,7 @@ import net.minecraft.world.entity.EntityTypes
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.phys.Vec3
+import ru.mairwunnx.mobosses.algebra.Bolts
 import ru.mairwunnx.mobosses.algebra.Rolls
 import ru.mairwunnx.mobosses.config.AbilitySettings
 import ru.mairwunnx.mobosses.config.AbilityThresholds
@@ -20,9 +21,10 @@ import kotlin.math.min
 import kotlin.random.Random
 
 /**
- * A bolt on every player the boss fights, however far, the rest scattered around them; a lightning rod or copper next
- * to a player draws that player's bolt. With no one to strike, around the boss. Only the flash: a real bolt would set
- * fires.
+ * A bolt on every player the boss fights, however far, the rest scattered around them, now and then right into one of
+ * them, up to three a player ([Bolts]); a lightning rod or copper next to a player draws that player's bolts. With no
+ * one to strike, around the boss. The bolt is only the flash, so fire is the ability's own: by chance, for a few
+ * seconds, and never near a claim.
  */
 object Lightning : Ability {
   override val key = "lightning"
@@ -42,13 +44,17 @@ object Lightning : Ability {
     val radius = min(cfg.lightningRadius + cast.level * cfg.lightningRadiusModifier, cfg.lightningRadiusMax)
     val strikes = Rolls.linear(cfg.lightningStrikes, cfg.lightningStrikesModifier, cfg.lightningStrikesMax, cast.level)
     val damage = Rolls.linear(cfg.lightningDamage, cfg.lightningDamageModifier, cfg.lightningDamageMax, cast.level)
-    val centers = cast.foes().map { it.position() }.ifEmpty { listOf(cast.at) }.map { attractor(world, it, min(5.0, radius)) ?: it }
-    val points = centers + List((strikes - centers.size).coerceAtLeast(0)) {
-      val center = centers.random()
-      val x = center.x + Random.nextDouble(-radius, radius)
-      val z = center.z + Random.nextDouble(-radius, radius)
-      Vec3(x, Targets.ground(world, x, center.y, z)?.let { it.y + 1.0 } ?: center.y, z)
+    val foes = cast.foes()
+    val centers = foes.map { it.position() }.ifEmpty { listOf(cast.at) }.map { attractor(world, it, min(5.0, radius)) ?: it }
+    val points = centers + Bolts.aim(foes.size, strikes - centers.size, cfg.lightningAimed).map { aimed ->
+      aimed?.let { centers[it] } ?: run {
+        val center = centers.random()
+        val x = center.x + Random.nextDouble(-radius, radius)
+        val z = center.z + Random.nextDouble(-radius, radius)
+        Vec3(x, Targets.ground(world, x, center.y, z)?.let { it.y + 1.0 } ?: center.y, z)
+      }
     }
+    val fire = cfg.lightningFire
     points.forEach { point ->
       EntityTypes.LIGHTNING_BOLT.create(world, EntitySpawnReason.TRIGGERED)?.let { bolt ->
         bolt.snapTo(point)
@@ -56,8 +62,25 @@ object Lightning : Ability {
         world.addFreshEntity(bolt)
       }
       cast.victims(point, 2.5).forEach { it.hurtServer(world, world.damageSources().mobAttack(cast.entity), damage.toFloat()) }
+      if (Random.nextDouble() < fire.chance) ignite(cast, BlockPos.containing(point), fire)
     }
     cast.sound(SoundEvents.LIGHTNING_BOLT_THUNDER)
+    return true
+  }
+
+  /** Fire where a bolt struck, as the game's lightning sets, but only for a while and never within reach of a claim. */
+  private fun ignite(cast: Cast, pos: BlockPos, fire: AbilitySettings.LightningFire) {
+    val world = cast.world
+    if (!Targets.isOpen(world, pos) || !Targets.solid(world, pos.below()) || !clearOfClaims(cast, pos, fire.claimDistance)) return
+    cast.mod.blockChanges.setFor(world, pos, Blocks.FIRE.defaultBlockState(), fire.seconds.coerceAtLeast(1) * 20L)
+  }
+
+  /** Whether every block within [distance] of [pos], every other one, may change: fire spreads, so it stays off a claim's edge. */
+  private fun clearOfClaims(cast: Cast, pos: BlockPos, distance: Int): Boolean {
+    val d = distance.coerceAtLeast(0)
+    for (dx in -d..d step 2) for (dz in -d..d step 2) {
+      if (!cast.mod.guards.canChangeBlock(cast.world, pos.offset(dx, 0, dz))) return false
+    }
     return true
   }
 

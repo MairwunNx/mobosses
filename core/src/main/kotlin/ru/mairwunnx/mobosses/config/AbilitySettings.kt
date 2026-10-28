@@ -44,6 +44,10 @@ data class AbilitySettings(
   @SerialName("lightning_strikes") val lightningStrikes: Int = 6,
   @SerialName("lightning_strikes_modifier") val lightningStrikesModifier: Double = 0.1,
   @SerialName("lightning_strikes_max") val lightningStrikesMax: Int = 26,
+  /** Bolts past each player's own that strike a player outright. */
+  @SerialName("lightning_aimed") val lightningAimed: LightningAimed = LightningAimed(),
+  /** Bolts that set the ground alight. */
+  @SerialName("lightning_fire") val lightningFire: LightningFire = LightningFire(),
 
   @SerialName("regeneration_duration_bias") val regenerationDurationBias: Double = 1.4,
   @SerialName("regen_duration_seconds_base") val regenDurationSecondsBase: Int = 8,
@@ -210,6 +214,24 @@ data class AbilitySettings(
     @SerialName("hits_max") val hitsMax: Int = 6,
     /** It heals the boss only while the boss is this close. */
     val range: Double = 16.0,
+  )
+
+  /** Each bolt past the players' own strikes one of them outright by [chance], up to [max] bolts a player in all. */
+  @Serializable
+  data class LightningAimed(
+    val chance: Double = 0.15,
+    val max: Int = 3,
+  )
+
+  /**
+   * Each bolt sets the block it strikes alight by [chance], for [seconds], as the game's lightning does, but never
+   * within [claimDistance] blocks of a claim or a protected region, since fire spreads.
+   */
+  @Serializable
+  data class LightningFire(
+    val chance: Double = 0.5,
+    val seconds: Int = 8,
+    @SerialName("claim_distance") val claimDistance: Int = 6,
   )
 
   /**
