@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.16.0
+
+### Changed
+
+- 🦇 **The dragon and the wither send a pack to each player.** Their summons came out at the boss, high in the air or far off, where phantoms circled until someone wandered near. Now each player the dragon or the wither fights gets a pack of their own, set on them at once: phantoms 8 to 12 blocks over their head, wither skeletons on the ground a few blocks off. Each player has room for `summoning_max_alive` of them. Other bosses still summon at their feet.
+
 ## 2.15.0
 
 ### New
