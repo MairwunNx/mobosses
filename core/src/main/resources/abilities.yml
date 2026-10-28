@@ -73,12 +73,17 @@ regen_anti_projectiles: true    # Burns arrows in the aura; tridents pass.
 regen_slow_players: true        # Slows players in the aura.
 
 # ---------------------------------------------------------------------------
-#  Fire ring: fire on the ground around the player the boss fights.
+#  Fire ring: fire on the ground around each player the boss fights. Where
+#  less than a third of a ring finds room, that ring doesn't burn.
 # ---------------------------------------------------------------------------
 fire_ring_min_radius: 4.0
 fire_ring_max_radius: 7.0
 fire_ring_density: 0.7   # The share of the ring's 64 points that catch fire.
 fire_ring_seconds: 6      # Seconds before the fire goes out.
+# Where it may burn besides bare ground: next to grass and flowers, next to
+# trees, and on water, as flames dancing on it that burn whoever wades
+# through. Next to anything else that burns, like a house, it never does.
+fire_ring_near: { plants: true, trees: true, water: true }
 
 # ---------------------------------------------------------------------------
 #  Web ring: cobwebs around the player the boss fights, and slowness for

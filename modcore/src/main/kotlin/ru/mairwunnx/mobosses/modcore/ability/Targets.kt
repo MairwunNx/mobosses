@@ -5,6 +5,7 @@ import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.tags.BlockTags
+import net.minecraft.tags.FluidTags
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.player.Player
@@ -69,6 +70,18 @@ object Targets {
     for (by in (start.coerceIn(min, max) downTo min) + (start.coerceIn(min, max) + 1..max)) {
       val below = BlockPos(bx, by - 1, bz)
       if (solid(level, below) && isOpen(level, below.above())) return below
+    }
+    return null
+  }
+
+  /** Water with open air over it near [y] in the column at [x], [z]: where a fire ring dances on a lake. */
+  fun water(level: ServerLevel, x: Double, y: Double, z: Double, window: Int = 8): BlockPos? {
+    val bx = floor(x).toInt()
+    val bz = floor(z).toInt()
+    val start = floor(y).toInt()
+    for (by in (start + window).coerceAtMost(level.maxY - 1) downTo (start - window).coerceAtLeast(level.minY)) {
+      val pos = BlockPos(bx, by, bz)
+      if (level.getFluidState(pos).`is`(FluidTags.WATER) && level.getBlockState(pos.above()).isAir) return pos
     }
     return null
   }

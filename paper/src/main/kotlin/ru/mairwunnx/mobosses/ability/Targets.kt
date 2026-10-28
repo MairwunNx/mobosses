@@ -63,6 +63,18 @@ object Targets {
     return null
   }
 
+  /** Water with open air over it near [y] in the column at [x], [z]: where a fire ring dances on a lake. */
+  fun water(world: World, x: Double, y: Double, z: Double, window: Int = 8): Block? {
+    val bx = floor(x).toInt()
+    val bz = floor(z).toInt()
+    val start = floor(y).toInt()
+    for (by in (start + window).coerceAtMost(world.maxHeight - 2) downTo (start - window).coerceAtLeast(world.minHeight)) {
+      val block = world.getBlockAt(bx, by, bz)
+      if (block.type == Material.WATER && block.getRelative(0, 1, 0).type.isAir) return block
+    }
+    return null
+  }
+
   /** How many blocks of open air are over [at], up to [max]: under a roof, arrows and meteors start below it. */
   fun headroom(at: Location, max: Double): Double {
     val start = at.blockY + 2

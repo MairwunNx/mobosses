@@ -63,6 +63,8 @@ data class AbilitySettings(
   @SerialName("fire_ring_density") val fireRingDensity: Double = 0.7,
   /** Seconds the fire stays before it goes out. */
   @SerialName("fire_ring_seconds") val fireRingSeconds: Int = 6,
+  /** Where the fire ring may burn besides bare ground. */
+  @SerialName("fire_ring_near") val fireRingNear: FireRingNear = FireRingNear(),
 
   @SerialName("web_ring_radius") val webRingRadius: Double = 3.0,
   /** Seconds the cobwebs stay. */
@@ -208,6 +210,17 @@ data class AbilitySettings(
     @SerialName("hits_max") val hitsMax: Int = 6,
     /** It heals the boss only while the boss is this close. */
     val range: Double = 16.0,
+  )
+
+  /**
+   * Where the fire ring may burn: next to [plants] like grass and flowers, next to [trees], and on [water], as flames
+   * dancing on it that burn whoever wades through. Next to anything else that burns, like a house, it never does.
+   */
+  @Serializable
+  data class FireRingNear(
+    val plants: Boolean = true,
+    val trees: Boolean = true,
+    val water: Boolean = true,
   )
 
   @Serializable
