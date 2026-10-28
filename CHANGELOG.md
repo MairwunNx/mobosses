@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.18.0
+
+### Fixed
+
+- 🏰 **Mobs a structure places can be bosses.** A bastion’s piglin brutes, a mansion’s vindicators and evokers, and a monument’s guardians come with the world as it generates, which neither Paper nor the game announces as a spawn, so none of them ever rolled; brutes, found nowhere else, never came as bosses at all. Now such a mob counts as `CHUNK_GEN` when it first enters the world and rolls when a player first sees it, like any other. `CHUNK_GEN` joins the default `spawn.allowed_spawn_reasons`; add it to your own list if you keep one. Structures someone already walked through keep their mobs as they are, since nothing tells those apart from any other old mob.
+
 ## 2.17.0
 
 ### New

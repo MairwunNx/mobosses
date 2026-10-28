@@ -98,7 +98,7 @@ class ResourcesTest {
         language = "ru",
         spawn = v1.spawn.copy(
           worldMultipliers = mapOf("world" to 1.0, "world_nether" to 1.1, "world_the_end" to 1.3),
-          allowedSpawnReasons = v1.spawn.allowedSpawnReasons - "BUILD_WITHER",
+          allowedSpawnReasons = v1.spawn.allowedSpawnReasons - "BUILD_WITHER" - "CHUNK_GEN",
         ),
         bossBar = Settings.BossBar(style = "SEGMENTED_20"),
         progression = v1.progression.copy(levelCurve = Settings.LevelCurve(power = 1.3, offset = 20.0), variance = Settings.Variance(extraChance = 0.45)),

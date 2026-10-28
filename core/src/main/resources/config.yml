@@ -68,11 +68,13 @@ spawn:
   # one on the surface and the other in a cave, by this many blocks below the top.
   check_vertical_zone: false
   vertical_zone_threshold: 14
-  # Spawn reasons that can make a boss. CUSTOM covers minions bosses summon, and
-  # BUILD_WITHER a wither someone builds. The Ender Dragon needs none: it rolls
-  # when the game brings it back, never in the first fight of a world.
+  # Spawn reasons that can make a boss. CUSTOM covers minions bosses summon,
+  # BUILD_WITHER a wither someone builds, and CHUNK_GEN the mobs a structure
+  # places as the world generates, like a bastion's brutes. The Ender Dragon
+  # needs none: it rolls when the game brings it back, never in the first
+  # fight of a world.
   # https://jd.papermc.io/paper/org/bukkit/event/entity/CreatureSpawnEvent.SpawnReason.html
-  allowed_spawn_reasons: [ NATURAL, JOCKEY, SPAWNER, TRIAL_SPAWNER, EGG, SPAWNER_EGG, VILLAGE_INVASION, NETHER_PORTAL, DROWNED, RAID, PATROL, BUILD_WITHER, COMMAND, CUSTOM ]
+  allowed_spawn_reasons: [ NATURAL, JOCKEY, SPAWNER, TRIAL_SPAWNER, EGG, SPAWNER_EGG, VILLAGE_INVASION, NETHER_PORTAL, DROWNED, RAID, PATROL, BUILD_WITHER, CHUNK_GEN, COMMAND, CUSTOM ]
   group_radius: 24
   # Against piles of bosses, from mob farms and spawners too: after a boss spawns
   # for a group, its players wait player_cooldown_seconds (stretched at random by

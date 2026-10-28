@@ -151,7 +151,7 @@ data class Settings(
     @SerialName("vertical_zone_threshold") val verticalZoneThreshold: Int = 14,
     @SerialName("allowed_spawn_reasons") val allowedSpawnReasons: List<String> = listOf(
       "NATURAL", "JOCKEY", "SPAWNER", "TRIAL_SPAWNER", "EGG", "SPAWNER_EGG", "VILLAGE_INVASION",
-      "NETHER_PORTAL", "DROWNED", "RAID", "PATROL", "BUILD_WITHER", "COMMAND", "CUSTOM",
+      "NETHER_PORTAL", "DROWNED", "RAID", "PATROL", "BUILD_WITHER", "CHUNK_GEN", "COMMAND", "CUSTOM",
     ),
     /** The players this close to the mob set its level together, by their average. */
     @SerialName("group_radius") val groupRadius: Int = 24,
