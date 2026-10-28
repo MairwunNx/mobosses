@@ -6,6 +6,7 @@ import net.minecraft.world.damagesource.DamageSource
 import net.minecraft.world.entity.Entity
 import net.minecraft.world.entity.boss.enderdragon.EnderDragon
 import net.minecraft.world.entity.LivingEntity
+import net.minecraft.world.entity.Mob
 import net.minecraft.world.entity.OwnableEntity
 import net.minecraft.world.entity.animal.golem.AbstractGolem
 import net.minecraft.world.entity.projectile.Projectile
@@ -45,6 +46,7 @@ class Damage(private val mod: MoBosses) {
       boss.addDamage(player.uuid, amount, byPet = pet != null)
       mod.groupHealth.update(boss)
     }
+    if (by is ServerPlayer) aggro(boss, by, amount)
     if (by !is ServerPlayer) {
       // Only pets and golems: other mobs that hit the boss by chance don't wake its abilities.
       if (pet == null && by !is AbstractGolem) return
@@ -59,6 +61,16 @@ class Damage(private val mod: MoBosses) {
     // The killing blow casts nothing: no minions or doubles for a boss already dead.
     if (boss.entity.isDeadOrDying) return
     mod.abilities.onHit(boss, player?.takeIf { !it.hasDisconnected() })
+  }
+
+  /** A vanilla creeper keeps its first target whoever hits it: a boss turns on whoever hurts it most lately ([Threat]). */
+  private fun aggro(boss: Boss, player: ServerPlayer, dealt: Double) {
+    val mob = boss.entity as? Mob ?: return
+    if (mob is EnderDragon) return
+    val settings = mod.catalog.settings.aggro
+    val now = mod.now()
+    boss.threat.add(player.uuid, dealt, now, settings.halfLifeSeconds)
+    if (boss.threat.turns(settings, player.uuid, mob.target?.uuid, now) && Targets.canHit(player, mod.guards)) mob.setTarget(player)
   }
 
   /**

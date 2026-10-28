@@ -1,5 +1,6 @@
 package ru.mairwunnx.mobosses.boss
 
+import ru.mairwunnx.mobosses.combat.Threat
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
 import org.bukkit.NamespacedKey
@@ -120,6 +121,9 @@ class Boss(
   fun graded(weight: Double): Double = Difficulty.part(difficulty, weight)
 
   var aura: BukkitTask? = null
+
+  /** Whom it chases: each player's damage, fading. Only in memory; a restart starts it over. */
+  val threat = Threat()
 
   private fun read(key: NamespacedKey) = Codec.decode(entity.persistentDataContainer.get(key, PersistentDataType.STRING))
 

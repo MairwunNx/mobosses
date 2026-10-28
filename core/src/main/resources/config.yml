@@ -141,6 +141,15 @@ despawn:
   radius: 64
   keep_spawned_by_command: true   # Bosses from /mobosses spawn stay.
 
+# Whom a boss chases. Each player's damage counts as threat, fading by half
+# every half_life_seconds; a hit from one whose threat beats that of the boss's
+# target by margin draws the boss to them. A vanilla creeper keeps its first
+# target whoever hits it; a boss answers whoever hurts it most.
+aggro:
+  enabled: true
+  half_life_seconds: 6.0
+  margin: 1.25
+
 # Tricks that beat bosses without a fight.
 anti_cheese:
   vehicles: true   # Bosses never get into boats or minecarts.

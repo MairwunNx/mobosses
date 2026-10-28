@@ -1,5 +1,6 @@
 package ru.mairwunnx.mobosses.modcore.boss
 
+import ru.mairwunnx.mobosses.combat.Threat
 import net.kyori.adventure.text.format.NamedTextColor
 import net.kyori.adventure.text.format.TextColor
 import net.minecraft.world.entity.LivingEntity
@@ -116,6 +117,9 @@ class Boss(
   fun graded(weight: Double): Double = Difficulty.part(difficulty, weight)
 
   var aura: Scheduler.Task? = null
+
+  /** Whom it chases: each player's damage, fading. Only in memory; a restart starts it over. */
+  val threat = Threat()
 
   private fun players(key: String) = read(key).mapNotNull { (k, v) -> runCatching { UUID.fromString(k) }.getOrNull()?.let { it to v } }.toMap()
 

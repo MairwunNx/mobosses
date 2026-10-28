@@ -5,6 +5,7 @@ import org.bukkit.entity.EnderDragon
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Golem
 import org.bukkit.entity.LivingEntity
+import org.bukkit.entity.Mob
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.entity.Tameable
@@ -23,6 +24,7 @@ import ru.mairwunnx.mobosses.ability.Targets
 import ru.mairwunnx.mobosses.achievement.Achievement
 import ru.mairwunnx.mobosses.ability.kinds.Chain
 import ru.mairwunnx.mobosses.algebra.Stats
+import ru.mairwunnx.mobosses.boss.Boss
 
 /**
  * Hits on bosses: each player's share of the damage, their pets' included, kept on the boss, the
@@ -57,6 +59,7 @@ class DamageListener(private val plugin: MoBossesPlugin) : Listener {
       boss.addDamage(it.uniqueId, dealt, byPet = pet != null)
       plugin.groupHealth.update(boss)
     }
+    if (source is Player) aggro(boss, source, dealt)
     if (source !is Player) {
       // Only pets and golems: other mobs that hit the boss by chance don't wake its abilities.
       if (pet == null && source !is Golem) return
@@ -71,6 +74,16 @@ class DamageListener(private val plugin: MoBossesPlugin) : Listener {
     // The killing blow casts nothing: no minions or doubles for a boss already dead.
     if (event.finalDamage >= boss.entity.health) return
     plugin.abilities.onHit(boss, player?.takeIf { it.isOnline })
+  }
+
+  /** A vanilla creeper keeps its first target whoever hits it: a boss turns on whoever hurts it most lately ([Threat]). */
+  private fun aggro(boss: Boss, player: Player, dealt: Double) {
+    val mob = boss.entity as? Mob ?: return
+    if (mob is EnderDragon) return
+    val settings = plugin.catalog.settings.aggro
+    val now = System.currentTimeMillis()
+    boss.threat.add(player.uniqueId, dealt, now, settings.halfLifeSeconds)
+    if (boss.threat.turns(settings, player.uniqueId, mob.target?.uniqueId, now) && Targets.canHit(player, plugin.guards)) mob.target = player
   }
 
   /** Who set a boss alight: a player, their arrow, or their pet; fire from anything else, like lava or the sun, burns in nobody's name. */
