@@ -181,6 +181,7 @@ data class AbilitySettings(
   val obelisk: ObeliskSettings = ObeliskSettings(),
   val chain: ChainSettings = ChainSettings(),
   val doubles: DoublesSettings = DoublesSettings(),
+  val blindness: BlindnessSettings = BlindnessSettings(),
   @SerialName("phase_two") val phaseTwo: PhaseTwoSettings = PhaseTwoSettings(),
 
   /** Each boss type's own abilities, on top of the shared ones; entries left out keep their defaults. */
@@ -243,6 +244,25 @@ data class AbilitySettings(
     val plants: Boolean = true,
     val trees: Boolean = true,
     val water: Boolean = true,
+  )
+
+  /**
+   * The boss gathers darkness: after [windUpTicks] of warning, blindness on every player in the fight within the radius,
+   * for the seconds by level. A player who runs [escape] blocks past the radius sheds it early.
+   */
+  @Serializable
+  data class BlindnessSettings(
+    val enabled: Boolean = true,
+    val cooldown: Long = 25000,
+    @SerialName("cooldown_bias") val cooldownBias: Double = 1.3,
+    @SerialName("radius_base") val radiusBase: Double = 10.0,
+    @SerialName("radius_per_level") val radiusPerLevel: Double = 0.06,
+    @SerialName("radius_max") val radiusMax: Double = 16.0,
+    @SerialName("seconds_base") val secondsBase: Double = 3.0,
+    @SerialName("seconds_per_level") val secondsPerLevel: Double = 0.1,
+    @SerialName("seconds_max") val secondsMax: Double = 11.0,
+    val escape: Double = 8.0,
+    @SerialName("wind_up_ticks") val windUpTicks: Int = 20,
   )
 
   @Serializable

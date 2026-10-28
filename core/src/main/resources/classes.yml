@@ -38,6 +38,7 @@ common:
     obelisk: 80
     chain: 18
     doubles: 65
+    blindness: 45
 
 uncommon:
   key: uncommon
@@ -66,6 +67,7 @@ uncommon:
     obelisk: 70
     chain: 16
     doubles: 56
+    blindness: 40
 
 rare:
   key: rare
@@ -94,6 +96,7 @@ rare:
     obelisk: 60
     chain: 14
     doubles: 48
+    blindness: 35
 
 epic:
   key: epic
@@ -122,6 +125,7 @@ epic:
     obelisk: 50
     chain: 12
     doubles: 40
+    blindness: 28
 
 legendary:
   key: legendary
@@ -150,6 +154,7 @@ legendary:
     obelisk: 42
     chain: 10
     doubles: 32
+    blindness: 22
 
 mythic:
   key: mythic
@@ -178,3 +183,4 @@ mythic:
     obelisk: 35
     chain: 8
     doubles: 25
+    blindness: 15

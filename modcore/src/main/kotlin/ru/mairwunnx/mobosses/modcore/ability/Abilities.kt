@@ -8,6 +8,7 @@ import ru.mairwunnx.mobosses.lang.Message
 import ru.mairwunnx.mobosses.modcore.MoBosses
 import ru.mairwunnx.mobosses.modcore.ability.kinds.ArrowArc
 import ru.mairwunnx.mobosses.modcore.ability.kinds.ArrowRain
+import ru.mairwunnx.mobosses.modcore.ability.kinds.Blindness
 import ru.mairwunnx.mobosses.modcore.ability.kinds.Chain
 import ru.mairwunnx.mobosses.modcore.ability.kinds.Doubles
 import ru.mairwunnx.mobosses.modcore.ability.kinds.Enrage
@@ -97,7 +98,7 @@ class Abilities(private val mod: MoBosses) {
     /** The abilities a hit may set off, at random. */
     val PICKED: List<Ability> = listOf(
       Lightning, Summoning, Regeneration, FireRing, WebRing, TeleportStrike, MeteorShower, ArrowArc, ArrowRain,
-      Shockwave, FrostNova, Grapple, Obelisk, Chain, Doubles,
+      Shockwave, FrostNova, Grapple, Obelisk, Chain, Doubles, Blindness,
       // Each boss type's own, which only its types pass `usable` for.
       PotionVolley, FireballBarrage, AimedVolley, Pounce, Swap, TridentStorm, FangLine, Whirlwind, WitherAura,
       Sandstorm, Infection, WindBurst, WarCry, Terror, Phase, Stampede, Curse, Fuse,

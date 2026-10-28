@@ -118,6 +118,7 @@ enum class Message(val key: String) {
   CHAIN("abilities.chain"),
   CHAIN_BROKEN("abilities.chain_broken"),
   DOUBLES("abilities.doubles"),
+  BLINDNESS("abilities.blindness"),
   PHASE_TWO("abilities.phase_two"),
   POTION_VOLLEY("abilities.potion_volley"),
   FIREBALL_BARRAGE("abilities.fireball_barrage"),
