@@ -2,6 +2,14 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.14.0
+
+### Changed
+
+- 🎯 **A boss turns on whoever hurts it most.** A vanilla creeper keeps chasing its first target however hard someone else hits it, and as a boss that left one player to take every blow. Now each player’s damage counts as threat, fading by half every 6 seconds, and a hit from a player whose threat beats that of the boss’s target by a quarter draws the boss to them. An even fight keeps it where it is. `aggro` in `config.yml` sets the fade and the margin, or turns it off.
+- 🔥 **The fire ring burns around every player in the fight**, up to four, not only the nearest. It now burns next to grass, flowers, and trees, and on water as flames dancing on it that burn whoever wades through, twice a second unless they have Fire Resistance. Next to anything else that burns, like a house, it still never does. `fire_ring_near` in `abilities.yml` turns plants, trees, and water off one by one.
+- 🏹 **The arrow arc is a ring of arrows** in every language, since it flies out all around the boss; an archer’s own aimed volley is the fan that flies at you.
+
 ## 2.13.0
 
 ### New

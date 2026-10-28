@@ -2,6 +2,8 @@ package ru.mairwunnx.mobosses
 
 import ru.mairwunnx.mobosses.algebra.Reel
 import ru.mairwunnx.mobosses.combat.Fatigue
+import ru.mairwunnx.mobosses.combat.Threat
+import ru.mairwunnx.mobosses.config.Aggro
 import ru.mairwunnx.mobosses.config.AbilitySettings
 import ru.mairwunnx.mobosses.combat.LootRules
 import ru.mairwunnx.mobosses.combat.Payout
@@ -12,6 +14,7 @@ import ru.mairwunnx.mobosses.config.LootTable
 import ru.mairwunnx.mobosses.config.RewardSettings
 import ru.mairwunnx.mobosses.config.Settings
 import ru.mairwunnx.mobosses.spawn.Hunt
+import java.util.UUID
 import kotlin.random.Random
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -93,6 +96,21 @@ class RulesTest {
     assertEquals(0.2, Reel.pull(chain, 0, 0.0), 1e-12)
     assertEquals(0.3, Reel.pull(chain, 0, 0.4), 1e-12)
     assertEquals(0.1, Reel.pull(chain, 0, 1.2), 1e-12)
+  }
+
+  @Test fun `a boss turns on whoever hurts it most lately`() {
+    val threat = Threat()
+    val aggro = Aggro()
+    val me = UUID.randomUUID()
+    val friend = UUID.randomUUID()
+    threat.add(me, 10.0, 0, aggro.halfLifeSeconds)
+    threat.add(friend, 10.0, 0, aggro.halfLifeSeconds)
+    assertTrue(!threat.turns(aggro, friend, me, 0), "an even fight keeps the target")
+    threat.add(friend, 5.0, 0, aggro.halfLifeSeconds)
+    assertTrue(threat.turns(aggro, friend, me, 0))
+    assertEquals(5.0, threat.of(me, 6000, aggro.halfLifeSeconds), 1e-9)
+    assertTrue(threat.turns(aggro, me, null, 0))
+    assertTrue(!threat.turns(aggro.copy(enabled = false), friend, me, 0))
   }
 
   @Test fun `amounts grow with levels above the entry's lowest, up to a stack`() {
