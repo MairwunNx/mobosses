@@ -200,7 +200,7 @@ abilities:
   web_ring: "<boss><boss_name></boss> плетёт кольцо паутины!"
   teleport_strike: "<boss><boss_name></boss> применяет <item>приёмы ниндзя</item>!"
   meteor_shower: "<boss><boss_name></boss> вызывает <item>метеоритный дождь</item>!"
-  arrow_arc: "<boss><boss_name></boss> выпускает <item>веер стрел</item>!"
+  arrow_arc: "<boss><boss_name></boss> даёт <item>круговой залп</item>!"
   arrow_rain: "<boss><boss_name></boss> обрушивает <item>дождь стрел</item>!"
   shockwave: "<boss><boss_name></boss> бьёт по земле!"
   frost_nova: "<boss><boss_name></boss> выпускает <item>ледяную волну</item>!"

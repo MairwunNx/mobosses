@@ -200,7 +200,7 @@ abilities:
   web_ring: "¡<boss><boss_name></boss> teje un anillo de telarañas!"
   teleport_strike: "¡<boss><boss_name></boss> usa <item>técnicas ninja</item>!"
   meteor_shower: "¡<boss><boss_name></boss> desata una <item>lluvia de meteoritos</item>!"
-  arrow_arc: "¡<boss><boss_name></boss> dispara un <item>arco de flechas</item>!"
+  arrow_arc: "¡<boss><boss_name></boss> dispara un <item>anillo de flechas</item>!"
   arrow_rain: "¡<boss><boss_name></boss> hace caer una <item>lluvia de flechas</item>!"
   shockwave: "¡<boss><boss_name></boss> golpea el suelo!"
   frost_nova: "¡<boss><boss_name></boss> lanza una <item>ola de escarcha</item>!"

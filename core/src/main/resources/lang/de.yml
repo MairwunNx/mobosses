@@ -200,7 +200,7 @@ abilities:
   web_ring: "<boss><boss_name></boss> spinnt einen Ring aus Spinnweben!"
   teleport_strike: "<boss><boss_name></boss> greift zu <item>Ninja-Tricks</item>!"
   meteor_shower: "<boss><boss_name></boss> ruft einen <item>Meteorschauer</item> herbei!"
-  arrow_arc: "<boss><boss_name></boss> feuert einen <item>Pfeilfächer</item> ab!"
+  arrow_arc: "<boss><boss_name></boss> feuert einen <item>Pfeilring</item> ab!"
   arrow_rain: "<boss><boss_name></boss> lässt <item>Pfeilregen</item> niedergehen!"
   shockwave: "<boss><boss_name></boss> schlägt auf den Boden!"
   frost_nova: "<boss><boss_name></boss> stößt eine <item>Frostwelle</item> aus!"

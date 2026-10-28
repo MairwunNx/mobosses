@@ -200,7 +200,7 @@ abilities:
   web_ring: "<boss><boss_name></boss> spins a ring of cobwebs!"
   teleport_strike: "<boss><boss_name></boss> uses <item>ninja moves</item>!"
   meteor_shower: "<boss><boss_name></boss> calls a <item>meteor shower</item>!"
-  arrow_arc: "<boss><boss_name></boss> looses an <item>arrow arc</item>!"
+  arrow_arc: "<boss><boss_name></boss> looses a <item>ring of arrows</item>!"
   arrow_rain: "<boss><boss_name></boss> brings down an <item>arrow rain</item>!"
   shockwave: "<boss><boss_name></boss> slams the ground!"
   frost_nova: "<boss><boss_name></boss> breathes a <item>frost nova</item>!"
