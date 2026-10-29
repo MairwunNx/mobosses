@@ -96,6 +96,9 @@ object Hooks {
 
   fun mayTravel(entity: Entity): Boolean = mod?.antiCheese?.mayTravel(entity) ?: true
 
+  /** Whether [entity] may turn into another mob: a boss stays the mob it is. */
+  fun mayConvert(entity: Entity): Boolean = mod?.bosses?.get(entity) == null
+
   /** A player breaks a block: an ability's temporary block goes without drops; true when it was one. */
   fun broke(level: ServerLevel, pos: BlockPos): Boolean {
     val temporary = mod?.blockChanges?.temporary ?: return false

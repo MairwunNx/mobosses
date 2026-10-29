@@ -11,6 +11,7 @@ import ru.mairwunnx.mobosses.ability.kinds.MeteorListener
 import ru.mairwunnx.mobosses.boss.BossBars
 import ru.mairwunnx.mobosses.boss.Bosses
 import ru.mairwunnx.mobosses.boss.Catalog
+import ru.mairwunnx.mobosses.boss.Conversions
 import ru.mairwunnx.mobosses.boss.Decoys
 import ru.mairwunnx.mobosses.hooks.WorldApiLink
 import ru.mairwunnx.mobosses.hooks.AllayLink
@@ -104,7 +105,7 @@ class MoBossesPlugin : JavaPlugin() {
 
   override fun onEnable() {
     if (!reload()) log.warn("Started with errors in the config files; fix them and run /mobosses reload")
-    listOf(playerLanguages, ProgressionListener(progression), spawns, survival, DeathPenalty(this), achievements, DamageListener(this), DeathListener(this), antiCheese, MeteorListener(this), ArrowListener(this), AbilityEntities(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener())
+    listOf(playerLanguages, ProgressionListener(progression), spawns, survival, DeathPenalty(this), achievements, DamageListener(this), DeathListener(this), Conversions(this), antiCheese, MeteorListener(this), ArrowListener(this), AbilityEntities(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener())
       .forEach { server.pluginManager.registerEvents(it, this) }
     registerCommand("mobosses", "Your Mo’Bosses level and the best hunters; for admins, reload, spawn, or remove bosses", listOf("mb", "moboss"), MoBossesCommand(this))
     tasks += server.scheduler.runTaskTimer(this, Runnable { visuals.tick(); bars.tick(); antiCheese.tick(); PlanData.bossesAlive = bosses.all.size }, 20L, 20L)

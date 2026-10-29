@@ -4,12 +4,14 @@ import net.minecraft.core.BlockPos
 import net.minecraft.gametest.framework.GameTestHelper
 import net.minecraft.util.ProblemReporter
 import net.minecraft.world.Difficulty
+import net.minecraft.world.entity.ConversionParams
 import net.minecraft.world.entity.EntitySpawnReason
 import net.minecraft.world.entity.EntitySpawnRequest
 import net.minecraft.world.entity.EntityType
 import net.minecraft.world.entity.EntityTypes
 import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.monster.zombie.Zombie
+import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.storage.TagValueInput
 import net.minecraft.world.level.storage.TagValueOutput
 import ru.mairwunnx.mobosses.modcore.boss.Boss
@@ -19,7 +21,7 @@ import ru.mairwunnx.mobosses.modcore.gametest.Players.mod
 
 /**
  * Bosses on a real server: what turning a mob into one writes and sets, that it outlives a save, that the difficulty
- * grades it and peaceful makes none, and that it keeps out of boats and portals.
+ * grades it and peaceful makes none, that it keeps out of boats and portals, and that it never turns into another mob.
  */
 class BossGameTests {
   private fun zombie(helper: GameTestHelper, x: Int = 1): Zombie = helper.spawn(EntityTypes.ZOMBIE, BlockPos(x, 2, 1)).also { it.setNoAi(false) }
@@ -91,6 +93,24 @@ class BossGameTests {
     helper.assertTrue(plain.startRiding(boat, false, true), "a plain zombie can't get into the boat")
     mod.bosses.remove(boss)
     helper.succeed()
+  }
+
+  @GameTest(maxTicks = 40)
+  fun aBossNeverDrownsIntoAnotherMob(helper: GameTestHelper) {
+    val zombie = zombie(helper)
+    val boss = boss(helper, zombie)
+    val plain = zombie(helper, 3)
+    for (x in listOf(1, 3)) for (y in 2..3) helper.setBlock(BlockPos(x, y, 1), Blocks.WATER)
+    zombie.setInWaterTime(600)
+    plain.setInWaterTime(600)
+    helper.runAfterDelay(5) {
+      helper.assertFalse(zombie.isUnderWaterConverting, "the boss started turning into a drowned")
+      helper.assertTrue(plain.isUnderWaterConverting, "a plain zombie under water doesn't start turning")
+      helper.assertTrue(zombie.convertTo(EntityTypes.DROWNED, ConversionParams.single(zombie, true, true)) {} == null, "the boss turned into a drowned")
+      helper.assertTrue(zombie.isAlive && mod.bosses.get(zombie) === boss, "the boss is no longer live")
+      mod.bosses.remove(boss)
+      helper.succeed()
+    }
   }
 
   @GameTest
