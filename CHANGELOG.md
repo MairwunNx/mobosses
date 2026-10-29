@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.18.1
+
+### Fixed
+
+- 🌊 **A boss stays the mob it is.** A zombie boss that sank and stayed under water turned into a plain drowned, and the boss was gone mid-fight. The same happened to a husk under water, a skeleton in powder snow, a piglin or hoglin in the Overworld, and a zombie villager someone cured. Now a boss stays itself, while plain mobs still turn. A slime still splits when it dies.
+
 ## 2.18.0
 
 ### Fixed
