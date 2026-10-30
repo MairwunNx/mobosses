@@ -4,7 +4,6 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import org.bukkit.Bukkit
 import org.bukkit.Material
-import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.inventory.Inventory
@@ -27,14 +26,15 @@ class LanguagePage private constructor(private val plugin: MoBossesPlugin, priva
       AUTO -> picked(player, null)
       BACK -> Menu.open(plugin, player)
       CLOSE -> player.closeInventory()
-      in SLOTS -> codes.getOrNull(SLOTS.indexOf(slot))?.let { picked(player, it) }
+      in SLOTS -> codes.getOrNull(SLOTS.indexOf(slot))?.let { picked(player, it) } ?: return
+      else -> return
     }
+    sound(player)
   }
 
   /** Back to the menu, already in the new language. */
   private fun picked(player: Player, code: String?) {
     plugin.playerLanguages.choose(player, code)
-    player.playSound(player.location, Sound.UI_BUTTON_CLICK, 0.5f, 1.2f)
     Menu.open(plugin, player)
   }
 

@@ -48,8 +48,9 @@ class Menu private constructor(mod: MoBosses, player: ServerPlayer, private val 
         command("mobosses killall")
       }
       Action.CLOSE -> close()
-      null -> {}
+      null -> return
     }
+    sound()
   }
 
   companion object {

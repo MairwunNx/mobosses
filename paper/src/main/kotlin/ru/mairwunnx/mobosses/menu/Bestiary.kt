@@ -24,7 +24,9 @@ class Bestiary private constructor(private val plugin: MoBossesPlugin) : Page {
     when (slot) {
       BACK -> Menu.open(plugin, player)
       CLOSE -> player.closeInventory()
+      else -> return
     }
+    sound(player)
   }
 
   companion object {

@@ -3,12 +3,10 @@ package ru.mairwunnx.mobosses.modcore.menu
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.NamedTextColor
 import net.minecraft.server.level.ServerPlayer
-import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.item.Items
 import ru.mairwunnx.mobosses.lang.LanguageChoices
 import ru.mairwunnx.mobosses.lang.Message
 import ru.mairwunnx.mobosses.modcore.MoBosses
-import ru.mairwunnx.mobosses.modcore.World
 
 /**
  * The languages Mo’Bosses speaks, each by its own name, for the player to pick one, or Automatic to have Mo’Bosses
@@ -20,14 +18,15 @@ class LanguagePage private constructor(mod: MoBosses, player: ServerPlayer, priv
       AUTO -> picked(null)
       BACK -> Menu.open(mod, player)
       CLOSE -> close()
-      in SLOTS -> codes.getOrNull(SLOTS.indexOf(slot))?.let(::picked)
+      in SLOTS -> codes.getOrNull(SLOTS.indexOf(slot))?.let(::picked) ?: return
+      else -> return
     }
+    sound()
   }
 
   /** Back to the menu, already in the new language. */
   private fun picked(code: String?) {
     mod.playerLanguages.choose(player, code)
-    World.sound(player, SoundEvents.UI_BUTTON_CLICK, volume = 0.5f, pitch = 1.2f)
     Menu.open(mod, player)
   }
 

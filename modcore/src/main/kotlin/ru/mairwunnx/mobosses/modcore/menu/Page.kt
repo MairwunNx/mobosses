@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextDecoration
 import net.minecraft.core.component.DataComponents
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.sounds.SoundEvents
 import net.minecraft.world.SimpleContainer
 import net.minecraft.world.SimpleMenuProvider
 import net.minecraft.world.entity.EntityType
@@ -18,6 +19,7 @@ import net.minecraft.world.item.Items
 import net.minecraft.world.item.SpawnEggItem
 import net.minecraft.world.item.component.ItemLore
 import ru.mairwunnx.mobosses.modcore.MoBosses
+import ru.mairwunnx.mobosses.modcore.World
 
 /**
  * A page of the `/mobosses` menu, as on Paper: a chest the client already knows how to draw, whose items are only
@@ -34,6 +36,9 @@ abstract class Page(protected val mod: MoBosses, val player: ServerPlayer, priva
   }
 
   fun close() = player.closeContainer()
+
+  /** A button's click, for the player alone. Pages play it only when a button did something; filler stays silent. */
+  fun sound() = World.sound(player, SoundEvents.UI_BUTTON_CLICK, volume = 0.5f, pitch = 1.2f)
 
   fun set(slot: Int, item: ItemStack?) = container.setItem(slot, item ?: ItemStack.EMPTY)
 

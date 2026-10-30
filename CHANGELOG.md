@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.18.2
+
+### Changed
+
+- 🖱️ **The menu’s buttons click.** Only picking a language made a sound before. Now every button that does something clicks—pages, back, close, the bestiary, the language picker, start over, and the admins’ buttons and boss list—and only you hear it. Empty slots, pictures, and a button with nothing to do, like “next” on the last page, stay silent.
+
 ## 2.18.1
 
 ### Fixed

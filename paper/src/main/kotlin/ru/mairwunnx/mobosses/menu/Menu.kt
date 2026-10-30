@@ -53,8 +53,9 @@ class Menu private constructor(private val plugin: MoBossesPlugin, val actions: 
         player.performCommand("mobosses killall")
       }
       Action.CLOSE -> player.closeInventory()
-      null -> {}
+      null -> return
     }
+    sound(player)
   }
 
   companion object {

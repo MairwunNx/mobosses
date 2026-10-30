@@ -17,7 +17,9 @@ class Bestiary private constructor(mod: MoBosses, player: ServerPlayer) : Page(m
     when (slot) {
       BACK -> Menu.open(mod, player)
       CLOSE -> close()
+      else -> return
     }
+    sound()
   }
 
   companion object {

@@ -30,13 +30,13 @@ class BossList private constructor(private val plugin: MoBossesPlugin, private v
 
   override fun click(player: Player, slot: Int, click: ClickType) {
     when (slot) {
-      PREVIOUS -> if (page > 0) open(plugin, player, page - 1)
-      NEXT -> if (page < pages - 1) open(plugin, player, page + 1)
+      PREVIOUS -> if (page > 0) open(plugin, player, page - 1) else return
+      NEXT -> if (page < pages - 1) open(plugin, player, page + 1) else return
       BACK -> Menu.open(plugin, player)
       CLOSE -> player.closeInventory()
       in slots.indices -> {
         val boss = plugin.bosses.get(slots[slot])?.takeIf { it.entity.isValid }
-          ?: return plugin.texts.send(player, Message.BOSS_LIST_GONE).also { open(plugin, player, page) }
+          ?: return plugin.texts.send(player, Message.BOSS_LIST_GONE).also { sound(player); open(plugin, player, page) }
         when {
           click.isRightClick && armed == slot -> {
             plugin.bosses.remove(boss)
@@ -55,7 +55,9 @@ class BossList private constructor(private val plugin: MoBossesPlugin, private v
           else -> plugin.texts.send(player, Message.BOSS_LIST_INFO, *details(plugin, player, boss))
         }
       }
+      else -> return
     }
+    sound(player)
   }
 
   companion object {

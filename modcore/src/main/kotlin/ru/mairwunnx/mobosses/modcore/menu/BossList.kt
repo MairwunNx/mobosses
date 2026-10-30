@@ -26,13 +26,13 @@ class BossList private constructor(mod: MoBosses, player: ServerPlayer, private 
 
   override fun click(slot: Int, right: Boolean, shift: Boolean) {
     when (slot) {
-      PREVIOUS -> if (page > 0) open(mod, player, page - 1)
-      NEXT -> if (page < pages - 1) open(mod, player, page + 1)
+      PREVIOUS -> if (page > 0) open(mod, player, page - 1) else return
+      NEXT -> if (page < pages - 1) open(mod, player, page + 1) else return
       BACK -> Menu.open(mod, player)
       CLOSE -> close()
       in slots.indices -> {
         val boss = mod.bosses.get(slots[slot])?.takeIf { it.entity.isAlive }
-          ?: return mod.texts.send(player, Message.BOSS_LIST_GONE).also { open(mod, player, page) }
+          ?: return mod.texts.send(player, Message.BOSS_LIST_GONE).also { sound(); open(mod, player, page) }
         val code = mod.texts.languageOf(player)
         when {
           right && armed == slot -> {
@@ -53,7 +53,9 @@ class BossList private constructor(mod: MoBosses, player: ServerPlayer, private 
           else -> mod.texts.send(player, Message.BOSS_LIST_INFO, *details(mod, player, boss))
         }
       }
+      else -> return
     }
+    sound()
   }
 
   companion object {
