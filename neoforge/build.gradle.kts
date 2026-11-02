@@ -8,9 +8,9 @@ plugins {
 }
 
 val minecraft = "26.3"
-val neoforgeVersion = "26.3.0.99"
+val neoforgeVersion = "26.3.0.101"
 val adventureVersion = "5.2.0"
-val sqlite = "3.53.4.0"
+val sqlite = "3.54.1.0"
 
 // Each platform's jar carries its name, as “Platforms” in CLAUDE.md says: mobosses-neoforge-X.Y.Z.jar.
 base {
