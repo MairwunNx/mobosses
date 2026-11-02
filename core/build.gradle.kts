@@ -19,14 +19,14 @@ dependencies {
   // MariaDB's driver also talks to MySQL; MySQL's own is GPL.
   api("org.mariadb.jdbc:mariadb-java-client:4.0.0")
   // Every platform brings its own SQLite driver (Paper does; the mods will carry one), so it stays out of the jar.
-  compileOnly("org.xerial:sqlite-jdbc:3.53.4.0")
+  compileOnly("org.xerial:sqlite-jdbc:3.54.1.0")
   // Messages are MiniMessage. Paper ships Adventure itself; the mods will carry it, relocated.
   compileOnly("net.kyori:adventure-text-minimessage:$adventureVersion")
   compileOnly("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
   // Advancements are JSON, with their texts as the game reads them; Paper and the game both bring Gson.
   compileOnly("net.kyori:adventure-text-serializer-gson:$adventureVersion")
 
-  testImplementation("org.xerial:sqlite-jdbc:3.53.4.0")
+  testImplementation("org.xerial:sqlite-jdbc:3.54.1.0")
   testImplementation("net.kyori:adventure-text-minimessage:$adventureVersion")
   testImplementation("net.kyori:adventure-text-serializer-legacy:$adventureVersion")
   testImplementation("net.kyori:adventure-text-serializer-gson:$adventureVersion")

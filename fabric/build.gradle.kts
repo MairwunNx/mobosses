@@ -14,7 +14,7 @@ val minecraft = "26.3"
 val loader = "0.20.1"
 val fabricApi = "0.165.0+26.3"
 val adventureVersion = "5.2.0"
-val sqlite = "3.53.4.0"
+val sqlite = "3.54.1.0"
 
 // Each platform's jar carries its name, as “Platforms” in CLAUDE.md says: mobosses-fabric-X.Y.Z.jar.
 base {
@@ -80,7 +80,7 @@ dependencies {
   // Mod Menu's button opens the settings screen; asked only when it's there.
   "clientCompileOnly"("maven.modrinth:modmenu:21.0.0") { isTransitive = false }
   // JEI in the client test, to see the loot pages in a game.
-  "gametestImplementation"("maven.modrinth:jei:b6JCG7a3") { isTransitive = false }
+  "gametestImplementation"("maven.modrinth:jei:1Uzmw8Mr") { isTransitive = false }
   compileOnly("com.mairwunnx:worldapi-expansion:1.0.0")
   compileOnly("chat.allay:allay-expansion:1.3.0")
 }

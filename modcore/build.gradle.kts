@@ -33,7 +33,7 @@ dependencies {
   api("net.kyori:adventure-text-serializer-plain:$adventureVersion")
   api("net.kyori:adventure-text-serializer-gson:$adventureVersion") { exclude(group = "com.google.code.gson") }
   // Each mod carries the SQLite driver inside its jar; the game has none.
-  compileOnly("org.xerial:sqlite-jdbc:3.53.4.0")
+  compileOnly("org.xerial:sqlite-jdbc:3.54.1.0")
   // Mixins: Fabric Loader and NeoForge both bring Mixin and MixinExtras at runtime.
   compileOnly("net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7")
   compileOnly("io.github.llamalad7:mixinextras-common:0.5.5")
@@ -46,7 +46,7 @@ dependencies {
   compileOnly("maven.modrinth:flan:26.3-1.12.8.b-fabric") { isTransitive = false }
   compileOnly("maven.modrinth:open-parties-and-claims:neoforge-26.3-0.33.0") { isTransitive = false }
   // The recipe viewers' common APIs, for the loot pages in a player's game; asked only when they're loaded.
-  compileOnly("mezz.jei:jei-26.3-common-api:31.17.0.93") { isTransitive = false }
+  compileOnly("mezz.jei:jei-26.3-common-api:31.17.0.108") { isTransitive = false }
   compileOnly("me.shedaniel:RoughlyEnoughItems-api:26.3.824") { isTransitive = false }
   compileOnly("me.shedaniel.cloth:basic-math:0.6.1")
 

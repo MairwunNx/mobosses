@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.18.3
+
+### Changed
+
+- 📦 **The Fabric and NeoForge mods carry SQLite’s driver 3.54.1.0,** up from 3.53.4.0. The plugin builds against Paper 26.3 build 237 and the NeoForge mod against NeoForge 26.3.0.101; nothing changes in play.
+
 ## 2.18.2
 
 ### Changed
