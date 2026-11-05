@@ -84,13 +84,22 @@ class Achievements(private val plugin: MoBossesPlugin) : Listener {
     progress(player)
   }
 
-  /** The bestiary after a kill: every boss type, and every one as a Mythic. */
+  /** The bestiary after a kill and at login: every boss type, and every one as a Mythic, one by one. */
   fun bestiary(player: Player, entries: List<BestiaryEntry>) {
     if (!enabled || entries.isEmpty()) return
-    val types = plugin.catalog.types.values.filter { it.spec.enabled }.map { it.key }.toSet()
+    val types = enabledTypes()
     if (types.isEmpty()) return
-    if (entries.mapTo(HashSet()) { it.type }.containsAll(types)) grant(player, Achievement.BESTIARY)
-    if (entries.filter { it.clazz == "mythic" }.mapTo(HashSet()) { it.type }.containsAll(types)) grant(player, Achievement.MYTHIC_COLLECTOR)
+    collect(player, Achievement.BESTIARY, entries.mapTo(HashSet()) { it.type }, types)
+    collect(player, Achievement.MYTHIC_COLLECTOR, entries.filter { it.clazz == "mythic" }.mapTo(HashSet()) { it.type }, types)
+  }
+
+  /** Ticks off each boss type [killed] on [achievement]'s list, which the game shows as N of M. */
+  private fun collect(player: Player, achievement: Achievement, killed: Set<String>, types: Set<String>) {
+    val advancement = Bukkit.getAdvancement(key(achievement)) ?: return
+    val progress = player.getAdvancementProgress(advancement)
+    if (progress.isDone) return
+    Advancement.collected(progress.remainingCriteria.toList(), killed, types).forEach(progress::awardCriteria)
+    if (progress.isDone) plugin.worldApi.achievement(player, achievement.id)
   }
 
   /** A player who died to a boss may avenge it on one of its type for a while. */
@@ -121,7 +130,10 @@ class Achievements(private val plugin: MoBossesPlugin) : Listener {
   private fun hurt(boss: Boss): Set<String> =
     boss.entity.persistentDataContainer.get(plugin.keys.hurt, PersistentDataType.STRING).orEmpty().split(';').filter { it.isNotBlank() }.toSet()
 
-  private fun json(achievement: Achievement, code: String): String = Advancement.json(achievement, code, plugin.languages, { key(it).toString() }).toString()
+  private fun json(achievement: Achievement, code: String): String =
+    Advancement.json(achievement, code, plugin.languages, { key(it).toString() }, names = Advancement.criteria(achievement, enabledTypes())).toString()
+
+  private fun enabledTypes() = plugin.catalog.types.values.filter { it.spec.enabled }.map { it.key }.toSet()
 
   private companion object {
     const val CRITERION = Advancement.CRITERION

@@ -233,15 +233,18 @@ class MoBosses(val server: MinecraftServer, val loader: Loader) {
   /** The UUID of a player by name: online, or one the server has seen. */
   fun idOf(name: String): UUID? = server.playerList.getPlayerByName(name)?.uuid ?: server.services().nameToIdCache().get(name).map { it.id() }.orElse(null)
 
+  /** What the achievements need before Mo’Bosses starts: whether they're on, their language, and the boss types. */
+  data class Startup(val enabled: Boolean, val code: String, val languages: Languages, val types: Set<String>)
+
   companion object {
     /** A file the jar ships, from Mo’Bosses' own jar ([Loader.resource]). */
     fun bundled(path: String): String = (Mod.loader.resource(path) ?: error("$path isn't in Mo’Bosses' jar")).toString(Charsets.UTF_8)
 
     /**
-     * The achievements' switch, language, and texts, read from the files before a server's Mo’Bosses starts: the
+     * The achievements' switch, language, texts, and boss types, read from the files before a server's Mo’Bosses starts: the
      * game builds its advancements first. Null when the files can't be read yet.
      */
-    fun readLanguages(loader: Loader): Triple<Boolean, String, Languages>? = runCatching {
+    fun readStartup(loader: Loader): Startup? = runCatching {
       val folder = loader.config.resolve("mobosses").toFile()
       val quiet = Log(object : Log.Sink {
         override fun info(message: String) {}
@@ -253,7 +256,9 @@ class MoBosses(val server: MinecraftServer, val loader: Loader) {
       val configs = Configs.fromFolder(folder, ::bundled, {}, {})
       val texts = LanguageFiles.load(folder.resolve("lang"), ::bundled, quiet) {}
       val languages = Languages(texts, LocaleResolver.normalize(configs.defaultLanguage))
-      Triple(configs.settings.achievements.enabled, configs.settings.achievements.language.ifBlank { languages.default }, languages)
+      // Before the registries resolve them, bosses.yml's own keys; a 1.x name that differs still completes the list (Advancement.collected).
+      val types = configs.bosses.filterValues { it.enabled }.keys.mapTo(HashSet()) { it.lowercase().removePrefix("minecraft:") }
+      Startup(configs.settings.achievements.enabled, configs.settings.achievements.language.ifBlank { languages.default }, languages, types)
     }.getOrNull()
   }
 }

@@ -67,13 +67,22 @@ class Achievements(private val mod: MoBosses) {
     progress(player)
   }
 
-  /** The bestiary after a kill: every boss type, and every one as a Mythic. */
+  /** The bestiary after a kill and at login: every boss type, and every one as a Mythic, one by one. */
   fun bestiary(player: ServerPlayer, entries: List<BestiaryEntry>) {
     if (!enabled || entries.isEmpty()) return
     val types = mod.catalog.types.values.filter { it.spec.enabled }.map { it.key }.toSet()
     if (types.isEmpty()) return
-    if (entries.mapTo(HashSet()) { it.type }.containsAll(types)) grant(player, Achievement.BESTIARY)
-    if (entries.filter { it.clazz == "mythic" }.mapTo(HashSet()) { it.type }.containsAll(types)) grant(player, Achievement.MYTHIC_COLLECTOR)
+    collect(player, Achievement.BESTIARY, entries.mapTo(HashSet()) { it.type }, types)
+    collect(player, Achievement.MYTHIC_COLLECTOR, entries.filter { it.clazz == "mythic" }.mapTo(HashSet()) { it.type }, types)
+  }
+
+  /** Ticks off each boss type [killed] on [achievement]'s list, which the game shows as N of M. */
+  private fun collect(player: ServerPlayer, achievement: Achievement, killed: Set<String>, types: Set<String>) {
+    val advancement = mod.server.advancements.get(id(achievement)) ?: return
+    val progress = player.advancements.getOrStartProgress(advancement)
+    if (progress.isDone) return
+    Advancement.collected(progress.remainingCriteria.toList(), killed, types).forEach { player.advancements.award(advancement, it) }
+    if (player.advancements.getOrStartProgress(advancement).isDone) mod.worldApi.achievement(player, achievement.id)
   }
 
   /** A player who died to a boss may avenge it on one of its type for a while. */
@@ -106,12 +115,14 @@ class Achievements(private val mod: MoBosses) {
      * start, before Mo’Bosses has read its files, in the one the config names.
      */
     fun build(registries: HolderLookup.Provider): List<AdvancementHolder> {
-      val (enabled, code, languages) = Mod.current?.let { Triple(it.catalog.settings.achievements.enabled, it.catalog.settings.achievements.language.ifBlank { it.languages.default }, it.languages) }
-        ?: MoBosses.readLanguages(Mod.loader) ?: return emptyList()
+      val (enabled, code, languages, types) = Mod.current?.let {
+        MoBosses.Startup(it.catalog.settings.achievements.enabled, it.catalog.settings.achievements.language.ifBlank { it.languages.default }, it.languages,
+          it.catalog.types.values.filter { type -> type.spec.enabled }.map { type -> type.key }.toSet())
+      } ?: MoBosses.readStartup(Mod.loader) ?: return emptyList()
       if (!enabled) return emptyList()
       val ops = registries.createSerializationContext(JsonOps.INSTANCE)
       return Achievement.entries.mapNotNull { achievement ->
-        val json = Advancement.json(achievement, code, languages, { id(it).toString() })
+        val json = Advancement.json(achievement, code, languages, { id(it).toString() }, names = Advancement.criteria(achievement, types))
         GameAdvancement.CODEC.parse(ops, json).resultOrPartial { Mod.log.warn("Achievement ${achievement.id}: $it") }.orElse(null)?.let { AdvancementHolder(id(achievement), it) }
       }
     }
