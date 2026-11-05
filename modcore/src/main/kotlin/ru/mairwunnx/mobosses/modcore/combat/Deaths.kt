@@ -116,6 +116,7 @@ class Deaths(private val mod: MoBosses) {
     player.giveExperiencePoints(payout.vanilla)
 
     mod.progression.add(player.uuid, player.plainTextName, payout.gained, payout.counts)
+    if (payout.counts) mod.deathPenalty.won(player)
     mod.progression.level(player.uuid).takeIf { it > levelBefore }?.let { mod.worldApi.levelUp(player, levelBefore, it) }
 
     if (share >= payout.lootShare && Random.nextDouble() < fatigue) {

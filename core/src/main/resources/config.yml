@@ -244,6 +244,10 @@ progression:
   # Dying to a boss, by its blow, its shot, or its ability, burns the progress
   # toward the next level: experience drops to the least that keeps the level.
   death_penalty: true
+  # From this many deaths to bosses in a row, with no boss killed between, each
+  # death also costs a level: experience drops to the least of the level below,
+  # never under level 1. A kill that counts ends the streak. 0 turns it off.
+  death_demotion: 3
 
 # ---------------------------------------------------------------------------
 #  Boss stats

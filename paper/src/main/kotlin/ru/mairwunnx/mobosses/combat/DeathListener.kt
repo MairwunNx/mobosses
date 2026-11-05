@@ -76,6 +76,7 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
 
     val levelBefore = plugin.progression.level(player.uniqueId)
     plugin.progression.add(player.uniqueId, player.name, payout.gained, payout.counts)
+    if (payout.counts) plugin.deathPenalty.won(player)
     plugin.progression.level(player.uniqueId).takeIf { it > levelBefore }?.let { plugin.worldApi.levelUp(player, levelBefore, it) }
     if (PlanData.available) PlanData.update(player)
 

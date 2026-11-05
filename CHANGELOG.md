@@ -2,6 +2,17 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.19.0
+
+### New
+
+- 💀 **Losing streaks cost a level.** Three deaths to bosses in a row, with no boss killed between, and the third drops your Mo’Bosses level by one, to the least experience of the level below; each death after it drops one more, down to level 1. A kill that counts ends the streak. `progression.death_demotion` sets how many deaths start it, and 0 turns it off; it works only while `death_penalty` is on.
+
+### Fixed
+
+- 💥 **A slam hurts.** A player close to a boss took a shockwave, whirlwind, stampede, or pounce mostly for nothing: the boss’s own swing left them the game’s half second of immunity, which swallowed a lesser hit, and at high levels the swing was almost always the harder one. Now these blows land in full whenever they come. Meteors, lightning, and arrows hit as before.
+- 🕸️ **A boss walks through its own traps.** A boss and its minions got stuck in the cobwebs it spun and caught fire in the rings it lit. Now they pass through what abilities leave, while players stay caught. Cobwebs and fire that were there before still hold and burn everyone.
+
 ## 2.18.3
 
 ### Changed
@@ -9,11 +20,6 @@ The “Release” workflow takes the notes for a version from its section here, 
 - 📦 **The Fabric and NeoForge mods carry SQLite’s driver 3.54.1.0,** up from 3.53.4.0. The plugin builds against Paper 26.3 build 237 and the NeoForge mod against NeoForge 26.3.0.101; nothing changes in play.
 
 ## 2.18.2
-
-### Fixed
-
-- 💥 **A slam hurts.** A player close to a boss took a shockwave, whirlwind, stampede, or pounce mostly for nothing: the boss’s own swing left them the game’s half second of immunity, which swallowed a lesser hit, and at high levels the swing was almost always the harder one. Now these blows land in full whenever they come. Meteors, lightning, and arrows hit as before.
-- 🕸️ **A boss walks through its own traps.** A boss and its minions got stuck in the cobwebs it spun and caught fire in the rings it lit, and a spider boss could pin itself down. Now they pass through what abilities leave, while players stay caught. Cobwebs and fire that were there before still hold and burn everyone.
 
 ### Changed
 

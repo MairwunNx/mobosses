@@ -128,11 +128,13 @@ class Progression(
 
   /**
    * After a player died to a boss: their experience drops to the least that keeps their level, so the
-   * way to the next one starts over. [done] gets what they lost, on the server thread.
+   * way to the next one starts over, or, when they [demote], to the least of the level below. [done] gets
+   * what they lost, on the server thread.
    */
-  fun penalize(player: UUID, name: String, done: (lost: Long) -> Unit) {
+  fun penalize(player: UUID, name: String, demote: Boolean, done: (lost: Long) -> Unit) {
     val curve = settings().progression.levelCurve
-    val change = { p: Progress -> p.copy(experience = Leveling.levelFloor(curve, p.experience)) }
+    val floor = if (demote) Leveling::demotedFloor else Leveling::levelFloor
+    val change = { p: Progress -> p.copy(experience = floor(curve, p.experience)) }
     val store = store
     if (store == null) {
       val before = of(player)

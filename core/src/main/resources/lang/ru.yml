@@ -40,6 +40,7 @@ info_next: "<gray>До уровня</gray> <num><next></num> <xp><progress></xp>
 info_top: "<gray>Высший уровень:</gray> <ok>расти больше некуда</ok>"
 survival_lost: "<pri>[Mo’Bosses]</pri> <warn>Бонус выживания сгорел: +<bonus>% к боссам за <hours> ч <minutes> мин без смертей.</warn>"
 death_penalty: "<pri>[Mo’Bosses]</pri> <warn>Вы пали от</warn> <boss><boss_name></boss><warn>: прогресс к <next>-му уровню сгорел, −<lost> опыта Mo’Bosses.</warn> <gray>Уровень остаётся.</gray>"
+death_demotion: "<pri>[Mo’Bosses]</pri> <warn>Вы пали от</warn> <boss><boss_name></boss><warn>, смертей подряд: <deaths>. Уровень падает до <level>-го, −<lost> опыта Mo’Bosses.</warn> <gray>Убейте босса, чтобы прервать серию.</gray>"
 full_moon: "<pri>[Mo’Bosses]</pri> <boss>Взошла полная луна.</boss> <gray>Этой ночью боссов больше, а редкие приходят ещё чаще.</gray>"
 # Над хотбаром у всех, кто бьёт босса, когда к бою присоединяется ещё один игрок. <players>, <percent> (здоровья сверх своего).
 group_health: "<boss><boss_name></boss> <warn>крепнет: бойцов <players>, +<percent>% здоровья</warn>"

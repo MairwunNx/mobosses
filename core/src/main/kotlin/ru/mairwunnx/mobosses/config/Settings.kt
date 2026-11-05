@@ -195,6 +195,8 @@ data class Settings(
     @SerialName("pet_damage") val petDamage: PetDamage = PetDamage(),
     /** Dying to a boss burns the progress toward the next level; the level itself stays. */
     @SerialName("death_penalty") val deathPenalty: Boolean = true,
+    /** From this many deaths to bosses in a row, with no boss killed between, each one costs a level too; 0 never. */
+    @SerialName("death_demotion") val deathDemotion: Int = 3,
   )
 
   /**

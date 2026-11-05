@@ -40,6 +40,7 @@ info_next: "<gray>Até o nível</gray> <num><next></num> <xp><progress></xp><dar
 info_top: "<gray>Nível máximo:</gray> <ok>não há mais para onde subir</ok>"
 survival_lost: "<pri>[Mo’Bosses]</pri> <warn>Seu bônus de sobrevivência acabou: +<bonus>% de chefes depois de <hours> h <minutes> min sem morrer.</warn>"
 death_penalty: "<pri>[Mo’Bosses]</pri> <warn>Você caiu para</warn> <boss><boss_name></boss><warn>: seu progresso rumo ao nível <next> queimou, −<lost> de experiência Mo’Bosses.</warn> <gray>Seu nível fica.</gray>"
+death_demotion: "<pri>[Mo’Bosses]</pri> <warn>Você caiu para</warn> <boss><boss_name></boss><warn>, <deaths> vezes seguidas: seu nível cai para <level>, −<lost> de experiência Mo’Bosses.</warn> <gray>Mate um chefe para encerrar a sequência.</gray>"
 full_moon: "<pri>[Mo’Bosses]</pri> <boss>A lua cheia nasce.</boss> <gray>Esta noite os chefes vêm mais vezes, e os raros mais ainda.</gray>"
 # Acima da barra de todos que lutam contra um chefe quando mais um jogador entra na luta. <players>, <percent> (vida acima da própria).
 group_health: "<boss><boss_name></boss> <warn>fica mais forte: <players> lutadores, +<percent>% de vida</warn>"

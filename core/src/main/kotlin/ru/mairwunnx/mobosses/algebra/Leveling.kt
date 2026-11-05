@@ -38,6 +38,9 @@ object Leveling {
   /** The least experience that keeps a player at their level: what dying to a boss leaves them. */
   fun levelFloor(curve: Settings.LevelCurve, experience: Long): Long = experienceFor(curve, playerLevel(curve, experience)) ?: 0L
 
+  /** The least experience of the level below: what dying to bosses again and again leaves. Level 1 stays level 1. */
+  fun demotedFloor(curve: Settings.LevelCurve, experience: Long): Long = experienceFor(curve, (playerLevel(curve, experience) - 1).coerceAtLeast(1)) ?: 0L
+
   /** How far a player is on their way to the next level: what they gathered on it and what it asks; null at `max_level`. */
   fun toNext(curve: Settings.LevelCurve, experience: Long): Pair<Long, Long>? {
     val level = playerLevel(curve, experience)

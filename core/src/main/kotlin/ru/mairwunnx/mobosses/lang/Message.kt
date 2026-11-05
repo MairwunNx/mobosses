@@ -35,6 +35,7 @@ enum class Message(val key: String) {
   INFO_TOP("info_top"),
   SURVIVAL_LOST("survival_lost"),
   DEATH_PENALTY("death_penalty"),
+  DEATH_DEMOTION("death_demotion"),
   FULL_MOON("full_moon"),
   GROUP_HEALTH("group_health"),
   TOP_HEADER("top.header"),

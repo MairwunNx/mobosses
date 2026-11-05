@@ -60,6 +60,8 @@ class Keys(plugin: Plugin) {
   val hurt = NamespacedKey(plugin, "hurt")
   /** On players: the boss type that last killed them and when, `type|millis`, for the “avenger” achievement. */
   val avenge = NamespacedKey(plugin, "avenge")
+  /** On players: their deaths to bosses since their last kill that counted. */
+  val deathStreak = NamespacedKey(plugin, "death_streak")
   /** On name labels, so a stray one from a crash can be cleared. */
   val label = NamespacedKey(plugin, "label")
   /** On players: when they may get rewards again, in epoch milliseconds. */

@@ -86,6 +86,7 @@ class MoBossesPlugin : JavaPlugin() {
   val worldApi = WorldApiLink(this)
   val allay = AllayLink(this)
   val survival = SurvivalBonus(this)
+  val deathPenalty = DeathPenalty(this)
   val fullMoon = FullMoon(this)
   val groupHealth = GroupHealth(this)
   val fatigue = SpawnerFatigue(this)
@@ -105,7 +106,7 @@ class MoBossesPlugin : JavaPlugin() {
 
   override fun onEnable() {
     if (!reload()) log.warn("Started with errors in the config files; fix them and run /mobosses reload")
-    listOf(playerLanguages, ProgressionListener(progression), spawns, survival, DeathPenalty(this), achievements, DamageListener(this), DeathListener(this), Conversions(this), antiCheese, MeteorListener(this), ArrowListener(this), AbilityEntities(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener())
+    listOf(playerLanguages, ProgressionListener(progression), spawns, survival, deathPenalty, achievements, DamageListener(this), DeathListener(this), Conversions(this), antiCheese, MeteorListener(this), ArrowListener(this), AbilityEntities(this), BlockLogListener(this), TemporaryBlockListener(this), MenuListener())
       .forEach { server.pluginManager.registerEvents(it, this) }
     registerCommand("mobosses", "Your Mo’Bosses level and the best hunters; for admins, reload, spawn, or remove bosses", listOf("mb", "moboss"), MoBossesCommand(this))
     tasks += server.scheduler.runTaskTimer(this, Runnable { visuals.tick(); bars.tick(); antiCheese.tick(); PlanData.bossesAlive = bosses.all.size }, 20L, 20L)

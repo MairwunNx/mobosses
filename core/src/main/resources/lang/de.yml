@@ -40,6 +40,7 @@ info_next: "<gray>Bis Stufe</gray> <num><next></num> <xp><progress></xp><dark_gr
 info_top: "<gray>Höchste Stufe:</gray> <ok>mehr geht nicht</ok>"
 survival_lost: "<pri>[Mo’Bosses]</pri> <warn>Dein Überlebensbonus ist weg: +<bonus> % auf Bosse nach <hours> h <minutes> min ohne Tod.</warn>"
 death_penalty: "<pri>[Mo’Bosses]</pri> <warn>Du bist gefallen durch</warn> <boss><boss_name></boss><warn>: Dein Fortschritt zu Stufe <next> ist verbrannt, −<lost> Mo’Bosses-Erfahrung.</warn> <gray>Deine Stufe bleibt.</gray>"
+death_demotion: "<pri>[Mo’Bosses]</pri> <warn>Du bist gefallen durch</warn> <boss><boss_name></boss><warn>, <deaths>-mal in Folge: Deine Stufe sinkt auf <level>, −<lost> Mo’Bosses-Erfahrung.</warn> <gray>Besiege einen Boss, dann endet die Serie.</gray>"
 full_moon: "<pri>[Mo’Bosses]</pri> <boss>Ein Vollmond geht auf.</boss> <gray>Heute Nacht kommen Bosse öfter, seltene noch öfter.</gray>"
 # Über der Hotbar aller, die einen Boss bekämpfen, wenn noch ein Spieler mitkämpft. <players>, <percent> (Leben über dem eigenen).
 group_health: "<boss><boss_name></boss> <warn>wird stärker: <players> Kämpfer, +<percent> % Leben</warn>"

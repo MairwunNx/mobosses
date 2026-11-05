@@ -148,6 +148,16 @@ class ProgressionTest {
     assertTrue(Leveling.playerLevel(curve, floor - 1) < level, "one less would drop the level")
   }
 
+  @Test fun `a streak of deaths drops one level to its floor, never below the first`() {
+    val curve = progression.levelCurve
+    val level = Leveling.playerLevel(curve, 40_000)
+    val demoted = Leveling.demotedFloor(curve, 40_000)
+    assertEquals(level - 1, Leveling.playerLevel(curve, demoted))
+    assertEquals(Leveling.experienceFor(curve, level - 1), demoted)
+    assertEquals(0L, Leveling.demotedFloor(curve, 0))
+    assertEquals(0L, Leveling.demotedFloor(curve, Leveling.experienceFor(curve, 2)!!))
+  }
+
   @Test fun `the way to the next level counts from the level's own floor`() {
     val curve = progression.levelCurve
     val level = Leveling.playerLevel(curve, 40_000)
