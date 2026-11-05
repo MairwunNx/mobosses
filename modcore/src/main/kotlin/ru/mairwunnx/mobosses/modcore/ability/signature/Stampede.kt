@@ -13,7 +13,7 @@ object Stampede : Signature("stampede", Message.STAMPEDE) {
     cast.sound(SoundEvents.RAVAGER_ROAR, 1f, 1f)
     cast.later(10) {
       around(cast, 2.8).forEach {
-        strike(cast, it, scaled(cast, 5.0, 0.1, 16.0))
+        cast.blow(it, scaled(cast, 5.0, 0.1, 16.0))
         knock(cast, it, 1.3, 0.6)
       }
     }

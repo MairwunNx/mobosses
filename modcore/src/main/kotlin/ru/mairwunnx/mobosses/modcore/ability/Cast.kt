@@ -47,6 +47,15 @@ class Cast(val mod: MoBosses, val boss: Boss, val attacker: ServerPlayer?) {
 
   fun canHit(player: ServerPlayer) = Targets.canHit(player, mod.guards)
 
+  /**
+   * Hurts [victim] with a blow of the boss's own, past the half second of immunity its last swing left: the game
+   * takes off a lesser hit within it, and swallowed slams and spins next to the boss.
+   */
+  fun blow(victim: LivingEntity, amount: Double) {
+    victim.invulnerableTime = 0
+    victim.hurtServer(world, world.damageSources().mobAttack(entity), amount.toFloat())
+  }
+
   fun sound(sound: SoundEvent, volume: Float = 1f, pitch: Float = 1f, where: Vec3 = at) = World.sound(world, where, sound, volume, pitch)
 
   fun particles(particle: ParticleOptions, where: Vec3, count: Int, dx: Double = 0.0, dy: Double = 0.0, dz: Double = 0.0, speed: Double = 0.0) =

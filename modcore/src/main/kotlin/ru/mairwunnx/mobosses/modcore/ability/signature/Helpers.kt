@@ -3,7 +3,6 @@ package ru.mairwunnx.mobosses.modcore.ability.signature
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.effect.MobEffectInstance
 import net.minecraft.world.entity.Entity
-import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.projectile.Projectile
 import net.minecraft.world.phys.Vec3
 import ru.mairwunnx.mobosses.modcore.ability.Cast
@@ -33,11 +32,6 @@ internal fun afflict(cast: Cast, radius: Double, vararg effects: () -> MobEffect
   val players = around(cast, radius).ifEmpty { return false }
   players.forEach { player -> effects.forEach { player.addEffect(it(), cast.entity) } }
   return true
-}
-
-/** Hurts [target] as the boss's blow would, as Bukkit's `damage(amount, boss)`. */
-internal fun strike(cast: Cast, target: LivingEntity, amount: Double) {
-  target.hurtServer(cast.world, cast.world.damageSources().mobAttack(cast.entity), amount.toFloat())
 }
 
 /**

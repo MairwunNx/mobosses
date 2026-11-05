@@ -26,7 +26,7 @@ object Pounce : Signature("pounce", Message.POUNCE) {
     cast.later(14) {
       val poison = cast.boss.entity.type == EntityType.CAVE_SPIDER
       around(cast, 2.5).forEach {
-        it.damage(scaled(cast, 3.0, 0.06, 9.0), cast.boss.entity)
+        cast.blow(it, scaled(cast, 3.0, 0.06, 9.0))
         it.addPotionEffect(PotionEffect(if (poison) PotionEffectType.POISON else PotionEffectType.SLOWNESS, ticks(cast, 3.0, 0.04, 7.0), if (cast.level >= 50) 1 else 0))
       }
     }

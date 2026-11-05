@@ -10,6 +10,10 @@ The “Release” workflow takes the notes for a version from its section here, 
 
 ## 2.18.2
 
+### Fixed
+
+- 💥 **A slam hurts.** A player close to a boss took a shockwave, whirlwind, stampede, or pounce mostly for nothing: the boss’s own swing left them the game’s half second of immunity, which swallowed a lesser hit, and at high levels the swing was almost always the harder one. Now these blows land in full whenever they come. Meteors, lightning, and arrows hit as before.
+
 ### Changed
 
 - 🖱️ **The menu’s buttons click.** Only picking a language made a sound before. Now every button that does something clicks—pages, back, close, the bestiary, the language picker, start over, and the admins’ buttons and boss list—and only you hear it. Empty slots, pictures, and a button with nothing to do, like “next” on the last page, stay silent.

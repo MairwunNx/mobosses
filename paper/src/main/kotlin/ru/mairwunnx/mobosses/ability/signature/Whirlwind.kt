@@ -20,7 +20,7 @@ object Whirlwind : Signature("whirlwind", Message.WHIRLWIND) {
   override fun cast(cast: Cast): Boolean {
     val victims = cast.victims(cast.at, 3.5).filter { it.location.distanceSquared(cast.at) <= 3.5 * 3.5 }.ifEmpty { return false }
     victims.forEach {
-      it.damage(scaled(cast, 4.0, 0.08, 14.0), cast.boss.entity)
+      cast.blow(it, scaled(cast, 4.0, 0.08, 14.0))
       knock(cast, it, 0.9, 0.35)
     }
     cast.at.world.spawnParticle(Particle.SWEEP_ATTACK, cast.at.clone().add(0.0, 1.0, 0.0), 12, 1.5, 0.3, 1.5, 0.0)

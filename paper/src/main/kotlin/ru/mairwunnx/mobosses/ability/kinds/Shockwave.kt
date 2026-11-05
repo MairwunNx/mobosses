@@ -39,7 +39,7 @@ object Shockwave : Ability {
     inReach(cast).forEach { victim ->
       val away = victim.location.toVector().subtract(cast.at.toVector()).setY(0)
       val closeness = 1.0 - (away.length() / cfg.shockwaveRadius).coerceIn(0.0, 1.0)
-      victim.damage(damage * (0.5 + 0.5 * closeness), cast.boss.entity)
+      cast.blow(victim, damage * (0.5 + 0.5 * closeness))
       val push = if (away.lengthSquared() < 1e-4) away.setX(1.0) else away.normalize()
       victim.velocity = push.multiply(cfg.shockwaveKnockback * (0.5 + 0.5 * closeness)).setY(cfg.shockwaveLift)
     }

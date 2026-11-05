@@ -43,6 +43,15 @@ class Cast(val plugin: MoBossesPlugin, val boss: Boss, val attacker: Player?) {
 
   fun canHit(player: Player) = Targets.canHit(player, plugin.guards)
 
+  /**
+   * Hurts [victim] with a blow of the boss's own, past the half second of immunity its last swing left: the game
+   * takes off a lesser hit within it, and swallowed slams and spins next to the boss.
+   */
+  fun blow(victim: LivingEntity, amount: Double) {
+    victim.noDamageTicks = 0
+    victim.damage(amount, boss.entity)
+  }
+
   fun sound(sound: Sound, volume: Float = 1f, pitch: Float = 1f, where: Location = at) = where.world.playSound(where, sound, volume, pitch)
 
   /** Runs [block] after [ticks], unless the boss is gone by then. */

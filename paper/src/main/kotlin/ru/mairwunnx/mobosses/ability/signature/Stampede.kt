@@ -24,7 +24,7 @@ object Stampede : Signature("stampede", Message.STAMPEDE) {
     cast.sound(Sound.ENTITY_RAVAGER_ROAR, 1f, 1f)
     cast.later(10) {
       around(cast, 2.8).forEach {
-        it.damage(scaled(cast, 5.0, 0.1, 16.0), cast.boss.entity)
+        cast.blow(it, scaled(cast, 5.0, 0.1, 16.0))
         knock(cast, it, 1.3, 0.6)
       }
     }
