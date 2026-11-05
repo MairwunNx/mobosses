@@ -56,6 +56,7 @@ import ru.mairwunnx.mobosses.spawn.FullMoon
 import ru.mairwunnx.mobosses.combat.GroupHealth
 import ru.mairwunnx.mobosses.combat.SpawnerFatigue
 import ru.mairwunnx.mobosses.progress.DeathPenalty
+import ru.mairwunnx.mobosses.boss.AdminSpawns
 import java.io.File
 
 class MoBossesPlugin : JavaPlugin() {
@@ -87,6 +88,7 @@ class MoBossesPlugin : JavaPlugin() {
   val allay = AllayLink(this)
   val survival = SurvivalBonus(this)
   val deathPenalty = DeathPenalty(this)
+  val adminSpawns = AdminSpawns(this)
   val fullMoon = FullMoon(this)
   val groupHealth = GroupHealth(this)
   val fatigue = SpawnerFatigue(this)

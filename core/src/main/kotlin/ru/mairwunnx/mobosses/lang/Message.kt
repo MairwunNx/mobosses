@@ -13,6 +13,7 @@ enum class Message(val key: String) {
   UNKNOWN_ENTITY("unknown_entity"),
   UNKNOWN_CLASS("unknown_class"),
   BAD_LEVEL("bad_level"),
+  BAD_SPAWN_OPTION("bad_spawn_option"),
   PLAYER_NOT_FOUND("player_not_found"),
   KILLED_ALL("killed_all"),
   KILLED_NONE("killed_none"),

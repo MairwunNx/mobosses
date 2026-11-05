@@ -10,9 +10,9 @@
 reloaded: "<pri>[Mo’Bosses]</pri> <ok>Recargado.</ok>"
 reload_failed: "<pri>[Mo’Bosses]</pri> <warn>Recargado con errores.</warn> <gray>Revisa el registro del servidor.</gray>"
 no_permission: "<err>No puedes usar este comando.</err>"
-usage: '<gray>Usa</gray> <white>/mobosses</white> <gray>para el menú,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>,</gray> <white>/mobosses reset</white><gray>,</gray> <white>/mobosses language [code|auto]</white><gray>; administradores:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray> o</gray> <white>/mobosses killall</white>'
+usage: '<gray>Usa</gray> <white>/mobosses</white> <gray>para el menú,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>,</gray> <white>/mobosses reset</white><gray>,</gray> <white>/mobosses language [code|auto]</white><gray>; administradores:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]] [abilities=a,b|none] [count=1–20]</white><gray> o</gray> <white>/mobosses killall</white>'
 # <entities>, <classes>: las opciones disponibles.
-spawn_usage: '<gray>Usa</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray>. Entidades:</gray> <white><entities></white><gray>. Clases:</gray> <white><classes></white>'
+spawn_usage: '<gray>Usa</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]] [abilities=a,b|none] [count=1–20]</white><gray>. Entidades:</gray> <white><entities></white><gray>. Clases:</gray> <white><classes></white>'
 spawned: "<pri>[Mo’Bosses]</pri> <ok>Generado:</ok> <class_color>[Nv. <level>] [<class>]</class_color> <boss_name>"
 # <reason>: el motivo, como la zona protegida que lo impidió.
 spawn_failed: "<err>No se puede generar el jefe:</err> <gray><reason></gray>"
@@ -20,6 +20,7 @@ spawn_where: "<err>Desde la consola, indica las coordenadas:</err> <white>/mobos
 unknown_entity: "<err>No existe el tipo de jefe <entity>.</err> <gray>Tipos:</gray> <white><entities></white>"
 unknown_class: "<err>No existe la clase <class>.</err> <gray>Clases:</gray> <white><classes></white>"
 bad_level: "<err>El nivel debe ser un número del 1 al <max>, no <level>.</err>"
+bad_spawn_option: "<err>No entiendo <option>.</err> <gray>Opciones:</gray> <white>abilities=shockwave,whirlwind</white> <gray>o</gray> <white>abilities=none</white><gray>, y</gray> <white>count=1</white><gray> a </gray><white>20</white><gray>. Habilidades:</gray> <white><abilities></white>"
 # <count>: cuántos.
 killed_all: "<pri>[Mo’Bosses]</pri> <ok>Jefes eliminados: <num><count></num>.</ok>"
 killed_none: "<pri>[Mo’Bosses]</pri> <warn>No hay jefes que eliminar.</warn>"

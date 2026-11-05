@@ -6,6 +6,7 @@ import net.kyori.adventure.text.format.TextColor
 import net.minecraft.world.entity.LivingEntity
 import ru.mairwunnx.mobosses.algebra.Difficulty
 import ru.mairwunnx.mobosses.boss.Codec
+import ru.mairwunnx.mobosses.boss.SpawnOptions
 import ru.mairwunnx.mobosses.combat.Shares
 import ru.mairwunnx.mobosses.config.BossClass
 import ru.mairwunnx.mobosses.modcore.Scheduler
@@ -74,6 +75,11 @@ class Boss(
   var pinned: Boolean
     get() = data.boolean(Keys.PINNED) == true
     set(value) = data.set(Keys.PINNED, value)
+
+  /** The abilities `/mobosses spawn abilities=…` gave it, whatever its level; null for all it has reached. */
+  var abilities: Set<String>?
+    get() = data.string(Keys.ABILITIES)?.let(SpawnOptions::decode)
+    set(value) = if (value == null) data.remove(Keys.ABILITIES) else data.set(Keys.ABILITIES, SpawnOptions.encode(value))
 
   /** When an ability, or [SHARED] for any, may go off again. */
   fun readyAt(ability: String): Long = read(Keys.COOLDOWNS)[ability]?.toLong() ?: 0L

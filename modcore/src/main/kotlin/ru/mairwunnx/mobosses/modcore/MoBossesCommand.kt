@@ -20,8 +20,11 @@ import net.minecraft.world.phys.BlockHitResult
 import net.minecraft.world.phys.HitResult
 import net.minecraft.world.phys.Vec3
 import ru.mairwunnx.mobosses.Permissions
+import ru.mairwunnx.mobosses.boss.SpawnOptions
 import ru.mairwunnx.mobosses.lang.LanguageChoices
 import ru.mairwunnx.mobosses.lang.Message
+import ru.mairwunnx.mobosses.modcore.ability.Abilities
+import ru.mairwunnx.mobosses.modcore.boss.AdminSpawns
 import ru.mairwunnx.mobosses.modcore.menu.LanguagePage
 import ru.mairwunnx.mobosses.modcore.menu.Menu
 import java.util.UUID
@@ -29,7 +32,7 @@ import java.util.concurrent.CompletableFuture
 
 /**
  * `/mobosses` (aliases `mb`, `moboss`) on the game's command tree, the same as on Paper: the menu, `info`, `top`,
- * `reset`, and `language [code|auto]` for players; `reload`, `spawn <entity> <level> <class> [x y z [world]]`, and
+ * `reset`, and `language [code|auto]` for players; `reload`, `spawn <entity> <level> <class> [x y z [world]] [abilities=…] [count=…]`, and
  * `killall` for admins, each under its own permission ([Perms]). One argument takes the rest of the line, so the
  * words parse as Paper's command parses them, and suggestions follow each word.
  */
@@ -151,7 +154,7 @@ object MoBossesCommand {
 
   private fun spawn(mod: MoBosses, source: CommandSourceStack, args: List<String>) {
     val catalog = mod.catalog
-    if (args.size !in setOf(3, 6, 7)) return usage(mod, source)
+    if (args.size < 3) return usage(mod, source)
     val type = catalog.types.values.firstOrNull { it.key.equals(args[0].removePrefix("minecraft:"), ignoreCase = true) }
       ?: return mod.texts.send(source, Message.UNKNOWN_ENTITY, Placeholder.unparsed("entity", args[0]), Placeholder.unparsed("entities", typeKeys(mod).joinToString(", ")))
     val maxLevel = maxOf(100, catalog.settings.progression.levelCurve.maxLevel)
@@ -159,22 +162,18 @@ object MoBossesCommand {
       ?: return mod.texts.send(source, Message.BAD_LEVEL, Placeholder.unparsed("level", args[1]), Placeholder.unparsed("max", maxLevel.toString()))
     val clazz = catalog.classes.byKey(args[2])
       ?: return mod.texts.send(source, Message.UNKNOWN_CLASS, Placeholder.unparsed("class", args[2]), Placeholder.unparsed("classes", catalog.classes.all.joinToString(", ") { it.key }))
-    val (world, at) = where(mod, source, args.drop(3)) ?: return mod.texts.send(source, Message.SPAWN_WHERE)
-    val pos = net.minecraft.core.BlockPos.containing(at)
-    if (!catalog.settings.protection.adminSpawnBypass && !mod.guards.canSpawnBoss(world, pos)) {
-      return mod.texts.send(source, Message.SPAWN_FAILED, Placeholder.unparsed("reason", "protected"))
+    val options = when (val parsed = SpawnOptions.parse(args.drop(3), Abilities.KEYS)) {
+      is SpawnOptions.Parsed.Ok -> parsed.options
+      is SpawnOptions.Parsed.Bad -> return mod.texts.send(source, Message.BAD_SPAWN_OPTION, Placeholder.unparsed("option", parsed.arg),
+        Placeholder.unparsed("abilities", Abilities.KEYS.joinToString(", ")))
     }
-    val entity = try {
-      mod.spawns.spawningByCommand = true
-      type.entity.spawn(world, pos, EntitySpawnReason.COMMAND) as? LivingEntity
-    } finally {
-      mod.spawns.spawningByCommand = false
+    val (world, at) = where(mod, source, options.place) ?: return mod.texts.send(source, Message.SPAWN_WHERE)
+    repeat(options.count) {
+      when (val result = mod.adminSpawns.spawn(type, clazz, level, world, at, options.abilities)) {
+        is AdminSpawns.Result.Spawned -> mod.texts.send(source, Message.SPAWNED, *mod.texts.boss(mod.texts.languageOf(source), result.boss))
+        is AdminSpawns.Result.Failed -> return mod.texts.send(source, Message.SPAWN_FAILED, Placeholder.unparsed("reason", result.reason))
+      }
     }
-    if (entity == null || !entity.isAlive) return mod.texts.send(source, Message.SPAWN_FAILED, Placeholder.unparsed("reason", "the spawn was cancelled"))
-    entity.snapTo(at.x, at.y, at.z, entity.yRot, entity.xRot)
-    val boss = mod.bosses.make(entity, type, clazz, level).also(mod.bosses::vanillaName)
-    boss.pinned = true
-    mod.texts.send(source, Message.SPAWNED, *mod.texts.boss(mod.texts.languageOf(source), boss))
   }
 
   /** Two blocks ahead of a player, or `x y z [world]` for anyone; a world is a dimension, `overworld`, or Paper's `world`. */
@@ -224,9 +223,12 @@ object MoBossesCommand {
       args.size == 2 -> typeKeys(mod)
       args.size == 3 -> listOf("1", "10", "25", "50", "75", "100")
       args.size == 4 -> mod.catalog.classes.all.map { it.key }
-      args.size in 5..7 -> player?.let { target(it) }?.let { pos -> listOf(pos.x, pos.y + 1, pos.z)[args.size - 5].toString() }?.let(::listOf).orEmpty()
-      args.size == 8 -> mod.server.levelKeys().map { it.identifier().toString() }
-      else -> emptyList()
+      '=' in last -> SpawnOptions.suggest(last, Abilities.KEYS)
+      else -> when (val given = args.drop(4).dropLast(1).count { '=' !in it }) {
+        in 0..2 -> player?.let { target(it) }?.let { pos -> listOf(pos.x, pos.y + 1, pos.z)[given].toString() }?.let(::listOf).orEmpty()
+        3 -> mod.server.levelKeys().map { it.identifier().toString() }
+        else -> emptyList()
+      } + listOf("abilities=", "count=")
     }
     val start = builder.start + typed.length - last.length
     val at = builder.createOffset(start)

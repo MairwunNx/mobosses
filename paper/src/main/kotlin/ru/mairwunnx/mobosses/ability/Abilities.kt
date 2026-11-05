@@ -25,6 +25,7 @@ import ru.mairwunnx.mobosses.ability.kinds.WebRing
 import ru.mairwunnx.mobosses.ability.signature.*
 import ru.mairwunnx.mobosses.algebra.Rolls
 import ru.mairwunnx.mobosses.boss.Boss
+import ru.mairwunnx.mobosses.boss.SpawnOptions
 import ru.mairwunnx.mobosses.boss.WorldBosses
 import kotlin.random.Random
 
@@ -41,13 +42,14 @@ class Abilities(private val plugin: MoBossesPlugin) {
     val settings = catalog.abilities
     val cast = Cast(plugin, boss, attacker)
     // The second phase casts something at once, cooldowns or not.
-    val turned = PhaseTwo.due(cast).also { if (it) PhaseTwo.cast(cast).also { announce(PhaseTwo.message, cast) } }
-    if (Enrage.enabled(settings) && boss.level >= Enrage.threshold(boss.clazz.abilityThresholds) && Enrage.usable(cast) && Enrage.cast(cast)) announce(Enrage.message, cast)
+    val given = boss.abilities
+    val turned = (SpawnOptions.allows(given, PHASE_TWO, true) && PhaseTwo.due(cast)).also { if (it) PhaseTwo.cast(cast).also { announce(PhaseTwo.message, cast) } }
+    if (Enrage.enabled(settings) && SpawnOptions.allows(given, Enrage.key, boss.level >= Enrage.threshold(boss.clazz.abilityThresholds)) && Enrage.usable(cast) && Enrage.cast(cast)) announce(Enrage.message, cast)
 
     val now = System.currentTimeMillis()
     if (!turned && now < boss.readyAt(Boss.SHARED)) return
     val ready = PICKED.filter { ability ->
-      ability.enabled(settings) && WorldBosses.allows(boss.type.key, ability.key) && boss.level >= ability.threshold(boss.clazz.abilityThresholds) &&
+      ability.enabled(settings) && WorldBosses.allows(boss.type.key, ability.key) && SpawnOptions.allows(given, ability.key, boss.level >= ability.threshold(boss.clazz.abilityThresholds)) &&
         (turned || now >= boss.readyAt(ability.key)) && ability.usable(cast)
     }
     // One that finds nothing to do, like a fire ring over water, gives way to the next.
@@ -80,6 +82,10 @@ class Abilities(private val plugin: MoBossesPlugin) {
   companion object {
     /** How close a player who hit the boss must still be to hear about its abilities. */
     private const val FIGHT = 48.0
+    private const val PHASE_TWO = "phase_two"
+
+    /** Every ability `/mobosses spawn abilities=…` may give: those a hit picks, enrage, and the second phase. */
+    val KEYS: Set<String> get() = PICKED.mapTo(LinkedHashSet()) { it.key } + Enrage.key + PHASE_TWO
 
     /** The abilities a hit may set off, at random. */
     val PICKED: List<Ability> = listOf(

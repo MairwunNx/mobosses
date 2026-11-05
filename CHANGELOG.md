@@ -7,6 +7,7 @@ The “Release” workflow takes the notes for a version from its section here, 
 ### New
 
 - 💀 **Losing streaks cost a level.** Three deaths to bosses in a row, with no boss killed between, and the third drops your Mo’Bosses level by one, to the least experience of the level below; each death after it drops one more, down to level 1. A kill that counts ends the streak. `progression.death_demotion` sets how many deaths start it, and 0 turns it off; it works only while `death_penalty` is on.
+- 🧪 **Spawn a boss with the abilities you pick.** `/mobosses spawn` takes options after the class, in any order and around the coordinates: `abilities=shockwave,whirlwind` leaves the boss only those, whatever its level, `abilities=none` leaves it none, and `count=5` spawns five at once, up to 20. The boss keeps its abilities across restarts. Tab completion lists every ability.
 
 ### Fixed
 

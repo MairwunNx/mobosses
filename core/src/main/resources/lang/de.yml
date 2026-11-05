@@ -10,9 +10,9 @@
 reloaded: "<pri>[Mo’Bosses]</pri> <ok>Neu geladen.</ok>"
 reload_failed: "<pri>[Mo’Bosses]</pri> <warn>Mit Fehlern neu geladen.</warn> <gray>Sieh ins Serverlog.</gray>"
 no_permission: "<err>Diesen Befehl darfst du nicht nutzen.</err>"
-usage: '<gray>Nutze</gray> <white>/mobosses</white> <gray>für das Menü,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>,</gray> <white>/mobosses reset</white><gray>,</gray> <white>/mobosses language [code|auto]</white><gray>; als Admin:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray> oder</gray> <white>/mobosses killall</white>'
+usage: '<gray>Nutze</gray> <white>/mobosses</white> <gray>für das Menü,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>,</gray> <white>/mobosses reset</white><gray>,</gray> <white>/mobosses language [code|auto]</white><gray>; als Admin:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]] [abilities=a,b|none] [count=1–20]</white><gray> oder</gray> <white>/mobosses killall</white>'
 # <entities>, <classes>: was zur Auswahl steht.
-spawn_usage: '<gray>Nutze</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray>. Wesen:</gray> <white><entities></white><gray>. Klassen:</gray> <white><classes></white>'
+spawn_usage: '<gray>Nutze</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]] [abilities=a,b|none] [count=1–20]</white><gray>. Wesen:</gray> <white><entities></white><gray>. Klassen:</gray> <white><classes></white>'
 spawned: "<pri>[Mo’Bosses]</pri> <ok>Gespawnt:</ok> <class_color>[Lvl. <level>] [<class>]</class_color> <boss_name>"
 # <reason>: warum, etwa das Schutzgebiet, das es verhindert hat.
 spawn_failed: "<err>Der Boss lässt sich nicht spawnen:</err> <gray><reason></gray>"
@@ -20,6 +20,7 @@ spawn_where: "<err>Gib in der Konsole Koordinaten an:</err> <white>/mobosses spa
 unknown_entity: "<err>Einen Bosstyp <entity> gibt es nicht.</err> <gray>Typen:</gray> <white><entities></white>"
 unknown_class: "<err>Eine Klasse <class> gibt es nicht.</err> <gray>Klassen:</gray> <white><classes></white>"
 bad_level: "<err>Die Stufe muss eine Zahl von 1 bis <max> sein, nicht <level>.</err>"
+bad_spawn_option: "<err><option> verstehe ich nicht.</err> <gray>Optionen:</gray> <white>abilities=shockwave,whirlwind</white> <gray>oder</gray> <white>abilities=none</white><gray>, und</gray> <white>count=1</white><gray> bis </gray><white>20</white><gray>. Fähigkeiten:</gray> <white><abilities></white>"
 # <count>: wie viele.
 killed_all: "<pri>[Mo’Bosses]</pri> <ok>Bosse entfernt: <num><count></num>.</ok>"
 killed_none: "<pri>[Mo’Bosses]</pri> <warn>Es gibt keine Bosse, die du entfernen könntest.</warn>"

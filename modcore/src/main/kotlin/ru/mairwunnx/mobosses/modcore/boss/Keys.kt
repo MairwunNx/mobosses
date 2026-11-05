@@ -19,6 +19,8 @@ object Keys {
   const val SEEN = "seen"
   /** On bosses from `/mobosses spawn`, which don't despawn. */
   const val PINNED = "pinned"
+  /** On bosses from `/mobosses spawn abilities=…`: the only abilities they cast, `key,…`. */
+  const val ABILITIES = "abilities"
   /** On pets and golems that hit a boss: `boss-uuid=millis`, until when its abilities may hit them back. */
   const val AGGRESSOR = "aggressor"
   /** When each ability may go off again: `ability=millis;…`, with `*` for the shared cooldown. */

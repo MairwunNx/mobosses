@@ -19,6 +19,8 @@ class Keys(plugin: Plugin) {
   val seen = NamespacedKey(plugin, "seen")
   /** On bosses from `/mobosses spawn`, which don't despawn. */
   val pinned = NamespacedKey(plugin, "pinned")
+  /** On bosses from `/mobosses spawn abilities=…`: the only abilities they cast, `key,…`. */
+  val abilities = NamespacedKey(plugin, "abilities")
   /** On pets and golems that hit a boss: `boss-uuid=millis`, until when its abilities may hit them back. */
   val aggressor = NamespacedKey(plugin, "aggressor")
   /** When each ability may go off again, in epoch milliseconds: `ability=millis;…`, with `*` for the shared cooldown. */

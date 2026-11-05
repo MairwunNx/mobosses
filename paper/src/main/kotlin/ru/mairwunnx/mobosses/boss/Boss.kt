@@ -74,6 +74,12 @@ class Boss(
     get() = entity.persistentDataContainer.get(keys.pinned, PersistentDataType.BOOLEAN) == true
     set(value) = entity.persistentDataContainer.set(keys.pinned, PersistentDataType.BOOLEAN, value)
 
+  /** The abilities `/mobosses spawn abilities=…` gave it, whatever its level; null for all it has reached. */
+  var abilities: Set<String>?
+    get() = entity.persistentDataContainer.get(keys.abilities, PersistentDataType.STRING)?.let(SpawnOptions::decode)
+    set(value) = if (value == null) entity.persistentDataContainer.remove(keys.abilities)
+      else entity.persistentDataContainer.set(keys.abilities, PersistentDataType.STRING, SpawnOptions.encode(value))
+
   private fun players(key: NamespacedKey) = read(key).mapNotNull { (k, v) -> runCatching { UUID.fromString(k) }.getOrNull()?.let { it to v } }.toMap()
 
   private fun add(key: NamespacedKey, player: UUID, amount: Double) =

@@ -19,6 +19,7 @@ import ru.mairwunnx.mobosses.modcore.ability.ArrowHits
 import ru.mairwunnx.mobosses.modcore.ability.kinds.Chain
 import ru.mairwunnx.mobosses.modcore.ability.kinds.Obelisk
 import ru.mairwunnx.mobosses.modcore.achievement.Achievements
+import ru.mairwunnx.mobosses.modcore.boss.AdminSpawns
 import ru.mairwunnx.mobosses.modcore.boss.BossBars
 import ru.mairwunnx.mobosses.modcore.boss.Bosses
 import ru.mairwunnx.mobosses.modcore.boss.Catalog
@@ -110,6 +111,7 @@ class MoBosses(val server: MinecraftServer, val loader: Loader) {
   val damage = Damage(this)
   val deaths = Deaths(this)
   val deathPenalty = DeathPenalty(this)
+  val adminSpawns = AdminSpawns(this)
   val blockChanges = BlockChanges(this)
   val menuStats = Stats(this)
   val settings = SettingsService(this)

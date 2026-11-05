@@ -10,9 +10,9 @@
 reloaded: "<pri>[Mo’Bosses]</pri> <ok>Перезагружено.</ok>"
 reload_failed: "<pri>[Mo’Bosses]</pri> <warn>Перезагружено с ошибками.</warn> <gray>Подробности в логе сервера.</gray>"
 no_permission: "<err>Вам недоступна эта команда.</err>"
-usage: '<gray>Команды:</gray> <white>/mobosses</white><gray> — меню,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>,</gray> <white>/mobosses reset</white><gray>,</gray> <white>/mobosses language [code|auto]</white><gray>; для админов:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray> и</gray> <white>/mobosses killall</white>'
+usage: '<gray>Команды:</gray> <white>/mobosses</white><gray> — меню,</gray> <white>/mobosses info [player]</white><gray>,</gray> <white>/mobosses top</white><gray>,</gray> <white>/mobosses reset</white><gray>,</gray> <white>/mobosses language [code|auto]</white><gray>; для админов:</gray> <white>/mobosses reload</white><gray>,</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]] [abilities=a,b|none] [count=1–20]</white><gray> и</gray> <white>/mobosses killall</white>'
 # <entities>, <classes>: из чего можно выбрать.
-spawn_usage: '<gray>Команда:</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]]</white><gray>. Существа:</gray> <white><entities></white><gray>. Классы:</gray> <white><classes></white>'
+spawn_usage: '<gray>Команда:</gray> <white>/mobosses spawn \<entity> \<level> \<class> [x y z [world]] [abilities=a,b|none] [count=1–20]</white><gray>. Существа:</gray> <white><entities></white><gray>. Классы:</gray> <white><classes></white>'
 spawned: "<pri>[Mo’Bosses]</pri> <ok>Призван</ok> <class_color>[Ур. <level>] [<class>]</class_color> <boss_name>"
 # <reason>: почему не вышло, например защищённая зона.
 spawn_failed: "<err>Не удалось призвать босса:</err> <gray><reason></gray>"
@@ -20,6 +20,7 @@ spawn_where: "<err>Из консоли укажите координаты:</err
 unknown_entity: "<err>Босса типа <entity> нет.</err> <gray>Типы:</gray> <white><entities></white>"
 unknown_class: "<err>Класса <class> нет.</err> <gray>Классы:</gray> <white><classes></white>"
 bad_level: "<err>Уровень — число от 1 до <max>, а не <level>.</err>"
+bad_spawn_option: "<err>Не понимаю <option>.</err> <gray>Параметры:</gray> <white>abilities=shockwave,whirlwind</white> <gray>или</gray> <white>abilities=none</white><gray>, а ещё</gray> <white>count=</white><gray> от 1 до 20. Абилки:</gray> <white><abilities></white>"
 # <count>: сколько.
 killed_all: "<pri>[Mo’Bosses]</pri> <ok>Убрано боссов: <num><count></num>.</ok>"
 killed_none: "<pri>[Mo’Bosses]</pri> <warn>Боссов нет, убирать некого.</warn>"

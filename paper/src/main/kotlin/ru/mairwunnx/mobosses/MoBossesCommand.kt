@@ -7,8 +7,10 @@ import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.OfflinePlayer
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.LivingEntity
 import org.bukkit.entity.Player
+import ru.mairwunnx.mobosses.ability.Abilities
+import ru.mairwunnx.mobosses.boss.AdminSpawns
+import ru.mairwunnx.mobosses.boss.SpawnOptions
 import ru.mairwunnx.mobosses.hooks.PlanData
 import ru.mairwunnx.mobosses.lang.LanguageChoices
 import ru.mairwunnx.mobosses.lang.Message
@@ -17,7 +19,7 @@ import ru.mairwunnx.mobosses.menu.Menu
 
 /**
  * `/mobosses` (the menu), `info`, `top`, `reset`, and `language [code|auto]` for players; `reload`,
- * `spawn <entity> <level> <class> [x y z [world]]`, and `killall` for admins, each under its own
+ * `spawn <entity> <level> <class> [x y z [world]] [abilities=…] [count=…]` ([SpawnOptions]), and `killall` for admins, each under its own
  * permission, all of them under `mobosses.admin`. A player spawns a boss two blocks ahead of them; the console gives coordinates.
  */
 class MoBossesCommand(private val plugin: MoBossesPlugin) : BasicCommand {
@@ -124,7 +126,7 @@ class MoBossesCommand(private val plugin: MoBossesPlugin) : BasicCommand {
 
   private fun spawn(sender: CommandSender, args: List<String>) {
     val catalog = plugin.catalog
-    if (args.size !in setOf(3, 6, 7)) return usage(sender)
+    if (args.size < 3) return usage(sender)
     val type = catalog.types.values.firstOrNull { it.key.equals(args[0].removePrefix("minecraft:"), ignoreCase = true) }
       ?: return plugin.texts.send(sender, Message.UNKNOWN_ENTITY, Placeholder.unparsed("entity", args[0]), Placeholder.unparsed("entities", typeKeys().joinToString(", ")))
     val maxLevel = maxOf(100, catalog.settings.progression.levelCurve.maxLevel)
@@ -132,26 +134,18 @@ class MoBossesCommand(private val plugin: MoBossesPlugin) : BasicCommand {
       ?: return plugin.texts.send(sender, Message.BAD_LEVEL, Placeholder.unparsed("level", args[1]), Placeholder.unparsed("max", maxLevel.toString()))
     val clazz = catalog.classes.byKey(args[2])
       ?: return plugin.texts.send(sender, Message.UNKNOWN_CLASS, Placeholder.unparsed("class", args[2]), Placeholder.unparsed("classes", catalog.classes.all.joinToString(", ") { it.key }))
-    val at = where(sender, args.drop(3)) ?: return plugin.texts.send(sender, Message.SPAWN_WHERE)
-
-    if (!catalog.settings.protection.adminSpawnBypass && !plugin.guards.canSpawnBoss(at)) {
-      return plugin.texts.send(sender, Message.SPAWN_FAILED, Placeholder.unparsed("reason", plugin.guards.regionsAt(at).joinToString().ifEmpty { "protected" }))
+    val options = when (val parsed = SpawnOptions.parse(args.drop(3), Abilities.KEYS)) {
+      is SpawnOptions.Parsed.Ok -> parsed.options
+      is SpawnOptions.Parsed.Bad -> return plugin.texts.send(sender, Message.BAD_SPAWN_OPTION, Placeholder.unparsed("option", parsed.arg),
+        Placeholder.unparsed("abilities", Abilities.KEYS.joinToString(", ")))
     }
-    // The console may name a spot nobody stands near; since 26.1 even the spawn chunks load only on demand.
-    at.world.getChunkAt(at)
-    val entity = try {
-      plugin.spawns.spawningByCommand = true
-      at.world.spawn(at, type.entity.entityClass!!) as? LivingEntity
-    } catch (e: IllegalArgumentException) {
-      return plugin.texts.send(sender, Message.SPAWN_FAILED, Placeholder.unparsed("reason", e.message ?: "?"))
-    } finally {
-      plugin.spawns.spawningByCommand = false
+    val at = where(sender, options.place) ?: return plugin.texts.send(sender, Message.SPAWN_WHERE)
+    repeat(options.count) {
+      when (val result = plugin.adminSpawns.spawn(type, clazz, level, at, options.abilities)) {
+        is AdminSpawns.Result.Spawned -> plugin.texts.send(sender, Message.SPAWNED, *plugin.texts.boss(plugin.texts.languageOf(sender), result.boss))
+        is AdminSpawns.Result.Failed -> return plugin.texts.send(sender, Message.SPAWN_FAILED, Placeholder.unparsed("reason", result.reason))
+      }
     }
-    if (entity == null || !entity.isValid) return plugin.texts.send(sender, Message.SPAWN_FAILED, Placeholder.unparsed("reason", "the spawn was cancelled"))
-
-    val boss = plugin.bosses.make(entity, type, clazz, level).also(plugin.bosses::vanillaName)
-    boss.pinned = true
-    plugin.texts.send(sender, Message.SPAWNED, *plugin.texts.boss(plugin.texts.languageOf(sender), boss))
   }
 
   /** Two blocks ahead of a player, or `x y z [world]` for anyone; the console's world defaults to the first one. */
@@ -181,11 +175,17 @@ class MoBossesCommand(private val plugin: MoBossesPlugin) : BasicCommand {
       args.size == 2 -> typeKeys()
       args.size == 3 -> listOf("1", "10", "25", "50", "75", "100")
       args.size == 4 -> plugin.catalog.classes.all.map { it.key }
-      args.size in 5..7 -> (sender as? Player)?.getTargetBlockExact(16)?.let { block -> listOf(block.x, block.y + 1, block.z)[args.size - 5].toString() }?.let(::listOf).orEmpty()
-      args.size == 8 -> Bukkit.getWorlds().map { it.name }
-      else -> emptyList()
+      '=' in last -> SpawnOptions.suggest(last, Abilities.KEYS)
+      else -> placeOptions(sender, args.drop(4).dropLast(1).filterNot { '=' in it }.size) + listOf("abilities=", "count=")
     }
     return options.filter { it.startsWith(last, ignoreCase = true) }
+  }
+
+  /** The coordinate or world that comes after [given] parts of the place, from the block a player looks at. */
+  private fun placeOptions(sender: CommandSender, given: Int): List<String> = when (given) {
+    in 0..2 -> (sender as? Player)?.getTargetBlockExact(16)?.let { block -> listOf(block.x, block.y + 1, block.z)[given].toString() }?.let(::listOf).orEmpty()
+    3 -> Bukkit.getWorlds().map { it.name }
+    else -> emptyList()
   }
 
   private companion object {
