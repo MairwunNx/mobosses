@@ -15,6 +15,7 @@ import ru.mairwunnx.mobosses.progress.Hunter
 import ru.mairwunnx.mobosses.progress.Progress
 import java.util.UUID
 import java.util.concurrent.CompletableFuture
+import kotlin.math.roundToLong
 
 /** What `/mobosses info`, `/mobosses top`, and the menu show, gathered off the server thread from the database. */
 class Stats(private val plugin: MoBossesPlugin) {
@@ -52,6 +53,9 @@ class Stats(private val plugin: MoBossesPlugin) {
     Placeholder.unparsed("experience", LevelProgress.grouped(card.progress.experience)),
     LevelProgress.resolver(plugin.languages, code, plugin.catalog.settings.progression.levelCurve, card.progress.experience),
     Placeholder.unparsed("kills", card.progress.kills.toString()),
+    Placeholder.unparsed("deaths", card.progress.deaths.toString()),
+    Placeholder.unparsed("streak", card.progress.streak.toString()),
+    Placeholder.unparsed("damage", LevelProgress.grouped(card.progress.damage.roundToLong())),
     Placeholder.unparsed("bonus", plugin.survival.percent(plugin.catalog.settings.survivalBonus, card.survivalMinutes).toString()),
     *plugin.survival.time(card.survivalMinutes),
     Placeholder.component("cooldown", if (card.nextBossInSeconds <= 0) plugin.languages.render(code, Message.INFO_READY) ?: Component.empty() else Component.text("${card.nextBossInSeconds / 60}:${"%02d".format(card.nextBossInSeconds % 60)}")),

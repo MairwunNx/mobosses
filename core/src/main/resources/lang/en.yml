@@ -33,6 +33,7 @@ info: |-
   <gray>Level</gray> <num><level></num><dark_gray>/<max></dark_gray> <dark_gray>·</dark_gray> <gray>Rank</gray> <num>#<rank></num>
   <next_level>
   <gray>Experience</gray> <xp><experience></xp> <dark_gray>·</dark_gray> <gray>Bosses killed</gray> <num><kills></num>
+  <gray>Deaths to bosses</gray> <num><deaths></num> <dark_gray>· <streak> in a row · <damage> damage dealt</dark_gray>
   <gray>Next boss near you</gray> <white><cooldown></white>
   <gray>Survival bonus</gray> <num>+<bonus>%</num> <dark_gray>· <hours> h <minutes> min without dying</dark_gray>
 info_ready: "any moment"

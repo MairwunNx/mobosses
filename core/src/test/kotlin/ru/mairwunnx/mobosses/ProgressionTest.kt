@@ -9,6 +9,8 @@ import ru.mairwunnx.mobosses.combat.Shares
 import ru.mairwunnx.mobosses.config.Settings
 import ru.mairwunnx.mobosses.combat.Fatigue
 import ru.mairwunnx.mobosses.spawn.Hunt
+import ru.mairwunnx.mobosses.progress.Deaths
+import ru.mairwunnx.mobosses.progress.Progress
 import java.util.UUID
 import kotlin.random.Random
 import kotlin.test.Test
@@ -146,6 +148,29 @@ class ProgressionTest {
     assertTrue(floor < 40_000)
     assertEquals(level, Leveling.playerLevel(curve, floor))
     assertTrue(Leveling.playerLevel(curve, floor - 1) < level, "one less would drop the level")
+  }
+
+  @Test fun `every death counts, the third in a row costs a level, and a kill that counts ends the streak`() {
+    val curve = progression.levelCurve
+    var progress = Progress(kills = 5, experience = 40_000)
+    val level = Leveling.playerLevel(curve, 40_000)
+    val first = Deaths.died(progress, progression)
+    assertEquals(Leveling.levelFloor(curve, 40_000), first.after.experience)
+    assertEquals(1 to 1, first.after.deaths to first.after.streak)
+    assertTrue(!first.demoted && first.lost > 0)
+    progress = Deaths.died(first.after, progression).after
+    val third = Deaths.died(progress, progression)
+    assertTrue(third.demoted, "the third death in a row costs a level")
+    assertEquals(level - 1, Leveling.playerLevel(curve, third.after.experience))
+    assertEquals(3 to 3, third.after.deaths to third.after.streak)
+    val share = Deaths.killed(third.after, kills = 0, experience = 10, damage = 4.0)
+    assertEquals(3, share.streak, "a share too small to count leaves the streak")
+    val kill = Deaths.killed(share, kills = 1, experience = 10, damage = 6.5)
+    assertEquals(0 to 3, kill.streak to kill.deaths)
+    assertEquals(10.5, kill.damage)
+    val off = Deaths.died(Progress(experience = 40_000, streak = 9), progression.copy(deathPenalty = false))
+    assertEquals(40_000L, off.after.experience)
+    assertTrue(!off.demoted && off.after.streak == 10, "without the penalty deaths still count, and cost nothing")
   }
 
   @Test fun `a streak of deaths drops one level to its floor, never below the first`() {

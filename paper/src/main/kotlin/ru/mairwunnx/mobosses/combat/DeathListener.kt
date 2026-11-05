@@ -21,6 +21,7 @@ import ru.mairwunnx.mobosses.lang.Message
 import java.util.UUID
 import kotlin.random.Random
 import kotlin.math.roundToInt
+import ru.mairwunnx.mobosses.progress.BossEvent
 
 /**
  * A boss's death. Each player's share of its health, their pets' damage included, decides their part
@@ -52,7 +53,7 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
       }
       plugin.loot.bonus(boss, looted)
       multiplyDrops(event, boss, shares.entries.sumOf { (id, share) -> share * (fatigues[id] ?: 1.0) } / shares.values.sum().coerceAtLeast(1e-9))
-      plugin.progression.count(boss.type.key, boss.clazz.key, killed = true)
+      plugin.progression.count(boss.type.key, boss.clazz.key, BossEvent.KILLED)
       announce(boss, shares, experience)
       plugin.worldApi.bossKilled(boss, shares, experience)
     }
@@ -75,8 +76,7 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
     player.giveExp(payout.vanilla)
 
     val levelBefore = plugin.progression.level(player.uniqueId)
-    plugin.progression.add(player.uniqueId, player.name, payout.gained, payout.counts)
-    if (payout.counts) plugin.deathPenalty.won(player)
+    plugin.progression.add(player.uniqueId, player.name, payout.gained, payout.counts, boss.damage[player.uniqueId] ?: 0.0)
     plugin.progression.level(player.uniqueId).takeIf { it > levelBefore }?.let { plugin.worldApi.levelUp(player, levelBefore, it) }
     if (PlanData.available) PlanData.update(player)
 

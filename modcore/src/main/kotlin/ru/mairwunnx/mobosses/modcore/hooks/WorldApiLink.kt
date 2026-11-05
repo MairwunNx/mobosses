@@ -8,6 +8,7 @@ import ru.mairwunnx.mobosses.modcore.MoBosses
 import ru.mairwunnx.mobosses.modcore.boss.Boss
 import ru.mairwunnx.mobosses.progress.Progress
 import java.util.UUID
+import ru.mairwunnx.mobosses.progress.Deaths
 
 /**
  * Mo’Bosses' data in WorldAPI, when it runs, as on Paper: the `mobosses` namespace and its events. [BossesExpansion]
@@ -60,12 +61,18 @@ class WorldApiLink(private val mod: MoBosses) {
 
   fun phaseTwo(boss: Boss) = publish("boss.phase_two", boss(boss), world = world(boss.entity))
 
-  fun diedTo(player: ServerPlayer, boss: Boss, lost: Long) = publish("player.died_to_boss", boss(boss) + mapOf("lost" to lost), player, world(player))
+  /** `streak` and `demoted` came in 2.20: the deaths in a row so far, and whether this one cost a level. */
+  fun diedTo(player: ServerPlayer, boss: Boss, death: Deaths.Death) = publish(
+    "player.died_to_boss", boss(boss) + mapOf("lost" to death.lost, "streak" to death.after.streak, "demoted" to death.demoted), player, world(player),
+  )
+
+  fun demoted(player: ServerPlayer, from: Int, to: Int, streak: Int) = publish("player.demoted", mapOf("from" to from, "level" to to, "streak" to streak), player, world(player))
 
   fun fullMoon(world: String) = publish("full_moon", mapOf("world" to world), world = world)
 
   fun hunter(id: UUID, name: String?, progress: Progress) = mapOf(
     "uuid" to id, "name" to name, "kills" to progress.kills, "experience" to progress.experience,
+    "deaths" to progress.deaths, "streak" to progress.streak, "damage" to progress.damage,
     "level" to Leveling.playerLevel(mod.catalog.settings.progression.levelCurve, progress.experience),
   )
 

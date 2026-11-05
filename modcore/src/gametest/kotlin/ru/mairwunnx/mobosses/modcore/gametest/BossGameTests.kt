@@ -77,6 +77,22 @@ class BossGameTests {
   }
 
   @GameTest
+  fun aDeathToABossCountsInTheDatabase(helper: GameTestHelper) {
+    val player = Players.survivor(helper)
+    val boss = boss(helper, zombie(helper, 3), "common", 10)
+    mod.deathPenalty.died(player, helper.level.damageSources().mobAttack(boss.entity))
+    // The database answers on its own thread: each tick reads the last answer and asks again once it came.
+    var asked: java.util.concurrent.CompletableFuture<ru.mairwunnx.mobosses.progress.Progress>? = null
+    helper.succeedWhen {
+      val progress = asked?.getNow(null)
+      if (asked == null || asked!!.isDone) asked = mod.progression.load(player.uuid)
+      helper.assertTrue(progress != null && progress.deaths == 1 && progress.streak == 1, "the death and the streak are saved, not ${progress?.deaths} and ${progress?.streak}")
+      mod.bosses.remove(boss)
+      helper.level.server.playerList.remove(player)
+    }
+  }
+
+  @GameTest
   fun theDifficultyGradesNewBosses(helper: GameTestHelper) {
     val hard = withDifficulty(helper, Difficulty.HARD) { boss(helper, zombie(helper, 1)) }
     val normal = withDifficulty(helper, Difficulty.NORMAL) { boss(helper, zombie(helper, 3)) }

@@ -33,6 +33,7 @@ info: |-
   <gray>Stufe</gray> <num><level></num><dark_gray>/<max></dark_gray> <dark_gray>·</dark_gray> <gray>Rang</gray> <num>#<rank></num>
   <next_level>
   <gray>Erfahrung</gray> <xp><experience></xp> <dark_gray>·</dark_gray> <gray>Besiegte Bosse</gray> <num><kills></num>
+  <gray>Tode durch Bosse</gray> <num><deaths></num> <dark_gray>· <streak> in Folge · <damage> Schaden ausgeteilt</dark_gray>
   <gray>Nächster Boss bei dir</gray> <white><cooldown></white>
   <gray>Überlebensbonus</gray> <num>+<bonus> %</num> <dark_gray>· <hours> h <minutes> min ohne Tod</dark_gray>
 info_ready: "jeden Moment"

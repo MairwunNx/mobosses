@@ -12,6 +12,7 @@ import ru.mairwunnx.mobosses.lang.Message
 import ru.mairwunnx.mobosses.modcore.MoBosses
 import ru.mairwunnx.mobosses.modcore.data.Data
 import java.util.UUID
+import ru.mairwunnx.mobosses.progress.BossEvent
 
 /**
  * The bosses in loaded chunks, as Paper's `Bosses`. A boss is an ordinary mob with Mo’Bosses' data on it: [make]
@@ -51,7 +52,7 @@ class Bosses(private val mod: MoBosses) {
     BossFactory.apply(entity, type, clazz, lvl, summoner, settings.formula, graded, settings.difficulty.weights)
     val boss = register(entity, type, clazz, lvl, summoner)
     boss.seen = mod.now()
-    mod.progression.count(type.key, clazz.key, killed = false)
+    mod.progression.count(type.key, clazz.key, BossEvent.SPAWNED)
     mod.log.debug { "${type.key} became a level $lvl ${clazz.key} boss at ${entity.level().dimension().identifier()} ${entity.blockX} ${entity.blockY} ${entity.blockZ}" }
     return boss
   }

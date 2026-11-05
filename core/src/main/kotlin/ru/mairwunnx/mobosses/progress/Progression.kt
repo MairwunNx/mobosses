@@ -83,9 +83,9 @@ class Progression(
 
   fun bestiary(player: UUID): CompletableFuture<List<BestiaryEntry>> = store?.bestiary(player) ?: CompletableFuture.completedFuture(emptyList())
 
-  /** Counts a boss that spawned, or that players killed, for the statistics. */
-  fun count(type: String, clazz: String, killed: Boolean) {
-    store?.count(type, clazz, killed)
+  /** Counts a boss that spawned, one players killed, or a player it killed, for the statistics. */
+  fun count(type: String, clazz: String, event: BossEvent) {
+    store?.count(type, clazz, event)
   }
 
   /** Null for a player whose progress isn't loaded, so Plan keeps what it stored last instead of a zero. */
@@ -127,34 +127,31 @@ class Progression(
   }
 
   /**
-   * After a player died to a boss: their experience drops to the least that keeps their level, so the
-   * way to the next one starts over, or, when they [demote], to the least of the level below. [done] gets
-   * what they lost, on the server thread.
+   * After a player died to a boss: the death counts, and with `death_penalty` on their experience drops to the least
+   * that keeps their level, or the level below's after a streak ([Deaths.died]). [done] gets the death, on the server
+   * thread.
    */
-  fun penalize(player: UUID, name: String, demote: Boolean, done: (lost: Long) -> Unit) {
-    val curve = settings().progression.levelCurve
-    val floor = if (demote) Leveling::demotedFloor else Leveling::levelFloor
-    val change = { p: Progress -> p.copy(experience = floor(curve, p.experience)) }
+  fun died(player: UUID, name: String, done: (Deaths.Death) -> Unit) {
+    val settings = settings().progression
     val store = store
     if (store == null) {
-      val before = of(player)
-      cache.computeIfPresent(player) { _, p -> change(p) }
-      return (before.experience - of(player).experience).takeIf { it > 0 }?.let(done) ?: Unit
+      val death = Deaths.died(of(player), settings)
+      cache.computeIfPresent(player) { _, _ -> death.after }
+      return done(death)
     }
-    store.update(player, name, change).whenComplete { result, error ->
+    var death: Deaths.Death? = null
+    store.update(player, name) { Deaths.died(it, settings).also { result -> death = result }.after }.whenComplete { result, error ->
       if (error != null) return@whenComplete log.warn("Can't save the progress of $name: ${error.message}")
-      val (before, after) = result
-      cache.computeIfPresent(player) { _, _ -> after }
-      val lost = before.experience - after.experience
-      if (lost > 0) onMain(Runnable { done(lost) })
+      cache.computeIfPresent(player) { _, _ -> result.second }
+      death?.let { onMain(Runnable { done(it) }) }
     }
   }
 
-  /** Adds a player's experience from a kill, and the kill itself when it [counts]. The server thread. */
-  fun add(player: UUID, name: String, experience: Long, counts: Boolean) {
+  /** Adds a player's experience and [damage] from a kill, and the kill itself when it [counts]. The server thread. */
+  fun add(player: UUID, name: String, experience: Long, counts: Boolean, damage: Double = 0.0) {
     val kills = if (counts) 1 else 0
-    cache[player] = of(player).let { Progress(it.kills + kills, it.experience + experience) }
-    store?.add(player, name, kills, experience)?.whenComplete { saved, error ->
+    cache[player] = Deaths.killed(of(player), kills, experience, damage)
+    store?.add(player, name, kills, experience, damage)?.whenComplete { saved, error ->
       if (error != null) log.warn("Can't save the progress of $name: ${error.message}")
       // The database's totals win: they count kills from before a failed load, or from another server on the same database.
       else cache.computeIfPresent(player) { _, _ -> saved }

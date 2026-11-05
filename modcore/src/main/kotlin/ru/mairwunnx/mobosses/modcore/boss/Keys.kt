@@ -64,8 +64,6 @@ object Keys {
   const val HURT = "hurt"
   /** On players: the boss type that last killed them and when, `type|millis`. */
   const val AVENGE = "avenge"
-  /** On players: their deaths to bosses since their last kill that counted. */
-  const val DEATH_STREAK = "death_streak"
   /** On players: when they may get rewards again. */
   const val REWARDS_UNTIL = "rewards_until"
   /** On players: minutes played since their last death, for the survival bonus. */

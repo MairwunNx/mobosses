@@ -33,6 +33,7 @@ info: |-
   <gray>Nível</gray> <num><level></num><dark_gray>/<max></dark_gray> <dark_gray>·</dark_gray> <gray>Posição</gray> <num>#<rank></num>
   <next_level>
   <gray>Experiência</gray> <xp><experience></xp> <dark_gray>·</dark_gray> <gray>Chefes derrotados</gray> <num><kills></num>
+  <gray>Mortes para chefes</gray> <num><deaths></num> <dark_gray>· <streak> seguidas · <damage> de dano causado</dark_gray>
   <gray>Próximo chefe perto de você</gray> <white><cooldown></white>
   <gray>Bônus de sobrevivência</gray> <num>+<bonus>%</num> <dark_gray>· <hours> h <minutes> min sem morrer</dark_gray>
 info_ready: "a qualquer momento"

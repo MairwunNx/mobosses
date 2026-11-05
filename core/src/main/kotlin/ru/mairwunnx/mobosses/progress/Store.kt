@@ -71,16 +71,21 @@ class Store(private val settings: Settings.Database, folder: File, private val c
    * Adds to a player's record and returns the new totals. It reads and writes in one transaction, so
    * a record the server hasn't loaded, or one another server shares, never gets overwritten.
    */
-  fun add(player: UUID, name: String, kills: Int, experience: Long): CompletableFuture<Progress> = query {
+  fun add(player: UUID, name: String, kills: Int, experience: Long, damage: Double = 0.0): CompletableFuture<Progress> = query {
     val current = PlayerProgressTable.selectAll().where { PlayerProgressTable.uuid eq player.toString() }.forUpdate().singleOrNull()?.let(::progress) ?: Progress()
-    val next = Progress(current.kills + kills, current.experience + experience)
-    PlayerProgressTable.upsert {
-      it[uuid] = player.toString()
-      it[bossKills] = next.kills
-      it[totalExperience] = next.experience
-      it[this.name] = name
-    }
+    val next = Deaths.killed(current, kills, experience, damage)
+    write(player, name, next)
     next
+  }
+
+  private fun write(player: UUID, name: String, next: Progress) = PlayerProgressTable.upsert {
+    it[uuid] = player.toString()
+    it[bossKills] = next.kills
+    it[totalExperience] = next.experience
+    it[bossDeaths] = next.deaths
+    it[deathStreak] = next.streak
+    it[bossDamage] = next.damage
+    it[this.name] = name
   }
 
   /** Wipes a player's record: they start again at level 1 and leave the board. */
@@ -93,12 +98,7 @@ class Store(private val settings: Settings.Database, folder: File, private val c
   fun update(player: UUID, name: String, change: (Progress) -> Progress): CompletableFuture<Pair<Progress, Progress>> = query {
     val current = PlayerProgressTable.selectAll().where { PlayerProgressTable.uuid eq player.toString() }.forUpdate().singleOrNull()?.let(::progress) ?: Progress()
     val next = change(current)
-    if (next != current) PlayerProgressTable.upsert {
-      it[uuid] = player.toString()
-      it[bossKills] = next.kills
-      it[totalExperience] = next.experience
-      it[this.name] = name
-    }
+    if (next != current) write(player, name, next)
     current to next
   }
 
@@ -149,25 +149,31 @@ class Store(private val settings: Settings.Database, folder: File, private val c
   private fun entries(player: UUID) = PlayerBossKillsTable.selectAll().where { PlayerBossKillsTable.uuid eq player.toString() }
     .map { BestiaryEntry(it[PlayerBossKillsTable.type], it[PlayerBossKillsTable.clazz], it[PlayerBossKillsTable.kills], it[PlayerBossKillsTable.bestLevel]) }
 
-  /** Counts a boss that spawned, or one players killed. */
-  fun count(type: String, clazz: String, killed: Boolean) {
+  /** Counts a boss that spawned, one players killed, or a player a boss killed. */
+  fun count(type: String, clazz: String, event: BossEvent) {
     query {
       val key = (BossStatsTable.type eq type) and (BossStatsTable.clazz eq clazz)
       val row = BossStatsTable.selectAll().where { key }.forUpdate().singleOrNull()
       BossStatsTable.upsert {
         it[this.type] = type
         it[this.clazz] = clazz
-        it[spawned] = (row?.get(spawned) ?: 0L) + if (killed) 0 else 1
-        it[this.killed] = (row?.get(this.killed) ?: 0L) + if (killed) 1 else 0
+        it[spawned] = (row?.get(spawned) ?: 0L) + if (event == BossEvent.SPAWNED) 1 else 0
+        it[killed] = (row?.get(killed) ?: 0L) + if (event == BossEvent.KILLED) 1 else 0
+        it[playerKills] = (row?.get(playerKills) ?: 0L) + if (event == BossEvent.KILLED_A_PLAYER) 1 else 0
       }
     }
   }
 
   fun counts(): CompletableFuture<List<BossCount>> = query {
-    BossStatsTable.selectAll().map { BossCount(it[BossStatsTable.type], it[BossStatsTable.clazz], it[BossStatsTable.spawned], it[BossStatsTable.killed]) }
+    BossStatsTable.selectAll().map {
+      BossCount(it[BossStatsTable.type], it[BossStatsTable.clazz], it[BossStatsTable.spawned], it[BossStatsTable.killed], it[BossStatsTable.playerKills])
+    }
   }
 
-  private fun progress(row: ResultRow) = Progress(row[PlayerProgressTable.bossKills], row[PlayerProgressTable.totalExperience])
+  private fun progress(row: ResultRow) = Progress(
+    row[PlayerProgressTable.bossKills], row[PlayerProgressTable.totalExperience],
+    row[PlayerProgressTable.bossDeaths], row[PlayerProgressTable.deathStreak], row[PlayerProgressTable.bossDamage],
+  )
 
   private fun <T> query(block: JdbcTransaction.() -> T): CompletableFuture<T> = CompletableFuture.supplyAsync({ transaction(database) { block() } }, worker)
 

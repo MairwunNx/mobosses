@@ -4,6 +4,7 @@ import ru.mairwunnx.mobosses.algebra.LegacyLevels
 import ru.mairwunnx.mobosses.algebra.Leveling
 import ru.mairwunnx.mobosses.config.Settings
 import ru.mairwunnx.mobosses.progress.BossCount
+import ru.mairwunnx.mobosses.progress.BossEvent
 import ru.mairwunnx.mobosses.progress.Progress
 import ru.mairwunnx.mobosses.progress.Store
 import java.nio.file.Files
@@ -36,11 +37,14 @@ class StoreTest {
       assertEquals(LegacyLevels.level(curve, 67921, 1430), Leveling.playerLevel(curve, carried), "the player keeps their level")
       assertEquals(Progress(1431, carried + 100), store.add(player, "Steve", 1, 100).get())
       assertEquals(Progress(1, 5), store.add(UUID(0, 1), "Alex", 1, 5).get())
+      // 2.20's columns join the 1.x table: deaths, the streak, and damage save and read back.
+      store.update(player, "Steve") { it.copy(deaths = 4, streak = 2) }.get()
+      assertEquals(Progress(1432, carried + 110, deaths = 4, streak = 0, damage = 37.5), store.add(player, "Steve", 1, 10, 37.5).get())
     }
     // Opens again, as on the next start: nothing is carried twice.
     Store(Settings.Database(), folder, carry).use {
       assertEquals(0, it.carried)
-      assertEquals(Progress(1431, carried + 100), it.load(player).get())
+      assertEquals(Progress(1432, carried + 110, deaths = 4, damage = 37.5), it.load(player).get())
     }
     DriverManager.getConnection("jdbc:sqlite:${folder.resolve("bosses.db")}").use { db ->
       db.createStatement().use {
@@ -65,12 +69,13 @@ class StoreTest {
       store.add(UUID(0, 4), "Mia", 40, 10).get()
       assertEquals("Steve", store.top(1, score).get().single().name)
 
-      store.count("zombie", "rare", killed = false)
-      store.count("zombie", "rare", killed = false)
-      store.count("zombie", "rare", killed = true)
-      store.count("blaze", "mythic", killed = false)
+      store.count("zombie", "rare", BossEvent.SPAWNED)
+      store.count("zombie", "rare", BossEvent.SPAWNED)
+      store.count("zombie", "rare", BossEvent.KILLED)
+      store.count("zombie", "rare", BossEvent.KILLED_A_PLAYER)
+      store.count("blaze", "mythic", BossEvent.SPAWNED)
       assertEquals(
-        setOf(BossCount("zombie", "rare", 2, 1), BossCount("blaze", "mythic", 1, 0)),
+        setOf(BossCount("zombie", "rare", 2, 1, 1), BossCount("blaze", "mythic", 1, 0)),
         store.counts().get().toSet(),
       )
     }

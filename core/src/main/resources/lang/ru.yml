@@ -33,6 +33,7 @@ info: |-
   <gray>Уровень</gray> <num><level></num><dark_gray>/<max></dark_gray> <dark_gray>·</dark_gray> <gray>Место</gray> <num>#<rank></num>
   <next_level>
   <gray>Опыт</gray> <xp><experience></xp> <dark_gray>·</dark_gray> <gray>Убито боссов</gray> <num><kills></num>
+  <gray>Смертей от боссов</gray> <num><deaths></num> <dark_gray>· подряд: <streak> · урона нанесено: <damage></dark_gray>
   <gray>Следующий босс рядом</gray> <white><cooldown></white>
   <gray>Бонус выживания</gray> <num>+<bonus>%</num> <dark_gray>· <hours> ч <minutes> мин без смертей</dark_gray>
 info_ready: "в любой момент"

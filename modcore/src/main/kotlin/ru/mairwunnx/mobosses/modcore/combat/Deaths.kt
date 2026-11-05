@@ -22,6 +22,7 @@ import java.util.UUID
 import java.util.function.Consumer
 import kotlin.math.roundToInt
 import kotlin.random.Random
+import ru.mairwunnx.mobosses.progress.BossEvent
 
 /**
  * A boss's death, as Paper's `DeathListener`. Each player's share of its health, their pets' damage included, decides
@@ -92,7 +93,7 @@ class Deaths(private val mod: MoBosses) {
       val fatigue = shares.entries.sumOf { (id, share) -> share * (fatigues[id] ?: 1.0) } / shares.values.sum().coerceAtLeast(1e-9)
       val multiplier = LootRules.vanillaMultiplier(mod.catalog.settings.loot.vanillaDrops, boss.clazz.key, boss.level, fatigue)
       if (multiplier > 1.0) multipliers[boss.uuid] = multiplier
-      mod.progression.count(boss.type.key, boss.clazz.key, killed = true)
+      mod.progression.count(boss.type.key, boss.clazz.key, BossEvent.KILLED)
       announce(boss, shares, experience)
       mod.worldApi.bossKilled(boss, shares, experience)
     }
@@ -115,8 +116,7 @@ class Deaths(private val mod: MoBosses) {
     val payout = Payout.of(settings, mod.catalog.rewards, share, petWorth, fatigue, experience, baseHealth, boss.clazz.experience, boss.level, levelBefore, group)
     player.giveExperiencePoints(payout.vanilla)
 
-    mod.progression.add(player.uuid, player.plainTextName, payout.gained, payout.counts)
-    if (payout.counts) mod.deathPenalty.won(player)
+    mod.progression.add(player.uuid, player.plainTextName, payout.gained, payout.counts, boss.damage[player.uuid] ?: 0.0)
     mod.progression.level(player.uuid).takeIf { it > levelBefore }?.let { mod.worldApi.levelUp(player, levelBefore, it) }
 
     if (share >= payout.lootShare && Random.nextDouble() < fatigue) {
