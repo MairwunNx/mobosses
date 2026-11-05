@@ -6,7 +6,13 @@ The “Release” workflow takes the notes for a version from its section here, 
 
 ### New
 
+- ☠️ **Your card counts your deaths.** `/mobosses` and `/mobosses info` show how many times bosses killed you, how many of those came in a row, and how much damage you dealt to bosses that died. Deaths count from this version on, whether `death_penalty` is on or not.
+- 📊 **More numbers for dashboards.** WorldAPI’s hunters and player cards carry `deaths`, `streak`, and `damage`, its leaderboards add `deaths` and `damage`, and `stats` adds the players bosses killed, by type and class, and how often each ability went off since the server started. `player.died_to_boss` tells the streak and whether it cost a level, and the new `player.demoted` event marks each lost level. Plan shows deaths, the streak, and damage on a player’s page, and the players each class and type killed. PlaceholderAPI, MiniPlaceholders, and Text Placeholder API get `deaths`, `streak`, and `damage`. Allay’s `hunt` tool tells a player their deaths too.
 - 🥚 **The mods spawn a boss from the menu too.** On Fabric and NeoForge, admins with `mobosses.spawn` get the button in `/mobosses` that Paper got in 2.19.0: the mob, its class, its level a digit at a time, then a chunk on the grid around you, or your own head to spawn it right on you.
+
+### Changed
+
+- 💀 **The streak of deaths lives in the database.** 2.19.0 kept it on the player, where only their own game saw it; now the card, other players’ `/mobosses info`, and WorldAPI see it too. A streak that started on 2.19.0 starts over.
 
 ## 2.19.0
 

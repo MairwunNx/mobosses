@@ -32,7 +32,7 @@ class BossesExpansion private constructor(private val plugin: MoBossesPlugin, pr
       val limit = request.query("limit")?.toIntOrNull()?.coerceIn(1, 50) ?: 10
       plugin.progression.top(limit).thenApply { hunters -> hunters.map { link.hunter(UUID.fromString(it.uuid), plugin.menuStats.name(it), it.progress) } }
     }.publicly(),
-    Resource.of("players/{player}", "A player's card, by UUID or name: level, experience, kills, and rank") { request ->
+    Resource.of("players/{player}", "A player's card, by UUID or name: level, experience, kills, deaths to bosses and the streak of them, damage dealt, and rank") { request ->
       val id = link.player(request.path("player"))
       plugin.progression.load(id).thenCombine(plugin.progression.rank(id)) { progress, rank ->
         link.hunter(id, Bukkit.getOfflinePlayer(id).name, progress) + mapOf("rank" to rank, "maxLevel" to plugin.catalog.settings.progression.levelCurve.maxLevel)
@@ -43,14 +43,16 @@ class BossesExpansion private constructor(private val plugin: MoBossesPlugin, pr
         entries.map { mapOf("type" to it.type, "class" to it.clazz, "kills" to it.kills, "bestLevel" to it.bestLevel) }
       }
     }.publicly(),
-    Resource.of("leaderboards/{board}", "Players ranked by kills, level, or experience, shaped as WorldAPI's own leaderboards; ?limit=1..500") { request ->
+    Resource.of("leaderboards/{board}", "Players ranked by kills, level, experience, deaths to bosses, or damage to them, shaped as WorldAPI's own leaderboards; ?limit=1..500") { request ->
       val board = request.path("board")
       val curve = plugin.catalog.settings.progression.levelCurve
       val (title, unit, score) = when (board) {
         "kills" -> Triple("Bosses killed", "bosses", { p: Progress -> p.kills.toDouble() })
         "level" -> Triple("Mo’Bosses level", "level", { p: Progress -> p.experience.toDouble() })
         "experience" -> Triple("Mo’Bosses experience", "xp", { p: Progress -> p.experience.toDouble() })
-        else -> throw NoSuchElementException("Boards: kills, level, experience")
+        "deaths" -> Triple("Deaths to bosses", "deaths", { p: Progress -> p.deaths.toDouble() })
+        "damage" -> Triple("Damage to bosses", "hp", { p: Progress -> p.damage })
+        else -> throw NoSuchElementException("Boards: kills, level, experience, deaths, damage")
       }
       plugin.progression.board(request.query("limit")?.toIntOrNull()?.coerceIn(1, 500) ?: 10, score).thenApply { (hunters, total) ->
         mapOf(
@@ -59,6 +61,8 @@ class BossesExpansion private constructor(private val plugin: MoBossesPlugin, pr
             val value = when (board) {
               "kills" -> hunter.progress.kills.toDouble()
               "level" -> Leveling.playerLevel(curve, hunter.progress.experience).toDouble()
+              "deaths" -> hunter.progress.deaths.toDouble()
+              "damage" -> hunter.progress.damage
               else -> hunter.progress.experience.toDouble()
             }
             mapOf("place" to i + 1, "player" to mapOf("uuid" to hunter.uuid, "name" to plugin.menuStats.name(hunter)), "value" to value)
@@ -66,13 +70,15 @@ class BossesExpansion private constructor(private val plugin: MoBossesPlugin, pr
         )
       }
     }.publicly(),
-    Resource.of("stats", "Bosses alive now, spawned, and killed, in all and by type and class") {
+    Resource.of("stats", "Bosses alive now, spawned, killed, and the players they killed, in all and by type and class; abilities cast since the start") {
       plugin.progression.counts().thenApply { counts ->
         mapOf(
           "alive" to PlanData.bossesAlive,
           "spawned" to counts.sumOf { it.spawned },
           "killed" to counts.sumOf { it.killed },
-          "counts" to counts.map { mapOf("type" to it.type, "class" to it.clazz, "spawned" to it.spawned, "killed" to it.killed) },
+          "playerKills" to counts.sumOf { it.playerKills },
+          "counts" to counts.map { mapOf("type" to it.type, "class" to it.clazz, "spawned" to it.spawned, "killed" to it.killed, "playerKills" to it.playerKills) },
+          "abilities" to plugin.abilities.casts.toSortedMap(),
         )
       }
     }.publicly(),
@@ -86,7 +92,8 @@ class BossesExpansion private constructor(private val plugin: MoBossesPlugin, pr
     EventType.of("boss.killed", "Players killed a boss: its type, class, level, and each player's share").publicly().recorded(),
     EventType.of("player.level_up", "A player reached a new Mo’Bosses level").publicly().recorded(),
     EventType.of("player.achievement", "A player earned a Mo’Bosses achievement").publicly().recorded(),
-    EventType.of("player.died_to_boss", "A boss killed a player, and what progress it burned").publicly(),
+    EventType.of("player.died_to_boss", "A boss killed a player, what progress it burned, and their deaths in a row").publicly(),
+    EventType.of("player.demoted", "Deaths to bosses in a row cost a player a Mo’Bosses level").publicly().recorded(),
     EventType.of("boss.phase_two", "A boss entered its second phase").publicly(),
     EventType.of("full_moon", "A full moon rose: a night of the hunt").publicly().recorded(),
   )

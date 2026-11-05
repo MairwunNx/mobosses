@@ -9,13 +9,15 @@ import ru.mairwunnx.mobosses.modcore.Mod
 import ru.mairwunnx.mobosses.modcore.MoBosses
 import ru.mairwunnx.mobosses.modcore.text.Chat
 import java.util.UUID
+import ru.mairwunnx.mobosses.progress.HunterValues
 
 /**
  * Text Placeholder API both ways, when it's there, as PlaceholderAPI on Paper. `<papi:name>` in a message asks for one
  * placeholder for the player who reads it: a tag, never `%…%` replaced over a whole text, so a percent sign or a
  * player's words stay as they are. The name is Text Placeholder API's, like `player:name`; a PlaceholderAPI-style one
  * without a colon reads its first `_` as the colon, so `player_name` asks for `player:name`. And `%mobosses:level%`,
- * `%mobosses:xp%`, and `%mobosses:kills%` tell other mods (TAB, scoreboards, Styled Chat) about the hunt.
+ * `%mobosses:xp%`, `%mobosses:kills%`, `%mobosses:deaths%`, `%mobosses:streak%`, and `%mobosses:damage%` tell other
+ * mods (TAB, scoreboards, Styled Chat) about the hunt.
  */
 object Placeholders {
   /** Patbox's on Fabric, its port on NeoForge (`placeholder_api_neoforge`); both keep the API's classes. */
@@ -44,12 +46,7 @@ object Placeholders {
   fun value(name: String, player: UUID?): String {
     val mod = Mod.current ?: return ""
     val id = player ?: return ""
-    return when (name) {
-      "level" -> mod.progression.level(id).toString()
-      "xp", "experience" -> mod.progression.of(id).experience.toString()
-      "kills" -> mod.progression.of(id).kills.toString()
-      else -> ""
-    }
+    return HunterValues.value(name, mod.progression.of(id), mod.progression.level(id)).orEmpty()
   }
 
   // Only touched when the API is loaded.
@@ -63,7 +60,7 @@ object Placeholders {
       return if (result.isValid) result.component() else null
     }
 
-    fun register() = listOf("level", "xp", "experience", "kills").forEach { name ->
+    fun register() = HunterValues.NAMES.forEach { name ->
       eu.pb4.placeholders.api.Placeholders.registerServer<Unit>(Identifier.fromNamespaceAndPath("mobosses", name)) { context, _ ->
         val online = if (context.hasPlayer()) context.player() as? ServerPlayer else null
         val id = online?.uuid ?: if (context.hasGameProfile()) context.gameProfile()?.id else null

@@ -20,9 +20,10 @@ import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 /**
- * Mo’Bosses in Plan, when Plan is there: a player's page shows their Mo’Bosses level, experience, and
- * kills, and the players table gets a level column. The server page counts the bosses alive, spawned,
- * and killed, and has tables of the best hunters and of bosses by class and by type. Plan asks from
+ * Mo’Bosses in Plan, when Plan is there: a player's page shows their Mo’Bosses level, experience, kills,
+ * deaths to bosses, and damage dealt to them, and the players table gets a level column. The server page
+ * counts the bosses alive, spawned, and killed, and the players they killed, and has tables of the best
+ * hunters and of bosses by class and by type. Plan asks from
  * its own threads, so the extension reads the progress cache, a count the server thread keeps, and the
  * database, whose queries run on its own thread.
  */
@@ -49,7 +50,7 @@ object PlanData {
 
   private fun add(plugin: MoBossesPlugin, extension: Extension, quiet: Boolean) {
     runCatching { ExtensionService.getInstance().register(extension).orElse(null) }
-      .onSuccess { caller = it; if (it != null) plugin.log.info("Plan found: levels, experience, and kills show in its Plugins sections") }
+      .onSuccess { caller = it; if (it != null) plugin.log.info("Plan found: levels, experience, kills, and deaths show in its Plugins sections") }
       .onFailure { if (!quiet) plugin.log.warn("Couldn't add Mo’Bosses to Plan: ${it.message}") }
   }
 
@@ -73,6 +74,15 @@ object PlanData {
     @NumberProvider(text = "Bosses killed", description = "Kills that counted toward their level", priority = 80, iconName = "skull", iconColor = Color.GREY)
     fun kills(player: UUID): Long = known(player).kills.toLong()
 
+    @NumberProvider(text = "Deaths to bosses", description = "Every time a boss killed them", priority = 70, iconName = "skull-crossbones", iconColor = Color.BLACK)
+    fun deaths(player: UUID): Long = known(player).deaths.toLong()
+
+    @NumberProvider(text = "Deaths in a row", description = "Deaths to bosses since their last kill that counted; from the third, each costs a level", priority = 60, iconName = "heart-broken", iconColor = Color.RED)
+    fun streak(player: UUID): Long = known(player).streak.toLong()
+
+    @NumberProvider(text = "Damage to bosses", description = "Health they took from bosses that died", priority = 50, iconName = "fist-raised", iconColor = Color.DEEP_ORANGE)
+    fun damage(player: UUID): Long = known(player).damage.toLong()
+
     @NumberProvider(text = "Bosses alive", description = "Bosses in loaded chunks right now", priority = 100, iconName = "dragon", iconColor = Color.RED)
     fun alive(): Long = bossesAlive.toLong()
 
@@ -81,6 +91,9 @@ object PlanData {
 
     @NumberProvider(text = "Bosses killed", description = "Every boss players killed", priority = 80, iconName = "skull", iconColor = Color.GREY)
     fun killed(): Long = counts().sumOf { it.killed }
+
+    @NumberProvider(text = "Players killed by bosses", description = "Every player a boss killed", priority = 70, iconName = "skull-crossbones", iconColor = Color.BLACK)
+    fun playerKills(): Long = counts().sumOf { it.playerKills }
 
     @TableProvider(tableColor = Color.RED)
     fun hunters(): Table {
@@ -95,10 +108,11 @@ object PlanData {
     @TableProvider(tableColor = Color.ORANGE)
     fun classes(): Table {
       val table = Table.builder().columnOne("Class", icon("gem")).columnTwo("Spawned", icon("egg")).columnThree("Killed", icon("skull"))
+        .columnFour("Players killed", icon("skull-crossbones"))
       val byClass = counts().groupBy { it.clazz }
       plugin.catalog.classes.all.forEach { clazz ->
         val rows = byClass[clazz.key].orEmpty()
-        table.addRow(clazz.key.replaceFirstChar(Char::uppercase), rows.sumOf { it.spawned }, rows.sumOf { it.killed })
+        table.addRow(clazz.key.replaceFirstChar(Char::uppercase), rows.sumOf { it.spawned }, rows.sumOf { it.killed }, rows.sumOf { it.playerKills })
       }
       return table.build()
     }
@@ -106,8 +120,9 @@ object PlanData {
     @TableProvider(tableColor = Color.DEEP_ORANGE)
     fun types(): Table {
       val table = Table.builder().columnOne("Boss", icon("dragon")).columnTwo("Spawned", icon("egg")).columnThree("Killed", icon("skull"))
+        .columnFour("Players killed", icon("skull-crossbones"))
       counts().groupBy { it.type }.entries.sortedByDescending { (_, rows) -> rows.sumOf { it.spawned } }.forEach { (type, rows) ->
-        table.addRow(type.replace('_', ' ').replaceFirstChar(Char::uppercase), rows.sumOf { it.spawned }, rows.sumOf { it.killed })
+        table.addRow(type.replace('_', ' ').replaceFirstChar(Char::uppercase), rows.sumOf { it.spawned }, rows.sumOf { it.killed }, rows.sumOf { it.playerKills })
       }
       return table.build()
     }

@@ -9,6 +9,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import ru.mairwunnx.mobosses.MoBossesPlugin
+import ru.mairwunnx.mobosses.progress.HunterValues
 
 /**
  * MiniPlaceholders both ways, when it's there. Messages resolve other plugins' tags, like
@@ -26,14 +27,12 @@ object MiniPlaceholderTags {
 
   /** Registers `<mobosses_…>`. Call only when [available]. Returns a handle that unregisters it. */
   fun register(plugin: MoBossesPlugin): AutoCloseable {
-    fun tag(value: (Player) -> Any) = AudienceTagResolver<Player> { player, _, _ -> Tag.selfClosingInserting(Component.text(value(player).toString())) }
-    val expansion = Expansion.builder("mobosses")
-      .author("MairwunNx")
-      .version(plugin.pluginMeta.version)
-      .audiencePlaceholder(Player::class.java, "level", tag { plugin.progression.level(it.uniqueId) })
-      .audiencePlaceholder(Player::class.java, "xp", tag { plugin.progression.of(it.uniqueId).experience })
-      .audiencePlaceholder(Player::class.java, "kills", tag { plugin.progression.of(it.uniqueId).kills })
-      .build()
+    fun tag(name: String) = AudienceTagResolver<Player> { player, _, _ ->
+      Tag.selfClosingInserting(Component.text(HunterValues.value(name, plugin.progression.of(player.uniqueId), plugin.progression.level(player.uniqueId)).orEmpty()))
+    }
+    val builder = Expansion.builder("mobosses").author("MairwunNx").version(plugin.pluginMeta.version)
+    HunterValues.NAMES.filter { it != "experience" }.forEach { builder.audiencePlaceholder(Player::class.java, it, tag(it)) }
+    val expansion = builder.build()
     expansion.register()
     return AutoCloseable { expansion.unregister() }
   }

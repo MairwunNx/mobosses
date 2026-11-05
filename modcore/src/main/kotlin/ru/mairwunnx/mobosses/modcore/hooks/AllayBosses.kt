@@ -70,7 +70,7 @@ class AllayBosses private constructor(private val mod: MoBosses) : AllayExpansio
         },
       ))
     },
-    tool("hunt", "The asker's own Mo’Bosses hunt: their level and the top level, experience and the experience the next level needs, bosses killed, place among hunters, seconds until a boss may spawn near them again, minutes of their survival bonus, whether dying to a boss burns progress here, and their bestiary (kills and best level by boss type and class).", false) { call ->
+    tool("hunt", "The asker's own Mo’Bosses hunt: their level and the top level, experience and the experience the next level needs, bosses killed, deaths to bosses and how many of them in a row (from the third in a row, each costs a level), damage dealt to bosses killed, place among hunters, seconds until a boss may spawn near them again, minutes of their survival bonus, whether dying to a boss burns progress here, and their bestiary (kills and best level by boss type and class).", false) { call ->
       val player = player(call.asker())
       val curve = mod.catalog.settings.progression.levelCurve
       val deathPenalty = mod.catalog.settings.progression.deathPenalty
@@ -78,7 +78,7 @@ class AllayBosses private constructor(private val mod: MoBosses) : AllayExpansio
         ToolResult.of(mapOf(
           "level" to card.level, "max_level" to curve.maxLevel, "experience" to card.progress.experience,
           "next_level_experience" to Leveling.experienceFor(curve, card.level + 1),
-          "kills" to card.progress.kills, "rank" to card.rank, "next_boss_in_seconds" to card.nextBossInSeconds,
+          "kills" to card.progress.kills, "deaths" to card.progress.deaths, "deaths_in_a_row" to card.progress.streak, "damage" to card.progress.damage, "rank" to card.rank, "next_boss_in_seconds" to card.nextBossInSeconds,
           "survival_minutes" to card.survivalMinutes, "death_penalty" to deathPenalty,
           "bestiary" to bestiary.map { mapOf("type" to it.type, "class" to it.clazz, "kills" to it.kills, "best_level" to it.bestLevel) },
         )).summary("level ${card.level}")
