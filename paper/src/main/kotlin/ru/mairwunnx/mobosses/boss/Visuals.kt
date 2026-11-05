@@ -30,7 +30,8 @@ class Visuals(private val plugin: MoBossesPlugin) {
       val name = team(boss)
       val team = scoreboard.getTeam(name) ?: scoreboard.registerNewTeam(name)
       val color = NamedTextColor.nearestTo(boss.color)
-      if (team.color() != color) team.color(color)
+      // A new team has no color, and asking for it throws.
+      if (!team.hasColor() || team.color() != color) team.color(color)
       team.addEntry(boss.uuid.toString())
       boss.entity.isGlowing = true
     }

@@ -11,7 +11,8 @@ The “Release” workflow takes the notes for a version from its section here, 
 
 ### Fixed
 
-- 💥 **A slam hurts.** A player close to a boss took a shockwave, whirlwind, stampede, or pounce mostly for nothing: the boss’s own swing left them the game’s half second of immunity, which swallowed a lesser hit, and at high levels the swing was almost always the harder one. Now these blows land in full whenever they come. Meteors, lightning, and arrows hit as before.
+- 💥 **A slam hurts.** A shockwave mostly missed: the player’s blow knocked the boss two or three blocks back during its roar, and the slam went off out of their reach, behind the boss. Now the boss stands its ground until it slams. And a player close to a boss took a shockwave, whirlwind, stampede, or pounce mostly for nothing: the boss’s own swing left them the game’s half second of immunity, which swallowed a lesser hit, and at high levels the swing was almost always the harder one. Now these blows land in full whenever they come. Meteors, lightning, and arrows hit as before.
+- ✨ **Bosses glow on a new world.** On a world whose glow teams had no color yet, Paper threw an error every second, and bosses got neither their glow nor their aura. Now the first boss of each class sets its team’s color.
 - 🕸️ **A boss walks through its own traps.** A boss and its minions got stuck in the cobwebs it spun and caught fire in the rings it lit. Now they pass through what abilities leave, while players stay caught. Cobwebs and fire that were there before still hold and burn everyone.
 
 ## 2.18.3
