@@ -170,6 +170,21 @@ class Store(private val settings: Settings.Database, folder: File, private val c
     }
   }
 
+  /** Counts an ability that went off. */
+  fun cast(ability: String) {
+    query {
+      val row = AbilityCastsTable.selectAll().where { AbilityCastsTable.ability eq ability }.forUpdate().singleOrNull()
+      AbilityCastsTable.upsert {
+        it[this.ability] = ability
+        it[casts] = (row?.get(casts) ?: 0L) + 1
+      }
+    }
+  }
+
+  fun casts(): CompletableFuture<Map<String, Long>> = query {
+    AbilityCastsTable.selectAll().associate { it[AbilityCastsTable.ability] to it[AbilityCastsTable.casts] }
+  }
+
   private fun progress(row: ResultRow) = Progress(
     row[PlayerProgressTable.bossKills], row[PlayerProgressTable.totalExperience],
     row[PlayerProgressTable.bossDeaths], row[PlayerProgressTable.deathStreak], row[PlayerProgressTable.bossDamage],
@@ -179,7 +194,7 @@ class Store(private val settings: Settings.Database, folder: File, private val c
 
   /** Creates the tables a new database lacks, and the columns an older one lacks, like 1.x's file without `name`. */
   private fun JdbcTransaction.createSchema() {
-    val tables = arrayOf(PlayerProgressTable, BossStatsTable, PlayerBossKillsTable)
+    val tables = arrayOf(PlayerProgressTable, BossStatsTable, PlayerBossKillsTable, AbilityCastsTable)
     SchemaUtils.create(*tables)
     currentDialectMetadata.resetCaches()
     val columns = currentDialectMetadata.tableColumns(*tables)

@@ -88,6 +88,14 @@ class Progression(
     store?.count(type, clazz, event)
   }
 
+  /** Counts an ability that went off, for the statistics. */
+  fun cast(ability: String) {
+    store?.cast(ability)
+  }
+
+  /** How many times each ability went off; empty without a database. */
+  fun casts(): CompletableFuture<Map<String, Long>> = store?.casts() ?: CompletableFuture.completedFuture(emptyMap())
+
   /** Null for a player whose progress isn't loaded, so Plan keeps what it stored last instead of a zero. */
   fun known(player: UUID): Progress? = cache[player]
 

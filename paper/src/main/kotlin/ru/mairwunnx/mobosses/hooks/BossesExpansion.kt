@@ -70,15 +70,15 @@ class BossesExpansion private constructor(private val plugin: MoBossesPlugin, pr
         )
       }
     }.publicly(),
-    Resource.of("stats", "Bosses alive now, spawned, killed, and the players they killed, in all and by type and class; abilities cast since the start") {
-      plugin.progression.counts().thenApply { counts ->
+    Resource.of("stats", "Bosses alive now, spawned, killed, and the players they killed, in all and by type and class, and how often each ability went off") {
+      plugin.progression.counts().thenCombine(plugin.progression.casts()) { counts, casts ->
         mapOf(
           "alive" to PlanData.bossesAlive,
           "spawned" to counts.sumOf { it.spawned },
           "killed" to counts.sumOf { it.killed },
           "playerKills" to counts.sumOf { it.playerKills },
           "counts" to counts.map { mapOf("type" to it.type, "class" to it.clazz, "spawned" to it.spawned, "killed" to it.killed, "playerKills" to it.playerKills) },
-          "abilities" to plugin.abilities.casts.toSortedMap(),
+          "abilities" to casts.toSortedMap(),
         )
       }
     }.publicly(),

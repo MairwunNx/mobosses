@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.20.1
+
+### Fixed
+
+- ✨ **Ability counts survive a restart.** WorldAPI’s `stats` counted each ability’s casts in memory, so every restart started them from zero. Now they live in the database, in the new `ability_casts` table, and count from this version on.
+
 ## 2.20.0
 
 ### New

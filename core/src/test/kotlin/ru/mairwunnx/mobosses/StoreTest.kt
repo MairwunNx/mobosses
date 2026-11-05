@@ -78,6 +78,11 @@ class StoreTest {
         setOf(BossCount("zombie", "rare", 2, 1, 1), BossCount("blaze", "mythic", 1, 0)),
         store.counts().get().toSet(),
       )
+
+      store.cast("meteor_shower")
+      store.cast("meteor_shower")
+      store.cast("phase_two")
+      assertEquals(mapOf("meteor_shower" to 2L, "phase_two" to 1L), store.casts().get())
     }
     folder.deleteRecursively()
   }

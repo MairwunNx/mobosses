@@ -54,6 +54,14 @@ object BossStatsTable : Table("boss_stats") {
   override val primaryKey = PrimaryKey(type, clazz)
 }
 
+/** How many times each ability went off, the second phase and enrage among them. Came in 2.20.1. */
+object AbilityCastsTable : Table("ability_casts") {
+  val ability = varchar("ability", 48)
+  val casts = long("casts").default(0)
+
+  override val primaryKey = PrimaryKey(ability)
+}
+
 /** What Mo’Bosses notes about the database itself, like which formula its experience follows. Came in 2.11. */
 object MetaTable : Table("mobosses_meta") {
   val key = varchar("key", 32)

@@ -69,15 +69,15 @@ class BossesExpansion private constructor(private val mod: MoBosses, private val
         )
       }
     }.publicly(),
-    Resource.of("stats", "Bosses alive now, spawned, killed, and the players they killed, in all and by type and class; abilities cast since the start") {
-      mod.progression.counts().thenApply { counts ->
+    Resource.of("stats", "Bosses alive now, spawned, killed, and the players they killed, in all and by type and class, and how often each ability went off") {
+      mod.progression.counts().thenCombine(mod.progression.casts()) { counts, casts ->
         mapOf(
           "alive" to mod.bosses.all.size,
           "spawned" to counts.sumOf { it.spawned },
           "killed" to counts.sumOf { it.killed },
           "playerKills" to counts.sumOf { it.playerKills },
           "counts" to counts.map { mapOf("type" to it.type, "class" to it.clazz, "spawned" to it.spawned, "killed" to it.killed, "playerKills" to it.playerKills) },
-          "abilities" to mod.abilities.casts.toSortedMap(),
+          "abilities" to casts.toSortedMap(),
         )
       }
     }.publicly(),

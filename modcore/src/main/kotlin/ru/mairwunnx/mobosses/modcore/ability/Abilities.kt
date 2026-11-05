@@ -50,9 +50,6 @@ import ru.mairwunnx.mobosses.modcore.boss.Boss
  * shared cooldown and that ability's own have passed. Enrage and the second phase come on their own, by health.
  */
 class Abilities(private val mod: MoBosses) {
-  /** How many times each ability went off since the server started, for WorldAPI's statistics; any thread reads it. */
-  val casts = java.util.concurrent.ConcurrentHashMap<String, Long>()
-
   fun onHit(boss: Boss, attacker: ServerPlayer?) {
     val catalog = mod.catalog
     if (!catalog.settings.enabled) return
@@ -60,9 +57,9 @@ class Abilities(private val mod: MoBosses) {
     val cast = Cast(mod, boss, attacker)
     // The second phase casts something at once, cooldowns or not.
     val given = boss.abilities
-    val turned = (SpawnOptions.allows(given, PHASE_TWO, true) && PhaseTwo.due(cast)).also { if (it) PhaseTwo.cast(cast).also { casts.merge(PHASE_TWO, 1L, Long::plus); announce(PhaseTwo.message, cast) } }
+    val turned = (SpawnOptions.allows(given, PHASE_TWO, true) && PhaseTwo.due(cast)).also { if (it) PhaseTwo.cast(cast).also { mod.progression.cast(PHASE_TWO); announce(PhaseTwo.message, cast) } }
     if (Enrage.enabled(settings) && SpawnOptions.allows(given, Enrage.key, boss.level >= Enrage.threshold(boss.clazz.abilityThresholds)) && Enrage.usable(cast) && Enrage.cast(cast)) {
-      casts.merge(Enrage.key, 1L, Long::plus)
+      mod.progression.cast(Enrage.key)
       announce(Enrage.message, cast)
     }
 
@@ -82,7 +79,7 @@ class Abilities(private val mod: MoBosses) {
       now + (Rolls.biased(cooldown.toDouble(), bias, Random) * factor).toLong(),
       now + (Rolls.biased(settings.generalCooldown.toDouble(), settings.generalCooldownBias, Random) * factor).toLong(),
     )
-    casts.merge(ability.key, 1L, Long::plus)
+    mod.progression.cast(ability.key)
     announce(ability.message, cast)
   }
 
