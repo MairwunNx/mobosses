@@ -26,7 +26,7 @@ import ru.mairwunnx.mobosses.modcore.World
  * pictures. Its [View] takes no click, drag, or shift-click, so nothing moves in or out, and clicks on its own slots
  * become [click] calls.
  */
-abstract class Page(protected val mod: MoBosses, val player: ServerPlayer, private val rows: Int) {
+abstract class Page(val mod: MoBosses, val player: ServerPlayer, private val rows: Int) {
   private val container = SimpleContainer(rows * 9)
 
   abstract fun click(slot: Int, right: Boolean, shift: Boolean)

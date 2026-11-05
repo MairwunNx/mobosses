@@ -17,11 +17,11 @@ import ru.mairwunnx.mobosses.progress.Hunter
 
 /**
  * The `/mobosses` menu, as on Paper: your card, the best hunters, the bosses by class, the bestiary, your language, a
- * button to start over, and, for admins, the bosses in the world and reload and remove-all buttons. It opens once the
+ * button to start over, and, for admins, the bosses in the world, a boss to spawn, and reload and remove-all buttons. It opens once the
  * database has answered, in the player's language.
  */
 class Menu private constructor(mod: MoBosses, player: ServerPlayer, private val actions: Map<Int, Action>) : Page(mod, player, 3) {
-  enum class Action { RESET, BESTIARY, LANGUAGE, BOSS_LIST, RELOAD, KILLALL, CLOSE }
+  enum class Action { RESET, BESTIARY, LANGUAGE, BOSS_LIST, SPAWN, RELOAD, KILLALL, CLOSE }
 
   /** The reset button asks once more: the first click only turns it into a warning. */
   private var resetArmed = false
@@ -39,6 +39,7 @@ class Menu private constructor(mod: MoBosses, player: ServerPlayer, private val 
       Action.BESTIARY -> Bestiary.open(mod, player)
       Action.LANGUAGE -> LanguagePage.open(mod, player)
       Action.BOSS_LIST -> BossList.open(mod, player, 0)
+      Action.SPAWN -> SpawnMenu.open(mod, player)
       Action.RELOAD -> {
         close()
         command("mobosses reload")
@@ -61,6 +62,7 @@ class Menu private constructor(mod: MoBosses, player: ServerPlayer, private val 
     private const val BESTIARY = 20
     private const val LANGUAGE = 21
     private const val BOSS_LIST = 22
+    private const val SPAWN = 23
     private const val RELOAD = 24
     private const val KILLALL = 25
     private const val CLOSE = 26
@@ -88,6 +90,7 @@ class Menu private constructor(mod: MoBosses, player: ServerPlayer, private val 
         put(BESTIARY, Action.BESTIARY)
         put(LANGUAGE, Action.LANGUAGE)
         if (Perms.check(source, Permissions.BOSSES)) put(BOSS_LIST, Action.BOSS_LIST)
+        if (Perms.check(source, Permissions.SPAWN)) put(SPAWN, Action.SPAWN)
         if (Perms.check(source, Permissions.RELOAD)) put(RELOAD, Action.RELOAD)
         if (Perms.check(source, Permissions.KILLALL)) put(KILLALL, Action.KILLALL)
         put(CLOSE, Action.CLOSE)
@@ -114,6 +117,7 @@ class Menu private constructor(mod: MoBosses, player: ServerPlayer, private val 
       menu.set(BESTIARY, menu.item(Items.WRITABLE_BOOK, languages.lines(code, Message.MENU_BESTIARY)))
       menu.set(LANGUAGE, menu.item(Items.GLOBE_BANNER_PATTERN, languages.lines(code, Message.MENU_LANGUAGE, Placeholder.unparsed("language", LanguageChoices.nativeName(code)))))
       if (Action.BOSS_LIST in actions.values) menu.set(BOSS_LIST, menu.item(Items.SPYGLASS, languages.lines(code, Message.MENU_BOSS_LIST)))
+      if (Action.SPAWN in actions.values) menu.set(SPAWN, menu.item(Items.ZOMBIE_SPAWN_EGG, languages.lines(code, Message.MENU_SPAWN)))
       if (Action.RELOAD in actions.values) menu.set(RELOAD, menu.name(ItemStack(Items.REPEATER), languages.render(code, Message.MENU_RELOAD), emptyList()))
       if (Action.KILLALL in actions.values) menu.set(KILLALL, menu.name(ItemStack(Items.BARRIER), languages.render(code, Message.MENU_KILLALL), emptyList()))
       menu.set(CLOSE, menu.name(ItemStack(Items.OAK_DOOR), languages.render(code, Message.MENU_CLOSE), emptyList()))

@@ -14,14 +14,19 @@ import net.minecraft.world.entity.monster.zombie.Zombie
 import net.minecraft.world.level.block.Blocks
 import net.minecraft.world.level.storage.TagValueInput
 import net.minecraft.world.level.storage.TagValueOutput
+import net.minecraft.world.phys.Vec3
+import ru.mairwunnx.mobosses.boss.SpawnPlan
 import ru.mairwunnx.mobosses.modcore.boss.Boss
 import ru.mairwunnx.mobosses.modcore.boss.Keys
 import ru.mairwunnx.mobosses.modcore.data.Data
 import ru.mairwunnx.mobosses.modcore.gametest.Players.mod
+import ru.mairwunnx.mobosses.modcore.menu.Page
+import ru.mairwunnx.mobosses.modcore.menu.SpawnPlacePage
 
 /**
  * Bosses on a real server: what turning a mob into one writes and sets, that it outlives a save, that the difficulty
- * grades it and peaceful makes none, that it keeps out of boats and portals, and that it never turns into another mob.
+ * grades it and peaceful makes none, that it keeps out of boats and portals, that it never turns into another mob, and
+ * that the menu spawns one on the admin.
  */
 class BossGameTests {
   private fun zombie(helper: GameTestHelper, x: Int = 1): Zombie = helper.spawn(EntityTypes.ZOMBIE, BlockPos(x, 2, 1)).also { it.setNoAi(false) }
@@ -52,6 +57,22 @@ class BossGameTests {
     helper.assertTrue(zombie.maxHealth > 20f && zombie.health == zombie.maxHealth, "a level 40 Epic boss has more than a zombie's health, all of it")
     helper.assertTrue(mod.bosses.get(zombie) === boss, "the boss is live")
     mod.bosses.remove(boss)
+    helper.succeed()
+  }
+
+  @GameTest
+  fun theMenuSpawnsABossOnTheAdmin(helper: GameTestHelper) {
+    val player = Players.survivor(helper, Vec3(2.5, 2.0, 2.5))
+    SpawnPlacePage.open(mod, player, mod.catalog.types.getValue(EntityTypes.ZOMBIE), mod.catalog.classes.byKey("rare")!!, 17)
+    val page = (player.containerMenu as? Page.View)?.page
+    helper.assertTrue(page is SpawnPlacePage, "the place's page is open")
+    page!!.click(SpawnPlan.CENTER, right = false, shift = false)
+    val boss = mod.bosses.all.firstOrNull { it.level == 17 && it.clazz.key == "rare" && it.entity.distanceToSqr(player) < 1.0 }
+    helper.assertTrue(boss != null, "the admin's own cell spawns a level 17 Rare boss right on them")
+    helper.assertTrue(boss!!.pinned, "a boss from the menu stays, as one from the command")
+    helper.assertTrue(player.containerMenu !is Page.View, "the menu closes once the boss is out")
+    mod.bosses.remove(boss)
+    helper.level.server.playerList.remove(player)
     helper.succeed()
   }
 

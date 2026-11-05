@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.20.0
+
+### New
+
+- 🥚 **The mods spawn a boss from the menu too.** On Fabric and NeoForge, admins with `mobosses.spawn` get the button in `/mobosses` that Paper got in 2.19.0: the mob, its class, its level a digit at a time, then a chunk on the grid around you, or your own head to spawn it right on you.
+
 ## 2.19.0
 
 ### New
