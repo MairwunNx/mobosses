@@ -1,7 +1,10 @@
 package ru.mairwunnx.mobosses.ability.kinds
 
+import org.bukkit.NamespacedKey
 import org.bukkit.Particle
 import org.bukkit.Sound
+import org.bukkit.attribute.Attribute
+import org.bukkit.attribute.AttributeModifier
 import ru.mairwunnx.mobosses.ability.Ability
 import ru.mairwunnx.mobosses.ability.Cast
 import ru.mairwunnx.mobosses.algebra.Rolls
@@ -20,12 +23,28 @@ object Shockwave : Ability {
   /** Ticks between the wind-up and the slam: long enough to step back, if you watch the boss. */
   private const val WIND_UP = 15L
 
+  /**
+   * Through the wind-up the boss stands its ground: a player's blow used to knock it two or three blocks back, and the
+   * slam went off out of reach of the player it was meant for. The modifier is transient, so a restart never keeps it.
+   */
+  private val BRACE = NamespacedKey("mobosses", "shockwave_brace")
+
+  private fun brace(cast: Cast, on: Boolean) {
+    val attribute = cast.boss.entity.getAttribute(Attribute.KNOCKBACK_RESISTANCE) ?: return
+    attribute.removeModifier(BRACE)
+    if (on) attribute.addTransientModifier(AttributeModifier(BRACE, 1.0, AttributeModifier.Operation.ADD_NUMBER))
+  }
+
   override fun cast(cast: Cast): Boolean {
     val cfg = cast.settings
     if (inReach(cast).isEmpty()) return false
     cast.at.world.spawnParticle(Particle.CLOUD, cast.at, 30, cfg.shockwaveRadius / 3, 0.1, cfg.shockwaveRadius / 3, 0.0)
     cast.sound(Sound.ENTITY_RAVAGER_ROAR, 1f, 0.8f)
-    cast.later(WIND_UP) { slam(cast) }
+    brace(cast, true)
+    cast.later(WIND_UP) {
+      brace(cast, false)
+      slam(cast)
+    }
     return true
   }
 

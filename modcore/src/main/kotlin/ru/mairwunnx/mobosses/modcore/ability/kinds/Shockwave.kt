@@ -1,7 +1,10 @@
 package ru.mairwunnx.mobosses.modcore.ability.kinds
 
 import net.minecraft.core.particles.ParticleTypes
+import net.minecraft.resources.Identifier
 import net.minecraft.sounds.SoundEvents
+import net.minecraft.world.entity.ai.attributes.AttributeModifier
+import net.minecraft.world.entity.ai.attributes.Attributes
 import net.minecraft.world.phys.Vec3
 import ru.mairwunnx.mobosses.algebra.Rolls
 import ru.mairwunnx.mobosses.config.AbilitySettings
@@ -21,12 +24,28 @@ object Shockwave : Ability {
   /** Ticks between the wind-up and the slam: long enough to step back, if you watch the boss. */
   private const val WIND_UP = 15L
 
+  /**
+   * Through the wind-up the boss stands its ground: a player's blow used to knock it two or three blocks back, and the
+   * slam went off out of reach of the player it was meant for. The modifier is transient, so a restart never keeps it.
+   */
+  private val BRACE = Identifier.fromNamespaceAndPath("mobosses", "shockwave_brace")
+
+  private fun brace(cast: Cast, on: Boolean) {
+    val attribute = cast.entity.getAttribute(Attributes.KNOCKBACK_RESISTANCE) ?: return
+    attribute.removeModifier(BRACE)
+    if (on) attribute.addTransientModifier(AttributeModifier(BRACE, 1.0, AttributeModifier.Operation.ADD_VALUE))
+  }
+
   override fun cast(cast: Cast): Boolean {
     val cfg = cast.settings
     if (inReach(cast).isEmpty()) return false
     cast.particles(ParticleTypes.CLOUD, cast.at, 30, cfg.shockwaveRadius / 3, 0.1, cfg.shockwaveRadius / 3)
     cast.sound(SoundEvents.RAVAGER_ROAR, 1f, 0.8f)
-    cast.later(WIND_UP) { slam(cast) }
+    brace(cast, true)
+    cast.later(WIND_UP) {
+      brace(cast, false)
+      slam(cast)
+    }
     return true
   }
 
