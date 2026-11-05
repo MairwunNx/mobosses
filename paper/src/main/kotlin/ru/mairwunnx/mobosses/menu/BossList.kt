@@ -9,17 +9,19 @@ import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 import org.bukkit.inventory.Inventory
+import org.bukkit.inventory.ItemStack
 import ru.mairwunnx.mobosses.MoBossesPlugin
 import ru.mairwunnx.mobosses.boss.Boss
 import ru.mairwunnx.mobosses.lang.Message
 import java.util.UUID
+import java.util.function.Consumer
 import kotlin.math.roundToInt
 
 /**
  * For admins: the bosses in loaded chunks, nearest first, then other worlds, 45 to a page. A click
  * shows a boss's details in the chat, Shift and a click takes the admin to it, and a right click asks
  * once and then removes it, without loot. Bosses in unloaded chunks don't show: the server doesn't
- * know them until their chunk loads.
+ * know them until their chunk loads. While the page is open, health, place, and fighters refresh each second.
  */
 class BossList private constructor(private val plugin: MoBossesPlugin, private val page: Int, private val pages: Int, private val slots: List<UUID>) : Page {
   private lateinit var inventory: Inventory
@@ -60,8 +62,19 @@ class BossList private constructor(private val plugin: MoBossesPlugin, private v
     sound(player)
   }
 
+  /** Redraws each boss in place from what the server knows now; one gone, or one a right click armed, stays as it is. */
+  private fun refresh(player: Player) {
+    slots.forEachIndexed { slot, uuid ->
+      if (slot == armed) return@forEachIndexed
+      val boss = plugin.bosses.get(uuid)?.takeIf { it.entity.isValid } ?: return@forEachIndexed
+      inventory.setItem(slot, item(plugin, player, boss))
+    }
+  }
+
   companion object {
     const val PERMISSION = "mobosses.bosses"
+    /** Ticks between redraws. */
+    private const val REFRESH = 20L
     private const val PER_PAGE = 45
     private const val PREVIOUS = 45
     private const val BACK = 47
@@ -87,11 +100,7 @@ class BossList private constructor(private val plugin: MoBossesPlugin, private v
         Placeholder.unparsed("count", bosses.size.toString())) ?: Component.text("Mo’Bosses")
       val inventory = Bukkit.createInventory(list, 54, title)
       list.inventory = inventory
-      shown.forEachIndexed { slot, boss ->
-        val egg = Bukkit.getItemFactory().getSpawnEgg(boss.entity.type) ?: Material.ZOMBIE_SPAWN_EGG
-        val name = languages.render(code, Message.BOSS_TAG, *plugin.texts.boss(code, boss))
-        inventory.setItem(slot, Page.item(egg, listOfNotNull(name) + languages.lines(code, Message.BOSS_LIST_LORE, *details(plugin, player, boss))))
-      }
+      shown.forEachIndexed { slot, boss -> inventory.setItem(slot, item(plugin, player, boss)) }
       if (bosses.isEmpty()) inventory.setItem(22, Page.item(Material.STRUCTURE_VOID, languages.lines(code, Message.BOSS_LIST_EMPTY)))
       if (current > 0) inventory.setItem(PREVIOUS, Page.item(Material.ARROW, languages.lines(code, Message.MENU_PREVIOUS)))
       if (current < pages - 1) inventory.setItem(NEXT, Page.item(Material.ARROW, languages.lines(code, Message.MENU_NEXT)))
@@ -100,6 +109,17 @@ class BossList private constructor(private val plugin: MoBossesPlugin, private v
         Placeholder.unparsed("pages", pages.toString()), Placeholder.unparsed("count", bosses.size.toString()))))
       inventory.setItem(CLOSE, Page.item(Material.OAK_DOOR, languages.lines(code, Message.MENU_CLOSE)))
       player.openInventory(inventory)
+      // Until the admin closes it or opens another page; the task reads only what the server thread keeps.
+      Bukkit.getScheduler().runTaskTimer(plugin, Consumer { task ->
+        if (!player.isOnline || player.openInventory.topInventory.holder !== list) task.cancel() else list.refresh(player)
+      }, REFRESH, REFRESH)
+    }
+
+    private fun item(plugin: MoBossesPlugin, player: Player, boss: Boss): ItemStack {
+      val code = plugin.texts.languageOf(player)
+      val egg = Bukkit.getItemFactory().getSpawnEgg(boss.entity.type) ?: Material.ZOMBIE_SPAWN_EGG
+      val name = plugin.languages.render(code, Message.BOSS_TAG, *plugin.texts.boss(code, boss))
+      return Page.item(egg, listOfNotNull(name) + plugin.languages.lines(code, Message.BOSS_LIST_LORE, *details(plugin, player, boss)))
     }
 
     /** `<health>`, `<max>`, `<world>`, `<x>`, `<y>`, `<z>`, `<distance>`, `<fighters>`, `<phase>`, `<spawner>`, and the boss's own tags. */

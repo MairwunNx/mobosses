@@ -37,6 +37,9 @@ abstract class Page(protected val mod: MoBosses, val player: ServerPlayer, priva
 
   fun close() = player.closeContainer()
 
+  /** Whether the player still looks at this page. */
+  val isOpen get() = (player.containerMenu as? View)?.page === this
+
   /** A button's click, for the player alone. Pages play it only when a button did something; filler stays silent. */
   fun sound() = World.sound(player, SoundEvents.UI_BUTTON_CLICK, volume = 0.5f, pitch = 1.2f)
 

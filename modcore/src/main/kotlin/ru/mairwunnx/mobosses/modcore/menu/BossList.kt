@@ -5,6 +5,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver
 import net.minecraft.server.level.ServerLevel
 import net.minecraft.server.level.ServerPlayer
+import net.minecraft.world.item.ItemStack
 import net.minecraft.world.item.Items
 import ru.mairwunnx.mobosses.Permissions
 import ru.mairwunnx.mobosses.lang.Message
@@ -18,7 +19,7 @@ import kotlin.math.sqrt
 /**
  * For admins, as on Paper: the bosses in loaded chunks, nearest first, then other worlds, 45 to a page. A click shows
  * a boss's details in the chat, Shift and a click takes the admin to it, and a right click asks once and then removes
- * it, without loot.
+ * it, without loot. While the page is open, health, place, and fighters refresh each second.
  */
 class BossList private constructor(mod: MoBosses, player: ServerPlayer, private val page: Int, private val pages: Int, private val slots: List<UUID>) : Page(mod, player, 6) {
   /** The slot whose boss a right click would remove now. */
@@ -58,7 +59,24 @@ class BossList private constructor(mod: MoBosses, player: ServerPlayer, private 
     sound()
   }
 
+  /** Redraws each boss in place from what the server knows now; one gone, or one a right click armed, stays as it is. */
+  private fun refresh() {
+    slots.forEachIndexed { slot, uuid ->
+      if (slot == armed) return@forEachIndexed
+      val boss = mod.bosses.get(uuid)?.takeIf { it.entity.isAlive } ?: return@forEachIndexed
+      set(slot, bossItem(boss))
+    }
+  }
+
+  private fun bossItem(boss: Boss): ItemStack {
+    val code = mod.texts.languageOf(player)
+    val name = mod.languages.render(code, Message.BOSS_TAG, *mod.texts.boss(code, boss))
+    return item(egg(boss.entity.type), listOfNotNull(name) + mod.languages.lines(code, Message.BOSS_LIST_LORE, *details(mod, player, boss)))
+  }
+
   companion object {
+    /** Ticks between redraws. */
+    private const val REFRESH = 20L
     private const val PER_PAGE = 45
     private const val PREVIOUS = 45
     private const val BACK = 47
@@ -83,10 +101,7 @@ class BossList private constructor(mod: MoBosses, player: ServerPlayer, private 
 
       val list = BossList(mod, player, current, pages, shown.map { it.uuid })
       with(list) {
-        shown.forEachIndexed { slot, boss ->
-          val name = languages.render(code, Message.BOSS_TAG, *mod.texts.boss(code, boss))
-          set(slot, item(egg(boss.entity.type), listOfNotNull(name) + languages.lines(code, Message.BOSS_LIST_LORE, *details(mod, player, boss))))
-        }
+        shown.forEachIndexed { slot, boss -> set(slot, bossItem(boss)) }
         if (bosses.isEmpty()) set(22, item(Items.STRUCTURE_VOID, languages.lines(code, Message.BOSS_LIST_EMPTY)))
         if (current > 0) set(PREVIOUS, item(Items.ARROW, languages.lines(code, Message.MENU_PREVIOUS)))
         if (current < pages - 1) set(NEXT, item(Items.ARROW, languages.lines(code, Message.MENU_NEXT)))
@@ -95,6 +110,8 @@ class BossList private constructor(mod: MoBosses, player: ServerPlayer, private 
         set(CLOSE, item(Items.OAK_DOOR, languages.lines(code, Message.MENU_CLOSE)))
         open(languages.render(code, Message.BOSS_LIST_TITLE, *counts) ?: Component.text("Mo’Bosses"))
       }
+      // Until the admin closes it or opens another page.
+      mod.scheduler.every(REFRESH) { task -> if (player.hasDisconnected() || !list.isOpen) task.cancel() else list.refresh() }
     }
 
     /** `<health>`, `<max>`, `<world>`, `<x>`, `<y>`, `<z>`, `<distance>`, `<fighters>`, `<phase>`, `<spawner>`, and the boss's own tags. */
