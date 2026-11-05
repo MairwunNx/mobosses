@@ -98,8 +98,8 @@ jobs:
         # uploads X.Y.Z+paper; the mods go through Modrinth's v3 API as X.Y.Z+fabric and X.Y.Z+neoforge, since Minotaur
         # can't set the environment Modrinth asks of a mod.
         run: |
-          ./gradlew :paper:modrinth -PreleaseVersion="$VERSION" -PchangelogFile="$NOTES" --no-configuration-cache
-          if [[ "$MODS" == "true" ]]; then python3 -I scripts/modrinth_mods.py --version "$VERSION" --notes "$NOTES"; fi
+          ./gradlew :paper:modrinthSyncBody -PreleaseVersion="$VERSION" --no-configuration-cache
+          python3 -I scripts/modrinth_mods.py --version "$VERSION" --notes "$NOTES"
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
       - name: Publish to Hangar
