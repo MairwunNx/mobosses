@@ -81,6 +81,9 @@ menu:
   boss_list: |-
     <aqua>Chefes no mundo</aqua>
     <gray>Os mais próximos primeiro: detalhes, teleporte ou remover.</gray>
+  spawn: |-
+    <green>Invocar um chefe</green>
+    <gray>A criatura, a classe e o nível, depois o lugar.</gray>
   back: "<gray>Voltar</gray>"
   previous: "<gray>Página anterior</gray>"
   next: "<gray>Próxima página</gray>"
@@ -155,6 +158,32 @@ boss_list:
   empty: |-
     <gray>Nenhum chefe em chunks carregados</gray>
     <dark_gray>Os de chunks não carregados aparecem quando eles carregam.</dark_gray>
+
+# Invocar um chefe pelo menu, para admins. <boss_name>, <class>, <class_color>, <level>: o que já foi escolhido.
+spawn_menu:
+  type_title: "Invocar: criatura · página <page>/<pages>"
+  type: "<gray>Clique para escolher esta criatura</gray>"
+  class_title: "Invocar <boss_name>: classe"
+  class: "<gray>Clique para escolher esta classe</gray>"
+  level_title: "Invocar: nível"
+  up: "<green>▲ +<step></green>"
+  down: "<red>▼ −<step></red>"
+  digit: "<num><digit></num>"
+  chosen: |-
+    <class_color>[Nv. <level>] [<class>]</class_color> <white><boss_name></white>
+    <gray>Clique para escolher o lugar</gray>
+  place_title: "Invocar: lugar · você está no centro"
+  here: |-
+    <green>Aqui mesmo, em você</green>
+    <gray>O chefe aparece onde você está.</gray>
+  chunk: |-
+    <white><direction></white>
+    <gray>Chunk <x>, <z>: o lugar mais seguro na sua altura</gray>
+  north: "<count> ao norte"
+  south: "<count> ao sul"
+  east: "<count> a leste"
+  west: "<count> a oeste"
+  no_room: "<warn>Esse chunk não tem lugar seguro na sua altura.</warn> <gray>Escolha outro ou chegue mais perto.</gray>"
 
 words:
   yes: "<green>sim</green>"

@@ -81,6 +81,9 @@ menu:
   boss_list: |-
     <aqua>Bosse in der Welt</aqua>
     <gray>Die nächsten zuerst: Details, Teleport oder entfernen.</gray>
+  spawn: |-
+    <green>Einen Boss rufen</green>
+    <gray>Wesen, Klasse und Stufe, dann der Ort.</gray>
   back: "<gray>Zurück</gray>"
   previous: "<gray>Vorige Seite</gray>"
   next: "<gray>Nächste Seite</gray>"
@@ -155,6 +158,32 @@ boss_list:
   empty: |-
     <gray>Keine Bosse in geladenen Chunks</gray>
     <dark_gray>Bosse in ungeladenen erscheinen, sobald diese laden.</dark_gray>
+
+# Einen Boss aus dem Menü rufen, für Admins. <boss_name>, <class>, <class_color>, <level>: was schon gewählt ist.
+spawn_menu:
+  type_title: "Boss rufen: Wesen · Seite <page>/<pages>"
+  type: "<gray>Klick, um dieses Wesen zu wählen</gray>"
+  class_title: "<boss_name> rufen: Klasse"
+  class: "<gray>Klick, um diese Klasse zu wählen</gray>"
+  level_title: "Boss rufen: Stufe"
+  up: "<green>▲ +<step></green>"
+  down: "<red>▼ −<step></red>"
+  digit: "<num><digit></num>"
+  chosen: |-
+    <class_color>[Lvl. <level>] [<class>]</class_color> <white><boss_name></white>
+    <gray>Klick, um den Ort zu wählen</gray>
+  place_title: "Boss rufen: Ort · du stehst in der Mitte"
+  here: |-
+    <green>Genau hier, bei dir</green>
+    <gray>Der Boss kommt, wo du stehst.</gray>
+  chunk: |-
+    <white><direction></white>
+    <gray>Chunk <x>, <z>: der sicherste Platz auf deiner Höhe</gray>
+  north: "<count> nach Norden"
+  south: "<count> nach Süden"
+  east: "<count> nach Osten"
+  west: "<count> nach Westen"
+  no_room: "<warn>In diesem Chunk gibt es auf deiner Höhe keinen sicheren Platz.</warn> <gray>Wähl einen anderen oder komm näher.</gray>"
 
 words:
   yes: "<green>ja</green>"

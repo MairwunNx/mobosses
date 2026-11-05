@@ -81,6 +81,9 @@ menu:
   boss_list: |-
     <aqua>Bosses in the world</aqua>
     <gray>Nearest first: details, teleport, or remove.</gray>
+  spawn: |-
+    <green>Spawn a boss</green>
+    <gray>Its mob, class, and level, then the place.</gray>
   back: "<gray>Back</gray>"
   previous: "<gray>Previous page</gray>"
   next: "<gray>Next page</gray>"
@@ -155,6 +158,32 @@ boss_list:
   empty: |-
     <gray>No bosses in loaded chunks</gray>
     <dark_gray>Bosses in unloaded ones show once they load.</dark_gray>
+
+# The menu's way to spawn a boss, for admins. <boss_name>, <class>, <class_color>, <level>: the boss so far.
+spawn_menu:
+  type_title: "Spawn a boss: the mob · page <page>/<pages>"
+  type: "<gray>Click to pick this mob</gray>"
+  class_title: "Spawn <boss_name>: the class"
+  class: "<gray>Click to pick this class</gray>"
+  level_title: "Spawn a boss: the level"
+  up: "<green>▲ +<step></green>"
+  down: "<red>▼ −<step></red>"
+  digit: "<num><digit></num>"
+  chosen: |-
+    <class_color>[Lv. <level>] [<class>]</class_color> <white><boss_name></white>
+    <gray>Click to pick the place</gray>
+  place_title: "Spawn: the place · you’re in the middle"
+  here: |-
+    <green>Right here, on you</green>
+    <gray>The boss comes where you stand.</gray>
+  chunk: |-
+    <white><direction></white>
+    <gray>Chunk <x>, <z>: the safest spot at your height</gray>
+  north: "<count> north"
+  south: "<count> south"
+  east: "<count> east"
+  west: "<count> west"
+  no_room: "<warn>That chunk has no safe spot at your height.</warn> <gray>Pick another, or come closer.</gray>"
 
 words:
   yes: "<green>yes</green>"

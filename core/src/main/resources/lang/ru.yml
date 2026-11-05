@@ -81,6 +81,9 @@ menu:
   boss_list: |-
     <aqua>Боссы в мире</aqua>
     <gray>Сначала ближайшие: подробности, телепорт или удаление.</gray>
+  spawn: |-
+    <green>Призвать босса</green>
+    <gray>Моб, класс и уровень, затем место.</gray>
   back: "<gray>Назад</gray>"
   previous: "<gray>Предыдущая страница</gray>"
   next: "<gray>Следующая страница</gray>"
@@ -155,6 +158,32 @@ boss_list:
   empty: |-
     <gray>В загруженных чанках боссов нет</gray>
     <dark_gray>Боссы в выгруженных появятся, когда те загрузятся.</dark_gray>
+
+# Призыв босса из меню, для админов. <boss_name>, <class>, <class_color>, <level>: что уже выбрано.
+spawn_menu:
+  type_title: "Призыв: моб · стр. <page>/<pages>"
+  type: "<gray>Нажмите, чтобы выбрать этого моба</gray>"
+  class_title: "Призыв: <boss_name>, класс"
+  class: "<gray>Нажмите, чтобы выбрать этот класс</gray>"
+  level_title: "Призыв: уровень"
+  up: "<green>▲ +<step></green>"
+  down: "<red>▼ −<step></red>"
+  digit: "<num><digit></num>"
+  chosen: |-
+    <class_color>[Ур. <level>] [<class>]</class_color> <white><boss_name></white>
+    <gray>Нажмите, чтобы выбрать место</gray>
+  place_title: "Призыв: место · вы в центре"
+  here: |-
+    <green>Прямо здесь, на вас</green>
+    <gray>Босс появится там, где вы стоите.</gray>
+  chunk: |-
+    <white><direction></white>
+    <gray>Чанк <x>, <z>: самое безопасное место на вашей высоте</gray>
+  north: "<count> к северу"
+  south: "<count> к югу"
+  east: "<count> к востоку"
+  west: "<count> к западу"
+  no_room: "<warn>В этом чанке нет безопасного места на вашей высоте.</warn> <gray>Выберите другой или подойдите ближе.</gray>"
 
 words:
   yes: "<green>да</green>"
