@@ -9,6 +9,7 @@ import net.minecraft.world.entity.LivingEntity
 import net.minecraft.world.entity.boss.enderdragon.EndCrystal
 import net.minecraft.world.entity.projectile.Projectile
 import net.minecraft.world.item.ItemStack
+import net.minecraft.world.level.Level
 import java.util.function.Consumer
 import ru.mairwunnx.mobosses.modcore.ability.AbilityEntities
 
@@ -105,5 +106,12 @@ object Hooks {
     if (!temporary.contains(level, pos)) return false
     temporary.forget(level, pos)
     return true
+  }
+
+  /** Whether [entity] passes through the cobweb or fire at [pos]: a boss or its minion, through what abilities leave. */
+  fun passes(level: Level, pos: BlockPos, entity: Entity): Boolean {
+    val mod = mod ?: return false
+    if (level !is ServerLevel || !mod.blockChanges.temporary.contains(level, pos)) return false
+    return mod.bosses.get(entity) != null || mod.minions.typeOf(entity) != null
   }
 }
