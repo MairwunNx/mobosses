@@ -41,7 +41,7 @@ info_next: "<gray>To level</gray> <num><next></num> <xp><progress></xp><dark_gra
 info_top: "<gray>The top level:</gray> <ok>nothing left to reach</ok>"
 survival_lost: "<pri>[Mo’Bosses]</pri> <warn>Your survival bonus is gone: +<bonus>% to bosses after <hours> h <minutes> min without dying.</warn>"
 death_penalty: "<pri>[Mo’Bosses]</pri> <warn>You fell to</warn> <boss><boss_name></boss><warn>: your progress toward level <next> burned up, −<lost> Mo’Bosses XP.</warn> <gray>Your level stays.</gray>"
-death_demotion: "<pri>[Mo’Bosses]</pri> <warn>You fell to</warn> <boss><boss_name></boss> <warn><deaths> times in a row: your level drops to <level>, −<lost> Mo’Bosses XP.</warn> <gray>Kill a boss to end the streak.</gray>"
+death_demotion: "<pri>[Mo’Bosses]</pri> <warn>You fell to</warn> <boss><boss_name></boss> <warn><deaths> times in a row: your level drops to <new_level>, −<lost> Mo’Bosses XP.</warn> <gray>Kill a boss to end the streak.</gray>"
 full_moon: "<pri>[Mo’Bosses]</pri> <boss>A full moon rises.</boss> <gray>Tonight bosses come more often, and rarer ones more often still.</gray>"
 # Over the hotbar of everyone fighting a boss as one more player joins in. <players>, <percent> (health above its own).
 group_health: "<boss><boss_name></boss> <warn>grows stronger: <players> fighters, +<percent>% health</warn>"

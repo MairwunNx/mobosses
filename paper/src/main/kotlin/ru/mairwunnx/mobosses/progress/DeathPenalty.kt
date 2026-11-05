@@ -38,7 +38,7 @@ class DeathPenalty(private val plugin: MoBossesPlugin) : Listener {
       val level = plugin.progression.level(player.uniqueId)
       val resolvers = plugin.texts.boss(plugin.texts.languageOf(player), boss)
       if (demote) plugin.texts.send(player, Message.DEATH_DEMOTION, Placeholder.unparsed("lost", lost.toString()),
-        Placeholder.unparsed("level", level.toString()), Placeholder.unparsed("deaths", deaths.toString()), *resolvers)
+        Placeholder.unparsed("new_level", level.toString()), Placeholder.unparsed("deaths", deaths.toString()), *resolvers)
       else plugin.texts.send(player, Message.DEATH_PENALTY, Placeholder.unparsed("lost", lost.toString()),
         Placeholder.unparsed("next", (level + 1).toString()), *resolvers)
     }

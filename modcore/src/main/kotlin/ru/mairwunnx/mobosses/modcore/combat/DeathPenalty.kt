@@ -30,7 +30,7 @@ class DeathPenalty(private val mod: MoBosses) {
       val level = mod.progression.level(now.uuid)
       val resolvers = mod.texts.boss(mod.texts.languageOf(now), boss)
       if (demote) mod.texts.send(now, Message.DEATH_DEMOTION, Placeholder.unparsed("lost", lost.toString()),
-        Placeholder.unparsed("level", level.toString()), Placeholder.unparsed("deaths", deaths.toString()), *resolvers)
+        Placeholder.unparsed("new_level", level.toString()), Placeholder.unparsed("deaths", deaths.toString()), *resolvers)
       else mod.texts.send(now, Message.DEATH_PENALTY, Placeholder.unparsed("lost", lost.toString()),
         Placeholder.unparsed("next", (level + 1).toString()), *resolvers)
     }
