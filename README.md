@@ -63,4 +63,11 @@ The [wiki](https://github.com/MairwunNx/mobosses/wiki) has everything else.
 
 [IP Geolocation by DB-IP](https://db-ip.com), licensed under CC BY 4.0.
 
+## Content disclosures
+
+- 🤖 **AI-generated code.** AI agents wrote much of the code.
+- ⚡ **Flashing lights.** Some bosses call lightning, several bolts at once, which flash the screen. The game’s “Hide Lightning Flashes” option softens it.
+- 🌍 **Languages by country** come from a DB-IP database the server downloads, and the lookup stays on the server.
+- No generative AI, telemetry, paid features, or ads.
+
 > 🫡 Made by Pavel Erokhin (Павел Ерохин), aka mairwunnx.
