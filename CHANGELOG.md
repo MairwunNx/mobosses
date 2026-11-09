@@ -10,6 +10,7 @@ The “Release” workflow takes the notes for a version from its section here, 
 - 📖 **Ask Allay what an ability does.** Every ability, shared or a mob’s own, comes with a line on what it does, the boss level it starts at in each class, its cooldown, reach, and damage from your `abilities.yml`, and a tip to counter it.
 - 🏆 **Ask Allay who hunts best.** The top ten hunters by experience, with their levels and kills. Allay names players only as its own privacy rules allow, and never a vanished one.
 - 🔎 **Allay knows Mo’Bosses’ named drops.** Search for an item like “Apprentice’s Stone Blade”, and Allay tells what it is and which bosses drop it, in every language Mo’Bosses has.
+- 🧩 **WorldAPI’s clients spawn and remove bosses.** With WorldAPI 4.6.0 or newer, a token with `world:write` can `POST /extensions/mobosses/bosses/spawn` with a type, class, level, count, and place, and `DELETE /extensions/mobosses/bosses/{uuid}` to take one away, as `/mobosses killall` does: no loot, no kill. Spawns follow `/mobosses spawn`’s rules, and WorldAPI writes every call into its audit log, so a bot or an AI through the MCP server can set up a fight. With WorldAPI 4.5 the log says so in one line, and the data works as before.
 - 🛠️ **Operators spawn bosses through Allay.** “Spawn two Rare zombies here” works for operators with `mobosses.spawn`, under the same rules as `/mobosses spawn`. Ordinary players never get it.
 
 ### Changed
@@ -18,6 +19,8 @@ The “Release” workflow takes the notes for a version from its section here, 
 - ⚔️ **Allay sees more of a fight.** For a boss nearby, Allay now knows the abilities it has reached, your own share of its damage (never anyone else’s), how many players fight it, and how much its health grew for the group. Your hunt shows your survival bonus in percent and whether a full moon is up.
 - 🐺 **Allay explains one boss in full.** Ask about one boss type, and Allay reads the gear it wears and from which level, its experience multiplier, and how much loot is its own. The list of every boss stays short enough for Allay to read whole.
 - 💬 **Allay knows why a kill gave little.** It explains the damage share loot and rewards ask for, spawner fatigue, the full moon, and the survival bonus.
+- 📉 **`hunters` lists at most 50 again.** 2.22.0 raised the cap of `/extensions/mobosses/hunters` to 500 by mistake. The leaderboards still take up to 500.
+- 🧱 **The mods load next to WorldAPI on NeoForge.** Mo’Bosses no longer carries a copy of the annotations WorldAPI ships too, which NeoForge refused to load twice.
 - 🔄 **`/mobosses reload` updates Allay too,** so its item search follows your edited loot table and language files.
 
 ## 2.22.0
