@@ -3,6 +3,7 @@ package ru.mairwunnx.mobosses.hooks
 import com.mairwunnx.worldapi.expansion.v2.Permission
 import com.mairwunnx.worldapi.expansion.v2.Place
 import com.mairwunnx.worldapi.expansion.v2.Request
+import com.mairwunnx.worldapi.expansion.v2.Resource
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import ru.mairwunnx.mobosses.boss.AdminSpawns
@@ -28,6 +29,8 @@ object BossesActions : BossesData() {
 
   val spawn = action("bosses/spawn", "Spawns bosses at a place, as /mobosses spawn does and under its rules: they stay until killed, and protection applies unless admin_spawn_bypass is on. An unknown type, a level past the server's top, or a world that isn't loaded answers 400", ::spawn).body(type, rank, level, count, at).permission(Permission.WORLD_WRITE).onServerThread().returns(Spawned::class.java)
   val kill = remove("bosses/{boss}", "Removes a live boss as /mobosses killall does: no loot, no experience, no kill for anyone. An id no boss alive has answers 404", ::kill).permission(Permission.WORLD_WRITE).onServerThread().returns(SpawnedBoss::class.java)
+
+  override fun capped(hunters: Resource): Resource = hunters.between(limit, 1, HUNTERS)
 
   @JvmRecord data class Spawned(val bosses: List<SpawnedBoss>, val failed: String?)
 

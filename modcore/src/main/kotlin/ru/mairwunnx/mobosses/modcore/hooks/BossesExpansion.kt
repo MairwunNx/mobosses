@@ -3,6 +3,7 @@ package ru.mairwunnx.mobosses.modcore.hooks
 import com.mairwunnx.worldapi.expansion.v2.Expansion
 import com.mairwunnx.worldapi.expansion.v2.Place
 import com.mairwunnx.worldapi.expansion.v2.PlayerRef
+import com.mairwunnx.worldapi.expansion.v2.Resource
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
 import net.minecraft.server.level.ServerPlayer
 import net.minecraft.world.entity.Entity
@@ -31,7 +32,7 @@ abstract class BossesData : Expansion("mobosses", "Mo’Bosses", "Mo’Bosses: b
   val player = player("player", "A player's name or UUID")
   val board = choice("board", "What the board ranks", Board::class.java, Board.KILLS)
 
-  val hunters = resource("hunters", "The best hunters by level, with kills and experience") { req -> topHunters(req[limit]) }.query(limit).returnsListOf(Hunter::class.java).publicly()
+  val hunters = capped(resource("hunters", "The best hunters by level, with kills and experience, at most $HUNTERS") { req -> topHunters(req[limit].coerceAtMost(HUNTERS)) }.query(limit).returnsListOf(Hunter::class.java).publicly())
   val card = resource("players/{player}", "A player's card: level, experience, kills, deaths to bosses and the streak of them, damage dealt, and rank") { req -> cardOf(req[player]) }.returns(Card::class.java).publicly()
   val bestiary = resource("players/{player}/bestiary", "A player's bestiary: kills and best level by boss type and class") { req -> bestiaryOf(req[player]) }.returnsListOf(Bestiary::class.java).publicly()
   val leaderboards = resource("leaderboards/{board}", "Players ranked by kills, level, experience, deaths to bosses, or damage to them, shaped as WorldAPI's own leaderboards") { req -> boardOf(req[board], req[limit]) }.query(limit).returns(Leaderboard::class.java).publicly()
@@ -88,6 +89,9 @@ abstract class BossesData : Expansion("mobosses", "Mo’Bosses", "Mo’Bosses: b
   @JvmRecord data class PhaseTwo(val uuid: UUID, val type: String, val `class`: String, val level: Int, val phaseTwo: Boolean, val maxHealth: Double, val location: Place)
 
   @JvmRecord data class FullMoon(val world: String)
+
+  /** `hunters` with its own bounds for `limit`, which WorldAPI 4.6 takes: [BossesActions] sets them, and 4.5 keeps the shared ones. */
+  protected open fun capped(hunters: Resource): Resource = hunters
 
   fun bossKilled(boss: Boss, shares: Map<UUID, Double>, experience: Int) {
     val players = shares.entries.sortedByDescending { it.value }.map { (id, share) -> Share(id, mod.nameOf(id), share) }
@@ -163,6 +167,9 @@ abstract class BossesData : Expansion("mobosses", "Mo’Bosses", "Mo’Bosses: b
   protected fun place(at: Entity) = Place(mod.worldApi.world(at), at.blockX.toDouble(), at.blockY.toDouble(), at.blockZ.toDouble())
 
   companion object {
+    /** The most hunters `hunters` lists, as before 2.22.0; the boards take up to 500. */
+    const val HUNTERS = 50
+
     /** The namespace WorldAPI took: [BossesActions] where WorldAPI takes actions, else [BossesExpansion]. */
     @Volatile lateinit var current: BossesData
       private set
@@ -178,8 +185,8 @@ abstract class BossesData : Expansion("mobosses", "Mo’Bosses", "Mo’Bosses: b
       return actions
     }
 
-    /** Whether the expansion API WorldAPI brings has actions (2.1, WorldAPI 4.6.0). */
-    private fun takesActions() = Expansion::class.java.declaredMethods.any { it.name == "action" }
+    /** Whether the expansion API WorldAPI brings has actions and a resource's own bounds (2.1, WorldAPI 4.6.0). */
+    private fun takesActions() = Expansion::class.java.declaredMethods.any { it.name == "action" } && Resource::class.java.methods.any { it.name == "between" }
 
     // One object per method, so the JVM never has to build the one it doesn't use.
     private fun withActions(mod: MoBosses): BossesData = BossesActions.also { it.mod = mod; it.register() }
