@@ -7,6 +7,7 @@ The “Release” workflow takes the notes for a version from its section here, 
 ### New
 
 - 📈 **bStats on Paper.** The plugin reports to bStats every 30 minutes: bosses spawned and killed, both by class, kills by class and mob, and the languages players got and how: by IP, by their game, by default, or by their own choice. `metrics: false` in `config.yml` turns it off; the mods send nothing.
+- 📊 **A Grafana dashboard.** Each release carries `mobosses.json`, a dashboard of what Mo’Bosses shares through WorldAPI: bosses alive, spawned, and killed, by type and by class, the best hunters, abilities cast, and the latest fights. Import it and pick an Infinity data source that points at your WorldAPI.
 
 ## 2.20.2
 

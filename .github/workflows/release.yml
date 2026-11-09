@@ -75,6 +75,16 @@ jobs:
         run: echo "MODS=$(sed -n 's/^mobosses\.mods=//p' gradle.properties)" >> "$GITHUB_ENV"
       - name: Build and test
         run: ./gradlew build -PreleaseVersion="$VERSION"
+      - name: Stamp the Grafana dashboard
+        # The version shows in Grafana's dashboard settings, so an imported copy says which release it is.
+        shell: python
+        run: |
+          import json, os, re
+          dashboard = json.load(open("grafana/mobosses.json", encoding="utf-8"))
+          dashboard["description"] = re.sub(r" \(v[\d.]+\)$", "", dashboard["description"]) + f" (v{os.environ['VERSION']})"
+          with open("mobosses.json", "w", encoding="utf-8") as file:
+              json.dump(dashboard, file, indent=2, ensure_ascii=False)
+              file.write("\n")
       - name: Publish the GitHub release
         # Every jar twice more without the version, so releases/latest/download/mobosses-paper.jar (and, with the mods,
         # mobosses-fabric.jar and mobosses-neoforge.jar) always fetches the newest; mobosses.jar, the Paper jar's name up
@@ -89,7 +99,8 @@ jobs:
               jars+=("$loader/build/libs/mobosses-$loader-$VERSION.jar" "$loader/build/libs/mobosses-$loader.jar")
             done
           fi
-          gh release create "v$VERSION" --target "$GITHUB_SHA" --title "Mo’Bosses $VERSION" --notes-file "$NOTES" "${jars[@]}"
+          # The Grafana dashboard too, so releases/latest/download/mobosses.json always reaches the newest.
+          gh release create "v$VERSION" --target "$GITHUB_SHA" --title "Mo’Bosses $VERSION" --notes-file "$NOTES" "${jars[@]}" mobosses.json
         env:
           GH_TOKEN: ${{ github.token }}
       - name: Publish to Modrinth

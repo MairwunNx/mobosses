@@ -119,8 +119,12 @@ To put a release on Moonlands, point the Mo’Bosses line in `minecraft/extras/j
 ## Releasing
 
 1. Add a `## X.Y.Z` section to CHANGELOG.md, written for server owners, and push it. After a change that reaches what the project ships, add it to CHANGELOG.md in the same push: under the topmost “## X.Y.Z” section while that version isn’t released (`gh release view vX.Y.Z` fails), or under a new section with the next version: patch for fixes, minor for features, major for breaking changes. A release then needs only the workflow, and the workflow runs only when the owner asks.
-2. Run the “Release” workflow with the new version: `gh workflow run release.yml -R MairwunNx/mobosses -f version=X.Y.Z -f modrinth=true -f hangar=true -f curseforge=true`. Its `changelog` field overrides the CHANGELOG.md section; one of the two must be there. It builds with `-PreleaseVersion`, tags `vX.Y.Z`, and attaches `mobosses-paper-X.Y.Z.jar` to a GitHub release, with `mobosses-paper.jar` and `mobosses.jar` (the name up to 2.9.0) beside it. Nothing in the repo holds the version; local and CI builds are `dev`.
+2. Run the “Release” workflow with the new version: `gh workflow run release.yml -R MairwunNx/mobosses -f version=X.Y.Z -f modrinth=true -f hangar=true -f curseforge=true`. Its `changelog` field overrides the CHANGELOG.md section; one of the two must be there. It builds with `-PreleaseVersion`, tags `vX.Y.Z`, and attaches `mobosses-paper-X.Y.Z.jar` to a GitHub release, with `mobosses-paper.jar` and `mobosses.jar` (the name up to 2.9.0) beside it, and the Grafana dashboard as `mobosses.json`. Nothing in the repo holds the version; local and CI builds are `dev`.
 3. Never delete or re-tag a published release. If GitHub succeeded and Modrinth didn’t, fix the build, finish the upload with `./gradlew :paper:modrinth -PreleaseVersion=X.Y.Z -PchangelogFile=… --no-configuration-cache` locally, and fix the workflow for next time.
+
+## Grafana
+
+`grafana/mobosses.json` is a Grafana dashboard of Mo’Bosses' WorldAPI data (`/extensions/mobosses`), read through the Infinity data source: the bosses, the hunters, bosses by type and by class, abilities cast, and the latest fights. It stays portable: the data source comes from the `worldapi` variable, the URLs are relative to it, and no server's name, address, token, or world is in it. Its panels read only fields WorldAPI's data already has, so a field it reads stays, as “Rules that keep it working” says. The release stamps the version into its description and attaches it as `mobosses.json`; Moonlands provisions it in MairwunNx/infrastructure.
 
 ## Modrinth
 
