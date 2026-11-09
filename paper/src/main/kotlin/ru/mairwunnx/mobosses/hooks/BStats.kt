@@ -54,7 +54,7 @@ class BStats(private val plugin: MoBossesPlugin) {
   }
 
   companion object {
-    /** The plugin's id on bstats.org; 0 keeps bStats off. */
-    const val BSTATS_ID = 0
+    /** The plugin's id on bstats.org, at bstats.org/plugin/bukkit/MoBosses/35229; 0 keeps bStats off. */
+    const val BSTATS_ID = 35229
   }
 }
