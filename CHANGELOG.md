@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.23.0
+
+### Changed
+
+- 🤖 **Allay’s tools need Allay 6.33 or newer.** Mo’Bosses now talks to Allay through its expansion API 2. Players ask about bosses, classes, and their hunt as before, and Allay answers the same. With an older Allay the log says so in one line, and the rest of Mo’Bosses runs as usual.
+
 ## 2.22.0
 
 ### Changed
