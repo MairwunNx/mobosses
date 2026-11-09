@@ -12,7 +12,7 @@ plugins {
 
 val minecraft = "26.3"
 val loader = "0.20.1"
-val fabricApi = "0.165.0+26.3"
+val fabricApi = "0.165.2+26.3"
 val adventureVersion = "5.2.0"
 val sqlite = "3.54.1.0"
 
