@@ -5,7 +5,7 @@ A Paper 26.3 plugin, and Fabric and NeoForge mods for dedicated servers and sing
 ## Talking to the owner
 
 - Reply in Russian, address the owner as «вы». Quotes «ёлочки», nested „лапки“, an em dash with spaces « — ».
-- Code, comments, commit messages, README.md, MODRINTH.md, the config files, and the English language file are in English: curly quotes, an em dash without spaces or an en dash with spaces, never a hyphen as a dash.
+- Code, comments, commit messages, README.md, MODRINTH.md, the config files, and the English language file are in English: curly quotes, an en dash with spaces (never an em dash glued to the words or a hyphen as a dash), and no semicolon between clauses: a full stop, a comma, or a colon instead.
 - README.RU.md and `lang/ru.yml` follow Russian typography; `lang/de.yml` uses „du“. Change both READMEs and MODRINTH.md together; details (commands, permissions, config keys, formulas) go to the wiki page that owns them, not the READMEs.
 - The game balance (formulas, classes, abilities, loot) is the owner’s. Fix what’s plainly broken; ask before changing anything else.
 
