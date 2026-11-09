@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.24.0
+
+### Changed
+
+- 💀 **Kill achievements show how far you are.** “Ten Down”, “A Hundred Trophies”, “Scourge of Bosses”, and “A Thousand Hunts” now fill a bar under the advancement and read like “347/1000”, as the bestiary and the Mythic collection already do. Kills from before the update count at your next login. A tier you already have stays yours, with no second toast. Ask Allay about your advancements, and it sees them as started too.
+
 ## 2.23.0
 
 ### New
