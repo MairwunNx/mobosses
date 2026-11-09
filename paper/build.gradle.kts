@@ -23,7 +23,7 @@ dependencies {
   compileOnly("com.djrapitops:plan-api:5.9-R1.3")
   compileOnly("io.github.miniplaceholders:miniplaceholders-api:3.2.0")
   compileOnly("com.github.GriefPrevention:GriefPrevention:16.18.7") { isTransitive = false }
-  compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.20")
+  compileOnly("com.sk89q.worldguard:worldguard-bukkit:7.0.21")
   compileOnly("net.coreprotect:coreprotect:24.1") { isTransitive = false }
   // WorldAPI brings these classes; Mo’Bosses only compiles against them.
   compileOnly("com.mairwunnx:worldapi-expansion:1.0.0")

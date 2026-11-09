@@ -3,7 +3,7 @@ plugins {
   kotlin("plugin.serialization")
 }
 
-val exposedVersion = "1.6.0"
+val exposedVersion = "1.6.1"
 val adventureVersion = "5.2.0"
 
 // Everything that doesn't touch a game platform: no Bukkit, no Minecraft, no loader. The formulas, the config models and

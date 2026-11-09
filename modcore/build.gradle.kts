@@ -46,7 +46,7 @@ dependencies {
   compileOnly("maven.modrinth:flan:26.3-1.12.8.b-fabric") { isTransitive = false }
   compileOnly("maven.modrinth:open-parties-and-claims:neoforge-26.3-0.33.0") { isTransitive = false }
   // The recipe viewers' common APIs, for the loot pages in a player's game; asked only when they're loaded.
-  compileOnly("mezz.jei:jei-26.3-common-api:31.17.0.108") { isTransitive = false }
+  compileOnly("mezz.jei:jei-26.3-common-api:31.17.0.109") { isTransitive = false }
   compileOnly("me.shedaniel:RoughlyEnoughItems-api:26.3.824") { isTransitive = false }
   compileOnly("me.shedaniel.cloth:basic-math:0.6.1")
 

@@ -80,7 +80,7 @@ dependencies {
   // Mod Menu's button opens the settings screen; asked only when it's there.
   "clientCompileOnly"("maven.modrinth:modmenu:21.0.0") { isTransitive = false }
   // JEI in the client test, to see the loot pages in a game.
-  "gametestImplementation"("maven.modrinth:jei:1Uzmw8Mr") { isTransitive = false }
+  "gametestImplementation"("maven.modrinth:jei:hif1VmML") { isTransitive = false }
   compileOnly("com.mairwunnx:worldapi-expansion:1.0.0")
   compileOnly("chat.allay:allay-expansion:1.3.0")
 }
