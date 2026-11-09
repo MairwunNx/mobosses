@@ -37,7 +37,7 @@ Mo’Bosses runs on Moonlands, my hard survival server with friends. Come in and
 
 ## Get started
 
-1. Put the jar from [Modrinth](https://modrinth.com/plugin/mobosses), [Hangar](https://hangar.papermc.io/MairwunNx/MoBosses), or [GitHub](https://github.com/MairwunNx/mobosses/releases/latest/download/mobosses-paper.jar) in `plugins/` on Paper 26.3 with Java 25, or add `mobosses` to `MODRINTH_PROJECTS` in [itzg/minecraft-server](https://docker-minecraft-server.readthedocs.io). On Fabric or NeoForge, put `mobosses-fabric` or `mobosses-neoforge` in `mods/`; see [Fabric and NeoForge](https://github.com/MairwunNx/mobosses/wiki/Mods).
+1. Put the jar from [Modrinth](https://modrinth.com/plugin/mobosses), [Hangar](https://hangar.papermc.io/MairwunNx/MoBosses), or [GitHub](https://github.com/MairwunNx/mobosses/releases/latest/download/mobosses-paper.jar) in `plugins/` on Paper 26.3 with Java 25, or add `mobosses` to `MODRINTH_PROJECTS` in [itzg/minecraft-server](https://docker-minecraft-server.readthedocs.io). On Fabric or NeoForge, put `mobosses-fabric` or `mobosses-neoforge` in `mods/`. See [Fabric and NeoForge](https://github.com/MairwunNx/mobosses/wiki/Mods).
 2. Restart the server, then meet a boss right away: `/mobosses spawn zombie 30 epic`.
 3. Read [First steps](https://github.com/MairwunNx/mobosses/wiki/First-steps) to tune how often bosses come.
 

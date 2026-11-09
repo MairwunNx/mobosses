@@ -37,7 +37,7 @@ Mo’Bosses работает на Moonlands — моём сервере со с�
 
 ## Как начать
 
-1. Положите jar с [Modrinth](https://modrinth.com/plugin/mobosses), [Hangar](https://hangar.papermc.io/MairwunNx/MoBosses) или [GitHub](https://github.com/MairwunNx/mobosses/releases/latest/download/mobosses-paper.jar) в `plugins/` на Paper 26.3 с Java 25 или добавьте `mobosses` в `MODRINTH_PROJECTS` в [itzg/minecraft-server](https://docker-minecraft-server.readthedocs.io). На Fabric или NeoForge положите `mobosses-fabric` или `mobosses-neoforge` в `mods/`; подробнее — в [Fabric and NeoForge](https://github.com/MairwunNx/mobosses/wiki/Mods).
+1. Положите jar с [Modrinth](https://modrinth.com/plugin/mobosses), [Hangar](https://hangar.papermc.io/MairwunNx/MoBosses) или [GitHub](https://github.com/MairwunNx/mobosses/releases/latest/download/mobosses-paper.jar) в `plugins/` на Paper 26.3 с Java 25 или добавьте `mobosses` в `MODRINTH_PROJECTS` в [itzg/minecraft-server](https://docker-minecraft-server.readthedocs.io). На Fabric или NeoForge положите `mobosses-fabric` или `mobosses-neoforge` в `mods/`. Подробнее — в [Fabric and NeoForge](https://github.com/MairwunNx/mobosses/wiki/Mods).
 2. Перезапустите сервер и сразу встретьте босса: `/mobosses spawn zombie 30 epic`.
 3. Прочитайте [First steps](https://github.com/MairwunNx/mobosses/wiki/First-steps), чтобы настроить, как часто приходят боссы.
 

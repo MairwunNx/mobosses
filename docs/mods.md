@@ -1,6 +1,6 @@
 # Mo’Bosses on Fabric and NeoForge
 
-How Mo’Bosses runs as a mod, as built on 2026-10-25. On a dedicated Fabric or NeoForge server it plays as the Paper plugin does: the same configs, the same `player_progress`, the same bosses. In a singleplayer or LAN world it plays the world you host. Players need no mod of their own; with it, they get the settings screen and boss loot in JEI, REI, and EMI.
+How Mo’Bosses runs as a mod, as built on 2026-10-25. On a dedicated Fabric or NeoForge server it plays as the Paper plugin does: the same configs, the same `player_progress`, the same bosses. In a singleplayer or LAN world it plays the world you host. Players need no mod of their own. With it, they get the settings screen and boss loot in JEI, REI, and EMI.
 
 ## What the mods have that Paper has too
 
@@ -22,7 +22,7 @@ The mods add no items, blocks, or entities. `mobosses:boss_killed` is the one re
 
 ## How the code splits
 
-The family's way: what decides goes to `core` with tests, and what touches the game is written twice, once against Bukkit in `paper` and once against the game in `modcore`, each file next to its twin with the same name. Fabric and NeoForge differ only behind `Loader` and `ClientLoader`; modcore never asks which loader it runs on.
+The family's way: what decides goes to `core` with tests, and what touches the game is written twice, once against Bukkit in `paper` and once against the game in `modcore`, each file next to its twin with the same name. Fabric and NeoForge differ only behind `Loader` and `ClientLoader`: modcore never asks which loader it runs on.
 
 | Module | What it holds for the mods |
 |---|---|
@@ -36,7 +36,7 @@ Each mixin calls `Hooks`, which passes the moment to the server that runs now: a
 
 ### Data on entities
 
-Mo’Bosses' data sits in a compound under `mobosses` in the entity's own custom data, which the game saves with it and `/data` shows; a mixin carries a player's over to the entity they respawn as. The keys are Paper's without their namespace. Times in it are the server's clock: its ticks, which stand still while a singleplayer game pauses, so leaving for the menu sends no boss away.
+Mo’Bosses' data sits in a compound under `mobosses` in the entity's own custom data, which the game saves with it and `/data` shows. A mixin carries a player's over to the entity they respawn as. The keys are Paper's without their namespace. Times in it are the server's clock: its ticks, which stand still while a singleplayer game pauses, so leaving for the menu sends no boss away.
 
 ### Names, bars, menus, advancements
 
@@ -49,7 +49,7 @@ Mo’Bosses' data sits in a compound under `mobosses` in the entity's own custom
 
 | What | Where | Why |
 |---|---|---|
-| `config.yml`, the other configs, `lang/`, `player-languages.yml`, `geoip/` | `config/mobosses/` of the game | One setup for every world; a player's language is theirs, not a world's |
+| `config.yml`, the other configs, `lang/`, `player-languages.yml`, `geoip/` | `config/mobosses/` of the game | One setup for every world. A player's language is theirs, not a world's |
 | `bosses.db` and `temporary-blocks.txt` | `<save>/mobosses/` | Levels belong to a world, and move, copy, and go with its save |
 
 A dedicated server keeps the database in `world/mobosses/`, and `database` in `config.yml` may still point it at MySQL, MariaDB, or PostgreSQL. A singleplayer world always uses SQLite in its save. The files Mo’Bosses copies come from its own jar through `Loader.resource`, never the class loader, which on Fabric hands out whichever mod's `config.yml` it finds first.
@@ -60,15 +60,15 @@ A player reads their own choice, else the language their country speaks, else th
 
 ### Permissions
 
-`mobosses.*` as on Paper, through fabric-permissions-api on Fabric and PermissionAPI on NeoForge when a permissions mod answers, else by `Permissions.byDefault`: everyone gets `use` and `reset`, operators the rest, and `mobosses.config` only owners (level 4). The owner of a singleplayer world may reload and change the settings without cheats; spawning and removing bosses ask for cheats.
+`mobosses.*` as on Paper, through fabric-permissions-api on Fabric and PermissionAPI on NeoForge when a permissions mod answers, else by `Permissions.byDefault`: everyone gets `use` and `reset`, operators the rest, and `mobosses.config` only owners (level 4). The owner of a singleplayer world may reload and change the settings without cheats. Spawning and removing bosses ask for cheats.
 
 ### The settings screen
 
-It lists every value of `config.yml`, `classes.yml`, `abilities.yml`, and `rewards.yml` from the models' serializers, with the file's own comment and the default on hover. Done changes each value on its own line, so every comment stays (`core/config/edit/`), and only when Mo’Bosses reads the file back without falling back for it. From the main menu it edits `config/mobosses/`; in a world it asks the server over Mo’Bosses' channel, which checks `mobosses.config` on every message, takes a file and keys only, one batch a second, logs who changed what, and reloads. In singleplayer that's the world's own server.
+It lists every value of `config.yml`, `classes.yml`, `abilities.yml`, and `rewards.yml` from the models' serializers, with the file's own comment and the default on hover. Done changes each value on its own line, so every comment stays (`core/config/edit/`), and only when Mo’Bosses reads the file back without falling back for it. From the main menu it edits `config/mobosses/`. In a world it asks the server over Mo’Bosses' channel, which checks `mobosses.config` on every message, takes a file and keys only, one batch a second, logs who changed what, and reloads. In singleplayer that's the world's own server.
 
 ### Loot pages
 
-The server sends a player's game the loot table once they join and after each reload, each entry as it drops, named in their language, with lines for the lowest class, the boss levels, the boss types, and its odds. JEI and REI show them as a category of their own; EMI reads JEI's plugin. A game without the mod, or a viewer, never asks.
+The server sends a player's game the loot table once they join and after each reload, each entry as it drops, named in their language, with lines for the lowest class, the boss levels, the boss types, and its odds. JEI and REI show them as a category of their own. EMI reads JEI's plugin. A game without the mod, or a viewer, never asks.
 
 ## Integrations
 
