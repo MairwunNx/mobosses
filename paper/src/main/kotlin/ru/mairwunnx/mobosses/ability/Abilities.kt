@@ -25,6 +25,7 @@ import ru.mairwunnx.mobosses.ability.kinds.WebRing
 import ru.mairwunnx.mobosses.ability.signature.*
 import ru.mairwunnx.mobosses.algebra.Rolls
 import ru.mairwunnx.mobosses.boss.Boss
+import ru.mairwunnx.mobosses.boss.Catalog
 import ru.mairwunnx.mobosses.boss.SpawnOptions
 import ru.mairwunnx.mobosses.boss.WorldBosses
 import kotlin.random.Random
@@ -90,6 +91,22 @@ class Abilities(private val plugin: MoBossesPlugin) {
 
     /** Every ability `/mobosses spawn abilities=…` may give: those a hit picks, enrage, and the second phase. */
     val KEYS: Set<String> get() = PICKED.mapTo(LinkedHashSet()) { it.key } + Enrage.key + PHASE_TWO
+
+    /**
+     * The abilities [boss] has reached, as a hit picks them: those its class gives at its level, or those it was given,
+     * with its type's own moves and minions, enrage, and the second phase.
+     */
+    fun reached(catalog: Catalog, boss: Boss): List<String> {
+      val settings = catalog.abilities
+      val given = boss.abilities
+      val picked = PICKED.filter { ability ->
+        ability.enabled(settings) && WorldBosses.allows(boss.type.key, ability.key) && SpawnOptions.allows(given, ability.key, boss.level >= ability.threshold(boss.clazz.abilityThresholds)) &&
+          (catalog.signatureTypes[ability.key]?.contains(boss.type.entity) ?: true) && (ability !== Summoning || catalog.minions.containsKey(boss.type.entity))
+      }.map { it.key }
+      val enrage = Enrage.enabled(settings) && SpawnOptions.allows(given, Enrage.key, boss.level >= Enrage.threshold(boss.clazz.abilityThresholds))
+      val phaseTwo = settings.phaseTwo.enabled && boss.level >= settings.phaseTwo.minLevel && SpawnOptions.allows(given, PHASE_TWO, true)
+      return picked + listOfNotNull(Enrage.key.takeIf { enrage }, PHASE_TWO.takeIf { phaseTwo })
+    }
 
     /** The abilities a hit may set off, at random. */
     val PICKED: List<Ability> = listOf(
