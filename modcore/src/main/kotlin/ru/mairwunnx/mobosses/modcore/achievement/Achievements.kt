@@ -43,7 +43,25 @@ class Achievements(private val mod: MoBosses) {
     }
     val level = mod.progression.level(player.uuid)
     Achievement.LEVELS.filter { (at, _) -> level >= at }.forEach { (_, it) -> grant(player, it) }
-    Achievement.KILLS.filter { (at, _) -> progress.kills >= at }.forEach { (_, it) -> grant(player, it) }
+    kills(player, progress.kills)
+  }
+
+  /** The kill tiers for a player's [kills], each showing how many of its goal are in. */
+  fun kills(player: ServerPlayer, kills: Int) = Achievement.KILLS.forEach { (goal, it) -> count(player, it, goal, kills) }
+
+  /**
+   * Ticks off a kill tier's kills up to [kills], which the game shows as N of [goal]. At the goal one criterion meets
+   * them all, and the kills' own go, so a player's advancement file keeps one line for the tier, not a thousand.
+   */
+  private fun count(player: ServerPlayer, achievement: Achievement, goal: Int, kills: Int) {
+    if (!enabled) return
+    val advancement = mod.server.advancements.get(id(achievement)) ?: return
+    val progress = player.advancements.getOrStartProgress(advancement)
+    if (progress.isDone) return
+    Advancement.counted(goal, kills, progress.remainingCriteria.toList()).forEach { player.advancements.award(advancement, it) }
+    if (!progress.isDone) return
+    if (progress.getCriterion(Advancement.CRITERION)?.isDone == true) progress.completedCriteria.filter { it != Advancement.CRITERION }.forEach { player.advancements.revoke(advancement, it) }
+    mod.worldApi.achievement(player, achievement.id)
   }
 
   /** A player's part in a kill: [took] when their share was enough for the kill to be theirs. */
@@ -122,7 +140,7 @@ class Achievements(private val mod: MoBosses) {
       if (!enabled) return emptyList()
       val ops = registries.createSerializationContext(JsonOps.INSTANCE)
       return Achievement.entries.mapNotNull { achievement ->
-        val json = Advancement.json(achievement, code, languages, { id(it).toString() }, names = Advancement.criteria(achievement, types))
+        val json = Advancement.json(achievement, code, languages, { id(it).toString() }, requirements = Advancement.requirements(achievement, types))
         GameAdvancement.CODEC.parse(ops, json).resultOrPartial { Mod.log.warn("Achievement ${achievement.id}: $it") }.orElse(null)?.let { AdvancementHolder(id(achievement), it) }
       }
     }

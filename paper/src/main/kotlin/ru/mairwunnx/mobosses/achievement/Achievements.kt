@@ -63,7 +63,25 @@ class Achievements(private val plugin: MoBossesPlugin) : Listener {
     }
     val level = plugin.progression.level(player.uniqueId)
     Achievement.LEVELS.filter { (at, _) -> level >= at }.forEach { (_, it) -> grant(player, it) }
-    Achievement.KILLS.filter { (at, _) -> progress.kills >= at }.forEach { (_, it) -> grant(player, it) }
+    kills(player, progress.kills)
+  }
+
+  /** The kill tiers for a player's [kills], each showing how many of its goal are in. */
+  fun kills(player: Player, kills: Int) = Achievement.KILLS.forEach { (goal, it) -> count(player, it, goal, kills) }
+
+  /**
+   * Ticks off a kill tier's kills up to [kills], which the game shows as N of [goal]. At the goal one criterion meets
+   * them all, and the kills' own go, so a player's advancement file keeps one line for the tier, not a thousand.
+   */
+  private fun count(player: Player, achievement: Achievement, goal: Int, kills: Int) {
+    if (!enabled) return
+    val advancement = Bukkit.getAdvancement(key(achievement)) ?: return
+    val progress = player.getAdvancementProgress(advancement)
+    if (progress.isDone) return
+    Advancement.counted(goal, kills, progress.remainingCriteria).forEach(progress::awardCriteria)
+    if (!progress.isDone) return
+    if (CRITERION in progress.awardedCriteria) progress.awardedCriteria.filter { it != CRITERION }.forEach(progress::revokeCriteria)
+    plugin.worldApi.achievement(player, achievement.id)
   }
 
   /** A player's part in a kill: [took] when their share was enough for the kill to be theirs. */
@@ -131,7 +149,7 @@ class Achievements(private val plugin: MoBossesPlugin) : Listener {
     boss.entity.persistentDataContainer.get(plugin.keys.hurt, PersistentDataType.STRING).orEmpty().split(';').filter { it.isNotBlank() }.toSet()
 
   private fun json(achievement: Achievement, code: String): String =
-    Advancement.json(achievement, code, plugin.languages, { key(it).toString() }, names = Advancement.criteria(achievement, enabledTypes())).toString()
+    Advancement.json(achievement, code, plugin.languages, { key(it).toString() }, requirements = Advancement.requirements(achievement, enabledTypes())).toString()
 
   private fun enabledTypes() = plugin.catalog.types.values.filter { it.spec.enabled }.map { it.key }.toSet()
 
