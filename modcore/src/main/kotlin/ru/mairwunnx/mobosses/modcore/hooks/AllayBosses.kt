@@ -68,7 +68,7 @@ object AllayBosses : Expansion("mobosses", "Mo’Bosses") {
   val loot = tool("loot", "What Mo’Bosses bosses drop on this server. With class and level (and type for a boss type's own entries), the likeliest items, each with its chance in percent to be one item a player gets, the amount, and its name. Also how many items each player who dealt enough damage gets, the damage share that takes alone, and the type's bonus roll. Without class it reads Common, and without level the asker's own Mo’Bosses level. With item, where that item comes from: the class, levels, and types that drop it, with its chance from a boss of its own class.", ::loot).args(bossClass, level, type, item).inPublic()
   val abilities = tool("abilities", "What boss abilities do on this server. Without ability, each shared ability with a line on what it does and the boss level it starts at in each class, Common to Mythic, and each boss type's own (signature) ability with its types, which all start at the signature levels. With ability, that one in full: what it does, a tip to counter it, its cooldown in seconds, its reach and damage from a low level to the cap, the health that sets it off, and where it starts.", ::abilities).args(ability).inPublic()
   val hunters = toolLater("hunters", "The best Mo’Bosses hunters on this server, by experience: place, the player, their level, bosses killed, and experience.", ::hunters).args(limit).inPublic().summary { "${it.hunters.size}" }
-  val spawn = tool("spawn", "Spawns bosses two blocks ahead of the asker, as /mobosses spawn does and under the command's rules: they stay until killed. type is required, a boss type's id. class defaults to Common, level to the asker's own Mo’Bosses level, and count to 1. Only on an operator's clear request.", ::spawn).args(type, bossClass, level, count).operator().permission(Permissions.SPAWN).summary { "${it.spawned.size}" }
+  val spawn = tool("spawn", "Spawns bosses two blocks ahead of the asker, as /mobosses spawn does and under the command's rules: they stay until killed. class defaults to Common, level to the asker's own Mo’Bosses level, and count to 1. Only on an operator's clear request.", ::spawn).args(type, bossClass, level, count).required(type).operator().permission(Permissions.SPAWN).summary { "${it.spawned.size}" }
 
   @JvmRecord data class Classes(val classes: List<ClassInfo>)
 
@@ -251,7 +251,7 @@ object AllayBosses : Expansion("mobosses", "Mo’Bosses") {
     val player = call.player(ServerPlayer::class.java)
     if (!Perms.check(player.createCommandSourceStack(), Permissions.SPAWN)) throw ToolException("the asker may not spawn bosses")
     val catalog = mod.catalog
-    val bossType = bossType(call[type] ?: throw ToolException("type is required: a boss type's id, like zombie"))
+    val bossType = bossType(call[type])
     val clazz = catalog.classes.byKey((call[bossClass] ?: Rank.COMMON).name) ?: throw ToolException("this server has no such class")
     val maxLevel = maxOf(100, catalog.settings.progression.levelCurve.maxLevel)
     val bossLevel = (call[level] ?: mod.progression.level(player.uuid)).coerceIn(1, maxLevel)

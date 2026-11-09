@@ -102,6 +102,8 @@ class AllayGameTests {
     helper.assertTrue(tools.values.filter { it.name() != "spawn" }.all { it.access() == AllayTool.Access.READ }, "every tool but spawn only reads")
     helper.assertTrue(tools.getValue("spawn").access() == AllayTool.Access.OPERATOR && tools.getValue("spawn").permission() == "mobosses.spawn" && !tools.getValue("spawn").inPublic(), "spawn is an operator's, behind mobosses.spawn")
     helper.assertTrue(listOf("classes", "bosses", "loot", "abilities", "hunters").all { tools.getValue(it).inPublic() } && listOf("hunt", "nearby").none { tools.getValue(it).inPublic() }, "only the asker's own tools stay out of public questions")
+    val spawnSchema = tools.getValue("spawn").parameters().toJson()
+    helper.assertTrue(Regex("\"required\"\\s*:\\s*\\[\\s*\"type\"").containsMatchIn(spawnSchema) && "\"required\"" !in tools.getValue("loot").parameters().toJson(), "type is required for spawn alone: $spawnSchema")
     val items = expansion.items()
     helper.assertTrue(items.size in 100..400, "${items.size} named drops")
     helper.assertTrue(items.all { it.id().startsWith("mobosses:") && it.base() != null && "en_us" in it.names() && "ru_ru" in it.names() && it.description().length <= 300 }, "each drop has an id, a base, English and Russian names, and a short description")
@@ -193,6 +195,7 @@ class AllayGameTests {
     server.playerList.op(player.nameAndId(), Optional.of(LevelBasedPermissionSet.GAMEMASTER), Optional.empty())
     try {
       helper.assertTrue(refused { run(expansion, "spawn", player, mapOf("type" to "nothing")) }, "an unknown type is refused")
+      helper.assertTrue(refused { run(expansion, "spawn", player, mapOf("class" to "rare")) }, "spawn needs a type")
       val (spawned, _) = run(expansion, "spawn", player, mapOf("type" to "zombie", "class" to "rare", "level" to 12L, "count" to 2L))
       helper.assertTrue(list(spawned["spawned"]).size == 2 && spawned["failed"] == null, "an operator gets two bosses: $spawned")
       val made = mod.bosses.all.filter { it.level == 12 && it.clazz.key == "rare" && it.entity.distanceToSqr(player) < 16.0 }
