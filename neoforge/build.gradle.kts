@@ -163,6 +163,8 @@ tasks {
     dependencies {
       exclude(dependency("org.jetbrains:annotations"))
       exclude(dependency("org.checkerframework:.*"))
+      // Annotations Adventure compiles against: WorldAPI ships its own copy, and NeoForge refuses two mods exporting one package.
+      exclude(dependency("org.jspecify:jspecify"))
     }
   }
 
