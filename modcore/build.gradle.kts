@@ -59,6 +59,8 @@ dependencies {
 dependencies {
   "gametestImplementation"(project(":core")) { exclude(group = "org.slf4j") }
   "gametestCompileOnly"("net.kyori:adventure-text-minimessage:$adventureVersion")
+  // The game tests run Allay's tools through its API, with a host of their own.
+  "gametestImplementation"("chat.allay:allay-expansion:2.0.0")
 }
 
 kotlin {

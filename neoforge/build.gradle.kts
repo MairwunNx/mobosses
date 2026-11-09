@@ -108,6 +108,8 @@ dependencies {
   adventure.forEach { "clientImplementation"(it) { exclude(group = "com.google.code.gson") } }
   "gametestImplementation"(project(":core")) { exclude(group = "org.slf4j") }
   "gametestRuntimeOnly"("org.xerial:sqlite-jdbc:$sqlite")
+  // Allay's expansion API, which the game tests run Mo’Bosses' tools through without Allay.
+  "gametestImplementation"("chat.allay:allay-expansion:2.0.0")
   // REI with Cloth Config and Architectury in the dev runs, to see the loot pages in a game.
   "gametestCompileOnly"("me.shedaniel:RoughlyEnoughItems-api:26.3.824") { isTransitive = false }
   listOf("maven.modrinth:rei:uwE0PJmc", "maven.modrinth:cloth-config:GchRXPnb", "maven.modrinth:architectury-api:dZ7iNvS4").forEach { "gametestRuntimeOnly"(it) { isTransitive = false } }
