@@ -3,10 +3,11 @@ package ru.mairwunnx.mobosses.hooks
 import ru.mairwunnx.mobosses.MoBossesPlugin
 
 /**
- * Mo’Bosses in Allay, the AI helper, when it runs: tools that tell the model which bosses and classes
- * this server has, the asker's hunt, and the bosses around them, and a few lines on how Mo’Bosses
- * works. [AllayBosses] speaks Allay's expansion API 2. This class holds no type of it, so it loads
- * without Allay.
+ * Mo’Bosses in Allay, the AI helper, when it runs: tools that tell the model which bosses, classes,
+ * abilities, and loot this server has, the asker's hunt, the best hunters, and the bosses around them,
+ * one that spawns bosses for operators, the named drops for its item search, and a few lines on how
+ * Mo’Bosses works. [AllayBosses] speaks Allay's expansion API 2. This class holds no type of it, so it
+ * loads without Allay.
  */
 class AllayLink(private val plugin: MoBossesPlugin) {
   @Volatile var connected = false
@@ -19,7 +20,7 @@ class AllayLink(private val plugin: MoBossesPlugin) {
       AllayBosses.plugin = plugin
       AllayBosses.register()
       connected = true
-      plugin.log.info("Allay found: it can tell players about bosses, classes, and their hunt")
+      plugin.log.info("Allay found: it can tell players about bosses, their abilities and loot, and their hunt")
     } catch (error: ExceptionInInitializerError) {
       plugin.log.warn("Allay didn't take Mo’Bosses' tools: ${error.cause?.message ?: error}")
     } catch (error: LinkageError) {
@@ -28,6 +29,12 @@ class AllayLink(private val plugin: MoBossesPlugin) {
     } catch (error: Exception) {
       plugin.log.warn("Allay didn't take Mo’Bosses' tools: ${error.message}")
     }
+  }
+
+  /** Hands Allay the expansion again after a reload, so its items follow the loot table and languages just read. */
+  fun refresh() {
+    if (!connected) return
+    runCatching { AllayBosses.register() }.onFailure { plugin.log.warn("Allay didn't take Mo’Bosses' tools again: ${it.message}") }
   }
 
   fun disconnect() {

@@ -206,6 +206,7 @@ class MoBosses(val server: MinecraftServer, val loader: Loader) {
     bosses.all.forEach(bosses::vanillaName)
     // The pages read the table and the languages just loaded.
     lootPages.sendAll()
+    allay.refresh()
     return ok
   }
 

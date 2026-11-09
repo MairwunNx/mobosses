@@ -178,6 +178,7 @@ class MoBossesPlugin : JavaPlugin() {
     bosses.all.forEach(bosses::vanillaName)
     // Loads any the server doesn't have yet, as when they were just switched on.
     achievements.load()
+    allay.refresh()
     return ok
   }
 
