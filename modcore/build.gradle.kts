@@ -38,7 +38,7 @@ dependencies {
   compileOnly("net.fabricmc:sponge-mixin:0.17.5+mixin.0.8.7")
   compileOnly("io.github.llamalad7:mixinextras-common:0.5.5")
   // WorldAPI and Allay run as mods too and bring their expansion APIs, as on Paper.
-  compileOnly("com.mairwunnx:worldapi-expansion:2.0.0")
+  compileOnly("com.mairwunnx:worldapi-expansion:2.1.0")
   compileOnly("chat.allay:allay-expansion:2.0.0")
   // Optional mods: Mo’Bosses asks them only when they're loaded. Their APIs read the same on both loaders.
   compileOnly("eu.pb4:placeholder-api:3.2.0+26.3") { isTransitive = false }
@@ -61,6 +61,8 @@ dependencies {
   "gametestCompileOnly"("net.kyori:adventure-text-minimessage:$adventureVersion")
   // The game tests run Allay's tools through its API, with a host of their own.
   "gametestImplementation"("chat.allay:allay-expansion:2.0.0")
+  // And WorldAPI's, to run Mo’Bosses' actions without WorldAPI.
+  "gametestImplementation"("com.mairwunnx:worldapi-expansion:2.1.0")
 }
 
 kotlin {

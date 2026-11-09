@@ -17,12 +17,13 @@ import java.util.concurrent.CompletableFuture
 
 /**
  * The `mobosses` namespace in WorldAPI, through its expansion API 2 (`com.mairwunnx:worldapi-expansion`, package `v2`).
- * WorldAPI brings the API's classes since 4.5.0, so this object loads only when it runs; [WorldApiLink] is the side the
+ * WorldAPI brings the API's classes since 4.5.0, so these classes load only when it runs. This one holds the resources
+ * and events, [BossesExpansion] registers them alone on WorldAPI 4.5, and [BossesActions] adds API 2.1's actions on 4.6; [WorldApiLink] is the side the
  * rest of the mod calls. The same resources and events as on Paper: everything public but the bosses alive. Places are
  * [Place]s, which WorldAPI leaves out for clients that mustn't see coordinates. Worlds go by their dimension's id, as
  * WorldAPI names them on the mods. The JSON keeps every field API 1 wrote.
  */
-object BossesExpansion : Expansion("mobosses", "Mo’Bosses", "Mo’Bosses: bosses, their hunters, and the fights between them") {
+abstract class BossesData : Expansion("mobosses", "Mo’Bosses", "Mo’Bosses: bosses, their hunters, and the fights between them") {
   /** The server the handlers read, set before [register]: a new one for each world in singleplayer. */
   @Volatile lateinit var mod: MoBosses
 
@@ -35,7 +36,7 @@ object BossesExpansion : Expansion("mobosses", "Mo’Bosses", "Mo’Bosses: boss
   val bestiary = resource("players/{player}/bestiary", "A player's bestiary: kills and best level by boss type and class") { req -> bestiaryOf(req[player]) }.returnsListOf(Bestiary::class.java).publicly()
   val leaderboards = resource("leaderboards/{board}", "Players ranked by kills, level, experience, deaths to bosses, or damage to them, shaped as WorldAPI's own leaderboards") { req -> boardOf(req[board], req[limit]) }.query(limit).returns(Leaderboard::class.java).publicly()
   val stats = resource("stats", "Bosses alive now, spawned, killed, and the players they killed, in all and by type and class, and how often each ability went off") { counts() }.returns(Stats::class.java).publicly()
-  val bosses = resource("bosses", "The bosses alive in loaded chunks, with health and coordinates") { alive() }.returnsListOf(AliveBoss::class.java).onServerThread()
+  val bosses = resource("bosses", "The bosses alive in loaded chunks, with health and coordinates: uuid is the id DELETE bosses/{boss} takes") { alive() }.returnsListOf(AliveBoss::class.java).onServerThread()
 
   val killed = event("boss.killed", BossKilled::class.java, "Players killed a boss: its type, class, level, and each player's share").publicly().recorded()
   val leveledUp = event("player.level_up", LevelUp::class.java, "A player reached a new Mo’Bosses level").publicly().recorded()
@@ -156,8 +157,36 @@ object BossesExpansion : Expansion("mobosses", "Mo’Bosses", "Mo’Bosses: boss
 
   private fun ref(player: ServerPlayer) = PlayerRef(player.uuid, player.plainTextName)
 
-  private fun maxHealth(boss: Boss) = boss.entity.maxHealth.toDouble()
+  protected fun maxHealth(boss: Boss) = boss.entity.maxHealth.toDouble()
 
   /** The block a boss or a player stands in, as API 1 wrote it. */
-  private fun place(at: Entity) = Place(mod.worldApi.world(at), at.blockX.toDouble(), at.blockY.toDouble(), at.blockZ.toDouble())
+  protected fun place(at: Entity) = Place(mod.worldApi.world(at), at.blockX.toDouble(), at.blockY.toDouble(), at.blockZ.toDouble())
+
+  companion object {
+    /** The namespace WorldAPI took: [BossesActions] where WorldAPI takes actions, else [BossesExpansion]. */
+    @Volatile lateinit var current: BossesData
+      private set
+
+    /**
+     * Registers the namespace; true when it came with its actions. WorldAPI 4.5 gets the resources and events alone:
+     * [BossesActions] would fail to build there, and an object that failed to build stays broken, so it's picked only
+     * where `action` exists.
+     */
+    fun connect(mod: MoBosses): Boolean {
+      val actions = takesActions()
+      current = if (actions) withActions(mod) else readsOnly(mod)
+      return actions
+    }
+
+    /** Whether the expansion API WorldAPI brings has actions (2.1, WorldAPI 4.6.0). */
+    private fun takesActions() = Expansion::class.java.declaredMethods.any { it.name == "action" }
+
+    // One object per method, so the JVM never has to build the one it doesn't use.
+    private fun withActions(mod: MoBosses): BossesData = BossesActions.also { it.mod = mod; it.register() }
+
+    private fun readsOnly(mod: MoBosses): BossesData = BossesExpansion.also { it.mod = mod; it.register() }
+  }
 }
+
+/** The namespace for WorldAPI 4.5: its resources and events alone. */
+object BossesExpansion : BossesData()

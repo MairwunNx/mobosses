@@ -20,10 +20,10 @@ class WorldApiLink(private val mod: MoBosses) {
   fun connect() {
     if (!mod.loader.loaded(WORLD_API)) return
     try {
-      BossesExpansion.mod = mod
-      BossesExpansion.register()
+      val actions = BossesData.connect(mod)
       connected = true
-      mod.log.info("WorldAPI found: hunters, cards, bestiaries, bosses, and events at /extensions/${BossesExpansion.id()}")
+      mod.log.info("WorldAPI found: hunters, cards, bestiaries, bosses, and events at /extensions/${BossesData.current.id()}")
+      if (!actions) mod.log.warn("This WorldAPI takes no actions: WorldAPI 4.6.0 or newer lets its clients spawn and remove bosses")
     } catch (error: ExceptionInInitializerError) {
       mod.log.warn("WorldAPI didn't take Mo’Bosses' data: ${error.cause?.message ?: error}")
     } catch (error: LinkageError) {
@@ -37,22 +37,22 @@ class WorldApiLink(private val mod: MoBosses) {
   fun disconnect() {
     if (!connected) return
     connected = false
-    runCatching { BossesExpansion.unregister() }
+    runCatching { BossesData.current.unregister() }
   }
 
-  fun bossKilled(boss: Boss, shares: Map<UUID, Double>, experience: Int) = publish("boss.killed") { BossesExpansion.bossKilled(boss, shares, experience) }
+  fun bossKilled(boss: Boss, shares: Map<UUID, Double>, experience: Int) = publish("boss.killed") { BossesData.current.bossKilled(boss, shares, experience) }
 
-  fun levelUp(player: ServerPlayer, from: Int, to: Int) = publish("player.level_up") { BossesExpansion.levelUp(player, from, to) }
+  fun levelUp(player: ServerPlayer, from: Int, to: Int) = publish("player.level_up") { BossesData.current.levelUp(player, from, to) }
 
-  fun achievement(player: ServerPlayer, id: String) = publish("player.achievement") { BossesExpansion.achievement(player, id) }
+  fun achievement(player: ServerPlayer, id: String) = publish("player.achievement") { BossesData.current.achievement(player, id) }
 
-  fun phaseTwo(boss: Boss) = publish("boss.phase_two") { BossesExpansion.phaseTwo(boss) }
+  fun phaseTwo(boss: Boss) = publish("boss.phase_two") { BossesData.current.phaseTwo(boss) }
 
-  fun diedTo(player: ServerPlayer, boss: Boss, death: Deaths.Death) = publish("player.died_to_boss") { BossesExpansion.diedTo(player, boss, death) }
+  fun diedTo(player: ServerPlayer, boss: Boss, death: Deaths.Death) = publish("player.died_to_boss") { BossesData.current.diedTo(player, boss, death) }
 
-  fun demoted(player: ServerPlayer, from: Int, to: Int, streak: Int) = publish("player.demoted") { BossesExpansion.demoted(player, from, to, streak) }
+  fun demoted(player: ServerPlayer, from: Int, to: Int, streak: Int) = publish("player.demoted") { BossesData.current.demoted(player, from, to, streak) }
 
-  fun fullMoon(world: String) = publish("full_moon") { BossesExpansion.fullMoon(world) }
+  fun fullMoon(world: String) = publish("full_moon") { BossesData.current.fullMoon(world) }
 
   /** WorldAPI names a world on the mods by its dimension: `overworld`, or another mod's as `namespace:path`. */
   fun world(entity: Entity): String {

@@ -83,7 +83,9 @@ dependencies {
   "gametestImplementation"("maven.modrinth:jei:hif1VmML") { isTransitive = false }
   // Allay's expansion API, which the game tests run Mo’Bosses' tools through without Allay.
   "gametestImplementation"("chat.allay:allay-expansion:2.0.0")
-  compileOnly("com.mairwunnx:worldapi-expansion:2.0.0")
+  // And WorldAPI's, to run Mo’Bosses' actions without WorldAPI.
+  "gametestImplementation"("com.mairwunnx:worldapi-expansion:2.1.0")
+  compileOnly("com.mairwunnx:worldapi-expansion:2.1.0")
   compileOnly("chat.allay:allay-expansion:2.0.0")
 }
 

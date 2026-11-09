@@ -110,6 +110,8 @@ dependencies {
   "gametestRuntimeOnly"("org.xerial:sqlite-jdbc:$sqlite")
   // Allay's expansion API, which the game tests run Mo’Bosses' tools through without Allay.
   "gametestImplementation"("chat.allay:allay-expansion:2.0.0")
+  // And WorldAPI's, to run Mo’Bosses' actions without WorldAPI.
+  "gametestImplementation"("com.mairwunnx:worldapi-expansion:2.1.0")
   // REI with Cloth Config and Architectury in the dev runs, to see the loot pages in a game.
   "gametestCompileOnly"("me.shedaniel:RoughlyEnoughItems-api:26.3.824") { isTransitive = false }
   listOf("maven.modrinth:rei:uwE0PJmc", "maven.modrinth:cloth-config:GchRXPnb", "maven.modrinth:architectury-api:dZ7iNvS4").forEach { "gametestRuntimeOnly"(it) { isTransitive = false } }
@@ -125,7 +127,7 @@ dependencies {
   implementation("org.xerial:sqlite-jdbc:$sqlite")
   jarJar("org.xerial:sqlite-jdbc:$sqlite") { isTransitive = false }
   // Optional mods Mo’Bosses will talk to, asked only when they're loaded; they bring these classes.
-  compileOnly("com.mairwunnx:worldapi-expansion:2.0.0")
+  compileOnly("com.mairwunnx:worldapi-expansion:2.1.0")
   compileOnly("chat.allay:allay-expansion:2.0.0")
 }
 

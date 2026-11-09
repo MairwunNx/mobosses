@@ -19,6 +19,7 @@ import ru.mairwunnx.mobosses.modcore.gametest.AllayGameTests
 import ru.mairwunnx.mobosses.modcore.gametest.BossGameTests
 import ru.mairwunnx.mobosses.modcore.gametest.FightGameTests
 import ru.mairwunnx.mobosses.modcore.gametest.GameTest
+import ru.mairwunnx.mobosses.modcore.gametest.WorldApiGameTests
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 import java.util.function.Consumer
@@ -33,7 +34,7 @@ import java.util.function.Consumer
 class MoBossesTests(modBus: IEventBus) {
   private class Test(val id: Identifier, val annotation: GameTest, val run: Consumer<GameTestHelper>)
 
-  private val tests = listOf(BossGameTests(), FightGameTests(), AbilityGameTests(), AllayGameTests())
+  private val tests = listOf(BossGameTests(), FightGameTests(), AbilityGameTests(), AllayGameTests(), WorldApiGameTests())
     .flatMap { instance -> instance.javaClass.methods.filter { it.isAnnotationPresent(GameTest::class.java) }.map { test(instance, it) } }
 
   init {
