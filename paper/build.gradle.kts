@@ -16,6 +16,8 @@ dependencies {
   // What doesn't touch Bukkit: the formulas, the configs, the languages, the store. Shaded with its libraries.
   implementation(project(":core"))
   compileOnly("io.papermc.paper:paper-api:26.3.build.245-stable")
+  // bStats, shaded and relocated: it refuses to run under its own package.
+  implementation("org.bstats:bstats-bukkit:3.2.1")
   // Paper ships the SQLite driver, so it stays out of the jar.
   compileOnly("org.xerial:sqlite-jdbc:3.54.1.0")
   // Optional plugins: their classes load only when they're on the server.
@@ -68,7 +70,7 @@ tasks.shadowJar {
   // Relocated so other plugins that ship their own copies can't clash with ours.
   listOf(
     "kotlin", "kotlinx", "com.charleskorn.kaml", "it.krzeminski.snakeyaml", "okio", "net.thauvin", "com.maxmind",
-    "org.jetbrains.exposed", "com.zaxxer.hikari", "org.postgresql", "org.mariadb.jdbc",
+    "org.jetbrains.exposed", "com.zaxxer.hikari", "org.postgresql", "org.mariadb.jdbc", "org.bstats",
   ).forEach { relocate(it, "ru.mairwunnx.mobosses.libs.$it") }
   exclude("META-INF/*.kotlin_module", "META-INF/versions/*/module-info.class", "module-info.class")
 }

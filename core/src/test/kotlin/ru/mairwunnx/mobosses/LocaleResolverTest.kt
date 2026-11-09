@@ -34,4 +34,10 @@ class LocaleResolverTest {
   @Test fun `a missing default language falls back to English`() {
     assertEquals("en", LocaleResolver(Settings.Locales(default = "de"), available).default)
   }
+
+  @Test fun `a pick says where the language came from`() {
+    assertEquals(LocaleResolver.Pick("ru", LocaleResolver.Picked.IP), resolver.pick("RU", Locale.US))
+    assertEquals(LocaleResolver.Pick("es", LocaleResolver.Picked.CLIENT), resolver.pick("DE", Locale.forLanguageTag("es")))
+    assertEquals(LocaleResolver.Pick("en", LocaleResolver.Picked.DEFAULT), resolver.pick(null, Locale.GERMANY))
+  }
 }

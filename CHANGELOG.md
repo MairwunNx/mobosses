@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.21.0
+
+### New
+
+- 📈 **bStats on Paper.** The plugin reports to bStats every 30 minutes: bosses spawned and killed, both by class, kills by class and mob, and the languages players got and how: by IP, by their game, by default, or by their own choice. `metrics: false` in `config.yml` turns it off; the mods send nothing.
+
 ## 2.20.2
 
 ### Changed

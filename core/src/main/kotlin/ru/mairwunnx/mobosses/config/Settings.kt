@@ -12,6 +12,8 @@ import kotlinx.serialization.Serializable
 data class Settings(
   val enabled: Boolean = true,
   val debug: Boolean = false,
+  /** bStats on Paper; the mods never send it. */
+  val metrics: Boolean = true,
   /** 1.x's single language; [Locales.default] replaces it. Read only when `locales.default` isn't set. */
   val language: String? = null,
   val locales: Locales = Locales(),

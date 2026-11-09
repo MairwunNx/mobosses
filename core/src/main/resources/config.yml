@@ -8,6 +8,7 @@
 
 enabled: true   # false stops new bosses and abilities; bosses already around stay.
 debug: false    # true logs spawns, levels, abilities, and loot.
+metrics: true   # false turns bStats off; Paper only.
 
 locales:
   # Players nothing else matches and the console get this language, and so do

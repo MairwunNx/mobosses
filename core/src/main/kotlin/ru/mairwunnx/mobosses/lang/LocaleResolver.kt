@@ -11,16 +11,24 @@ class LocaleResolver(private val settings: Settings.Locales, private val availab
 
   val default: String = normalize(defaultCode).takeIf { it in available } ?: Languages.FALLBACK
 
-  fun resolve(country: String?, client: Locale?): String {
+  fun resolve(country: String?, client: Locale?): String = pick(country, client).code
+
+  /** The language, and where it came from. */
+  fun pick(country: String?, client: Locale?): Pick {
     for (source in settings.sources) {
       val code = when (source) {
         Settings.Source.IP -> country?.let { byCountry[it.uppercase()] }
         Settings.Source.CLIENT -> client?.let(::fromClient)
       }
-      if (code != null && code in available) return code
+      if (code != null && code in available) return Pick(code, if (source == Settings.Source.IP) Picked.IP else Picked.CLIENT)
     }
-    return default
+    return Pick(default, Picked.DEFAULT)
   }
+
+  data class Pick(val code: String, val source: Picked)
+
+  /** Where a language came from, by the name bStats counts it under; [CHOICE] is a player's own, from `/mobosses language`. */
+  enum class Picked(val id: String) { IP("ip"), CLIENT("client"), DEFAULT("default"), CHOICE("choice") }
 
   /** `pt_BR` matches a `pt_br` file first, then `pt`. */
   private fun fromClient(locale: Locale): String? {

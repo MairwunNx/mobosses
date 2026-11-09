@@ -54,6 +54,7 @@ class DeathListener(private val plugin: MoBossesPlugin) : Listener {
       plugin.loot.bonus(boss, looted)
       multiplyDrops(event, boss, shares.entries.sumOf { (id, share) -> share * (fatigues[id] ?: 1.0) } / shares.values.sum().coerceAtLeast(1e-9))
       plugin.progression.count(boss.type.key, boss.clazz.key, BossEvent.KILLED)
+      plugin.bStats.tallies.kill(boss.type.key, boss.clazz.key)
       announce(boss, shares, experience)
       plugin.worldApi.bossKilled(boss, shares, experience)
     }

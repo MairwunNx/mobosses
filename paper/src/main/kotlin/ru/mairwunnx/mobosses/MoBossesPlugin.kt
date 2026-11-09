@@ -30,6 +30,7 @@ import ru.mairwunnx.mobosses.config.BundledFiles
 import ru.mairwunnx.mobosses.config.Configs
 import ru.mairwunnx.mobosses.config.Ids
 import ru.mairwunnx.mobosses.config.Settings
+import ru.mairwunnx.mobosses.hooks.BStats
 import ru.mairwunnx.mobosses.hooks.Expansion
 import ru.mairwunnx.mobosses.hooks.MiniPlaceholderTags
 import ru.mairwunnx.mobosses.hooks.PlanData
@@ -95,6 +96,7 @@ class MoBossesPlugin : JavaPlugin() {
   val antiCheese = AntiCheese(this)
   val blockChanges = BlockChanges(this)
   val menuStats = Stats(this)
+  val bStats = BStats(this)
 
   private val tasks = mutableListOf<BukkitTask>()
   private var geoIpTask: BukkitTask? = null
@@ -139,6 +141,7 @@ class MoBossesPlugin : JavaPlugin() {
     expansion?.unregister()
     worldApi.disconnect()
     allay.disconnect()
+    bStats.stop()
     miniPlaceholders?.close()
     // Cobwebs and the like go back now, or they'd stay in the world for good.
     blockChanges.temporary.restoreAll()
@@ -167,6 +170,7 @@ class MoBossesPlugin : JavaPlugin() {
     blockLog = BlockLog.load(configs.settings.coreprotect, log)
     setUpGeoIp(configs.settings)
     progression.open(configs.settings.database, dataFolder)
+    bStats.apply(configs.settings.metrics)
 
     // Titles, labels, and names may read differently now.
     bars.clear()

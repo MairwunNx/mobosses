@@ -7,6 +7,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent
+import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerQuitEvent
 import ru.mairwunnx.mobosses.MoBossesPlugin
 import java.util.UUID
@@ -25,6 +26,15 @@ class PlayerLanguages(private val plugin: MoBossesPlugin) : Listener {
   fun onPreLogin(event: AsyncPlayerPreLoginEvent) {
     if (event.loginResult != AsyncPlayerPreLoginEvent.Result.ALLOWED) return
     plugin.geoIp.country(event.address)?.let { countries[event.uniqueId] = it }
+  }
+
+  /** Counts the language a player gets at each login, and where it came from, for bStats. */
+  @EventHandler(priority = EventPriority.MONITOR)
+  fun onJoin(event: PlayerJoinEvent) {
+    val player = event.player
+    val chosen = chosen(player)
+    val pick = if (chosen != null) LocaleResolver.Pick(chosen, LocaleResolver.Picked.CHOICE) else plugin.resolver.pick(countries[player.uniqueId], player.locale())
+    plugin.bStats.tallies.language(pick.code, pick.source.id)
   }
 
   @EventHandler(priority = EventPriority.MONITOR)
