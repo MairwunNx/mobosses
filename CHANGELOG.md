@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.20.2
+
+### Changed
+
+- 📦 **Built against newer libraries:** Paper API 26.3 build 245, Fabric API 0.165.2, Exposed 1.6.1, and WorldGuard 7.0.21. Nothing changes in the files or the commands.
+
 ## 2.20.1
 
 ### Fixed
