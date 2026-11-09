@@ -83,7 +83,7 @@ The server sends a player's game the loot table once they join and after each re
 ## Tests
 
 - `core`: the rules, the editor, the resources, as unit tests.
-- `modcore/src/gametest`, on both loaders (`./gradlew :fabric:runGameTest`, `:neoforge:runGameTestServer`): a boss's data and stats, difficulty and peaceful, a save and a load, boats and portals, `/mobosses spawn`, natural spawns waiting to be seen, a solo kill's payout and loot, temporary blocks, the advancements, the trigger's conditions, and every ability cast once by a Mythic boss.
+- `modcore/src/gametest`, on both loaders (`./gradlew :fabric:runGameTest`, `:neoforge:runGameTestServer`): a boss's data and stats, difficulty and peaceful, a save and a load, boats and portals, `/mobosses spawn`, natural spawns waiting to be seen, a solo kill's payout and loot, temporary blocks, the advancements, the kill tiers' and the Mythic collection's progress and what it costs on the wire, the trigger's conditions, and every ability cast once by a Mythic boss.
 - A singleplayer world in a game window (`./gradlew :fabric:runClientGameTest`, `:neoforge:runClientGameTest`): Mo’Bosses on the game's own server, its files where they belong, the client's language, the owner's rights, a spawn, the settings screen changing the server's file, and the loot pages in JEI (Fabric) and REI (NeoForge). On macOS keep the display awake (`caffeinate -d`), or the window stalls before the menu.
 
 What only a person at the game can judge, how a fight feels, the abilities' look, and the screens' layout at other sizes, goes to the owner.
