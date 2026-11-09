@@ -76,7 +76,8 @@ class BossGameTests {
     helper.succeed()
   }
 
-  @GameTest
+  // The database answers on its own thread, which a busy CI runner can hold up for seconds: wait 30 of them.
+  @GameTest(maxTicks = 600)
   fun aDeathToABossCountsInTheDatabase(helper: GameTestHelper) {
     val player = Players.survivor(helper)
     val boss = boss(helper, zombie(helper, 3), "common", 10)

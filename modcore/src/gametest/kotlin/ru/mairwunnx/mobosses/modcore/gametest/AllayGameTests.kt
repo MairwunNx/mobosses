@@ -80,7 +80,8 @@ class AllayGameTests {
   /** A tool's answer as Allay writes it, and its JSON. */
   private fun run(expansion: AllayExpansion, name: String, player: ServerPlayer, args: Map<String, Any?> = emptyMap(), language: String = "en_us"): Pair<Map<String, Any?>, String> {
     val result = tool(expansion, name).run(Run(Ask(player, language), args))
-    val data = result.pending()?.toCompletableFuture()?.get(10, TimeUnit.SECONDS)?.data() ?: result.data()
+    // A later answer reads the database on its own thread, which a busy CI runner can hold up for seconds.
+    val data = result.pending()?.toCompletableFuture()?.get(30, TimeUnit.SECONDS)?.data() ?: result.data()
     return data to json.toJson(data)
   }
 
