@@ -1,16 +1,10 @@
 package ru.mairwunnx.mobosses.hooks
 
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer
-import org.bukkit.Bukkit
-import org.bukkit.Location
-import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
 import ru.mairwunnx.mobosses.MoBossesPlugin
-import ru.mairwunnx.mobosses.algebra.Leveling
 import ru.mairwunnx.mobosses.boss.Boss
-import ru.mairwunnx.mobosses.progress.Progress
-import java.util.UUID
 import ru.mairwunnx.mobosses.progress.Deaths
+import java.util.UUID
 
 /**
  * Mo’Bosses' data in WorldAPI, when it runs: the `mobosses` namespace with the best hunters, players'
@@ -27,12 +21,15 @@ class WorldApiLink(private val plugin: MoBossesPlugin) {
   fun connect() {
     if (plugin.server.pluginManager.getPlugin(WORLD_API) == null) return
     try {
-      BossesExpansion.register(plugin, this)
+      BossesExpansion.plugin = plugin
+      BossesExpansion.register()
       connected = true
-      plugin.log.info("WorldAPI found: hunters, cards, bestiaries, bosses, and events at /extensions/${BossesExpansion.ID}")
+      plugin.log.info("WorldAPI found: hunters, cards, bestiaries, bosses, and events at /extensions/${BossesExpansion.id()}")
+    } catch (error: ExceptionInInitializerError) {
+      plugin.log.warn("WorldAPI didn't take Mo’Bosses' data: ${error.cause?.message ?: error}")
     } catch (error: LinkageError) {
-      // WorldAPI before 3.4.0 has no expansion API.
-      plugin.log.warn("WorldAPI is too old for Mo’Bosses' data; it needs 3.4.0 or newer")
+      // WorldAPI before 4.5.0 has no expansion API 2.
+      plugin.log.warn("WorldAPI is too old for Mo’Bosses' data: it needs 4.5.0 or newer")
     } catch (error: Exception) {
       plugin.log.warn("WorldAPI didn't take Mo’Bosses' data: ${error.message}")
     }
@@ -44,57 +41,29 @@ class WorldApiLink(private val plugin: MoBossesPlugin) {
     runCatching { BossesExpansion.unregister() }
   }
 
-  /** An event for WorldAPI's clients; dropped quietly while WorldAPI isn't there. */
-  fun publish(event: String, data: Map<String, Any?>, player: Player? = null, world: String? = null) {
+  fun bossKilled(boss: Boss, shares: Map<UUID, Double>, experience: Int) = publish("boss.killed") { BossesExpansion.bossKilled(boss, shares, experience) }
+
+  fun levelUp(player: Player, from: Int, to: Int) = publish("player.level_up") { BossesExpansion.levelUp(player, from, to) }
+
+  fun achievement(player: Player, id: String) = publish("player.achievement") { BossesExpansion.achievement(player, id) }
+
+  fun phaseTwo(boss: Boss) = publish("boss.phase_two") { BossesExpansion.phaseTwo(boss) }
+
+  fun diedTo(player: Player, boss: Boss, death: Deaths.Death) = publish("player.died_to_boss") { BossesExpansion.diedTo(player, boss, death) }
+
+  fun demoted(player: Player, from: Int, to: Int, streak: Int) = publish("player.demoted") { BossesExpansion.demoted(player, from, to, streak) }
+
+  fun fullMoon(world: String) = publish("full_moon") { BossesExpansion.fullMoon(world) }
+
+  /** An event for WorldAPI's clients; dropped quietly while WorldAPI isn't there or is too old. */
+  private inline fun publish(event: String, send: () -> Unit) {
     if (!connected) return
-    runCatching { BossesExpansion.publish(event, data, player?.uniqueId, player?.name, world) }
-      .onFailure { plugin.log.debug { "WorldAPI didn't take $event: ${it.message}" } }
-  }
-
-  fun bossKilled(boss: Boss, shares: Map<UUID, Double>, experience: Int) {
-    val players = shares.entries.sortedByDescending { it.value }.map { (id, share) ->
-      mapOf("uuid" to id, "name" to (Bukkit.getPlayer(id)?.name ?: Bukkit.getOfflinePlayer(id).name), "share" to share)
+    try {
+      send()
+    } catch (error: Throwable) {
+      plugin.log.debug { "WorldAPI didn't take $event: ${error.message}" }
     }
-    publish("boss.killed", boss(boss) + mapOf("experience" to experience, "players" to players), shares.maxByOrNull { it.value }?.key?.let(Bukkit::getPlayer), boss.entity.world.name)
   }
-
-  fun levelUp(player: Player, from: Int, to: Int) = publish("player.level_up", mapOf("from" to from, "level" to to), player, player.world.name)
-
-  fun achievement(player: Player, id: String) {
-    val code = plugin.catalog.settings.achievements.language.ifBlank { plugin.languages.default }
-    val title = plugin.languages.render(code, "achievements.$id.title")?.let(PlainTextComponentSerializer.plainText()::serialize) ?: id
-    publish("player.achievement", mapOf("id" to id, "title" to title), player, player.world.name)
-  }
-
-  fun phaseTwo(boss: Boss) = publish("boss.phase_two", boss(boss), world = boss.entity.world.name)
-
-  /** `streak` and `demoted` came in 2.20: the deaths in a row so far, and whether this one cost a level. */
-  fun diedTo(player: Player, boss: Boss, death: Deaths.Death) = publish(
-    "player.died_to_boss", boss(boss) + mapOf("lost" to death.lost, "streak" to death.after.streak, "demoted" to death.demoted), player, player.world.name,
-  )
-
-  fun demoted(player: Player, from: Int, to: Int, streak: Int) = publish("player.demoted", mapOf("from" to from, "level" to to, "streak" to streak), player, player.world.name)
-
-  fun fullMoon(world: String) = publish("full_moon", mapOf("world" to world), world = world)
-
-  fun hunter(id: UUID, name: String?, progress: Progress) = mapOf(
-    "uuid" to id, "name" to name, "kills" to progress.kills, "experience" to progress.experience,
-    "deaths" to progress.deaths, "streak" to progress.streak, "damage" to progress.damage,
-    "level" to Leveling.playerLevel(plugin.catalog.settings.progression.levelCurve, progress.experience),
-  )
-
-  /** A boss's type, class, level, and max health; its place under `location`, which anonymous clients don't get. */
-  fun boss(boss: Boss): Map<String, Any?> = mapOf(
-    "uuid" to boss.uuid, "type" to boss.type.key, "class" to boss.clazz.key, "level" to boss.level, "phaseTwo" to boss.phaseTwo,
-    "maxHealth" to (boss.entity.getAttribute(Attribute.MAX_HEALTH)?.value ?: 0.0), "location" to location(boss.entity.location),
-  )
-
-  private fun location(at: Location) = mapOf("world" to at.world.name, "x" to at.blockX, "y" to at.blockY, "z" to at.blockZ)
-
-  /** A UUID, or the name of a player the server knows. */
-  fun player(raw: String): UUID = runCatching { UUID.fromString(raw) }.getOrNull()
-    ?: Bukkit.getOfflinePlayerIfCached(raw)?.uniqueId
-    ?: throw NoSuchElementException("No player named $raw has played here")
 
   private companion object {
     const val WORLD_API = "WorldAPI"
