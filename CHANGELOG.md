@@ -2,6 +2,15 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.22.0
+
+### Changed
+
+- 🧩 **WorldAPI’s data needs WorldAPI 4.5.0 or newer.** Mo’Bosses now talks to WorldAPI through its expansion API 2. With an older WorldAPI the log says so in one line, and the rest of Mo’Bosses runs as usual. The paths, the event names, and every field at `/extensions/mobosses` stay as they were, so sites, the Grafana dashboard, and your own scripts keep working.
+- 📋 **WorldAPI describes Mo’Bosses’ data.** `GET /extensions` lists what each resource takes: `limit`, a player by name or UUID, and the five boards, with their bounds. It also shows the fields of every answer and event, so a client or an AI through the MCP server knows them before it asks.
+- 🔒 **WorldAPI hides coordinates by itself.** A boss’s place, and now a player’s, is one WorldAPI knows as a place: visitors and tokens without `players:private` never get it, in events and in `bosses` alike. Until now a token that could read `bosses` saw its coordinates without that permission.
+- ➕ **Events say more.** `player.level_up`, `player.achievement`, and `player.demoted` carry the `player` and their `location`, `player.died_to_boss` the `player`, and `boss.killed` names its biggest hunter as `player`, even one who has logged off since. `hunters` takes a `limit` up to 500, as the leaderboards do. A bad `limit` or an unknown board answers 400, a player who never played on the server 404, and coordinates come as `12.0` rather than `12`.
+
 ## 2.21.0
 
 ### New
