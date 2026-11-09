@@ -124,7 +124,7 @@ dependencies {
   jarJar("org.xerial:sqlite-jdbc:$sqlite") { isTransitive = false }
   // Optional mods Mo’Bosses will talk to, asked only when they're loaded; they bring these classes.
   compileOnly("com.mairwunnx:worldapi-expansion:2.0.0")
-  compileOnly("chat.allay:allay-expansion:1.3.0")
+  compileOnly("chat.allay:allay-expansion:2.0.0")
 }
 
 kotlin {

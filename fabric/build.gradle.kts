@@ -82,7 +82,7 @@ dependencies {
   // JEI in the client test, to see the loot pages in a game.
   "gametestImplementation"("maven.modrinth:jei:hif1VmML") { isTransitive = false }
   compileOnly("com.mairwunnx:worldapi-expansion:2.0.0")
-  compileOnly("chat.allay:allay-expansion:1.3.0")
+  compileOnly("chat.allay:allay-expansion:2.0.0")
 }
 
 kotlin {
