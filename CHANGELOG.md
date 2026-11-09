@@ -4,9 +4,21 @@ The “Release” workflow takes the notes for a version from its section here, 
 
 ## 2.23.0
 
+### New
+
+- 🎁 **Ask Allay about loot.** “What does a Mythic level 50 boss drop?” or “Where do I get the Tracker’s Leather Vest?”: Allay reads your loot table and answers with the likeliest items, each one’s chance and amount, how many items a kill gives, and the damage share that takes. Item names come in the player’s language.
+- 📖 **Ask Allay what an ability does.** Every ability, shared or a mob’s own, comes with a line on what it does, the boss level it starts at in each class, its cooldown, reach, and damage from your `abilities.yml`, and a tip to counter it.
+- 🏆 **Ask Allay who hunts best.** The top ten hunters by experience, with their levels and kills. Allay names players only as its own privacy rules allow, and never a vanished one.
+- 🔎 **Allay knows Mo’Bosses’ named drops.** Search for an item like “Apprentice’s Stone Blade”, and Allay tells what it is and which bosses drop it, in every language Mo’Bosses has.
+- 🛠️ **Operators spawn bosses through Allay.** “Spawn two Rare zombies here” works for operators with `mobosses.spawn`, under the same rules as `/mobosses spawn`. Ordinary players never get it.
+
 ### Changed
 
 - 🤖 **Allay’s tools need Allay 6.33 or newer.** Mo’Bosses now talks to Allay through its expansion API 2. Players ask about bosses, classes, and their hunt as before, and Allay answers the same. With an older Allay the log says so in one line, and the rest of Mo’Bosses runs as usual.
+- ⚔️ **Allay sees more of a fight.** For a boss nearby, Allay now knows the abilities it has reached, your own share of its damage (never anyone else’s), how many players fight it, and how much its health grew for the group. Your hunt shows your survival bonus in percent and whether a full moon is up.
+- 🐺 **Allay explains one boss in full.** Ask about one boss type, and Allay reads the gear it wears and from which level, its experience multiplier, and how much loot is its own. The list of every boss stays short enough for Allay to read whole.
+- 💬 **Allay knows why a kill gave little.** It explains the damage share loot and rewards ask for, spawner fatigue, the full moon, and the survival bonus.
+- 🔄 **`/mobosses reload` updates Allay too,** so its item search follows your edited loot table and language files.
 
 ## 2.22.0
 
