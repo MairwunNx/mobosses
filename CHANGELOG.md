@@ -2,6 +2,12 @@
 
 The “Release” workflow takes the notes for a version from its section here, unless you type them into its `changelog` field. The same notes go to GitHub and Modrinth.
 
+## 2.24.1
+
+### Changed
+
+- 📦 **Fresher builds underneath.** The plugin is built against Paper 26.3 build 253, the Fabric mod against Fabric API 0.166.2, and the NeoForge mod against NeoForge 26.3.0.103, with kotlinx.serialization 1.13.0 inside. Nothing changes in how bosses play.
+
 ## 2.24.0
 
 ### Changed
