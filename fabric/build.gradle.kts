@@ -78,9 +78,9 @@ dependencies {
   // Optional mods Mo’Bosses will talk to, asked only when they're loaded; they bring these classes.
   compileOnly("me.lucko:fabric-permissions-api:0.7.0")
   // Mod Menu's button opens the settings screen; asked only when it's there.
-  "clientCompileOnly"("maven.modrinth:modmenu:21.0.0") { isTransitive = false }
+  "clientCompileOnly"("maven.modrinth:modmenu:21.0.1") { isTransitive = false }
   // JEI in the client test, to see the loot pages in a game.
-  "gametestImplementation"("maven.modrinth:jei:hif1VmML") { isTransitive = false }
+  "gametestImplementation"("maven.modrinth:jei:zX75GFgt") { isTransitive = false }
   // Allay's expansion API, which the game tests run Mo’Bosses' tools through without Allay.
   "gametestImplementation"("chat.allay:allay-expansion:2.0.0")
   // And WorldAPI's, to run Mo’Bosses' actions without WorldAPI.

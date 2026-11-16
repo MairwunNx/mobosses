@@ -9,7 +9,7 @@ val adventureVersion = "5.2.0"
 // Everything that doesn't touch a game platform: no Bukkit, no Minecraft, no loader. The formulas, the config models and
 // the files the plugin copies, the languages, and the store. paper builds on it now, and the mods will through modcore.
 dependencies {
-  api("org.jetbrains.kotlinx:kotlinx-serialization-core:1.12.0")
+  api("org.jetbrains.kotlinx:kotlinx-serialization-core:1.13.0")
   api("com.charleskorn.kaml:kaml:0.104.0")
   api("com.maxmind.db:maxmind-db:4.2.0")
   api("org.jetbrains.exposed:exposed-core:$exposedVersion")
