@@ -1,0 +1,56 @@
+<!--
+  The hero image and social preview. Render from this folder:
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new --hide-scrollbars --force-device-scale-factor=2 --window-size=1280,640 --virtual-time-budget=3000 --screenshot=hero.png "file://$PWD/hero.html"
+  magick hero.png -define webp:lossless=true ../hero.webp (README), and render with --force-device-scale-factor=1 for GitHub's social preview (under 1 MB).
+-->
+<!doctype html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:"Minecraft";src:url("minecraft.woff2") format("woff2");font-weight:400}
+@font-face{font-family:"Minecraft";src:url("minecraft-bold.woff2") format("woff2");font-weight:700}
+
+html,body{margin:0;width:1280px;height:640px;overflow:hidden;background:#0b0d12;font-family:-apple-system,"SF Pro Display","Inter",sans-serif}
+#bg{position:absolute;left:0;top:0;width:1280px;height:640px;object-fit:cover;filter:blur(1.2px) saturate(1.05)}
+.shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(16,8,20,.86) 0%,rgba(16,8,20,.66) 36%,rgba(16,8,20,.25) 62%,rgba(16,8,20,.15) 100%)}
+.text{position:absolute;left:64px;top:0;bottom:0;width:500px;display:flex;flex-direction:column;justify-content:center;color:#fff}
+.text h1,.text p{text-shadow:0 2px 18px rgba(0,0,0,.45)}
+.tag{display:inline-flex;align-items:center;gap:14px;font-size:18px;font-weight:700;color:#ffcf6b;letter-spacing:.06em;text-transform:uppercase;margin-bottom:18px}
+.tag img{width:34px;height:auto;filter:drop-shadow(0 4px 6px rgba(0,0,0,.5))}
+h1{margin:0;font-size:60px;line-height:1.02;font-weight:800;letter-spacing:-.02em}
+h1 span{color:#ff8a3d}
+p{margin:22px 0 0;font-size:22px;line-height:1.4;color:#d3d6df;max-width:470px}
+.chips{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px}
+.chips b{font-weight:600;font-size:16px;color:#e6e8ee;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.16);padding:7px 12px;border-radius:8px;backdrop-filter:blur(6px)}
+.powered{margin-top:24px;display:flex;align-items:center;gap:8px;font-size:15px;color:rgba(255,255,255,.72)}
+.powered strong{color:#fff;font-weight:600}
+.made{position:absolute;left:64px;bottom:22px;font-size:12px;letter-spacing:.02em;color:rgba(255,255,255,.42)}
+.shot{position:absolute;perspective:1600px}
+.shot img{width:100%;display:block;border-radius:14px;transform:rotateY(-16deg) rotateX(4deg) rotateZ(1deg);transform-origin:left center;box-shadow:0 40px 80px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.12)}
+.tag img{border-radius:8px}
+#bg{filter:blur(3px) saturate(1.1) brightness(.9)}
+.boss{position:absolute}
+.boss img{height:100%;width:auto;display:block}
+.tagline{position:absolute;top:-30px;transform:translateX(-50%);white-space:nowrap;font:400 15px/1 "Minecraft",monospace;text-shadow:2px 2px 0 rgba(0,0,0,.35);color:#fff;background:rgba(0,0,0,.45);padding:6px 9px;border-radius:4px;letter-spacing:.01em}
+.boss .tagline b{font-weight:400}
+</style></head><body>
+<img id="bg" src="../hero-background.png">
+<div class="shade"></div>
+<div class="boss" style="left:525px;bottom:205px;height:230px;z-index:1"><div class="tagline" data-x="0.545"><b style="color:#ff5a4f">[Lv. 60] [Mythic]</b> Wither Lord</div><img src="cut-wither.png" style="filter:drop-shadow(0 0 1.5px #ff5a4f) drop-shadow(0 0 16px #ff5a4faa) drop-shadow(0 20px 30px rgba(0,0,0,.55))"></div>
+<div class="boss" style="left:1075px;bottom:245px;height:195px;z-index:1"><div class="tagline" data-x="0.4861"><b style="color:#4fe3ff">[Lv. 30] [Rare]</b> Bonejack</div><img src="cut-skeleton.png" style="filter:drop-shadow(0 0 1.5px #4fe3ff) drop-shadow(0 0 16px #4fe3ffaa) drop-shadow(0 20px 30px rgba(0,0,0,.55))"></div>
+<div class="boss" style="left:700px;bottom:45px;height:265px;z-index:2"><div class="tagline" data-x="0.6831"><b style="color:#ffb52e">[Lv. 50] [Legendary]</b> The Bulldozer</div><img src="cut-ravager.png" style="filter:drop-shadow(0 0 1.5px #ffb52e) drop-shadow(0 0 16px #ffb52eaa) drop-shadow(0 20px 30px rgba(0,0,0,.55))"></div>
+<div class="boss" style="left:975px;bottom:12px;height:245px;z-index:3"><div class="tagline" data-x="0.5047"><b style="color:#c46bff">[Lv. 40] [Epic]</b> Rotface</div><img src="cut-zombie.png" style="filter:drop-shadow(0 0 1.5px #c46bff) drop-shadow(0 0 16px #c46bffaa) drop-shadow(0 20px 30px rgba(0,0,0,.55))"></div>
+<div class="text">
+<div class="tag"><img src="../icon.png">Mo’Bosses</div>
+<h1>Mobs that fight <span>like bosses</span></h1>
+<p>25 kinds of bosses in six classes, with abilities, minions, and loot worth the&nbsp;fight.</p>
+<div class="chips"><b>Paper</b><b>Fabric</b><b>NeoForge</b><b>Singleplayer</b></div>
+
+</div>
+<div class="made">Made by Pavel Erokhin</div>
+<script>
+// Each name sits over its boss's head: data-x is where the head is, as a share of the cutout's width.
+for (const tag of document.querySelectorAll('.tagline[data-x]')) {
+  const img = tag.parentElement.querySelector('img');
+  const place = () => { tag.style.left = (img.offsetLeft + img.offsetWidth * parseFloat(tag.dataset.x)) + 'px'; };
+  window.addEventListener('load', place);
+}
+</script>
+</body></html>

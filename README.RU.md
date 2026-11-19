@@ -1,5 +1,7 @@
 # Mo’Bosses
 
+![Mo’Bosses: мобы, которые дерутся как боссы](https://raw.githubusercontent.com/MairwunNx/mobosses/master/media/hero.webp)
+
 <p align="center">
   <a href="https://modrinth.com/plugin/mobosses"><img alt="Modrinth" src="https://img.shields.io/modrinth/dt/mobosses?logo=modrinth&label=Modrinth&color=00AF5C"></a>
   <a href="https://hangar.papermc.io/MairwunNx/MoBosses"><img alt="Hangar" src="https://img.shields.io/hangar/dt/MoBosses?label=Hangar&color=1E88E5"></a>

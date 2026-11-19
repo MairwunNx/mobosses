@@ -1,5 +1,7 @@
 # Mo’Bosses
 
+![Mo’Bosses: mobs that fight like bosses](https://raw.githubusercontent.com/MairwunNx/mobosses/master/media/hero.webp)
+
 🏆 **Mo’Bosses** turns ordinary mobs into bosses, on Paper servers and, as a Fabric or NeoForge mod, on modded servers and in singleplayer worlds. A zombie that spawns near a player may come out as a level 40 Epic boss with more health, harder hits, a glow in its class color, a health bar, and abilities like lightning, meteor showers, and minions. Every kill raises the player’s own Mo’Bosses level, and the bosses that find them grow with it.
 
 ## What you get
