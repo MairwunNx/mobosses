@@ -12,10 +12,10 @@
 - 🎁 **Loot worth the fight:** over 600 entries by level and class, a private drop for each player who fought, potion rewards, and a pity count for rare items.
 - 🏆 **Something to chase:** achievements in a tab of their own, a bestiary, the best hunters, nights of the hunt under a full moon, and a survival bonus that brings more bosses the longer you live.
 - 🌍 **Every player reads their own language,** even the names over bosses’ heads: five languages bundled, picked by IP or game language.
-- 🛡️ **Builds stay safe:** GriefPrevention claims and WorldGuard regions keep bosses out, and CoreProtect logs whatever they break, ready to roll back.
+- 🛡️ **Builds stay safe:** GriefPrevention claims and WorldGuard regions keep bosses out, and CoreProtect logs whatever they break, ready to roll back. On Fabric and NeoForge, claims of Flan, Open Parties and Claims, and the mods behind Common Protection API do the same, and the blocks abilities place go back by themselves.
 - 🤖 **Ask Allay about the boss in front of you:** with [Allay](https://github.com/allay-ai/minecraft), the AI helper, players learn what a boss can do, how rare its class is, and how far their next level is, from this server’s own numbers.
 - 🧱 **Paper, Fabric, or NeoForge, server or singleplayer:** the same bosses everywhere, and players join with a vanilla game. As a mod it brings a settings screen, boss loot in JEI, REI, and EMI, bosses from other mods’ mobs, and a trigger for your own advancements.
-- 🧩 **Plays well with others:** PlaceholderAPI, MiniPlaceholders, Plan, WorldAPI, Allay, and SQLite, MySQL, MariaDB, or PostgreSQL for players’ levels.
+- 🧩 **Plays well with others:** PlaceholderAPI, MiniPlaceholders, Plan, WorldAPI, Allay, and SQLite, MySQL, MariaDB, or PostgreSQL for players’ levels. The mods work with Text Placeholder API, WorldAPI, and Allay.
 
 ## Get started
 
