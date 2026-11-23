@@ -114,7 +114,7 @@ dependencies {
   "gametestImplementation"("com.mairwunnx:worldapi-expansion:2.1.0")
   // REI with Cloth Config and Architectury in the dev runs, to see the loot pages in a game.
   "gametestCompileOnly"("me.shedaniel:RoughlyEnoughItems-api:26.3.824") { isTransitive = false }
-  listOf("maven.modrinth:rei:uwE0PJmc", "maven.modrinth:cloth-config:GchRXPnb", "maven.modrinth:architectury-api:dZ7iNvS4").forEach { "gametestRuntimeOnly"(it) { isTransitive = false } }
+  listOf("maven.modrinth:rei:uwE0PJmc", "maven.modrinth:cloth-config:GchRXPnb", "maven.modrinth:architectury-api:faZ1g4vs").forEach { "gametestRuntimeOnly"(it) { isTransitive = false } }
   adventure.forEach { "gametestImplementation"(it) { exclude(group = "com.google.code.gson") } }
   shade(project(":core")) { exclude(group = "org.slf4j") }
   shade(project(":modcore")) { isTransitive = false }

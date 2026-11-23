@@ -79,8 +79,8 @@ dependencies {
   compileOnly("me.lucko:fabric-permissions-api:0.7.0")
   // Mod Menu's button opens the settings screen; asked only when it's there.
   "clientCompileOnly"("maven.modrinth:modmenu:21.0.1") { isTransitive = false }
-  // JEI in the client test, to see the loot pages in a game.
-  "gametestImplementation"("maven.modrinth:jei:zX75GFgt") { isTransitive = false }
+  // JEI in the client test, to see the loot pages in a game, with MezzConfig, which it needs since 31.23.
+  listOf("maven.modrinth:jei:W90vrxwW", "maven.modrinth:mezzconfig:26GXFp06").forEach { "gametestImplementation"(it) { isTransitive = false } }
   // Allay's expansion API, which the game tests run Mo’Bosses' tools through without Allay.
   "gametestImplementation"("chat.allay:allay-expansion:2.0.0")
   // And WorldAPI's, to run Mo’Bosses' actions without WorldAPI.
